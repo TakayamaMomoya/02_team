@@ -12,6 +12,7 @@
 #include "manager.h"
 #include "renderer.h"
 #include "texture.h"
+#include "UI.h"
 
 //*****************************************************
 // Ã“Iƒƒ“ƒo•Ï”éŒ¾
@@ -189,7 +190,7 @@ CNumber *CNumber::Create(int nNumPlace,int nValue)
 
 			if (pNumber->m_apObject[nCnt] == nullptr)
 			{
-				pNumber->m_apObject[nCnt] = CObject2D::Create(7);
+				pNumber->m_apObject[nCnt] = CUI::Create();
 
 				pNumber->m_apObject[nCnt]->Init();
 			}

@@ -9,31 +9,23 @@
 // インクルード
 //*****************************************************
 #include "manager.h"
-#include "renderer.h"
 #include "game.h"
 #include "object.h"
-#include "universal.h"
-#include "particle.h"
 #include "inputkeyboard.h"
-#include "inputjoypad.h"
 #include "inputManager.h"
 #include "fade.h"
 #include "camera.h"
-#include "effect3D.h"
 #include "sound.h"
 #include "scene.h"
 #include "debugproc.h"
 #include <stdio.h>
-#include "texture.h"
-#include "timer.h"
+#include "UIManager.h"
+#include "objectX.h"
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
 #define TRANS_TIME	(60)	// 終了までの余韻のフレーム数
-#define RESULT_TIME	(5)	// リザルト画面表示までのラグ
-#define BOSS_LINE	(2737.0f)	// ボス戦に突入するライン
-#define CHECKPOINT_PATH "data\\MAP\\checkpoint.txt"	// チェックポイントデータのパス
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -66,13 +58,10 @@ HRESULT CGame::Init(void)
 
 	m_state = STATE_NORMAL;
 
-	// カメラ距離の設定
-	CCamera *pCamera = CManager::GetCamera();
+	// UIマネージャーの追加
+	CUIManager::Create();
 
-	if (pCamera != nullptr)
-	{
-		pCamera->SetDist(180.0f);
-	}
+	CObjectX::Create();
 
 	m_bStop = false;
 
@@ -104,6 +93,19 @@ void CGame::Update(void)
 		CScene::Update();
 	}
 
+	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
+
+	if (pKeyboard != nullptr)
+	{
+		if (pKeyboard->GetTrigger(DIK_RETURN))
+		{
+			if (pFade != nullptr)
+			{
+				pFade->SetFade(CScene::MODE_RANKING);
+			}
+		}
+	}
+
 	// カメラ更新
 	UpdateCamera();
 
@@ -131,13 +133,7 @@ void CGame::UpdateCamera(void)
 	{
 		if (m_state == STATE_NORMAL)
 		{
-			// プレイヤーの追従
-			pCamera->FollowPlayer();
-		}
-		else if (m_state == STATE_BOSS)
-		{
-			// ボス戦の動き
-			pCamera->BossBattle();
+
 		}
 	}
 	else
@@ -158,15 +154,11 @@ void CGame::ManageState(void)
 	{
 	case CGame::STATE_NORMAL:
 		break;
-	case CGame::STATE_BOSS:
-		break;
-	case CGame::STATE_RESULT:
-		break;
 	case CGame::STATE_END:
 
 		m_nCntState++;
 
-		if (m_nCntState >= 120 && pFade != nullptr)
+		if (m_nCntState >= TRANS_TIME && pFade != nullptr)
 		{
 			pFade->SetFade(CScene::MODE_RANKING);
 		}
