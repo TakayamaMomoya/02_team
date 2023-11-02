@@ -44,7 +44,7 @@ HRESULT CCamera::Init(void)
 	m_camera.posRDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_camera.vecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_camera.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_camera.fLength = 0.0f;
+	m_camera.fLength = 100.0f;
 	m_camera.fViewAngle = INITIAL_ANGLE;
 
 	float fLength = sqrtf

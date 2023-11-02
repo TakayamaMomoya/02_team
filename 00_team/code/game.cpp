@@ -20,7 +20,7 @@
 #include "debugproc.h"
 #include <stdio.h>
 #include "UIManager.h"
-#include "objectX.h"
+#include "object3D.h"
 
 //*****************************************************
 // マクロ定義
@@ -61,7 +61,7 @@ HRESULT CGame::Init(void)
 	// UIマネージャーの追加
 	CUIManager::Create();
 
-	CObjectX::Create();
+	CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	m_bStop = false;
 
