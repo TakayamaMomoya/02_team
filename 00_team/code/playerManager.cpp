@@ -8,8 +8,8 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "main.h"
 #include "playerManager.h"
+#include "player.h"
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -55,7 +55,16 @@ void CPlayerManager::CreatePlayer(int nNumPlayer)
 {
 	for (int i = 0; i < nNumPlayer; i++)
 	{
+		CPlayer *pPlayer = nullptr;
 
+		pPlayer = CPlayer::Create();
+
+		if (pPlayer != nullptr)
+		{
+			pPlayer->SetID(i);
+
+			m_apPlayer[i] = pPlayer;
+		}
 	}
 }
 
@@ -74,7 +83,23 @@ void CPlayerManager::Uninit(void)
 {
 	m_pPlayerManager = nullptr;
 
+	for (int i = 0; i < NUM_PLAYER; i++)
+	{
+		if (m_apPlayer[i] != nullptr)
+		{
+			m_apPlayer[i] = nullptr;
+		}
+	}
+
 	Release();
+}
+
+//=====================================================
+// 個別終了処理
+//=====================================================
+void CPlayerManager::ReleasePlayer(int nIdx)
+{
+	m_apPlayer[nIdx] = nullptr;
 }
 
 //=====================================================

@@ -52,15 +52,23 @@ CCharacter *CCharacter::Create(char *pPath)
 }
 
 //=====================================================
+// “Çˆ—
+//=====================================================
+void CCharacter::Load(char *pPath)
+{
+	if (m_info.pBody == nullptr && pPath != nullptr)
+	{
+		m_info.pBody = CMotion::Create(pPath);
+	}
+}
+
+//=====================================================
 // ‰Šú‰»ˆ—
 //=====================================================
 HRESULT CCharacter::Init(void)
 {
-	// ‘Ì‚Ì¶¬
-	if (m_info.pBody == nullptr && m_info.pPath != nullptr)
-	{
-		m_info.pBody = CMotion::Create(m_info.pPath);
-	}
+	// ‘Ì‚Ì“Ç
+	Load(m_info.pPath);
 
 	return S_OK;
 }
@@ -85,9 +93,6 @@ void CCharacter::Uninit(void)
 //=====================================================
 void CCharacter::Update(void)
 {
-	// ‘O‰ñ‚ÌˆÊ’u‚ğ•Û‘¶
-	m_info.posOld = m_info.pos;
-
 	if (m_info.pBody != nullptr)
 	{// ‘Ì‚Ì’Ç]
 		D3DXVECTOR3 pos = GetPosition();

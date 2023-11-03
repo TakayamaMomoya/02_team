@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include "UIManager.h"
 #include "object3D.h"
+#include "playerManager.h"
 
 //*****************************************************
 // マクロ定義
@@ -64,6 +65,14 @@ HRESULT CGame::Init(void)
 	CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	m_bStop = false;
+
+	// プレイヤーの生成
+	CPlayerManager *pPlayerManger = CPlayerManager::Create();
+
+	if (pPlayerManger != nullptr)
+	{
+		pPlayerManger->CreatePlayer(4);
+	}
 
 	return S_OK;
 }

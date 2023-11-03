@@ -87,6 +87,7 @@
     <ClCompile Include="code\number.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="code\character.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -160,5 +161,6 @@
     <ClInclude Include="code\number.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="code\character.h" />
   </ItemGroup>
 </Project>

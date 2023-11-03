@@ -41,6 +41,7 @@ public:
 	void SetRot(D3DXVECTOR3 rot) { m_info.rot = rot; }
 	D3DXVECTOR3 GetRot(void) { return m_info.rot; }
 	CMotion *GetBody(void) { return m_info.pBody; }
+	void Load(char *pPath);
 
 private:
 	struct SInfo

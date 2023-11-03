@@ -40,6 +40,8 @@ private:
 		int nID;	// ”Ô†
 	};
 
+	void Debug(void);
+
 	SInfo m_info;	// ©g‚Ìî•ñ
 };
 

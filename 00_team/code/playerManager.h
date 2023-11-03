@@ -31,6 +31,7 @@ public:
 	void CreatePlayer(int nNumPlayer);
 	HRESULT Init(void);
 	void Uninit(void);
+	void ReleasePlayer(int nIdx);
 	void Update(void);
 	void Draw(void);
 	static CPlayerManager *GetInstance(void) { return m_pPlayerManager; }
