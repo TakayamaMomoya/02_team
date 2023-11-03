@@ -29,6 +29,7 @@ CNumber::CNumber(int nPriority) : CObject(nPriority)
 	m_pos = { 0.0f,0.0f,0.0f };
 	m_nNumAll = 0;
 	m_nIdxTexture = -1;
+	ZeroMemory(&m_apObject[0],sizeof(m_apObject));
 }
 
 //=====================================================
