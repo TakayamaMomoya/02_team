@@ -50,6 +50,7 @@
     <ClCompile Include="code\UIManager.cpp" />
     <ClCompile Include="code\playerManager.cpp" />
     <ClCompile Include="code\player.cpp" />
+    <ClCompile Include="code\character.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -95,5 +96,6 @@
     <ClInclude Include="code\UIManager.h" />
     <ClInclude Include="code\playerManager.h" />
     <ClInclude Include="code\player.h" />
+    <ClInclude Include="code\character.h" />
   </ItemGroup>
 </Project>

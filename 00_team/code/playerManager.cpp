@@ -21,7 +21,7 @@ CPlayerManager *CPlayerManager::m_pPlayerManager = nullptr;	// 自身のポインタ
 //=====================================================
 CPlayerManager::CPlayerManager()
 {
-
+	ZeroMemory(&m_apPlayer[0], sizeof(m_apPlayer));
 }
 
 //=====================================================
@@ -46,6 +46,17 @@ CPlayerManager *CPlayerManager::Create(void)
 	}
 
 	return m_pPlayerManager;
+}
+
+//=====================================================
+// プレイヤー生成処理
+//=====================================================
+void CPlayerManager::CreatePlayer(int nNumPlayer)
+{
+	for (int i = 0; i < nNumPlayer; i++)
+	{
+
+	}
 }
 
 //=====================================================
