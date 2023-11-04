@@ -74,7 +74,7 @@ int CModel::Load(char *pPath)
 			ZeroMemory(m_apModel[nCntModel],sizeof(Model));
 
 			// XÉtÉ@ÉCÉãì«Ç›çûÇ›
-			D3DXLoadMeshFromX(pPath,
+			D3DXLoadMeshFromX((LPCWSTR)pPath,
 				D3DXMESH_SYSTEMMEM,
 				pDevice,
 				nullptr,

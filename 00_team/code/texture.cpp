@@ -75,7 +75,7 @@ HRESULT CTexture::Load(void)
 
 			// テクスチャの読込
 			D3DXCreateTextureFromFile
-			(pDevice, apFileName[nCntTex],&m_apTexture[nCntTex]);
+			(pDevice, (LPCWSTR)apFileName[nCntTex],&m_apTexture[nCntTex]);
 
 			// ファイル名保存
 			m_apFilename[nCntTex] = apFileName[nCntTex];
@@ -130,7 +130,7 @@ int CTexture::Regist(const char *pFileName)
 
 	// テクスチャの読込
 	D3DXCreateTextureFromFile
-	(pDevice, pFileName, &m_apTexture[m_nNumAll]);
+	(pDevice, (LPCWSTR)pFileName, &m_apTexture[m_nNumAll]);
 
 	m_apFilename[m_nNumAll] = new char[MAX_STRING];
 

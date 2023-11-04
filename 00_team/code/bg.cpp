@@ -117,7 +117,7 @@ HRESULT CBg::Load(void)
 		D3DXCreateTextureFromFile
 		(
 			pDevice,
-			"data\\TEXTURE\\BG\\bg101.jpg",
+			(LPCWSTR)"data\\TEXTURE\\BG\\bg101.jpg",
 			&m_pTexture
 		);
 	}
