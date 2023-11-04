@@ -41,7 +41,6 @@ CMotion::CMotion(int nPriority) : CObject(nPriority)
 	m_bFinish = false;
 	m_pos = { 0.0f,0.0f,0.0f };
 	m_posOld = { 0.0f,0.0f,0.0f };
-	m_move = { 0.0f,0.0f,0.0f };
 }
 
 //=====================================================
@@ -324,6 +323,9 @@ void CMotion::MultiplyMtx(void)
 //=====================================================
 void CMotion::Draw(void)
 {
+	// 全ての親のマトリック設定
+	SetMatrix();
+
 	// マトリックスをかけ合わせる処理
 	MultiplyMtx();
 }

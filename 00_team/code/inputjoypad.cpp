@@ -143,26 +143,20 @@ void CInputJoypad::Update(void)
 			// スティックのトリガー判定
 			CheckStickTrigger(aState[nCntPlayer], nCntPlayer);
 
-			for (int nCntKey = 0; nCntKey < CInputJoypad::PADBUTTONS_MAX; nCntKey++)
-			{
-				//トリガー
-				m_aStateTrigger[nCntKey].Gamepad.wButtons =
-					(m_aState[nCntKey].Gamepad.wButtons ^ aState[nCntKey].Gamepad.wButtons)
-					& aState[nCntKey].Gamepad.wButtons;
+			//トリガー
+			m_aStateTrigger[nCntPlayer].Gamepad.wButtons =
+				(m_aState[nCntPlayer].Gamepad.wButtons ^ aState[nCntPlayer].Gamepad.wButtons)
+				& aState[nCntPlayer].Gamepad.wButtons;
 
-				//リリース
-				m_aStateRelease[nCntKey].Gamepad.wButtons =
-					(m_aState[nCntKey].Gamepad.wButtons ^ aState[nCntKey].Gamepad.wButtons)
-					& m_aState[nCntKey].Gamepad.wButtons;
+			//リリース
+			m_aStateRelease[nCntPlayer].Gamepad.wButtons =
+				(m_aState[nCntPlayer].Gamepad.wButtons ^ aState[nCntPlayer].Gamepad.wButtons)
+				& m_aState[nCntPlayer].Gamepad.wButtons;
 
-				//プレス
-				m_aState[nCntPlayer] = aState[nCntPlayer];
-			}
+			//プレス
+			m_aState[nCntPlayer] = aState[nCntPlayer];
 		}
 	}
-
-	CDebugProc::GetInstance()->Print("スティック[%f]", (float)m_aState[0].Gamepad.sThumbLY / USHRT_MAX * 2);
-
 }
 
 //====================================================

@@ -1,6 +1,6 @@
 //*****************************************************
 //
-// プレイヤーマネージャー[playerManager.cpp]
+// キャラクターの処理[character.h]
 // Author:髙山桃也
 //
 //*****************************************************
@@ -8,26 +8,27 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "playerManager.h"
-#include "player.h"
+#include "main.h"
+#include "character.h"
+#include "motion.h"
 
 //*****************************************************
-// 静的メンバ変数宣言
+// マクロ定義
 //*****************************************************
-CPlayerManager *CPlayerManager::m_pPlayerManager = nullptr;	// 自身のポインタ
+#define BODY_PATH	"data\\MOTION\\rayleigh.txt"	// 体のパス
 
 //=====================================================
-// コンストラクタ
+// 優先順位を決めるコンストラクタ
 //=====================================================
-CPlayerManager::CPlayerManager()
+CCharacter::CCharacter(int nPriority)
 {
-	ZeroMemory(&m_apPlayer[0], sizeof(m_apPlayer));
+	ZeroMemory(&m_info, sizeof(CCharacter::SInfo));
 }
 
 //=====================================================
 // デストラクタ
 //=====================================================
-CPlayerManager::~CPlayerManager()
+CCharacter::~CCharacter()
 {
 
 }
@@ -35,85 +36,75 @@ CPlayerManager::~CPlayerManager()
 //=====================================================
 // 生成処理
 //=====================================================
-CPlayerManager *CPlayerManager::Create(void)
+CCharacter *CCharacter::Create(char *pPath)
 {
-	if (m_pPlayerManager == nullptr)
-	{// インスタンス生成
-		m_pPlayerManager = new CPlayerManager;
+	CCharacter *pCharacter = nullptr;
 
-		// 初期化処理
-		m_pPlayerManager->Init();
+	pCharacter = new CCharacter;
+
+	if (pCharacter != nullptr)
+	{
+		pCharacter->m_info.pPath = pPath;
+		pCharacter->Init();
 	}
 
-	return m_pPlayerManager;
+	return pCharacter;
 }
 
 //=====================================================
-// プレイヤー生成処理
+// 読込処理
 //=====================================================
-void CPlayerManager::CreatePlayer(int nNumPlayer)
+void CCharacter::Load(char *pPath)
 {
-	for (int i = 0; i < nNumPlayer; i++)
+	if (m_info.pBody == nullptr && pPath != nullptr)
 	{
-		CPlayer *pPlayer = nullptr;
-
-		pPlayer = CPlayer::Create();
-
-		if (pPlayer != nullptr)
-		{
-			pPlayer->SetID(i);
-
-			m_apPlayer[i] = pPlayer;
-		}
+		m_info.pBody = CMotion::Create(pPath);
 	}
 }
 
 //=====================================================
 // 初期化処理
 //=====================================================
-HRESULT CPlayerManager::Init(void)
+HRESULT CCharacter::Init(void)
 {
+	// 体の読込
+	Load(m_info.pPath);
+
 	return S_OK;
 }
 
 //=====================================================
 // 終了処理
 //=====================================================
-void CPlayerManager::Uninit(void)
+void CCharacter::Uninit(void)
 {
-	m_pPlayerManager = nullptr;
-
-	for (int i = 0; i < NUM_PLAYER; i++)
+	if (m_info.pBody != nullptr)
 	{
-		if (m_apPlayer[i] != nullptr)
-		{
-			m_apPlayer[i] = nullptr;
-		}
+		m_info.pBody->Uninit();
+		m_info.pBody = nullptr;
 	}
 
+	// 自身の破棄
 	Release();
-}
-
-//=====================================================
-// 個別終了処理
-//=====================================================
-void CPlayerManager::ReleasePlayer(int nIdx)
-{
-	m_apPlayer[nIdx] = nullptr;
 }
 
 //=====================================================
 // 更新処理
 //=====================================================
-void CPlayerManager::Update(void)
+void CCharacter::Update(void)
 {
+	if (m_info.pBody != nullptr)
+	{// 体の追従
+		D3DXVECTOR3 pos = GetPosition();
 
+		m_info.pBody->SetPosition(pos);
+	}
 }
 
 //=====================================================
 // 描画処理
 //=====================================================
-void CPlayerManager::Draw(void)
+void CCharacter::Draw(void)
 {
 
 }

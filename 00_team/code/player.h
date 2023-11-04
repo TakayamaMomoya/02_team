@@ -11,12 +11,17 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "object.h"
+#include "character.h"
+
+//*****************************************************
+// 前方宣言
+//*****************************************************
+class CMotion;
 
 //*****************************************************
 // クラスの定義
 //*****************************************************
-class CPlayer : public CObject
+class CPlayer : public CCharacter
 {
 public:
 	CPlayer(int nPriority = 4);	// コンストラクタ
@@ -27,15 +32,15 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void SetID(int nID) { m_info.nID = nID; }
 
 private:
 	struct SInfo
 	{
-		D3DXVECTOR3 pos;	// 位置
-		D3DXVECTOR3 posOld;	// 前回の位置
-		D3DXVECTOR3 move;	// 移動量
-		D3DXVECTOR3 rot;	// 向き
+		int nID;	// 番号
 	};
+
+	void Debug(void);
 
 	SInfo m_info;	// 自身の情報
 };
