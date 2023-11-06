@@ -14,6 +14,8 @@
 #include "object2D.h"
 #include "manager.h"
 #include "debugproc.h"
+#include "billboard.h"
+#include "texture.h"
 
 //*****************************************************
 // マクロ定義
@@ -88,7 +90,7 @@ void CCollision::Uninit(void)
 		m_pObjectOther = nullptr;
 	}
 
-	delete this;
+	Release();
 }
 
 //=====================================================
@@ -327,6 +329,8 @@ CCollisionSphere::CCollisionSphere()
 	m_fRadius = 0.0f;
 
 	SetType(TYPE_SPHERE);
+
+	m_pBillboard = nullptr;
 }
 
 //=====================================================
@@ -344,6 +348,17 @@ HRESULT CCollisionSphere::Init(void)
 {
 	m_fRadius = 100.0f;
 
+	if (m_pBillboard == nullptr)
+	{// ビルボードの生成
+		m_pBillboard = CBillboard::Create(GetPosition(),m_fRadius,m_fRadius);
+
+		if (m_pBillboard != nullptr)
+		{
+			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\EFFECT\\collision.png");
+			m_pBillboard->SetIdxTexture(nIdx);
+		}
+	}
+
 	return S_OK;
 }
 
@@ -352,6 +367,12 @@ HRESULT CCollisionSphere::Init(void)
 //=====================================================
 void CCollisionSphere::Uninit(void)
 {
+	if (m_pBillboard != nullptr)
+	{// ビルボードの削除
+		m_pBillboard->Uninit();
+		m_pBillboard = nullptr;
+	}
+
 	CCollision::Uninit();
 }
 
@@ -360,7 +381,14 @@ void CCollisionSphere::Uninit(void)
 //=====================================================
 void CCollisionSphere::Update(void)
 {
+	if (m_pBillboard != nullptr)
+	{// ビルボードの追従
+		D3DXVECTOR3 pos = GetPosition();
 
+		m_pBillboard->SetPosition(pos);
+
+		m_pBillboard->SetSize(m_fRadius, m_fRadius);
+	}
 }
 
 //=====================================================

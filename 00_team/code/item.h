@@ -1,46 +1,43 @@
 //*****************************************************
 //
-// プレイヤーマネージャー[PlayerManager.h]
+// アイテムの処理[item.h]
 // Author:髙山桃也
 //
 //*****************************************************
 
-#ifndef _PLAYERMANAGER_H_
-#define _PLAYERMANAGER_H_
+#ifndef _ITEM_H_
+#define _ITEM_H_
 
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "object.h"
+#include "objectX.h"
 
 //*****************************************************
 // 前方宣言
 //*****************************************************
-class CPlayer;
+class CCollisionSphere;
 
 //*****************************************************
 // クラスの定義
 //*****************************************************
-class CPlayerManager : public CObject
+class CItem : public CObjectX
 {
 public:
-	CPlayerManager();	// コンストラクタ
-	~CPlayerManager();	// デストラクタ
+	CItem(int nPriority = 3);	// コンストラクタ
+	~CItem();	// デストラクタ
 
-	static CPlayerManager *Create(void);
-	void CreatePlayer(int nNumPlayer);
 	HRESULT Init(void);
 	void Uninit(void);
-	void ReleasePlayer(int nIdx);
 	void Update(void);
 	void Draw(void);
-	CPlayer *GetPlayer(int nIdx) { return m_apPlayer[nIdx]; }
-	static CPlayerManager *GetInstance(void) { return m_pPlayerManager; }
+	static CItem *Create();
 
 private:
-	CPlayer *m_apPlayer[NUM_PLAYER];	// プレイヤーの配列
+	void GetItem(CObject *pObj);
 
-	static CPlayerManager *m_pPlayerManager;	// 自身のポインタ
+	CCollisionSphere *m_pCollisionSphere;
 };
 
 #endif
+

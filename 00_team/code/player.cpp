@@ -15,6 +15,7 @@
 #include "debugproc.h"
 #include "inputjoypad.h"
 #include "universal.h"
+#include "collision.h"
 
 //*****************************************************
 // マクロ定義
@@ -67,6 +68,17 @@ HRESULT CPlayer::Init(void)
 	// 体の読込
 	CCharacter::Load(BODY_PATH);
 
+	// 当たり判定の生成
+	if (m_info.pCollisionSphere == nullptr)
+	{
+		m_info.pCollisionSphere = CCollisionSphere::Create(CCollision::TAG_PLAYER, CCollision::TYPE_SPHERE, this);
+
+		if (m_info.pCollisionSphere != nullptr)
+		{
+			m_info.pCollisionSphere->SetRadius(5.0f);
+		}
+	}
+
 	return S_OK;
 }
 
@@ -78,8 +90,14 @@ void CPlayer::Uninit(void)
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 
 	if (pPlayerManager != nullptr)
-	{
+	{// 保管してある自身のポインタを削除
 		pPlayerManager->ReleasePlayer(m_info.nID);
+	}
+
+	if (m_info.pCollisionSphere != nullptr)
+	{
+		m_info.pCollisionSphere->Uninit();
+		m_info.pCollisionSphere = nullptr;
 	}
 	
 	// 継承クラスの終了
@@ -103,6 +121,14 @@ void CPlayer::Update(void)
 
 	pos += move;
 	SetPosition(pos);
+
+	// 当たり判定の追従
+	if (m_info.pCollisionSphere != nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+
+		m_info.pCollisionSphere->SetPosition(pos);
+	}
 
 	// 移動量の減衰
 	move *= 0.1f;
@@ -242,6 +268,14 @@ void CPlayer::Draw(void)
 
 	// デバッグ表示
 	Debug();
+}
+
+//=====================================================
+// 武器設定
+//=====================================================
+void CPlayer::SetWeapon(void)
+{
+	
 }
 
 //=====================================================

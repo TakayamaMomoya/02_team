@@ -17,11 +17,12 @@
 // 前方宣言
 //****************************************************
 class CObject2D;
+class CBillboard;
 
 //*****************************************************
 // クラス定義
 //*****************************************************
-class CCollision
+class CCollision : public CObject
 {
 public:
 	typedef enum
@@ -31,9 +32,8 @@ public:
 		TAG_ENEMY,	// 敵
 		TAG_PLAYERBULLET,	// プレイヤーの弾
 		TAG_ENEMYBULLET,	// 敵の弾
-		TAG_MISSILE,	// ミサイル
 		TAG_BLOCK,	// ブロック
-		TAG_DEFEND,	// 護衛対象
+		TAG_ITEM,	// アイテム
 		TAG_MAX
 	}TAG;
 
@@ -107,6 +107,7 @@ public:
 
 private:
 	float m_fRadius;
+	CBillboard *m_pBillboard;	// ビルボード
 };
 
 class CCollisionCube : public CCollision

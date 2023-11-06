@@ -90,6 +90,7 @@
     <ClCompile Include="code\character.cpp" />
     <ClCompile Include="code\bullet.cpp" />
     <ClCompile Include="code\skybox.cpp" />
+    <ClCompile Include="code\item.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -166,5 +167,6 @@
     <ClInclude Include="code\character.h" />
     <ClInclude Include="code\bullet.h" />
     <ClInclude Include="code\skybox.h" />
+    <ClInclude Include="code\item.h" />
   </ItemGroup>
 </Project>

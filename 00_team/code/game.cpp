@@ -24,6 +24,7 @@
 #include "playerManager.h"
 #include "texture.h"
 #include "skybox.h"
+#include "item.h"
 
 //*****************************************************
 // マクロ定義
@@ -66,7 +67,6 @@ HRESULT CGame::Init(void)
 	CUIManager::Create();
 
 	CObject3D *pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	// テクスチャの読込
 	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\field00.jpg");
 	pObject->SetIdxTexture(nIdx);
 
@@ -77,8 +77,12 @@ HRESULT CGame::Init(void)
 
 	if (pPlayerManger != nullptr)
 	{
-		pPlayerManger->CreatePlayer(1);
+		pPlayerManger->CreatePlayer(2);
 	}
+
+	// アイテム
+	CItem *pItem = CItem::Create();
+	pItem->SetPosition(D3DXVECTOR3(0.0f,0.0f,-40.0f));
 
 	return S_OK;
 }
@@ -148,7 +152,8 @@ void CGame::UpdateCamera(void)
 	{
 		if (m_state == STATE_NORMAL)
 		{
-
+			// 操作
+			pCamera->Control();
 		}
 	}
 	else

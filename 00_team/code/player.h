@@ -17,6 +17,8 @@
 // 前方宣言
 //*****************************************************
 class CMotion;
+class CCollisionSphere;
+class CWeapon;
 
 //*****************************************************
 // クラスの定義
@@ -32,12 +34,15 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void SetWeapon(void);
 	void SetID(int nID) { m_info.nID = nID; }
 
 private:
 	struct SInfo
 	{
 		int nID;	// 番号
+		CCollisionSphere *pCollisionSphere;	// 当たり判定
+		CWeapon *pWeapon;	// 武器
 	};
 
 	void Input(void);
