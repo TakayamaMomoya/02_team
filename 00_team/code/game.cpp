@@ -81,7 +81,7 @@ HRESULT CGame::Init(void)
 	}
 
 	// ƒAƒCƒeƒ€
-	CItem *pItem = CItem::Create();
+	CItem *pItem = CItem::Create(CItem::TYPE_MAGNUM);
 	pItem->SetPosition(D3DXVECTOR3(0.0f,0.0f,-40.0f));
 
 	return S_OK;

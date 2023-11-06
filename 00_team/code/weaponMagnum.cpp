@@ -78,11 +78,11 @@ void CMagnum::Attack(void)
 	int nID = GetID();
 
 	if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB,nID))
-	{
+	{// 射撃
 		D3DXMATRIX *pMtx = GetMatrix();
 
 		D3DXVECTOR3 pos = 
-		{
+		{// 取っ手の位置を取得
 			pMtx->_41,
 			pMtx->_42,
 			pMtx->_43,
@@ -93,7 +93,7 @@ void CMagnum::Attack(void)
 		CPlayer *pPlayer = GetPlayer();
 
 		if (pPlayer != nullptr)
-		{
+		{// プレイヤーの向きに移動量を設定
 			D3DXVECTOR3 rot = pPlayer->GetRot();
 
 			move = 
@@ -104,6 +104,7 @@ void CMagnum::Attack(void)
 			};
 		}
 
+		// 弾を発射
 		CBullet::Create(pos, -move, 100, CBullet::TYPE_PLAYER, false);
 	}
 }

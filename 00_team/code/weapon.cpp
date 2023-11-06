@@ -59,6 +59,17 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 
 			// ‰Šú‰»
 			pWeapon->Init();
+
+			// ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
+			char* apPath[CWeapon::TYPE_MAX] =
+			{
+				"data\\MODEL\\weapon\\shotgun.x",
+				"data\\MODEL\\weapon\\shotgun.x",
+			};
+
+			int nIdx = CModel::Load(apPath[type]);
+			pWeapon->SetIdxModel(nIdx);
+			pWeapon->BindModel(nIdx);
 		}
 	}
 

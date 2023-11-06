@@ -21,6 +21,7 @@
 //=====================================================
 CItem::CItem(int nPriority) : CObjectX(nPriority)
 {
+	m_type = TYPE_MAGNUM;
 	m_pCollisionSphere = nullptr;
 }
 
@@ -40,12 +41,8 @@ HRESULT CItem::Init(void)
 	// 継承クラスの初期化
 	CObjectX::Init();
 
-	SetEmissiveCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-
-	// モデルの読込
-	int nIdx = CModel::Load("data\\MODEL\\weapon\\shotgun.x");
-	SetIdxModel(nIdx);
-	BindModel(nIdx);
+	// 読み込み
+	Load();
 
 	if (m_pCollisionSphere == nullptr)
 	{// 当たり判定の生成
@@ -58,6 +55,24 @@ HRESULT CItem::Init(void)
 	}
 
 	return S_OK;
+}
+
+//=====================================================
+// 読み込み処理
+//=====================================================
+void CItem::Load(void)
+{
+	char* apPath[CItem::TYPE_MAX] =
+	{
+		"data\\MODEL\\weapon\\shotgun.x",
+		"data\\MODEL\\weapon\\shotgun.x",
+		"data\\MODEL\\weapon\\shotgun.x",
+	};
+
+	// モデルの読込
+	int nIdx = CModel::Load(apPath[m_type]);
+	SetIdxModel(nIdx);
+	BindModel(nIdx);
 }
 
 //=====================================================
@@ -122,11 +137,38 @@ void CItem::GetItem(CObject *pObj)
 		{
 			if ((CObject*)pPlayer == pObj)
 			{// プレイヤー検出
-				pPlayer->SetWeapon(CWeapon::TYPE_MAGNUM);
+				// 効果の付与
+				ApplyEffect(pPlayer);
 
 				Uninit();
 			}
 		}
+	}
+}
+
+//=====================================================
+// 効果を適用する処理
+//=====================================================
+void CItem::ApplyEffect(CPlayer* pPlayer)
+{
+	if (pPlayer == nullptr)
+	{
+		return;
+	}
+
+	switch (m_type)
+	{
+	case CItem::TYPE_MAGNUM:
+
+		pPlayer->SetWeapon(CWeapon::TYPE_MAGNUM);
+
+		break;
+	case CItem::TYPE_MACHINEGUN:
+		break;
+	case CItem::TYPE_RIFLE:
+		break;
+	default:
+		break;
 	}
 }
 
@@ -142,7 +184,7 @@ void CItem::Draw(void)
 //=====================================================
 // 生成処理
 //=====================================================
-CItem *CItem::Create()
+CItem *CItem::Create(TYPE type)
 {
 	CItem *pItem = nullptr;
 
@@ -152,6 +194,8 @@ CItem *CItem::Create()
 
 		if (pItem != nullptr)
 		{
+			pItem->m_type = type;
+
 			// 初期化
 			pItem->Init();
 		}

@@ -1604,7 +1604,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Documents\\メタセコイア\\data\\TEXTURE\\shotgun000.png";
+    "data\\TEXTURE\\shotgun000.png";
    }
   }
  }

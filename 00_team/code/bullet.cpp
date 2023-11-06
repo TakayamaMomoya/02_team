@@ -294,7 +294,7 @@ CBullet *CBullet::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move, int nLife,TYPE type, 
 			{
 				pBullet->m_pCollisionSphere->SetPosition(pBullet->m_pos);
 
-				pBullet->m_pCollisionSphere->SetRadius(fRadius * 1.5f);
+				pBullet->m_pCollisionSphere->SetRadius(fRadius);
 			}
 
 			// ‰Šú‰»ˆ—
