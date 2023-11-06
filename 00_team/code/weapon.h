@@ -42,6 +42,7 @@ public:
 	virtual void Attack(void) {};
 	CPlayer *GetPlayer(void) { return m_pPlayer; }
 	void SetPlayer(CPlayer *pPlayer);
+	int GetID(void) { return m_nIdxPlayer; }
 
 private:
 	void FollowPlayerHand(void);

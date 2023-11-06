@@ -43,7 +43,7 @@ public:
 	CBullet(int nPriority = 6);	// コンストラクタ
 	~CBullet();	// デストラクタ
 
-	static CBullet *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nLife, TYPE type, bool bPierce = false, float fRadius = 10.0f, float fDamage = 5.0f, D3DXCOLOR col = { 1.0f,1.0f,1.0f,1.0f });
+	static CBullet *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nLife, TYPE type, bool bPierce = false, float fRadius = 2.0f, float fDamage = 5.0f, D3DXCOLOR col = { 1.0f,1.0f,1.0f,1.0f });
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);

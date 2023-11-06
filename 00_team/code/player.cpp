@@ -195,7 +195,14 @@ void CPlayer::InputMove(void)
 //=====================================================
 void CPlayer::InputAttack(void)
 {
-	// ŽËŒ‚ˆ—
+	if (m_info.pWeapon != nullptr)
+	{// •Ší‚ÌUŒ‚
+		m_info.pWeapon->Attack();
+	}
+	else
+	{
+
+	}
 }
 
 //=====================================================
