@@ -65,7 +65,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 		LoadCursor(nullptr, IDC_ARROW),
 		(HBRUSH)(COLOR_WINDOW + 1),
 		nullptr,
-		(LPCWSTR)CLASS_NAME,
+		CLASS_NAME,
 		LoadIcon(nullptr,IDI_APPLICATION),
 	};
 
@@ -80,8 +80,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 
 	// ウィンドウを生成
 	hWnd = CreateWindowEx(0,
-		(LPCWSTR)CLASS_NAME,
-		(LPCWSTR)WINDOW_NAME,
+		CLASS_NAME,
+		WINDOW_NAME,
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
@@ -177,7 +177,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 	}
 
 	// ウィンドウクラスの登録を解除
-	UnregisterClass((LPCWSTR)CLASS_NAME, wcex.hInstance);
+	UnregisterClass(CLASS_NAME, wcex.hInstance);
 
 	return(int)msg.wParam;
 }
@@ -199,7 +199,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_CLOSE:
 
 		// 確認メッセージ
-		nID = MessageBox(hWnd, (LPCWSTR)"終了しますか？", (LPCWSTR)"終了メッセージ", MB_YESNO);
+		nID = MessageBox(hWnd, "終了しますか？", "終了メッセージ", MB_YESNO);
 
 		if (nID == IDYES)
 		{// イエスの場合
@@ -218,7 +218,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case VK_ESCAPE:
 
 			// 確認メッセージ
-			nID = MessageBox(hWnd, (LPCWSTR)"終了しますか？", (LPCWSTR)"終了メッセージ", MB_YESNO);
+			nID = MessageBox(hWnd, "終了しますか？", "終了メッセージ", MB_YESNO);
 
 			if (nID == IDYES)
 			{// イエスの場合

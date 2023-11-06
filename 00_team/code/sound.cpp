@@ -74,7 +74,7 @@ HRESULT CSound::Init(HWND hWnd)
 	hr = XAudio2Create(&m_pXAudio2, 0);
 	if(FAILED(hr))
 	{
-		MessageBox(hWnd, (LPCWSTR)"XAudio2オブジェクトの作成に失敗！", (LPCWSTR)"警告！", MB_ICONWARNING);
+		MessageBox(hWnd, "XAudio2オブジェクトの作成に失敗！", "警告！", MB_ICONWARNING);
 
 		// COMライブラリの終了処理
 		CoUninitialize();
@@ -86,7 +86,7 @@ HRESULT CSound::Init(HWND hWnd)
 	hr = m_pXAudio2->CreateMasteringVoice(&m_pMasteringVoice);
 	if(FAILED(hr))
 	{
-		MessageBox(hWnd, (LPCWSTR)"マスターボイスの生成に失敗！", (LPCWSTR)"警告！", MB_ICONWARNING);
+		MessageBox(hWnd, "マスターボイスの生成に失敗！", "警告！", MB_ICONWARNING);
 
 		if(m_pXAudio2 != nullptr)
 		{
@@ -116,15 +116,15 @@ HRESULT CSound::Init(HWND hWnd)
 		memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
 
 		// サウンドデータファイルの生成
-		hFile = CreateFile((LPCWSTR)m_aSoundInfo[nCntSound].pFilename, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+		hFile = CreateFile(m_aSoundInfo[nCntSound].pFilename, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
 		if(hFile == INVALID_HANDLE_VALUE)
 		{
-			MessageBox(hWnd, (LPCWSTR)"サウンドデータファイルの生成に失敗！(1)", (LPCWSTR)"警告！", MB_ICONWARNING);
+			MessageBox(hWnd, "サウンドデータファイルの生成に失敗！(1)", "警告！", MB_ICONWARNING);
 			return HRESULT_FROM_WIN32(GetLastError());
 		}
 		if(SetFilePointer(hFile, 0, nullptr, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
 		{// ファイルポインタを先頭に移動
-			MessageBox(hWnd, (LPCWSTR)"サウンドデータファイルの生成に失敗！(2)", (LPCWSTR)"警告！", MB_ICONWARNING);
+			MessageBox(hWnd, "サウンドデータファイルの生成に失敗！(2)", "警告！", MB_ICONWARNING);
 			return HRESULT_FROM_WIN32(GetLastError());
 		}
 	
@@ -132,18 +132,18 @@ HRESULT CSound::Init(HWND hWnd)
 		hr = CheckChunk(hFile, 'FFIR', &dwChunkSize, &dwChunkPosition);
 		if(FAILED(hr))
 		{
-			MessageBox(hWnd, (LPCWSTR)"WAVEファイルのチェックに失敗！(1)", (LPCWSTR)"警告！", MB_ICONWARNING);
+			MessageBox(hWnd, "WAVEファイルのチェックに失敗！(1)", "警告！", MB_ICONWARNING);
 			return S_FALSE;
 		}
 		hr = ReadChunkData(hFile, &dwFiletype, sizeof(DWORD), dwChunkPosition);
 		if(FAILED(hr))
 		{
-			MessageBox(hWnd, (LPCWSTR)"WAVEファイルのチェックに失敗！(2)", (LPCWSTR)"警告！", MB_ICONWARNING);
+			MessageBox(hWnd, "WAVEファイルのチェックに失敗！(2)", "警告！", MB_ICONWARNING);
 			return S_FALSE;
 		}
 		if(dwFiletype != 'EVAW')
 		{
-			MessageBox(hWnd, (LPCWSTR)"WAVEファイルのチェックに失敗！(3)", (LPCWSTR)"警告！", MB_ICONWARNING);
+			MessageBox(hWnd, "WAVEファイルのチェックに失敗！(3)", "警告！", MB_ICONWARNING);
 			return S_FALSE;
 		}
 	
@@ -151,13 +151,13 @@ HRESULT CSound::Init(HWND hWnd)
 		hr = CheckChunk(hFile, ' tmf', &dwChunkSize, &dwChunkPosition);
 		if(FAILED(hr))
 		{
-			MessageBox(hWnd, (LPCWSTR)"フォーマットチェックに失敗！(1)", (LPCWSTR)"警告！", MB_ICONWARNING);
+			MessageBox(hWnd, "フォーマットチェックに失敗！(1)", "警告！", MB_ICONWARNING);
 			return S_FALSE;
 		}
 		hr = ReadChunkData(hFile, &wfx, dwChunkSize, dwChunkPosition);
 		if(FAILED(hr))
 		{
-			MessageBox(hWnd, (LPCWSTR)"フォーマットチェックに失敗！(2)", (LPCWSTR)"警告！", MB_ICONWARNING);
+			MessageBox(hWnd, "フォーマットチェックに失敗！(2)", "警告！", MB_ICONWARNING);
 			return S_FALSE;
 		}
 
@@ -165,14 +165,14 @@ HRESULT CSound::Init(HWND hWnd)
 		hr = CheckChunk(hFile, 'atad', &m_aSizeAudio[nCntSound], &dwChunkPosition);
 		if(FAILED(hr))
 		{
-			MessageBox(hWnd, (LPCWSTR)"オーディオデータ読み込みに失敗！(1)", (LPCWSTR)"警告！", MB_ICONWARNING);
+			MessageBox(hWnd, "オーディオデータ読み込みに失敗！(1)", "警告！", MB_ICONWARNING);
 			return S_FALSE;
 		}
 		m_apDataAudio[nCntSound] = (BYTE*)malloc(m_aSizeAudio[nCntSound]);
 		hr = ReadChunkData(hFile, m_apDataAudio[nCntSound], m_aSizeAudio[nCntSound], dwChunkPosition);
 		if(FAILED(hr))
 		{
-			MessageBox(hWnd, (LPCWSTR)"オーディオデータ読み込みに失敗！(2)", (LPCWSTR)"警告！", MB_ICONWARNING);
+			MessageBox(hWnd, "オーディオデータ読み込みに失敗！(2)", "警告！", MB_ICONWARNING);
 			return S_FALSE;
 		}
 	
@@ -180,7 +180,7 @@ HRESULT CSound::Init(HWND hWnd)
 		hr = m_pXAudio2->CreateSourceVoice(&m_apSourceVoice[nCntSound], &(wfx.Format));
 		if(FAILED(hr))
 		{
-			MessageBox(hWnd, (LPCWSTR)"ソースボイスの生成に失敗！", (LPCWSTR)"警告！", MB_ICONWARNING);
+			MessageBox(hWnd, "ソースボイスの生成に失敗！", "警告！", MB_ICONWARNING);
 			return S_FALSE;
 		}
 

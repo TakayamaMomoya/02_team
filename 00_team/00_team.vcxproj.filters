@@ -88,6 +88,8 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="code\character.cpp" />
+    <ClCompile Include="code\bullet.cpp" />
+    <ClCompile Include="code\skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -162,5 +164,7 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="code\character.h" />
+    <ClInclude Include="code\bullet.h" />
+    <ClInclude Include="code\skybox.h" />
   </ItemGroup>
 </Project>

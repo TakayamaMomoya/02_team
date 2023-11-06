@@ -22,6 +22,8 @@
 #include "UIManager.h"
 #include "object3D.h"
 #include "playerManager.h"
+#include "texture.h"
+#include "skybox.h"
 
 //*****************************************************
 // マクロ定義
@@ -58,20 +60,24 @@ HRESULT CGame::Init(void)
 	m_pGame = this;
 
 	m_state = STATE_NORMAL;
+	m_bStop = false;
 
 	// UIマネージャーの追加
 	CUIManager::Create();
 
-	CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	CObject3D *pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	// テクスチャの読込
+	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\field00.jpg");
+	pObject->SetIdxTexture(nIdx);
 
-	m_bStop = false;
+	CSkybox::Create();
 
 	// プレイヤーの生成
 	CPlayerManager *pPlayerManger = CPlayerManager::Create();
 
 	if (pPlayerManger != nullptr)
 	{
-		pPlayerManger->CreatePlayer(4);
+		pPlayerManger->CreatePlayer(1);
 	}
 
 	return S_OK;

@@ -70,7 +70,7 @@ private:
 	// サウンドの情報
 	SOUNDINFO m_aSoundInfo[LABEL_MAX] =
 	{
-		{ "data/SOUND/BGM/Control_Station.wav", -1 },			// タイトル	
+		{ "data/SOUND/BGM/title.wav", -1 },			// タイトル	
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ

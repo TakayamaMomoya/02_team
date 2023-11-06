@@ -146,7 +146,7 @@ HRESULT CEffect2D::Load(void)
 		D3DXCreateTextureFromFile
 		(
 			pDevice,
-			(LPCWSTR)"data\\TEXTURE\\EFFECT\\effect000.png",
+			"data\\TEXTURE\\EFFECT\\effect000.png",
 			&m_pTexture
 		);
 	}

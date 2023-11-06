@@ -96,8 +96,10 @@ void CCharacter::Update(void)
 	if (m_info.pBody != nullptr)
 	{// �̂̒Ǐ]
 		D3DXVECTOR3 pos = GetPosition();
+		D3DXVECTOR3 rot = GetRot();
 
 		m_info.pBody->SetPosition(pos);
+		m_info.pBody->SetRot(rot);
 	}
 }
 

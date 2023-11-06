@@ -341,9 +341,9 @@ void CCamera::SetPosV(void)
 {
 	m_camera.posV =
 	{
-		m_camera.posR.x + sinf(m_camera.rot.x) * sinf(m_camera.rot.y) * m_camera.fLength,
+		m_camera.posR.x + sinf(m_camera.rot.x) * sinf(m_camera.rot.y + D3DX_PI) * m_camera.fLength,
 		m_camera.posR.y + cosf(m_camera.rot.x) * m_camera.fLength,
-		m_camera.posR.z + sinf(m_camera.rot.x) * cosf(m_camera.rot.y) * m_camera.fLength
+		m_camera.posR.z + sinf(m_camera.rot.x) * cosf(m_camera.rot.y + D3DX_PI) * m_camera.fLength
 	};
 }
 

@@ -40,6 +40,10 @@ private:
 		int nID;	// ”Ô†
 	};
 
+	void Input(void);
+	void InputMove(void);
+	void InputAttack(void);
+	void Aim(void);
 	void Debug(void);
 
 	SInfo m_info;	// ©g‚Ìî•ñ
