@@ -10,6 +10,7 @@
 //*****************************************************
 #include "weapon.h"
 #include "weaponMagnum.h"
+#include "weaponMachinegun.h"
 #include "motion.h"
 #include "player.h"
 #include "universal.h"
@@ -48,6 +49,9 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 
 			break;
 		case CWeapon::TYPE_MACHINEGUN:
+			// É}ÉVÉìÉKÉìÇÃê∂ê¨
+			pWeapon = new CMachinegun;
+
 			break;
 		default:
 			break;
@@ -64,7 +68,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			char* apPath[CWeapon::TYPE_MAX] =
 			{
 				"data\\MODEL\\weapon\\shotgun.x",
-				"data\\MODEL\\weapon\\shotgun.x",
+				"data\\MODEL\\weapon\\katana.x",
 			};
 
 			int nIdx = CModel::Load(apPath[type]);

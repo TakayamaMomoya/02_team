@@ -65,7 +65,7 @@ void CItem::Load(void)
 	char* apPath[CItem::TYPE_MAX] =
 	{
 		"data\\MODEL\\weapon\\shotgun.x",
-		"data\\MODEL\\weapon\\shotgun.x",
+		"data\\MODEL\\weapon\\katana.x",
 		"data\\MODEL\\weapon\\shotgun.x",
 	};
 
@@ -164,6 +164,9 @@ void CItem::ApplyEffect(CPlayer* pPlayer)
 
 		break;
 	case CItem::TYPE_MACHINEGUN:
+
+		pPlayer->SetWeapon(CWeapon::TYPE_MACHINEGUN);
+
 		break;
 	case CItem::TYPE_RIFLE:
 		break;

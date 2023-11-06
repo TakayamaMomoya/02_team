@@ -84,6 +84,9 @@ HRESULT CGame::Init(void)
 	CItem *pItem = CItem::Create(CItem::TYPE_MAGNUM);
 	pItem->SetPosition(D3DXVECTOR3(0.0f,0.0f,-40.0f));
 
+	pItem = CItem::Create(CItem::TYPE_MACHINEGUN);
+	pItem->SetPosition(D3DXVECTOR3(40.0f, 0.0f, -40.0f));
+
 	return S_OK;
 }
 
