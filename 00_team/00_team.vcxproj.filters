@@ -14,6 +14,9 @@
     <Filter Include="UI">
       <UniqueIdentifier>{78d905fd-ee39-486c-8146-903dd869c54d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="weapon">
+      <UniqueIdentifier>{66256463-8e1f-42c8-bd07-9615d0d67a2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\animation2D.cpp" />
@@ -91,6 +94,12 @@
     <ClCompile Include="code\bullet.cpp" />
     <ClCompile Include="code\skybox.cpp" />
     <ClCompile Include="code\item.cpp" />
+    <ClCompile Include="code\weapon.cpp">
+      <Filter>weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="code\weaponMagnum.cpp">
+      <Filter>weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -168,5 +177,11 @@
     <ClInclude Include="code\bullet.h" />
     <ClInclude Include="code\skybox.h" />
     <ClInclude Include="code\item.h" />
+    <ClInclude Include="code\weapon.h">
+      <Filter>weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="code\weaponMagnum.h">
+      <Filter>weapon</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

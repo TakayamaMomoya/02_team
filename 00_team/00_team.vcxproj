@@ -66,6 +66,8 @@
     <ClCompile Include="code\UI.cpp" />
     <ClCompile Include="code\UIManager.cpp" />
     <ClCompile Include="code\universal.cpp" />
+    <ClCompile Include="code\weapon.cpp" />
+    <ClCompile Include="code\weaponMagnum.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -115,6 +117,8 @@
     <ClInclude Include="code\UI.h" />
     <ClInclude Include="code\UIManager.h" />
     <ClInclude Include="code\universal.h" />
+    <ClInclude Include="code\weapon.h" />
+    <ClInclude Include="code\weaponMagnum.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{35541F49-3336-48EE-AB85-2AECEB818A54}</ProjectGuid>

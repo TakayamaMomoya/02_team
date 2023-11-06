@@ -104,7 +104,7 @@ void CMotion::Update(void)
 				m_nCounterMotion == m_aMotionInfo[m_motionType].pParticle[nCntParticle].nFrame)
 			{// パーティクル生成
 				// 親パーツの位置取得
-				D3DXMATRIX *pMtx = m_apParts[m_aMotionInfo[m_motionType].pParticle[nCntParticle].nIdxParent]->m_pParts->GetMatrix();
+				D3DXMATRIX *pMtx = m_apParts[m_aMotionInfo[m_motionType].pParticle[nCntParticle].nIdxParent]->pParts->GetMatrix();
 				pos = D3DXVECTOR3(pMtx->_41, pMtx->_42, pMtx->_43) + m_aMotionInfo[m_motionType].pParticle[nCntParticle].offset;
 
 				CParticle::Create(pos, (CParticle::TYPE)m_aMotionInfo[m_motionType].pParticle[nCntParticle].nType);
@@ -120,8 +120,8 @@ void CMotion::Update(void)
 		}
 
 		// パーツのトランスフォーム取得
-		pos = m_apParts[nCntParts]->m_pParts->GetPosOrg();
-		rot = m_apParts[nCntParts]->m_pParts->GetRot();
+		pos = m_apParts[nCntParts]->pParts->GetPosOrg();
+		rot = m_apParts[nCntParts]->pParts->GetRot();
 
 		if (m_nKey < m_aMotionInfo[m_motionType].nNumKey - 1)
 		{
@@ -171,9 +171,9 @@ void CMotion::Update(void)
 			DiffRotZ * (float)(1.0f / (float)m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame) * m_nCounterMotion;
 
 		//パーツの向き・位置設定
-		m_apParts[nCntParts]->m_pParts->SetPosition(D3DXVECTOR3(DestPosX, DestPosY, DestPosZ));
+		m_apParts[nCntParts]->pParts->SetPosition(D3DXVECTOR3(DestPosX, DestPosY, DestPosZ));
 
-		m_apParts[nCntParts]->m_pParts->SetRot(D3DXVECTOR3(DestRotX, DestRotY, DestRotZ));
+		m_apParts[nCntParts]->pParts->SetRot(D3DXVECTOR3(DestRotX, DestRotY, DestRotZ));
 	}
 
 	m_nCounterMotion++;
@@ -229,13 +229,13 @@ void CMotion::SetKeyOld(void)
 {
 	for (int nCntPart = 0;nCntPart < m_nNumParts;nCntPart++)
 	{
-		m_aKeyOld[nCntPart].fPosX = m_apParts[nCntPart]->m_pParts->GetPosition().x - m_apParts[nCntPart]->m_pParts->GetPosOrg().x;
-		m_aKeyOld[nCntPart].fPosY = m_apParts[nCntPart]->m_pParts->GetPosition().y - m_apParts[nCntPart]->m_pParts->GetPosOrg().y;
-		m_aKeyOld[nCntPart].fPosZ = m_apParts[nCntPart]->m_pParts->GetPosition().z - m_apParts[nCntPart]->m_pParts->GetPosOrg().z;
+		m_aKeyOld[nCntPart].fPosX = m_apParts[nCntPart]->pParts->GetPosition().x - m_apParts[nCntPart]->pParts->GetPosOrg().x;
+		m_aKeyOld[nCntPart].fPosY = m_apParts[nCntPart]->pParts->GetPosition().y - m_apParts[nCntPart]->pParts->GetPosOrg().y;
+		m_aKeyOld[nCntPart].fPosZ = m_apParts[nCntPart]->pParts->GetPosition().z - m_apParts[nCntPart]->pParts->GetPosOrg().z;
 
-		m_aKeyOld[nCntPart].fRotX = m_apParts[nCntPart]->m_pParts->GetRot().x;
-		m_aKeyOld[nCntPart].fRotY = m_apParts[nCntPart]->m_pParts->GetRot().y;
-		m_aKeyOld[nCntPart].fRotZ = m_apParts[nCntPart]->m_pParts->GetRot().z;
+		m_aKeyOld[nCntPart].fRotX = m_apParts[nCntPart]->pParts->GetRot().x;
+		m_aKeyOld[nCntPart].fRotY = m_apParts[nCntPart]->pParts->GetRot().y;
+		m_aKeyOld[nCntPart].fRotZ = m_apParts[nCntPart]->pParts->GetRot().z;
 	}
 }
 
@@ -283,25 +283,25 @@ void CMotion::MultiplyMtx(void)
 	for (int nCntParts = 0;nCntParts < m_nNumParts;nCntParts++)
 	{
 		// マトリックスの取得
-		pMtx = m_apParts[nCntParts]->m_pParts->GetMatrix();
+		pMtx = m_apParts[nCntParts]->pParts->GetMatrix();
 
 		//ワールドマトリックス初期化
 		D3DXMatrixIdentity(pMtx);
 
 		//向きを反映
 		D3DXMatrixRotationYawPitchRoll(&mtxRotModel,
-			m_apParts[nCntParts]->m_pParts->GetRot().y, m_apParts[nCntParts]->m_pParts->GetRot().x, m_apParts[nCntParts]->m_pParts->GetRot().z);
+			m_apParts[nCntParts]->pParts->GetRot().y, m_apParts[nCntParts]->pParts->GetRot().x, m_apParts[nCntParts]->pParts->GetRot().z);
 		D3DXMatrixMultiply(pMtx, pMtx, &mtxRotModel);
 
 		//位置を反映
 		D3DXMatrixTranslation(&mtxTransModel,
-			m_apParts[nCntParts]->m_pParts->GetPosition().x, m_apParts[nCntParts]->m_pParts->GetPosition().y, m_apParts[nCntParts]->m_pParts->GetPosition().z);
+			m_apParts[nCntParts]->pParts->GetPosition().x, m_apParts[nCntParts]->pParts->GetPosition().y, m_apParts[nCntParts]->pParts->GetPosition().z);
 		D3DXMatrixMultiply(pMtx, pMtx, &mtxTransModel);
 		
 		if (m_apParts[nCntParts]->nIdxParent != -1)
 		{//親パーツがある場合
 			// 親マトリックスの取得
-			pMtxParent = m_apParts[m_apParts[nCntParts]->nIdxParent]->m_pParts->GetMatrix();
+			pMtxParent = m_apParts[m_apParts[nCntParts]->nIdxParent]->pParts->GetMatrix();
 		}
 		else
 		{
@@ -314,7 +314,7 @@ void CMotion::MultiplyMtx(void)
 		//ワールドマトリックス設定
 		pDevice->SetTransform(D3DTS_WORLD, pMtx);
 
-		m_apParts[nCntParts]->m_pParts->Draw();
+		m_apParts[nCntParts]->pParts->Draw();
 	}
 }
 
@@ -375,13 +375,13 @@ void CMotion::Load(char *pPath)
 
 						m_apParts[nCntFile] = new Parts;
 
-						m_apParts[nCntFile]->m_pParts = CParts::Create();
+						m_apParts[nCntFile]->pParts = CParts::Create();
 
 						int nIdx = CModel::Load(&aPath[0]);
 
 						// モデル読込
-						m_apParts[nCntFile]->m_pParts->SetIdxModel(nIdx);
-						m_apParts[nCntFile]->m_pParts->BindModel(m_apParts[nCntFile]->m_pParts->GetIdxModel());
+						m_apParts[nCntFile]->pParts->SetIdxModel(nIdx);
+						m_apParts[nCntFile]->pParts->BindModel(m_apParts[nCntFile]->pParts->GetIdxModel());
 
 						nCntFile++;
 					}
@@ -429,9 +429,9 @@ void CMotion::Load(char *pPath)
 									fscanf(pFile, "%f", &pos[nCntPos]);
 								}
 
-								m_apParts[nCntModel]->m_pParts->SetPosition(pos);
+								m_apParts[nCntModel]->pParts->SetPosition(pos);
 
-								m_apParts[nCntModel]->m_pParts->SetPosOrg(pos);
+								m_apParts[nCntModel]->pParts->SetPosOrg(pos);
 							}
 
 							if (strcmp(cTemp, "ROT") == 0)
@@ -445,7 +445,7 @@ void CMotion::Load(char *pPath)
 									fscanf(pFile, "%f", &rot[nCntRot]);
 								}
 
-								m_apParts[nCntModel]->m_pParts->SetRot(rot);
+								m_apParts[nCntModel]->pParts->SetRot(rot);
 							}
 
 						}//END_PART
@@ -628,7 +628,7 @@ float CMotion::GetRadiusMax(void)
 	{
 		if (m_apParts[nCntParts] != nullptr)
 		{// パーツの半径取得
-			fTemp = m_apParts[nCntParts]->m_pParts->GetRadius();
+			fTemp = m_apParts[nCntParts]->pParts->GetRadius();
 
 			if (fTemp > fRadiusMax)
 			{// 最大半径設定

@@ -273,9 +273,20 @@ void CPlayer::Draw(void)
 //=====================================================
 // •ŠíÝ’è
 //=====================================================
-void CPlayer::SetWeapon(void)
+void CPlayer::SetWeapon(CWeapon::TYPE type)
 {
-	
+	if (m_info.pWeapon != nullptr)
+	{
+		m_info.pWeapon->Uninit();
+		m_info.pWeapon = nullptr;
+	}
+
+	m_info.pWeapon = CWeapon::Create(type,8);
+
+	if (m_info.pWeapon != nullptr)
+	{
+		m_info.pWeapon->SetPlayer(this);
+	}
 }
 
 //=====================================================

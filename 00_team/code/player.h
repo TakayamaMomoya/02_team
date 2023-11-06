@@ -12,13 +12,13 @@
 // インクルード
 //*****************************************************
 #include "character.h"
+#include "weapon.h"
 
 //*****************************************************
 // 前方宣言
 //*****************************************************
 class CMotion;
 class CCollisionSphere;
-class CWeapon;
 
 //*****************************************************
 // クラスの定義
@@ -34,8 +34,9 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	void SetWeapon(void);
+	void SetWeapon(CWeapon::TYPE type);
 	void SetID(int nID) { m_info.nID = nID; }
+	int GetID(void) { return m_info.nID; }
 
 private:
 	struct SInfo

@@ -1,6 +1,6 @@
 //*****************************************************
 //
-// アイテムの処理[item.cpp]
+// 武器の処理[weapon.cpp]
 // Author:髙山桃也
 //
 //*****************************************************
@@ -8,34 +8,67 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "item.h"
-#include "manager.h"
-#include "renderer.h"
-#include "collision.h"
-#include "playerManager.h"
 #include "weapon.h"
+#include "weaponMagnum.h"
+#include "motion.h"
 #include "player.h"
+#include "universal.h"
 
 //=====================================================
 // コンストラクタ
 //=====================================================
-CItem::CItem(int nPriority) : CObjectX(nPriority)
+CWeapon::CWeapon(int nPriority) : CObjectX(nPriority)
 {
-	m_pCollisionSphere = nullptr;
+	m_nIdxHand = 0;
+	m_nIdxPlayer = 0;
 }
 
 //=====================================================
 // デストラクタ
 //=====================================================
-CItem::~CItem()
+CWeapon::~CWeapon()
 {
 
 }
 
 //=====================================================
+// 生成処理
+//=====================================================
+CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
+{
+	CWeapon *pWeapon = nullptr;
+
+	if (pWeapon == nullptr)
+	{
+		switch (type)
+		{
+		case CWeapon::TYPE_MAGNUM:
+			// マグナムの生成
+			pWeapon = new CMagnum;
+
+			break;
+		case CWeapon::TYPE_MACHINEGUN:
+			break;
+		default:
+			break;
+		}
+
+		if (pWeapon != nullptr)
+		{
+			pWeapon->m_nIdxHand = nIdxhand;
+
+			// 初期化
+			pWeapon->Init();
+		}
+	}
+
+	return pWeapon;
+}
+
+//=====================================================
 // 初期化処理
 //=====================================================
-HRESULT CItem::Init(void)
+HRESULT CWeapon::Init(void)
 {
 	// 継承クラスの初期化
 	CObjectX::Init();
@@ -47,30 +80,14 @@ HRESULT CItem::Init(void)
 	SetIdxModel(nIdx);
 	BindModel(nIdx);
 
-	if (m_pCollisionSphere == nullptr)
-	{// 当たり判定の生成
-		m_pCollisionSphere = CCollisionSphere::Create(CCollision::TAG_ITEM, CCollision::TYPE_SPHERE, this);
-
-		if (m_pCollisionSphere != nullptr)
-		{
-			m_pCollisionSphere->SetRadius(10.0f);
-		}
-	}
-
 	return S_OK;
 }
 
 //=====================================================
 // 終了処理
 //=====================================================
-void CItem::Uninit(void)
+void CWeapon::Uninit(void)
 {
-	if (m_pCollisionSphere != nullptr)
-	{
-		m_pCollisionSphere->Uninit();
-		m_pCollisionSphere = nullptr;
-	}
-
 	// 継承クラスの終了
 	CObjectX::Uninit();
 }
@@ -78,54 +95,40 @@ void CItem::Uninit(void)
 //=====================================================
 // 更新処理
 //=====================================================
-void CItem::Update(void)
+void CWeapon::Update(void)
 {
 	// 継承クラスの更新
 	CObjectX::Update();
 
-	if (m_pCollisionSphere != nullptr)
-	{
-		D3DXVECTOR3 pos = GetPosition();
-
-		m_pCollisionSphere->SetPosition(pos);
-
-		// プレイヤーとの当たり判定
-		if (m_pCollisionSphere->SphereCollision(CCollision::TAG_PLAYER))
-		{
-			// 当たったオブジェクトの取得
-			CObject *pObj = m_pCollisionSphere->GetOther();
-
-			// アイテム入手処理
-			GetItem(pObj);
-		}
-	}
+	// プレイヤーの手とマトリックスをかけ合わせる
+	FollowPlayerHand();
 }
 
 //=====================================================
-// アイテム入手時の処理
+// プレイヤーの手を追従
 //=====================================================
-void CItem::GetItem(CObject *pObj)
+void CWeapon::FollowPlayerHand(void)
 {
-	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
+	CUniversal *pUniversal = CUniversal::GetInstance();
 
-	if (pObj == nullptr || pPlayerManager == nullptr)
+	if (m_pPlayer == nullptr)
 	{
 		return;
 	}
 
-	// プレイヤー取得
-	for (int i = 0; i < NUM_PLAYER; i++)
+	CMotion *pBody = m_pPlayer->GetBody();
+
+	if (pBody != nullptr)
 	{
-		CPlayer *pPlayer = pPlayerManager->GetPlayer(i);
+		CParts *pParts = pBody->GetParts(m_nIdxHand)->pParts;
 
-		if (pPlayer != nullptr)
+		if (pParts != nullptr)
 		{
-			if ((CObject*)pPlayer == pObj)
-			{// プレイヤー検出
-				pPlayer->SetWeapon(CWeapon::TYPE_MAGNUM);
+			D3DXMATRIX *pMtx = GetMatrix();
+			D3DXMATRIX *pMtxPart = pParts->GetMatrix();
+			D3DXVECTOR3 offset = { 0.0f,0.0f,0.0f };
 
-				Uninit();
-			}
+			pUniversal->SetOffSet(pMtx, *pMtxPart, offset);
 		}
 	}
 }
@@ -133,29 +136,21 @@ void CItem::GetItem(CObject *pObj)
 //=====================================================
 // 描画処理
 //=====================================================
-void CItem::Draw(void)
+void CWeapon::Draw(void)
 {
 	// 継承クラスの描画
-	CObjectX::Draw();
+	CObjectX::JustDraw();
 }
 
 //=====================================================
-// 生成処理
+// プレイヤー設定
 //=====================================================
-CItem *CItem::Create()
+void CWeapon::SetPlayer(CPlayer *pPlayer)
 {
-	CItem *pItem = nullptr;
+	m_pPlayer = pPlayer;
 
-	if (pItem == nullptr)
+	if (m_pPlayer != nullptr)
 	{
-		pItem = new CItem;
-
-		if (pItem != nullptr)
-		{
-			// 初期化
-			pItem->Init();
-		}
+		m_nIdxPlayer = pPlayer->GetID();
 	}
-
-	return pItem;
 }

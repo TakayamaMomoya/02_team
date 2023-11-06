@@ -69,7 +69,7 @@ public:
 	{
 		int nIdx;
 		int nIdxParent;
-		CParts *m_pParts;
+		CParts *pParts;
 	}Parts;
 
 	// ƒƒ“ƒoŠÖ”

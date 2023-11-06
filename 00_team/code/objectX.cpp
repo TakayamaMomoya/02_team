@@ -132,6 +132,61 @@ void CObjectX::Draw(void)
 }
 
 //=====================================================
+// 描画のみ行う
+//=====================================================
+void CObjectX::JustDraw(void)
+{
+	if (m_pModel != nullptr)
+	{
+		// デバイスの取得
+		LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
+
+		// ワールドマトリックス設定
+		pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
+
+		D3DXMATERIAL *pMat;				// マテリアルデータへのポインタ
+		D3DMATERIAL9 matDef;			// 現在のマテリアル保存用
+		LPDIRECT3DTEXTURE9 pTexture;
+
+		// 現在のマテリアル取得
+		pDevice->GetMaterial(&matDef);
+
+		// マテリアルデータへのポインタを取得
+		pMat = (D3DXMATERIAL*)m_pModel->pBuffMat->GetBufferPointer();
+
+		for (int nCntMat = 0; nCntMat < (int)m_pModel->dwNumMat; nCntMat++)
+		{
+			// マテリアルの保存
+			matDef = pMat[nCntMat].MatD3D;
+
+			if (m_bChangeCol)
+			{
+				// 色の設定
+				pMat[nCntMat].MatD3D.Diffuse = m_col;
+			}
+
+			// マテリアル設定
+			pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+
+			// テクスチャの取得
+			pTexture = CTexture::GetInstance()->GetAddress(m_pModel->pIdxTexture[nCntMat]);
+
+			// テクスチャ設定
+			pDevice->SetTexture(0, pTexture);
+
+			// モデル（パーツ）描画
+			m_pModel->pMesh->DrawSubset(nCntMat);
+
+			// 色を戻す
+			pMat[nCntMat].MatD3D = matDef;
+		}
+
+		// マテリアルを戻す
+		pDevice->SetMaterial(&matDef);
+	}
+}
+
+//=====================================================
 // マトリックス設定処理
 //=====================================================
 void CObjectX::SetMatrix(void)
