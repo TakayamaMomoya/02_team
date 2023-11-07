@@ -45,6 +45,8 @@ public:
 	static CScene::MODE GetMode(void) { return m_mode; }
 	static void SetScore(int nScore) { m_nScore = nScore; }
 	static int GetScore(void) { return m_nScore; }
+	static float GetTick(void) { return m_fTick; }
+	static void SetTick(float fTick) { m_fTick = fTick; }
 
 private:
 	static CCamera *m_pCamera;	// カメラのポインタ
@@ -52,6 +54,7 @@ private:
 	static CScene *m_pScene;	// 現在のシーン
 	static CScene::MODE m_mode;	// 現在のモード
 	static int m_nScore;	// スコア
+	static float m_fTick;	// 前回のフレームから経過した秒数
 };
 
 #endif

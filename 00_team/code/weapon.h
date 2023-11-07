@@ -38,6 +38,7 @@ public:
 		int nIdxHand;
 		int nIdxPlayer;
 		CPlayer *pPlayer;
+		TYPE type;
 	};
 
 	CWeapon(int nPriority = 3);	// コンストラクタ

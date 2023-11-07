@@ -11,6 +11,7 @@
 #include "weapon.h"
 #include "weaponMagnum.h"
 #include "weaponMachinegun.h"
+#include "weaponManager.h"
 #include "motion.h"
 #include "player.h"
 #include "universal.h"
@@ -60,6 +61,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 		if (pWeapon != nullptr)
 		{
 			pWeapon->m_info.nIdxHand = nIdxhand;
+			pWeapon->m_info.type = type;
 
 			// 初期化
 			pWeapon->Init();
@@ -91,6 +93,17 @@ HRESULT CWeapon::Init(void)
 	// モデルの読込
 	int nIdx = CModel::Load("data\\MODEL\\weapon\\shotgun.x");
 	BindModel(nIdx);
+
+	// 基底パラメーター取得
+	CWeaponManager* pWeaponManager = CWeaponManager::GetInstance();
+
+	if (pWeaponManager != nullptr)
+	{
+		CWeapon::SInfo info = pWeaponManager->GetBaseInfo(m_info.type);
+
+		SetMaxBullet(info.nMaxBullet);
+		SetRapid(info.nRapid);
+	}
 
 	return S_OK;
 }

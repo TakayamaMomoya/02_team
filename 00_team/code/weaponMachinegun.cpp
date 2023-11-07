@@ -12,7 +12,6 @@
 #include "inputjoypad.h"
 #include "bullet.h"
 #include "player.h"
-#include "weaponManager.h"
 
 //*****************************************************
 // マクロ定義
@@ -43,16 +42,6 @@ HRESULT CMachinegun::Init(void)
 	// 継承クラスの初期化
 	CWeapon::Init();
 
-	// パラメーター取得
-	CWeaponManager* pWeaponManager = CWeaponManager::GetInstance();
-
-	if (pWeaponManager != nullptr)
-	{
-		CWeapon::SInfo info = pWeaponManager->GetBaseInfo(CWeapon::TYPE_MACHINEGUN);
-
-		SetMaxBullet(info.nMaxBullet);
-		SetRapid(info.nRapid);
-	}
 
 	return S_OK;
 }
@@ -80,44 +69,56 @@ void CMachinegun::Update(void)
 //=====================================================
 void CMachinegun::Attack(void)
 {
-	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
+	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
 
 	if (pJoypad == nullptr)
 	{
 		return;
 	}
 
+	int nBullet = GetBullet();
 	int nID = GetID();
 
-	if (pJoypad->GetPress(CInputJoypad::PADBUTTONS_RB,nID))
+	if (pJoypad->GetPress(CInputJoypad::PADBUTTONS_RB, nID))
 	{// 射撃
-		D3DXMATRIX *pMtx = GetMatrix();
+		if (nBullet > 0)
+		{// 弾の発射
+			D3DXMATRIX* pMtx = GetMatrix();
 
-		D3DXVECTOR3 pos = 
-		{// 取っ手の位置を取得
-			pMtx->_41,
-			pMtx->_42,
-			pMtx->_43,
-		};
-
-		D3DXVECTOR3 move = { 0.0f,0.0f,0.0f };
-
-		CPlayer *pPlayer = GetPlayer();
-
-		if (pPlayer != nullptr)
-		{// プレイヤーの向きに移動量を設定
-			D3DXVECTOR3 rot = pPlayer->GetRot();
-
-			move = 
-			{
-				sinf(rot.y) * BULLET_SPEED,
-				0.0f,
-				cosf(rot.y) * BULLET_SPEED,
+			D3DXVECTOR3 pos =
+			{// 取っ手の位置を取得
+				pMtx->_41,
+				pMtx->_42,
+				pMtx->_43,
 			};
-		}
 
-		// 弾を発射
-		CBullet::Create(pos, -move, 100, CBullet::TYPE_PLAYER, false);
+			D3DXVECTOR3 move = { 0.0f,0.0f,0.0f };
+
+			CPlayer* pPlayer = GetPlayer();
+
+			if (pPlayer != nullptr)
+			{// プレイヤーの向きに移動量を設定
+				D3DXVECTOR3 rot = pPlayer->GetRot();
+
+				move =
+				{
+					sinf(rot.y) * BULLET_SPEED,
+					0.0f,
+					cosf(rot.y) * BULLET_SPEED,
+				};
+			}
+
+			// 弾を発射
+			CBullet::Create(pos, -move, 100, CBullet::TYPE_PLAYER, false);
+
+			// 弾を減らす
+			nBullet--;
+			SetBullet(nBullet);
+		}
+		else
+		{// 弾切れの場合
+
+		}
 	}
 }
 

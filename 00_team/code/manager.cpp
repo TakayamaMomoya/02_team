@@ -41,6 +41,7 @@ CLight *CManager::m_pLight = nullptr;	// ライトのポインタ
 CScene *CManager::m_pScene = nullptr;	// シーンへのポインタ
 CScene::MODE CManager::m_mode = CScene::MODE_GAME;	// 現在のモード
 int CManager::m_nScore = 0;	// スコア保存用
+float CManager::m_fTick = 0.0f;	// 前回のフレームから経過した時間
 
 //=====================================================
 // コンストラクタ

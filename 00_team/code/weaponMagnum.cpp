@@ -12,7 +12,6 @@
 #include "inputjoypad.h"
 #include "bullet.h"
 #include "player.h"
-#include "weaponManager.h"
 
 //*****************************************************
 // マクロ定義
@@ -42,17 +41,6 @@ HRESULT CMagnum::Init(void)
 {
 	// 継承クラスの初期化
 	CWeapon::Init();
-
-	// パラメーター取得
-	CWeaponManager* pWeaponManager = CWeaponManager::GetInstance();
-
-	if (pWeaponManager != nullptr)
-	{
-		CWeapon::SInfo info = pWeaponManager->GetBaseInfo(CWeapon::TYPE_MAGNUM);
-
-		SetMaxBullet(info.nMaxBullet);
-		SetRapid(info.nRapid);
-	}
 
 	return S_OK;
 }

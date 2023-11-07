@@ -41,7 +41,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 	// マネージャーの宣言
 	CManager *pManager = nullptr;
 	
-	//変数宣言
 	DWORD dwCurrentTime;				//現在時刻
 	DWORD dwExecLastTime;				//最後に処理した時刻
 	DWORD dwFrameCount;					//フレームカウント
@@ -141,16 +140,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 				dwFrameCount = 0;
 			}
 
-
 			//現在時刻の取得
 			dwCurrentTime = timeGetTime();
+
 			if ((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
 			{//60分の1秒経過
+				float fTick = ((float)dwCurrentTime - (float)dwExecLastTime) * 0.001f / 60;
+
 				//処理開始の時刻を計算
 				dwExecLastTime = dwCurrentTime;
 
 				if (pManager != nullptr)
 				{
+					// ティックの設定
+					CManager::SetTick(fTick);
+
 					// 更新処理
 					pManager->Update();
 
@@ -161,8 +165,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 				//FPSカウンタ経過
 				dwFrameCount++;
 			}
-
-			
 		}
 	}
 
