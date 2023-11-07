@@ -160,7 +160,9 @@ void CWeapon::Draw(void)
 		return;
 	}
 
-	pDebugProc->Print("\n’e”[%d]", m_info.nMaxBullet);
+	pDebugProc->Print("\nÅ‘å’e”[%d]", m_info.nMaxBullet);
+	pDebugProc->Print("\n’e”[%d]", m_info.nNumBullet);
+	pDebugProc->Print("\n˜AŽË—Í[%d]", m_info.nRapid);
 }
 
 //=====================================================

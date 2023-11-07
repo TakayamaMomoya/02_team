@@ -91,12 +91,27 @@ void CWeaponManager::LoadParam(void)
 					fscanf(pFile, "%s", &cTemp[0]);
 
 					// 基底パラメーター読み込み
-					LoadBaseInfo(pFile, &cTemp[0], nCntParam);
+					LoadBaseInfo(pFile, &cTemp[0], CWeapon::TYPE_MAGNUM);
 
 					if (strcmp(cTemp, "END_MAGNUMSET") == 0)
 					{// パラメーター読込終了
-						nCntParam++;
+						break;
+					}
+				}
+			}
 
+			if (strcmp(cTemp, "MACHINEGUNSET") == 0)
+			{// パラメーター読込開始
+				while (true)
+				{
+					// 文字読み込み
+					fscanf(pFile, "%s", &cTemp[0]);
+
+					// 基底パラメーター読み込み
+					LoadBaseInfo(pFile, &cTemp[0], CWeapon::TYPE_MACHINEGUN);
+
+					if (strcmp(cTemp, "END_MACHINEGUNSET") == 0)
+					{// パラメーター読込終了
 						break;
 					}
 				}
@@ -123,6 +138,13 @@ void CWeaponManager::LoadBaseInfo(FILE* pFile, char* pTemp, int nCntParam)
 		fscanf(pFile, "%s", pTemp);
 
 		fscanf(pFile, "%d", &m_aInfo[nCntParam].nMaxBullet);
+	}
+
+	if (strcmp(pTemp, "RAPID") == 0)
+	{// 連射力
+		fscanf(pFile, "%s", pTemp);
+
+		fscanf(pFile, "%d", &m_aInfo[nCntParam].nRapid);
 	}
 }
 
