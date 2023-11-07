@@ -118,6 +118,7 @@
     <ClCompile Include="code\enemyNormal.cpp">
       <Filter>enemy</Filter>
     </ClCompile>
+    <ClCompile Include="code\goal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -216,5 +217,6 @@
     <ClInclude Include="code\enemyNormal.h">
       <Filter>enemy</Filter>
     </ClInclude>
+    <ClInclude Include="code\goal.h" />
   </ItemGroup>
 </Project>

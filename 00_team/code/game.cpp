@@ -27,6 +27,7 @@
 #include "item.h"
 #include "weaponManager.h"
 #include "enemyManager.h"
+#include "goal.h"
 
 //*****************************************************
 // マクロ定義
@@ -99,6 +100,9 @@ HRESULT CGame::Init(void)
 	{
 		pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -59.0f), CEnemy::TYPE_NORMAL);
 	}
+
+	// ゴールの生成
+	CGoal::Create();
 
 	return S_OK;
 }

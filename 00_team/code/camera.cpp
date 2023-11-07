@@ -24,7 +24,7 @@
 //*****************************************************
 #define MOVE_SPEED					(3.0f)						//移動スピード
 #define ROLL_SPEED					(0.02f)						//回転スピード
-#define MOVE_FACT					(0.3f)						//移動係数
+#define MOVE_FACT					(0.1f)						//移動係数
 #define LIMIT_HEIGHT	(50)	// 位置を制限する高さ
 #define INITIAL_ANGLE	(45.0f)	// 初期の視野角
 #define ANGLE_GAME	(D3DX_PI * 0.4f)	// ゲーム中のカメラの角度
