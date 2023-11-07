@@ -29,6 +29,9 @@
     <ClCompile Include="code\debugproc.cpp" />
     <ClCompile Include="code\effect2D.cpp" />
     <ClCompile Include="code\effect3D.cpp" />
+    <ClCompile Include="code\enemy.cpp" />
+    <ClCompile Include="code\enemyManager.cpp" />
+    <ClCompile Include="code\enemyNormal.cpp" />
     <ClCompile Include="code\fade.cpp" />
     <ClCompile Include="code\game.cpp" />
     <ClCompile Include="code\input.cpp" />
@@ -82,6 +85,9 @@
     <ClInclude Include="code\debugproc.h" />
     <ClInclude Include="code\effect2D.h" />
     <ClInclude Include="code\effect3D.h" />
+    <ClInclude Include="code\enemy.h" />
+    <ClInclude Include="code\enemyManager.h" />
+    <ClInclude Include="code\enemyNormal.h" />
     <ClInclude Include="code\fade.h" />
     <ClInclude Include="code\game.h" />
     <ClInclude Include="code\input.h" />
@@ -134,13 +140,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>

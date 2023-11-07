@@ -23,6 +23,8 @@ CParts::CParts()
 	m_rot = { 0.0f,0.0f,0.0f };
 	m_IdxModel = -1;
 	m_fRadius = 0.0f;
+	m_bChangeCol = false;
+	m_col = { 0.0f,0.0f,0.0f,0.0f };
 }
 
 //====================================================
@@ -71,6 +73,11 @@ void CParts::Update(void)
 //====================================================
 void CParts::Draw(void)
 {
+	if (m_pModel == nullptr)
+	{
+		return;
+	}
+
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
 
@@ -86,6 +93,15 @@ void CParts::Draw(void)
 
 	for (int nCntMat = 0; nCntMat < (int)m_pModel->dwNumMat; nCntMat++)
 	{
+		// マテリアルの保存
+		matDef = pMat[nCntMat].MatD3D;
+
+		if (m_bChangeCol)
+		{
+			// 色の設定
+			pMat[nCntMat].MatD3D.Diffuse = m_col;
+		}
+
 		//マテリアル設定
 		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
@@ -97,10 +113,65 @@ void CParts::Draw(void)
 
 		//モデル（パーツ）描画
 		m_pModel->pMesh->DrawSubset(nCntMat);
+
+		// 色を戻す
+		pMat[nCntMat].MatD3D = matDef;
+
+		// マテリアルを戻す
+		pDevice->SetMaterial(&matDef);
+	}
+}
+
+//====================================================
+// 影用の描画処理
+//====================================================
+void CParts::DrawShadow(void)
+{
+	if (m_pModel == nullptr)
+	{
+		return;
 	}
 
-	// マテリアルを戻す
-	pDevice->SetMaterial(&matDef);
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
+
+	D3DXMATERIAL *pMat;				//マテリアルデータへのポインタ
+	D3DMATERIAL9 matDef;			//現在のマテリアル保存用
+	LPDIRECT3DTEXTURE9 pTexture;
+
+	// 現在のマテリアル取得
+	pDevice->GetMaterial(&matDef);
+
+	// マテリアルデータへのポインタを取得
+	pMat = (D3DXMATERIAL*)m_pModel->pBuffMat->GetBufferPointer();
+
+	for (int nCntMat = 0; nCntMat < (int)m_pModel->dwNumMat; nCntMat++)
+	{
+		// マテリアルの保存
+		matDef = pMat[nCntMat].MatD3D;
+
+		// 色の設定
+		pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+		pMat[nCntMat].MatD3D.Emissive = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+
+		//マテリアル設定
+		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+
+		// テクスチャの取得
+		pTexture = CTexture::GetInstance()->GetAddress(m_pModel->pIdxTexture[nCntMat]);
+
+		//テクスチャ設定
+		pDevice->SetTexture(0, pTexture);
+
+		//モデル（パーツ）描画
+		m_pModel->pMesh->DrawSubset(nCntMat);
+
+		// 色を戻す
+		pMat[nCntMat].MatD3D = matDef;
+
+		// マテリアルを戻す
+		pDevice->SetMaterial(&matDef);
+	}
 }
 
 //=====================================================

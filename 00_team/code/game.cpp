@@ -26,6 +26,7 @@
 #include "skybox.h"
 #include "item.h"
 #include "weaponManager.h"
+#include "enemyManager.h"
 
 //*****************************************************
 // マクロ定義
@@ -90,6 +91,14 @@ HRESULT CGame::Init(void)
 
 	pItem = CItem::Create(CItem::TYPE_MACHINEGUN);
 	pItem->SetPosition(D3DXVECTOR3(40.0f, 0.0f, -40.0f));
+
+	// 敵マネージャーの生成
+	CEnemyManager *pEnemyManager = CEnemyManager::Create();
+
+	if (pEnemyManager != nullptr)
+	{
+		pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, 0.0f), CEnemy::TYPE_NORMAL);
+	}
 
 	return S_OK;
 }

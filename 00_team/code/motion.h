@@ -44,15 +44,22 @@ public:
 		KEY aKey[MAX_PARTS];			//各モデルのキー要素
 	}KEY_INFO;
 
-	// パーティクル情報構造体
 	typedef struct
-	{
+	{// パーティクル情報構造体
 		int nKey;	//生成するキー
 		int nFrame;	//生成するフレーム
 		int nType;	// 種類
 		D3DXVECTOR3 offset;	// オフセット位置
 		int nIdxParent;	// 親となるパーツの番号
 	}PARTICLE_INFO;
+	
+	typedef struct
+	{// 当たり判定情報構造体
+		int nKey;	//生成するキー
+		int nFrame;	//生成するフレーム
+		D3DXVECTOR3 offset;	// オフセット位置
+		int nIdxParent;	// 親となるパーツの番号
+	}COLLISION_INFO;
 
 	//モーション情報の構造体
 	typedef struct
@@ -61,7 +68,9 @@ public:
 		int nNumKey;					//キーの総数
 		KEY_INFO aKeyInfo[MAX_PARTS];	//キー情報
 		int nNumParticle;	// パーティクルの数
+		int nNumCollision;	// 当たり判定の数
 		PARTICLE_INFO *pParticle;	// パーティクルのポインタ
+		COLLISION_INFO *pCollision;	// 当たり判定のポインタ
 	}MOTION_INFO;
 
 	// パーツの構造体
@@ -82,10 +91,14 @@ public:
 	void Load(char *pPath);
 	void MultiplyMtx(void);
 	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }	// 設定処理
+	void SetPosShadow(D3DXVECTOR3 pos) { m_posShadow = pos; }	// 設定処理
 	void SetPositionOld(D3DXVECTOR3 pos) { m_posOld = pos; }	// 設定処理
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }	// 取得処理
 	D3DXVECTOR3 *GetPosAddress(void) { return &m_pos; }	// 取得処理
 	D3DXVECTOR3 GetPositionOld(void) { return m_posOld; }
+	D3DXVECTOR3 GetMtxPos(int nIdx);
+	void SetMove(D3DXVECTOR3 move) { m_move = move; }
+	D3DXVECTOR3 GetMove(void) { return m_move; }	// 取得処理
 	void SetRot(D3DXVECTOR3 rot) { m_rot = rot; }
 	D3DXVECTOR3 GetRot(void) { return m_rot; }
 	void SetMotion(int nMotionType);
@@ -97,6 +110,13 @@ public:
 	bool IsFinish(void) { return m_bFinish; }
 	void SetMatrix(void);
 	float GetRadiusMax(void);
+	void SetAfterImage(D3DXCOLOR col = { 0.0f,0.0f,0.0f,0.0f }, int m_nLife = 10);
+	int GetKey(void) { return m_nKey; }
+	int GetFrame(void) { return m_nCounterMotion; }
+	void SetAllCol(D3DXCOLOR col);
+	void ResetAllCol(void);
+	void InitPose(int nMotion);
+	void EnableShadow(bool bShadow) { m_bShadow = bShadow; }
 
 private:
 	Parts *m_apParts[MAX_PARTS];	// パーツの構造体
@@ -112,9 +132,12 @@ private:
 	int m_nNumParts;	// パーツの数
 	D3DXVECTOR3 m_pos;	// 位置
 	D3DXVECTOR3 m_posOld;	// 前回の位置
+	D3DXVECTOR3 m_posShadow;	// 影の位置
+	D3DXVECTOR3 m_move;	// 移動量
 	D3DXVECTOR3 m_rot;							//向き
 	D3DXMATRIX m_mtxWorld;	// マトリックス
 	bool m_bFinish;	// モーションが終わったかどうか
+	bool m_bShadow;	// 影を描画するかどうか
 };
 
 #endif
