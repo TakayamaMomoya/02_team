@@ -104,6 +104,7 @@ public:
 	void SetRadius(float fRadius) { m_fRadius = fRadius; }
 	bool IsTriggerExit(TAG tag);
 	bool IsTriggerEnter(TAG tag);
+	void PushCollision(D3DXVECTOR3 *pPos,TAG tag);
 
 private:
 	float m_fRadius;

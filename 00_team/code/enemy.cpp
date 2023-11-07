@@ -264,11 +264,20 @@ void CEnemy::ManageCollision(void)
 
 		if (pBody != nullptr)
 		{
-			D3DXVECTOR3 pos = pBody->GetMtxPos(0);
+			D3DXVECTOR3 posWaist = pBody->GetMtxPos(0);
+
+			D3DXVECTOR3 pos = GetPosition();
+
+			m_pCollisionSphere->SetPosition(pos);
+
+			m_pCollisionSphere->PushCollision(&pos, CCollision::TAG_PLAYER);
+			m_pCollisionSphere->PushCollision(&pos, CCollision::TAG_ENEMY);
+
+			SetPosition(pos);
 
 			m_pCollisionSphere->SetPositionOld(m_pCollisionSphere->GetPosition());
 
-			m_pCollisionSphere->SetPosition(pos);
+			m_pCollisionSphere->SetPosition(posWaist);
 		}
 	}
 
@@ -281,7 +290,6 @@ void CEnemy::ManageCollision(void)
 
 		// ‰Ÿ‚µo‚µ‚Ì“–‚½‚è”»’è
 		m_pCollisionCube->CubeCollision(CCollision::TAG_BLOCK, &move);
-
 		SetMove(move);
 	}
 }

@@ -539,6 +539,56 @@ bool CCollisionSphere::IsTriggerEnter(TAG tag)
 }
 
 //=====================================================
+// 球の押し出しの判定
+//=====================================================
+void CCollisionSphere::PushCollision(D3DXVECTOR3* pPos, TAG tag)
+{
+
+	CCollision** ppCollision = GetCollision();
+
+	for (int nCnt = 0; nCnt < NUM_OBJECT; nCnt++)
+	{
+		if (ppCollision[nCnt] != nullptr)
+		{
+			if (ppCollision[nCnt]->GetType() == TYPE_SPHERE)
+			{
+				if (tag == TAG_NONE)
+				{
+
+				}
+				else if (ppCollision[nCnt]->GetTag() != tag || ppCollision[nCnt] == this)
+				{
+					continue;
+				}
+
+				// 差分取得
+				D3DXVECTOR3 vecDiff = ppCollision[nCnt]->GetPosition() - *pPos;
+
+				// 差分の長さ
+				float fLengthDiff = D3DXVec3Length(&vecDiff);
+
+				// ぶつかる時の距離
+				float fLength = ppCollision[nCnt]->GetRadius() + GetRadius();
+
+				if (fLengthDiff < fLength)
+				{
+					D3DXVECTOR3 posAfter;	// 押し出し後の座標
+
+					// 差分ベクトルから押し出し後の位置を計算
+					D3DXVec3Normalize(&posAfter,&vecDiff);
+
+					posAfter *= -fLength;
+
+					posAfter += ppCollision[nCnt]->GetPosition();
+
+					*pPos = posAfter;
+				}
+			}
+		}
+	}
+}
+
+//=====================================================
 // 生成処理
 //=====================================================
 CCollisionSphere *CCollisionSphere::Create(TAG tag, TYPE type, CObject *obj)

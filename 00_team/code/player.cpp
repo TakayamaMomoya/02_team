@@ -127,7 +127,12 @@ void CPlayer::Update(void)
 	{
 		D3DXVECTOR3 pos = GetPosition();
 
+		m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_PLAYER);
+		m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_ENEMY);
+
 		m_info.pCollisionSphere->SetPosition(pos);
+
+		SetPosition(pos);
 	}
 
 	// ˆÚ“®—Ê‚ÌŒ¸Š

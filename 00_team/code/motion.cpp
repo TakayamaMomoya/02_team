@@ -412,30 +412,30 @@ void CMotion::Load(char *pPath)
 		while(true)
 		{
 			//文字読み込み
-			fscanf_s(pFile, "%s", &cTemp[0]);
+			fscanf(pFile, "%s", &cTemp[0]);
 
 			//ファイル名読み込み=========================================
 			if (strcmp(cTemp, "NUM_MODEL") == 0)
 			{
 				//"="読み込み
-				fscanf_s(pFile, "%s", &cTemp[0]);
+				fscanf(pFile, "%s", &cTemp[0]);
 
 				//モデル数読み込み
-				fscanf_s(pFile, "%d", &m_nNumParts);
+				fscanf(pFile, "%d", &m_nNumParts);
 
 				for (int nCntFile = 0; nCntFile < m_nNumParts;)
 				{//ファイル名読み込み
 
-					fscanf_s(pFile, "%s", &cTemp[0]);
+					fscanf(pFile, "%s", &cTemp[0]);
 
 					if (strcmp(cTemp, "MODEL_FILENAME") == 0)
 					{//ファイル名読み込み
-						fscanf_s(pFile, "%s", &cTemp[0]);
+						fscanf(pFile, "%s", &cTemp[0]);
 
 						char aPath[MAX_STRING];
 
 						// モデルパス読込
-						fscanf_s(pFile, "%s", &aPath[0]);
+						fscanf(pFile, "%s", &aPath[0]);
 
 						m_apParts[nCntFile] = new Parts;
 
@@ -460,37 +460,37 @@ void CMotion::Load(char *pPath)
 
 				while (strcmp(cTemp, "END_CHARACTERSET") != 0)
 				{//終わりまでキャラクター設定
-					fscanf_s(pFile, "%s", &cTemp[0]);
+					fscanf(pFile, "%s", &cTemp[0]);
 
 					if (strcmp(cTemp, "PARTSSET") == 0)
 					{//パーツスタート
 						while (strcmp(cTemp, "END_PARTSSET") != 0)
 						{//終わりまでパーツ設定
-							fscanf_s(pFile, "%s", &cTemp[0]);
+							fscanf(pFile, "%s", &cTemp[0]);
 
 							if (strcmp(cTemp, "INDEX") == 0)
 							{//番号読み込み
-								fscanf_s(pFile, "%s", &cTemp[0]);
+								fscanf(pFile, "%s", &cTemp[0]);
 
-								fscanf_s(pFile, "%d", &m_apParts[nCntModel]->nIdx);
+								fscanf(pFile, "%d", &m_apParts[nCntModel]->nIdx);
 							}
 
 							if (strcmp(cTemp, "PARENT") == 0)
 							{//親番号読み込み
-								fscanf_s(pFile, "%s", &cTemp[0]);
+								fscanf(pFile, "%s", &cTemp[0]);
 
-								fscanf_s(pFile, "%d", &m_apParts[nCntModel]->nIdxParent);
+								fscanf(pFile, "%d", &m_apParts[nCntModel]->nIdxParent);
 							}
 
 							if (strcmp(cTemp, "POS") == 0)
 							{//位置読み込み
 								D3DXVECTOR3 pos;
 
-								fscanf_s(pFile, "%s", &cTemp[0]);
+								fscanf(pFile, "%s", &cTemp[0]);
 
 								for (int nCntPos = 0; nCntPos < 3; nCntPos++)
 								{
-									fscanf_s(pFile, "%f", &pos[nCntPos]);
+									fscanf(pFile, "%f", &pos[nCntPos]);
 								}
 
 								m_apParts[nCntModel]->pParts->SetPosition(pos);
@@ -502,11 +502,11 @@ void CMotion::Load(char *pPath)
 							{//向き読み込み
 								D3DXVECTOR3 rot;
 
-								fscanf_s(pFile, "%s", &cTemp[0]);
+								fscanf(pFile, "%s", &cTemp[0]);
 
 								for (int nCntRot = 0; nCntRot < 3; nCntRot++)
 								{
-									fscanf_s(pFile, "%f", &rot[nCntRot]);
+									fscanf(pFile, "%f", &rot[nCntRot]);
 								}
 
 								m_apParts[nCntModel]->pParts->SetRot(rot);
@@ -531,27 +531,27 @@ void CMotion::Load(char *pPath)
 				while (strcmp(cTemp, "END_MOTIONSET") != 0)
 				{//終わりまでキャラクター設定
 
-					fscanf_s(pFile, "%s", &cTemp[0]);
+					fscanf(pFile, "%s", &cTemp[0]);
 
 					if (strcmp(cTemp, "LOOP") == 0)
 					{//ループ判断
-						fscanf_s(pFile, "%s", &cTemp[0]);
+						fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf_s(pFile, "%d", (int*)&m_aMotionInfo[nCntMotion].bLoop);
+						fscanf(pFile, "%d", (int*)&m_aMotionInfo[nCntMotion].bLoop);
 					}
 
 					if (strcmp(cTemp, "NUM_KEY") == 0)
 					{//キー数判断
-						fscanf_s(pFile, "%s", &cTemp[0]);
+						fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf_s(pFile, "%d", &m_aMotionInfo[nCntMotion].nNumKey);
+						fscanf(pFile, "%d", &m_aMotionInfo[nCntMotion].nNumKey);
 					}
 
 					if (strcmp(cTemp, "NUM_PARTICLE") == 0)
 					{//パーティクル数判断
-						fscanf_s(pFile, "%s", &cTemp[0]);
+						fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf_s(pFile, "%d", &m_aMotionInfo[m_nNumMotion].nNumParticle);
+						fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].nNumParticle);
 
 						if (m_aMotionInfo[m_nNumMotion].nNumParticle != 0)
 						{
@@ -567,46 +567,46 @@ void CMotion::Load(char *pPath)
 					{// パーティクル情報設定
 						while (strcmp(cTemp, "END_PARTICLESET") != 0)
 						{//終わりまでパーティクル設定
-							fscanf_s(pFile, "%s", &cTemp[0]);
+							fscanf(pFile, "%s", &cTemp[0]);
 
 							if (strcmp(cTemp, "KEY") == 0)
 							{// 再生キー取得
-								fscanf_s(pFile, "%s", &cTemp[0]);
+								fscanf(pFile, "%s", &cTemp[0]);
 
-								fscanf_s(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nKey);
+								fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nKey);
 							}
 
 							if (strcmp(cTemp, "FRAME") == 0)
 							{// 再生フレーム取得
-								fscanf_s(pFile, "%s", &cTemp[0]);
+								fscanf(pFile, "%s", &cTemp[0]);
 
-								fscanf_s(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nFrame);
+								fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nFrame);
 							}
 
 							if (strcmp(cTemp, "TYPE") == 0)
 							{// 種類取得
-								fscanf_s(pFile, "%s", &cTemp[0]);
+								fscanf(pFile, "%s", &cTemp[0]);
 
-								fscanf_s(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nType);
+								fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nType);
 							}
 
 							if (strcmp(cTemp, "POS") == 0)
 							{//位置読み込み
 								D3DXVECTOR3 pos;
 
-								fscanf_s(pFile, "%s", &cTemp[0]);
+								fscanf(pFile, "%s", &cTemp[0]);
 
 								for (int nCntPos = 0; nCntPos < 3; nCntPos++)
 								{
-									fscanf_s(pFile, "%f", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].offset[nCntPos]);
+									fscanf(pFile, "%f", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].offset[nCntPos]);
 								}
 							}
 
 							if (strcmp(cTemp, "PARENT") == 0)
 							{// 親パーツ番号取得
-								fscanf_s(pFile, "%s", &cTemp[0]);
+								fscanf(pFile, "%s", &cTemp[0]);
 
-								fscanf_s(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nIdxParent);
+								fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nIdxParent);
 							}
 						}
 
@@ -615,9 +615,9 @@ void CMotion::Load(char *pPath)
 
 					//if (strcmp(cTemp, "NUM_COLLISION") == 0)
 					//{// 当たり判定数判断
-					//	fscanf_s(pFile, "%s", &cTemp[0]);
+					//	fscanf(pFile, "%s", &cTemp[0]);
 
-					//	fscanf_s(pFile, "%d", &m_aMotionInfo[m_nNumMotion].nNumCollision);
+					//	fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].nNumCollision);
 
 					//	if (m_aMotionInfo[m_nNumMotion].nNumCollision != 0)
 					//	{
@@ -633,39 +633,39 @@ void CMotion::Load(char *pPath)
 					//{// 当たり判定情報設定
 					//	while (strcmp(cTemp, "END_COLLISIONSET") != 0)
 					//	{//終わりまで当たり判定設定
-					//		fscanf_s(pFile, "%s", &cTemp[0]);
+					//		fscanf(pFile, "%s", &cTemp[0]);
 
 					//		if (strcmp(cTemp, "KEY") == 0)
 					//		{// 再生キー取得
-					//			fscanf_s(pFile, "%s", &cTemp[0]);
+					//			fscanf(pFile, "%s", &cTemp[0]);
 
-					//			fscanf_s(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nKey);
+					//			fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nKey);
 					//		}
 
 					//		if (strcmp(cTemp, "FRAME") == 0)
 					//		{// 再生フレーム取得
-					//			fscanf_s(pFile, "%s", &cTemp[0]);
+					//			fscanf(pFile, "%s", &cTemp[0]);
 
-					//			fscanf_s(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nFrame);
+					//			fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nFrame);
 					//		}
 
 					//		if (strcmp(cTemp, "POS") == 0)
 					//		{//位置読み込み
 					//			D3DXVECTOR3 pos;
 
-					//			fscanf_s(pFile, "%s", &cTemp[0]);
+					//			fscanf(pFile, "%s", &cTemp[0]);
 
 					//			for (int nCntPos = 0; nCntPos < 3; nCntPos++)
 					//			{
-					//				fscanf_s(pFile, "%f", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].offset[nCntPos]);
+					//				fscanf(pFile, "%f", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].offset[nCntPos]);
 					//			}
 					//		}
 
 					//		if (strcmp(cTemp, "PARENT") == 0)
 					//		{// 親パーツ番号取得
-					//			fscanf_s(pFile, "%s", &cTemp[0]);
+					//			fscanf(pFile, "%s", &cTemp[0]);
 
-					//			fscanf_s(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nIdxParent);
+					//			fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nIdxParent);
 					//		}
 					//	}
 
@@ -677,37 +677,37 @@ void CMotion::Load(char *pPath)
 						while (strcmp(cTemp, "END_KEYSET") != 0)
 						{//終わりまでキー設定
 
-							fscanf_s(pFile, "%s", &cTemp[0]);
+							fscanf(pFile, "%s", &cTemp[0]);
 
 							if (strcmp(cTemp, "FRAME") == 0)
 							{//フレーム数取得
-								fscanf_s(pFile, "%s", &cTemp[0]);
+								fscanf(pFile, "%s", &cTemp[0]);
 
-								fscanf_s(pFile, "%d", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].nFrame);
+								fscanf(pFile, "%d", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].nFrame);
 							}
 
 							if (strcmp(cTemp, "KEY") == 0)
 							{//フレーム数取得
 								while (strcmp(cTemp, "END_KEY") != 0)
 								{//終わりまでキー設定
-									fscanf_s(pFile, "%s", &cTemp[0]);
+									fscanf(pFile, "%s", &cTemp[0]);
 
 									if (strcmp(cTemp, "POS") == 0)
 									{//位置取得
-										fscanf_s(pFile, "%s", &cTemp[0]);
+										fscanf(pFile, "%s", &cTemp[0]);
 
-										fscanf_s(pFile, "%f", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].aKey[nCntPart].fPosX);
-										fscanf_s(pFile, "%f", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].aKey[nCntPart].fPosY);
-										fscanf_s(pFile, "%f", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].aKey[nCntPart].fPosZ);
+										fscanf(pFile, "%f", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].aKey[nCntPart].fPosX);
+										fscanf(pFile, "%f", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].aKey[nCntPart].fPosY);
+										fscanf(pFile, "%f", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].aKey[nCntPart].fPosZ);
 									}
 
 									if (strcmp(cTemp, "ROT") == 0)
 									{//向き取得
-										fscanf_s(pFile, "%s", &cTemp[0]);
+										fscanf(pFile, "%s", &cTemp[0]);
 
-										fscanf_s(pFile, "%f", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].aKey[nCntPart].fRotX);
-										fscanf_s(pFile, "%f", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].aKey[nCntPart].fRotY);
-										fscanf_s(pFile, "%f", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].aKey[nCntPart].fRotZ);
+										fscanf(pFile, "%f", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].aKey[nCntPart].fRotX);
+										fscanf(pFile, "%f", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].aKey[nCntPart].fRotY);
+										fscanf(pFile, "%f", &m_aMotionInfo[nCntMotion].aKeyInfo[nCntKey].aKey[nCntPart].fRotZ);
 									}
 								}
 

@@ -97,7 +97,7 @@ HRESULT CGame::Init(void)
 
 	if (pEnemyManager != nullptr)
 	{
-		pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, 0.0f), CEnemy::TYPE_NORMAL);
+		pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -59.0f), CEnemy::TYPE_NORMAL);
 	}
 
 	return S_OK;
@@ -169,7 +169,7 @@ void CGame::UpdateCamera(void)
 		if (m_state == STATE_NORMAL)
 		{
 			// ‘€ì
-			pCamera->Control();
+			pCamera->FollowPlayer();
 		}
 	}
 	else

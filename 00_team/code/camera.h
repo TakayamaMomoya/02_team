@@ -43,24 +43,19 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void SetCamera(void);
-	void SetPosV(void);
-	void SetPosR(void);
 	void SetDist(float fDist) { m_camera.fLength = fDist; }
 	float GetDist(void) { return m_camera.fLength; }
 	void Control(void);
 	Camera *GetCamera(void);
 	void FollowPlayer(void);
-	void BossBattle(void);
 	void SetQuake(float fQuakeSizeH, float fQuakeSizeV, int nTime);
 	void Quake(void);
-	void TitleMove(void);
 	void UpdateResult(void);
 	void SetTitle(void);
 
 private:
-	void UpdateTitle(void);
-	void UpdateGame(void);
-	void Debug(void);
+	void SetPosV(void);
+	void SetPosR(void);
 
 	Camera m_camera;	// ç\ë¢ëÃÇÃèÓïÒ
 };
