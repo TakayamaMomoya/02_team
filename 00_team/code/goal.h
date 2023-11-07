@@ -15,6 +15,11 @@
 #include <stdio.h>
 
 //*****************************************************
+// 前方宣言
+//*****************************************************
+class CCollisionSphere;
+
+//*****************************************************
 // クラスの定義
 //*****************************************************
 class CGoal : public CObjectX
@@ -32,6 +37,8 @@ public:
 private:
 	void Load(void);
 	void ApplyInfo(FILE *pFile,char *pTemp);
+
+	CCollisionSphere *m_pCollisionGoal;	// ゴール判定
 };
 
 #endif

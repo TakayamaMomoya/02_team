@@ -11,6 +11,7 @@
 #include "goal.h"
 #include "manager.h"
 #include "renderer.h"
+#include "collision.h"
 
 //*****************************************************
 // マクロ定義
@@ -22,7 +23,7 @@
 //=====================================================
 CGoal::CGoal(int nPriority) : CObjectX(nPriority)
 {
-
+	m_pCollisionGoal = nullptr;
 }
 
 //=====================================================
@@ -40,6 +41,17 @@ HRESULT CGoal::Init(void)
 {
 	// 継承クラスの初期化
 	CObjectX::Init();
+
+	if (m_pCollisionGoal == nullptr)
+	{// 球の当たり判定生成
+		m_pCollisionGoal = CCollisionSphere::Create(CCollision::TAG_GOAL, CCollision::TYPE_SPHERE, this);
+
+		if (m_pCollisionGoal != nullptr)
+		{// 情報の設定
+			m_pCollisionGoal->SetPosition(GetPosition());
+			m_pCollisionGoal->SetRadius(5);
+		}
+	}
 
 	// 情報読み込み
 	Load();
@@ -111,6 +123,11 @@ void CGoal::ApplyInfo(FILE* pFile, char* pTemp)
 		}
 
 		SetPosition(pos);
+
+		if (m_pCollisionGoal != nullptr)
+		{// 当たり判定の位置設定
+			m_pCollisionGoal->SetPosition(pos);
+		}
 	}
 
 	if (strcmp(pTemp, "MODEL") == 0)
@@ -124,6 +141,20 @@ void CGoal::ApplyInfo(FILE* pFile, char* pTemp)
 		SetIdxModel(nIdx);
 		BindModel(nIdx);
 	}
+
+	if (strcmp(pTemp, "RADIUS") == 0)
+	{// 判定の大きさ
+		float fRadius;
+
+		fscanf(pFile, "%s", pTemp);
+
+		fscanf(pFile, "%f", &fRadius);
+
+		if (m_pCollisionGoal != nullptr)
+		{// 当たり判定の位置設定
+			m_pCollisionGoal->SetRadius(fRadius);
+		}
+	}
 }
 
 //=====================================================
@@ -131,6 +162,12 @@ void CGoal::ApplyInfo(FILE* pFile, char* pTemp)
 //=====================================================
 void CGoal::Uninit(void)
 {
+	if (m_pCollisionGoal != nullptr)
+	{
+		m_pCollisionGoal->Uninit();
+		m_pCollisionGoal = nullptr;
+	}
+
 	// 継承クラスの終了
 	CObjectX::Uninit();
 }
