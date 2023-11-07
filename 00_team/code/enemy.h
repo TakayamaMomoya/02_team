@@ -76,6 +76,7 @@ protected:
 
 private:
 	void ManageState(void);
+	void ManageCollision(void);
 
 	static int m_nNumAll;	// ‘”
 	float m_fLife;	// ‘Ì—Í

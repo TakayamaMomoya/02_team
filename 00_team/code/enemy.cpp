@@ -245,6 +245,45 @@ void CEnemy::Update(void)
 {
 	// 継承クラスの更新
 	CCharacter::Update();
+
+	// 状態管理
+	ManageState();
+
+	// 当たり判定の管理
+	ManageCollision();
+}
+
+//=====================================================
+// 当たり判定の管理
+//=====================================================
+void CEnemy::ManageCollision(void)
+{
+	if (m_pCollisionSphere != nullptr)
+	{// 球の当たり判定の管理
+		CMotion* pBody = GetBody();
+
+		if (pBody != nullptr)
+		{
+			D3DXVECTOR3 pos = pBody->GetMtxPos(0);
+
+			m_pCollisionSphere->SetPositionOld(m_pCollisionSphere->GetPosition());
+
+			m_pCollisionSphere->SetPosition(pos);
+		}
+	}
+
+	if (m_pCollisionCube != nullptr)
+	{// 立方体の当たり判定の管理
+		// 当たり判定の位置設定
+		m_pCollisionCube->SetPosition(GetPosition());
+
+		D3DXVECTOR3 move = GetMove();
+
+		// 押し出しの当たり判定
+		m_pCollisionCube->CubeCollision(CCollision::TAG_BLOCK, &move);
+
+		SetMove(move);
+	}
 }
 
 //=====================================================
