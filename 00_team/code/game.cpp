@@ -25,6 +25,7 @@
 #include "texture.h"
 #include "skybox.h"
 #include "item.h"
+#include "weaponManager.h"
 
 //*****************************************************
 // マクロ定義
@@ -79,6 +80,9 @@ HRESULT CGame::Init(void)
 	{
 		pPlayerManger->CreatePlayer(2);
 	}
+
+	// 武器マネージャーの生成
+	CWeaponManager::Create();
 
 	// アイテム
 	CItem *pItem = CItem::Create(CItem::TYPE_MAGNUM);

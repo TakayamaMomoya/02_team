@@ -37,6 +37,7 @@ public:
 	void SetWeapon(CWeapon::TYPE type);
 	void SetID(int nID) { m_info.nID = nID; }
 	int GetID(void) { return m_info.nID; }
+	void ReleaseWeapon(void) { m_info.pWeapon = nullptr; }
 
 private:
 	struct SInfo

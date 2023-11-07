@@ -14,14 +14,14 @@
 #include "motion.h"
 #include "player.h"
 #include "universal.h"
+#include "debugproc.h"
 
 //=====================================================
 // コンストラクタ
 //=====================================================
 CWeapon::CWeapon(int nPriority) : CObjectX(nPriority)
 {
-	m_nIdxHand = 0;
-	m_nIdxPlayer = 0;
+	ZeroMemory(&m_info, sizeof(SInfo));
 }
 
 //=====================================================
@@ -59,7 +59,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 
 		if (pWeapon != nullptr)
 		{
-			pWeapon->m_nIdxHand = nIdxhand;
+			pWeapon->m_info.nIdxHand = nIdxhand;
 
 			// 初期化
 			pWeapon->Init();
@@ -88,11 +88,8 @@ HRESULT CWeapon::Init(void)
 	// 継承クラスの初期化
 	CObjectX::Init();
 
-	SetEmissiveCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-
 	// モデルの読込
 	int nIdx = CModel::Load("data\\MODEL\\weapon\\shotgun.x");
-	SetIdxModel(nIdx);
 	BindModel(nIdx);
 
 	return S_OK;
@@ -126,16 +123,16 @@ void CWeapon::FollowPlayerHand(void)
 {
 	CUniversal *pUniversal = CUniversal::GetInstance();
 
-	if (m_pPlayer == nullptr)
+	if (m_info.pPlayer == nullptr)
 	{
 		return;
 	}
 
-	CMotion *pBody = m_pPlayer->GetBody();
+	CMotion *pBody = m_info.pPlayer->GetBody();
 
 	if (pBody != nullptr)
 	{
-		CParts *pParts = pBody->GetParts(m_nIdxHand)->pParts;
+		CParts *pParts = pBody->GetParts(m_info.nIdxHand)->pParts;
 
 		if (pParts != nullptr)
 		{
@@ -155,6 +152,15 @@ void CWeapon::Draw(void)
 {
 	// 継承クラスの描画
 	CObjectX::JustDraw();
+
+	CDebugProc* pDebugProc = CDebugProc::GetInstance();
+
+	if (pDebugProc == nullptr)
+	{
+		return;
+	}
+
+	pDebugProc->Print("\n弾数[%d]", m_info.nMaxBullet);
 }
 
 //=====================================================
@@ -162,10 +168,41 @@ void CWeapon::Draw(void)
 //=====================================================
 void CWeapon::SetPlayer(CPlayer *pPlayer)
 {
-	m_pPlayer = pPlayer;
+	m_info.pPlayer = pPlayer;
 
-	if (m_pPlayer != nullptr)
+	if (m_info.pPlayer != nullptr)
 	{
-		m_nIdxPlayer = pPlayer->GetID();
+		m_info.nIdxPlayer = pPlayer->GetID();
 	}
+}
+
+//=====================================================
+// 弾数設定
+//=====================================================
+void CWeapon::SetBullet(int nBullet)
+{
+	m_info.nNumBullet = nBullet;
+
+	if (m_info.nNumBullet <= 0)
+	{// 弾切れした場合、破棄
+		if (m_info.pPlayer != nullptr)
+		{
+			m_info.pPlayer->ReleaseWeapon();
+		}
+
+		Uninit();
+	}
+	else if (m_info.nNumBullet > m_info.nMaxBullet)
+	{// 最大数を越えた場合の補正
+		m_info.nNumBullet = m_info.nMaxBullet;
+	}
+}
+
+//=====================================================
+// 最大弾数設定
+//=====================================================
+void CWeapon::SetMaxBullet(int nBullet)
+{
+	m_info.nMaxBullet = nBullet;
+	m_info.nNumBullet = nBullet;
 }

@@ -103,6 +103,9 @@
     <ClCompile Include="code\weaponMachinegun.cpp">
       <Filter>weapon</Filter>
     </ClCompile>
+    <ClCompile Include="code\weaponManager.cpp">
+      <Filter>weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -187,6 +190,9 @@
       <Filter>weapon</Filter>
     </ClInclude>
     <ClInclude Include="code\weaponMachinegun.h">
+      <Filter>weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="code\weaponManager.h">
       <Filter>weapon</Filter>
     </ClInclude>
   </ItemGroup>

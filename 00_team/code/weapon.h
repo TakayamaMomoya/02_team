@@ -30,6 +30,14 @@ public:
 		TYPE_MACHINEGUN,	// マシンガン
 		TYPE_MAX
 	};
+	struct SInfo
+	{// 自身の情報
+		int nNumBullet;
+		int nMaxBullet;
+		int nIdxHand;
+		int nIdxPlayer;
+		CPlayer *pPlayer;
+	};
 
 	CWeapon(int nPriority = 3);	// コンストラクタ
 	~CWeapon();	// デストラクタ
@@ -40,16 +48,17 @@ public:
 	void Update(void);
 	void Draw(void);
 	virtual void Attack(void) {};
-	CPlayer *GetPlayer(void) { return m_pPlayer; }
+	CPlayer *GetPlayer(void) { return m_info.pPlayer; }
 	void SetPlayer(CPlayer *pPlayer);
-	int GetID(void) { return m_nIdxPlayer; }
+	int GetID(void) { return m_info.nIdxPlayer; }
+	void SetBullet(int nBullet);
+	int GetBullet(void) { return m_info.nNumBullet; }
+	void SetMaxBullet(int nBullet);
 
 private:
 	void FollowPlayerHand(void);
 
-	int m_nIdxHand;
-	int m_nIdxPlayer;
-	CPlayer *m_pPlayer;
+	SInfo m_info;
 };
 
 #endif
