@@ -60,6 +60,7 @@
     <ClCompile Include="code\playerManager.cpp" />
     <ClCompile Include="code\ranking.cpp" />
     <ClCompile Include="code\renderer.cpp" />
+    <ClCompile Include="code\result.cpp" />
     <ClCompile Include="code\scene.cpp" />
     <ClCompile Include="code\score.cpp" />
     <ClCompile Include="code\skybox.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="code\playerManager.h" />
     <ClInclude Include="code\ranking.h" />
     <ClInclude Include="code\renderer.h" />
+    <ClInclude Include="code\result.h" />
     <ClInclude Include="code\scene.h" />
     <ClInclude Include="code\score.h" />
     <ClInclude Include="code\skybox.h" />

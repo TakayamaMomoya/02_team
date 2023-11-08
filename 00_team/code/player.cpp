@@ -16,6 +16,7 @@
 #include "inputjoypad.h"
 #include "universal.h"
 #include "collision.h"
+#include "game.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
@@ -146,6 +147,18 @@ void CPlayer::Update(void)
 //=====================================================
 void CPlayer::Input(void)
 {
+	CGame *pGame = CGame::GetInstance();
+
+	if (pGame != nullptr)
+	{
+		CGame::STATE state = pGame->GetState();
+
+		if (state == CGame::STATE_RESULT || state == CGame::STATE_END)
+		{
+			return;
+		}
+	}
+
 	// ˆÚ“®ˆ—
 	InputMove();
 
@@ -206,7 +219,7 @@ void CPlayer::InputAttack(void)
 		m_info.pWeapon->Attack();
 	}
 	else
-	{
+	{// ‘fè‚Ìê‡‚Ìˆ—
 
 	}
 }

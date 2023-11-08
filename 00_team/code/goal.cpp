@@ -14,6 +14,9 @@
 #include "collision.h"
 #include "fade.h"
 #include "goalTimer.h"
+#include "playerManager.h"
+#include "player.h"
+#include "result.h"
 
 //*****************************************************
 // マクロ定義
@@ -251,10 +254,30 @@ void CGoal::DeadLine(void)
 {
 	m_bFinish = true;
 
-	CFade *pFade = CFade::GetInstance();
+	// リザルトの生成
+	CResult::Create();
 
-	if (pFade != nullptr)
+	// 範囲内のプレイヤー検出
+	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
+
+	if (pPlayerManager != nullptr)
 	{
-		pFade->SetFade(CScene::MODE_RANKING);
+		for (int i = 0;i < NUM_PLAYER;i++)
+		{
+			CPlayer *pPlayer = pPlayerManager->GetPlayer(i);
+
+			if (pPlayer != nullptr)
+			{
+				// リザルトにプレイヤー情報を渡す
+
+			}
+		}
 	}
+
+	// 仮フェード処理、リザルトができたらそちらに移行
+	//CFade *pFade = CFade::GetInstance();
+	//if (pFade != nullptr)
+	//{
+	//	pFade->SetFade(CScene::MODE_RANKING);
+	//}
 }
