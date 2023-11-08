@@ -29,6 +29,9 @@ CResult::CResult()
 {
 	m_state = STATE_NONE;
 	m_pBg = nullptr;
+	m_pCaption = nullptr;
+	ZeroMemory(&m_apSuvived[0], sizeof(m_apSuvived));
+	m_nNumSuvived = 0;
 }
 
 //====================================================
@@ -139,6 +142,8 @@ void CResult::Uninit(void)
 		m_pCaption = nullptr;
 	}
 
+	ZeroMemory(&m_apSuvived[0], sizeof(m_apSuvived));
+
 	Release();
 }
 
@@ -165,4 +170,20 @@ void CResult::Input(void)
 void CResult::Draw(void)
 {
 
+}
+
+//====================================================
+// ê∂ë∂é“ÇÃê›íË
+//====================================================
+void CResult::SetSurvived(CPlayer *pPlayer)
+{
+	if (m_nNumSuvived == NUM_PLAYER - 1)
+	{// ç≈ëÂÇ…íBÇµÇƒÇ¢ÇΩèÍçáÇÃÉGÉâÅ[
+		return;
+	}
+
+	// èÓïÒÇÃï€ë∂
+	m_apSuvived[m_nNumSuvived] = pPlayer;
+
+	m_nNumSuvived++;
 }

@@ -17,6 +17,7 @@
 // 前方宣言
 //*****************************************************
 class CObject2D;
+class CPlayer;
 
 //*****************************************************
 // クラス定義
@@ -27,12 +28,12 @@ public:
 	CResult();	// コンストラクタ
 	~CResult();	// デストラクタ
 
+	static CResult *Create(bool bWin = false);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-
-	static CResult *Create(bool bWin = false);
+	void SetSurvived(CPlayer *pPlayer);
 
 private:
 	enum STATE
@@ -49,6 +50,8 @@ private:
 	CObject2D *m_pBg;	// 背景のポインタ
 	CObject2D *m_pCaption;	// 見出しのポインタ
 	STATE m_state;	// 状態
+	CPlayer *m_apSuvived[NUM_PLAYER];	// 生存者の配列
+	int m_nNumSuvived;	// 生存者数
 };
 
 #endif

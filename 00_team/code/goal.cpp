@@ -255,7 +255,7 @@ void CGoal::DeadLine(void)
 	m_bFinish = true;
 
 	// リザルトの生成
-	CResult::Create();
+	CResult *pResult = CResult::Create();
 
 	// 範囲内のプレイヤー検出
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
@@ -268,8 +268,10 @@ void CGoal::DeadLine(void)
 
 			if (pPlayer != nullptr)
 			{
-				// リザルトにプレイヤー情報を渡す
-
+				if (pResult != nullptr)
+				{// リザルトにプレイヤー情報を渡す
+					pResult->SetSurvived(pPlayer);
+				}
 			}
 		}
 	}
