@@ -346,8 +346,6 @@ CCollisionSphere::~CCollisionSphere()
 //=====================================================
 HRESULT CCollisionSphere::Init(void)
 {
-	m_fRadius = 100.0f;
-
 	if (m_pBillboard == nullptr)
 	{// ビルボードの生成
 		m_pBillboard = CBillboard::Create(GetPosition(),m_fRadius,m_fRadius);

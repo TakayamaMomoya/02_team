@@ -177,5 +177,5 @@ void CGoalTimer::Draw(void)
 		return;
 	}
 
-	pDebugProc->Print("\nŒ»İ‚Ì•b”[%f]", m_fSecond);
+	pDebugProc->Print("\nƒS[ƒ‹c‚èŠÔ[%f]", m_fSecond);
 }

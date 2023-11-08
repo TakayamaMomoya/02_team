@@ -106,10 +106,7 @@ CEnemy::~CEnemy()
 		pTail = pManager->GetTail();
 	}
 
-	if (m_state != STATE_DEATH)
-	{
-		m_nNumAll--;
-	}
+	m_nNumAll--;
 
 	if (pHead == this)
 	{// æ“ªƒAƒhƒŒƒX‚Ì”jŠü

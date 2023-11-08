@@ -96,11 +96,6 @@ HRESULT CGame::Init(void)
 	// 敵マネージャーの生成
 	CEnemyManager *pEnemyManager = CEnemyManager::Create();
 
-	if (pEnemyManager != nullptr)
-	{
-		pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -59.0f), CEnemy::TYPE_NORMAL);
-	}
-
 	// ゴールの生成
 	CGoal::Create();
 
@@ -142,6 +137,17 @@ void CGame::Update(void)
 			{
 				pFade->SetFade(CScene::MODE_RANKING);
 			}
+		}
+	}
+
+	if (CEnemy::GetNumAll() == 0)
+	{
+		// 敵マネージャーの生成
+		CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
+
+		if (pEnemyManager != nullptr)
+		{
+			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -59.0f), CEnemy::TYPE_NORMAL);
 		}
 	}
 

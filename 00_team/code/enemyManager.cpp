@@ -85,14 +85,14 @@ CEnemy *CEnemyManager::CreateEnemy(D3DXVECTOR3 pos, CEnemy::TYPE type)
 
 		if (pEnemy != nullptr)
 		{
-			// モーション読込
-			pEnemy->Load(apPath[type]);
+			// 初期化処理
+			pEnemy->Init();
 
 			// 位置設定
 			pEnemy->SetPosition(pos);
 
-			// 初期化処理
-			pEnemy->Init();
+			// モーション読込
+			pEnemy->Load(apPath[type]);
 		}
 	}
 

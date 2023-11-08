@@ -287,11 +287,4 @@ void CGoal::DeadLine(void)
 			}
 		}
 	}
-
-	// 仮フェード処理、リザルトができたらそちらに移行
-	//CFade *pFade = CFade::GetInstance();
-	//if (pFade != nullptr)
-	//{
-	//	pFade->SetFade(CScene::MODE_RANKING);
-	//}
 }
