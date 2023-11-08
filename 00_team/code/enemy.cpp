@@ -17,10 +17,12 @@
 #include "particle.h"
 #include <stdio.h>
 #include "player.h"
+#include "playerManager.h"
 #include "game.h"
 #include "enemyManager.h"
 #include "enemyNormal.h"
 #include "motion.h"
+#include "universal.h"
 
 //*****************************************************
 // É}ÉNÉçíËã`
@@ -59,6 +61,7 @@ CEnemy::CEnemy()
 
 	m_fLife = 0;
 	m_nScore = 0;
+	m_fMoveSpeed = 0.0f;
 	m_nTimerState = 0;
 	m_pCollisionSphere = nullptr;
 	m_pCollisionCube = nullptr;
@@ -337,66 +340,63 @@ void CEnemy::ManageState(void)
 }
 
 //=====================================================
-// ñ⁄ïWï˚å¸Çå¸Ç≠èàóù
+// ñ⁄ïWÇÃí«ê’
 //=====================================================
-void CEnemy::RotDest(void)
+void CEnemy::ChaseTarget(void)
 {
-	//// ñ⁄ïWéÊìæ
-	//CPlayer *pPlayer;
-	//if (CPlayer::GetInstance() != nullptr)
-	//{
-	//	pPlayer = CPlayer::GetInstance();
-	//}
-	//else
-	//{
-	//	return;
-	//}
+	CUniversal *pUniversal = CUniversal::GetInstance();
 
-	//D3DXVECTOR3 posTarget = pPlayer->GetPosition();
-	//D3DXVECTOR3 pos = GetPosition();
-	//float fRot = 0.0f;
+	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 
-	//if (posTarget.x <= pos.x)
-	//{// âEë§
-	//	fRot = D3DX_PI * 0.5f;
-	//}
-	//else
-	//{// ç∂ë§
-	//	fRot = -D3DX_PI * 0.5f;
-	//}
+	if (pPlayerManager == nullptr)
+	{
+		return;
+	}
 
-	//// ïœêîêÈåæ
-	//D3DXVECTOR3 vecDest;
-	//D3DXVECTOR3 rot = GetRot();
+	D3DXVECTOR3 posTarget = { 0.0f,0.0f,0.0f };
 
-	//float fRotDiff = fRot - rot.y;
+	// ç≈âìãóó£ÇÃêÈåæ
+	float fLengthMax = FLT_MAX;
 
-	//// äpìxÇÃèCê≥
-	//if (fRotDiff > D3DX_PI)
-	//{
-	//	fRotDiff -= 6.28f;
-	//}
-	//if (fRotDiff < -D3DX_PI)
-	//{
-	//	fRotDiff += 6.28f;
-	//}
+	for (int i = 0;i < NUM_PLAYER;i++)
+	{// ç≈Ç‡ãﬂÇ¢ÉvÉåÉCÉÑÅ[ÇéQè∆
+		CPlayer *pPlayer = pPlayerManager->GetPlayer(i);
 
-	//// äpìxï‚ê≥
-	//SetRot(D3DXVECTOR3(rot.x, rot.y + fRotDiff * ROLL_FACT, rot.z));
+		if (pPlayer != nullptr)
+		{
+			D3DXVECTOR3 pos = GetPosition();
+			D3DXVECTOR3 posPlayer = pPlayer->GetPosition();
 
-	//// äpìxÇÃèCê≥
-	//rot = GetRot();
+			// ãóó£ÇÃî‰är
+			bool bNear = pUniversal->DistCmp(pos, posPlayer, fLengthMax, &fLengthMax);
 
-	//if (GetRot().y > D3DX_PI)
-	//{
-	//	// äpìxï‚ê≥
-	//	SetRot(D3DXVECTOR3(GetRot().x, GetRot().y - 6.28f, GetRot().z));
-	//}
-	//if (GetRot().y < -D3DX_PI)
-	//{
-	//	// äpìxï‚ê≥
-	//	SetRot(D3DXVECTOR3(GetRot().x, GetRot().y + 6.28f, GetRot().z));
-	//}
+			if (bNear)
+			{
+				posTarget = posPlayer;
+			}
+		}
+	}
+
+	// à⁄ìÆó ÇÃê›íË
+	D3DXVECTOR3 pos = GetPosition();
+	D3DXVECTOR3 vecDiff = posTarget - pos;
+	D3DXVECTOR3 move = GetMove();
+
+	D3DXVec3Normalize(&vecDiff, &vecDiff);
+
+	vecDiff *= m_fMoveSpeed;
+
+	move += vecDiff;
+
+	SetMove(move);
+
+	// å¸Ç´Çà⁄ìÆï˚å¸Ç…ï‚ê≥
+	float fAngleDist = atan2f(move.x, move.z);
+	D3DXVECTOR3 rot = GetRot();
+
+	pUniversal->FactingRot(&rot.y, fAngleDist, 0.1f);
+
+	SetRot(rot);
 }
 
 //=====================================================

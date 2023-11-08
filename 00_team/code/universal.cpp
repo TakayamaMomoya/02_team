@@ -121,15 +121,35 @@ void CUniversal::FactingRot(float *pfRot, float fRotDest, float rotateFact)
 	*pfRot += fRotDiff * rotateFact;
 
 	//äpìxÇÃèCê≥
-	if (fRotDiff < 0)
+	if (*pfRot < 0)
 	{
-		fRotDiff += 6.28f;
+		*pfRot += 6.28f;
 	}
-	else if (fRotDiff > 0)
+	else if (*pfRot > 0)
 	{
-		fRotDiff -= 6.28f;
+		*pfRot -= 6.28f;
 	}
+}
 
-	//äpìxï‚ê≥
-	*pfRot += fRotDiff * rotateFact;
+//========================================
+// ãóó£ÇÃî‰är
+//========================================
+bool CUniversal::DistCmp(D3DXVECTOR3 posOwn, D3DXVECTOR3 posTarget, float fLengthMax, float *fDiff)
+{
+	D3DXVECTOR3 vecDiff = posTarget - posOwn;
+	float fLength = D3DXVec3Length(&vecDiff);
+
+	if (fLength < fLengthMax)
+	{
+		if (fDiff != nullptr)
+		{
+			*fDiff = fLength;
+		}
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
