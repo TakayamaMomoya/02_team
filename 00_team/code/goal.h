@@ -28,17 +28,23 @@ public:
 	CGoal(int nPriority = 3);	// コンストラクタ
 	~CGoal();	// デストラクタ
 
-	static CGoal* Create();
+	static CGoal *Create(void);
+	static CGoal *GetInstance(void) { return m_pGoal; }
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void DeadLine(void);
+	bool IsFinish(void) { return m_bFinish; }
 
 private:
 	void Load(void);
 	void ApplyInfo(FILE *pFile,char *pTemp);
+	void DetectPlayer(void);
 
+	bool m_bFinish;	// カウントダウンが終わったかどうか
 	CCollisionSphere *m_pCollisionGoal;	// ゴール判定
+	static CGoal *m_pGoal;	// 自身のポインタ
 };
 
 #endif

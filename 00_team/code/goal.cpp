@@ -12,17 +12,25 @@
 #include "manager.h"
 #include "renderer.h"
 #include "collision.h"
+#include "fade.h"
+#include "goalTimer.h"
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
 #define INFO_PATH	"data\\TEXT\\goal.txt"	// ゴール情報のテキスト
 
+//*****************************************************
+// 静的メンバ変数宣言
+//*****************************************************
+CGoal *CGoal::m_pGoal = nullptr;	// 自身のポインタ
+
 //=====================================================
 // コンストラクタ
 //=====================================================
 CGoal::CGoal(int nPriority) : CObjectX(nPriority)
 {
+	m_bFinish = false;
 	m_pCollisionGoal = nullptr;
 }
 
@@ -32,6 +40,25 @@ CGoal::CGoal(int nPriority) : CObjectX(nPriority)
 CGoal::~CGoal()
 {
 
+}
+
+//=====================================================
+// 生成処理
+//=====================================================
+CGoal *CGoal::Create()
+{
+	if (m_pGoal == nullptr)
+	{
+		m_pGoal = new CGoal;
+
+		if (m_pGoal != nullptr)
+		{
+			// 初期化
+			m_pGoal->Init();
+		}
+	}
+
+	return m_pGoal;
 }
 
 //=====================================================
@@ -168,6 +195,8 @@ void CGoal::Uninit(void)
 		m_pCollisionGoal = nullptr;
 	}
 
+	m_pGoal = nullptr;
+
 	// 継承クラスの終了
 	CObjectX::Uninit();
 }
@@ -179,6 +208,31 @@ void CGoal::Update(void)
 {
 	// 継承クラスの更新
 	CObjectX::Update();
+
+	// プレイヤーの検出
+	DetectPlayer();
+}
+
+//=====================================================
+// プレイヤーの検出
+//=====================================================
+void CGoal::DetectPlayer(void)
+{
+	CGoalTimer *pGoalTimer = CGoalTimer::GetInstance();
+
+	if (pGoalTimer != nullptr)
+	{
+		return;
+	}
+
+	if (m_pCollisionGoal != nullptr)
+	{
+		if (m_pCollisionGoal->SphereCollision(CCollision::TAG_PLAYER))
+		{
+			// ゴールタイマーの生成
+			CGoalTimer::Create();
+		}
+	}
 }
 
 //=====================================================
@@ -191,22 +245,16 @@ void CGoal::Draw(void)
 }
 
 //=====================================================
-// 生成処理
+// 制限時間の終了
 //=====================================================
-CGoal *CGoal::Create()
+void CGoal::DeadLine(void)
 {
-	CGoal *pGoal = nullptr;
+	m_bFinish = true;
 
-	if (pGoal == nullptr)
+	CFade *pFade = CFade::GetInstance();
+
+	if (pFade != nullptr)
 	{
-		pGoal = new CGoal;
-
-		if (pGoal != nullptr)
-		{
-			// 初期化
-			pGoal->Init();
-		}
+		pFade->SetFade(CScene::MODE_RANKING);
 	}
-
-	return pGoal;
 }

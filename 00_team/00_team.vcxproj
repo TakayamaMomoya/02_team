@@ -35,6 +35,7 @@
     <ClCompile Include="code\fade.cpp" />
     <ClCompile Include="code\game.cpp" />
     <ClCompile Include="code\goal.cpp" />
+    <ClCompile Include="code\goalTimer.cpp" />
     <ClCompile Include="code\input.cpp" />
     <ClCompile Include="code\inputjoypad.cpp" />
     <ClCompile Include="code\inputkeyboard.cpp" />
@@ -92,6 +93,7 @@
     <ClInclude Include="code\fade.h" />
     <ClInclude Include="code\game.h" />
     <ClInclude Include="code\goal.h" />
+    <ClInclude Include="code\goalTimer.h" />
     <ClInclude Include="code\input.h" />
     <ClInclude Include="code\inputjoypad.h" />
     <ClInclude Include="code\inputkeyboard.h" />

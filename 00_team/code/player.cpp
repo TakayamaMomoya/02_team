@@ -130,6 +130,7 @@ void CPlayer::Update(void)
 		m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_PLAYER);
 		m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_ENEMY);
 
+		m_info.pCollisionSphere->SetPositionOld(m_info.pCollisionSphere->GetPosition());
 		m_info.pCollisionSphere->SetPosition(pos);
 
 		SetPosition(pos);
