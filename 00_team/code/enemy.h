@@ -70,16 +70,17 @@ public:
 	void DeleteCollision(void);
 
 protected:
-	void RotDest(void);
 	CShadow *GetShadow(void) { return m_pShadow; }
 	void ManageScore(void);
 
 private:
 	void ManageState(void);
 	void ManageCollision(void);
+	void ChaseTarget(void);
 
 	static int m_nNumAll;	// 総数
 	float m_fLife;	// 体力
+	float m_fMoveSpeed;	// 移動速度
 	int m_nTimerState;	// 状態遷移カウンター
 	CCollisionSphere *m_pCollisionSphere;	// 球の当たり判定
 	CCollisionCube *m_pCollisionCube;	// 立方体の当たり判定
