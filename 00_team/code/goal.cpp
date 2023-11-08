@@ -34,6 +34,7 @@ CGoal *CGoal::m_pGoal = nullptr;	// 自身のポインタ
 CGoal::CGoal(int nPriority) : CObjectX(nPriority)
 {
 	m_bFinish = false;
+	m_fRadius = 0.0f;
 	m_pCollisionGoal = nullptr;
 }
 
@@ -180,6 +181,8 @@ void CGoal::ApplyInfo(FILE* pFile, char* pTemp)
 
 		fscanf(pFile, "%f", &fRadius);
 
+		m_fRadius = fRadius;
+
 		if (m_pCollisionGoal != nullptr)
 		{// 当たり判定の位置設定
 			m_pCollisionGoal->SetRadius(fRadius);
@@ -270,7 +273,16 @@ void CGoal::DeadLine(void)
 			{
 				if (pResult != nullptr)
 				{// リザルトにプレイヤー情報を渡す
-					pResult->SetSurvived(pPlayer);
+					// 座標の差分から距離を計算
+					D3DXVECTOR3 pos = GetPosition();
+					D3DXVECTOR3 posPlayer = pPlayer->GetPosition();
+					D3DXVECTOR3 vecDiff = posPlayer - pos;
+					float fDiff = D3DXVec3Length(&vecDiff);
+					
+					if (fDiff < m_fRadius)
+					{
+						pResult->SetSurvived(pPlayer);
+					}
 				}
 			}
 		}

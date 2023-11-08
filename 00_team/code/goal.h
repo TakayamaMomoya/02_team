@@ -43,6 +43,7 @@ private:
 	void DetectPlayer(void);
 
 	bool m_bFinish;	// カウントダウンが終わったかどうか
+	float m_fRadius;	// 判定の半径
 	CCollisionSphere *m_pCollisionGoal;	// ゴール判定
 	static CGoal *m_pGoal;	// 自身のポインタ
 };
