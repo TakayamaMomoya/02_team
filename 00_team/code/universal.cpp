@@ -104,31 +104,20 @@ void CUniversal::SetOffSet(D3DXMATRIX *pMtxWorldOffset, D3DXMATRIX mtxWorldOwner
 //========================================
 void CUniversal::FactingRot(float *pfRot, float fRotDest, float rotateFact)
 {
+	// ˆø”‚ÌŠp“x‚Ì•â³
+	LimitRot(pfRot);
+	LimitRot(&fRotDest);
+
 	//·•ªŠp“x‚ğæ“¾
 	float fRotDiff = fRotDest - *pfRot;
 
 	//Šp“x‚ÌC³
-	if (fRotDiff < 0)
-	{
-		fRotDiff += 6.28f;
-	}
-	else if (fRotDiff > 0)
-	{
-		fRotDiff -= 6.28f;
-	}
+	LimitRot(&fRotDiff);
 
 	//Šp“x•â³
 	*pfRot += fRotDiff * rotateFact;
 
-	//Šp“x‚ÌC³
-	if (*pfRot < 0)
-	{
-		*pfRot += 6.28f;
-	}
-	else if (*pfRot > 0)
-	{
-		*pfRot -= 6.28f;
-	}
+	LimitRot(pfRot);
 }
 
 //========================================

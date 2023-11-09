@@ -68,6 +68,8 @@ public:
 	int GetCntState(void) { return m_nTimerState; }
 	void SetCntState(int nCnt) { m_nTimerState = nCnt; }
 	void DeleteCollision(void);
+	float GetSpeed(void) { return m_fMoveSpeed; }
+	void SetMoveSpeed(float fSpeed) { m_fMoveSpeed = fSpeed; }
 
 protected:
 	CShadow *GetShadow(void) { return m_pShadow; }

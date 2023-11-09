@@ -277,9 +277,8 @@ void CPlayer::Aim(void)
 	D3DXVECTOR3 rot = GetRot();
 
 	pUniversal->LimitRot(&fAngleDest);
-	pUniversal->LimitRot(&rot.y);
 
-	pUniversal->FactingRot(&rot.y, fAngleDest, ROT_SPEED);
+	pUniversal->FactingRot(&rot.y, fAngleDest + D3DX_PI, ROT_SPEED);
 
 	SetRot(rot);
 }
