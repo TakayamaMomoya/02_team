@@ -35,6 +35,7 @@ public:
 		int nNumBullet;
 		int nMaxBullet;
 		int nRapid;
+		int nCntShot;
 		int nIdxHand;
 		int nIdxPlayer;
 		CPlayer *pPlayer;
@@ -58,6 +59,8 @@ public:
 	void SetMaxBullet(int nBullet);
 	void SetRapid(int nRapid) { m_info.nRapid = nRapid; }
 	int GetRapid(void) { return m_info.nRapid; }
+	void SetCntShot(int nCntShot) { m_info.nCntShot = nCntShot; }
+	int GetCntShot(void) { return m_info.nCntShot; }
 
 private:
 	void FollowPlayerHand(void);

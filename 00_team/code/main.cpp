@@ -145,7 +145,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 
 			if ((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
 			{//60分の1秒経過
-				float fTick = ((float)dwCurrentTime - (float)dwExecLastTime) * 0.001f / 60;
+				float fTick = ((float)dwCurrentTime - (float)dwExecLastTime) * 0.001f;
 
 				//処理開始の時刻を計算
 				dwExecLastTime = dwCurrentTime;

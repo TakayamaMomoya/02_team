@@ -70,7 +70,7 @@ HRESULT CUIManager::Init(void)
 	m_pScore = CScore::Create();
 
 	// タイマーの生成
-	m_pTimer = CTimer::Create();
+	//m_pTimer = CTimer::Create();
 
 	return S_OK;
 }

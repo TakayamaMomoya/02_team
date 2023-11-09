@@ -16,6 +16,7 @@
 #include "inputjoypad.h"
 #include "universal.h"
 #include "collision.h"
+#include "game.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
@@ -127,7 +128,13 @@ void CPlayer::Update(void)
 	{
 		D3DXVECTOR3 pos = GetPosition();
 
+		m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_PLAYER);
+		m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_ENEMY);
+
+		m_info.pCollisionSphere->SetPositionOld(m_info.pCollisionSphere->GetPosition());
 		m_info.pCollisionSphere->SetPosition(pos);
+
+		SetPosition(pos);
 	}
 
 	// ˆÚ“®—Ê‚ÌŒ¸Š
@@ -140,6 +147,18 @@ void CPlayer::Update(void)
 //=====================================================
 void CPlayer::Input(void)
 {
+	CGame *pGame = CGame::GetInstance();
+
+	if (pGame != nullptr)
+	{
+		CGame::STATE state = pGame->GetState();
+
+		if (state == CGame::STATE_RESULT || state == CGame::STATE_END)
+		{
+			return;
+		}
+	}
+
 	// ˆÚ“®ˆ—
 	InputMove();
 
@@ -200,7 +219,7 @@ void CPlayer::InputAttack(void)
 		m_info.pWeapon->Attack();
 	}
 	else
-	{
+	{// ‘fŽè‚Ìê‡‚Ìˆ—
 
 	}
 }
@@ -258,9 +277,8 @@ void CPlayer::Aim(void)
 	D3DXVECTOR3 rot = GetRot();
 
 	pUniversal->LimitRot(&fAngleDest);
-	pUniversal->LimitRot(&rot.y);
 
-	pUniversal->FactingRot(&rot.y, fAngleDest, ROT_SPEED);
+	pUniversal->FactingRot(&rot.y, fAngleDest + D3DX_PI, ROT_SPEED);
 
 	SetRot(rot);
 }

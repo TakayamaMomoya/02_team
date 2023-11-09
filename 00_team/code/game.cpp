@@ -26,6 +26,8 @@
 #include "skybox.h"
 #include "item.h"
 #include "weaponManager.h"
+#include "enemyManager.h"
+#include "goal.h"
 
 //*****************************************************
 // マクロ定義
@@ -78,7 +80,7 @@ HRESULT CGame::Init(void)
 
 	if (pPlayerManger != nullptr)
 	{
-		pPlayerManger->CreatePlayer(2);
+		pPlayerManger->CreatePlayer(1);
 	}
 
 	// 武器マネージャーの生成
@@ -90,6 +92,12 @@ HRESULT CGame::Init(void)
 
 	pItem = CItem::Create(CItem::TYPE_MACHINEGUN);
 	pItem->SetPosition(D3DXVECTOR3(40.0f, 0.0f, -40.0f));
+
+	// 敵マネージャーの生成
+	CEnemyManager *pEnemyManager = CEnemyManager::Create();
+
+	// ゴールの生成
+	CGoal::Create();
 
 	return S_OK;
 }
@@ -132,6 +140,21 @@ void CGame::Update(void)
 		}
 	}
 
+	if (CEnemy::GetNumAll() == 0)
+	{
+		// 敵マネージャーの生成
+		CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
+
+		if (pEnemyManager != nullptr)
+		{
+			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -59.0f), CEnemy::TYPE_NORMAL);
+			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -88.0f), CEnemy::TYPE_NORMAL);
+			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -107.0f), CEnemy::TYPE_NORMAL);
+			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -130.0f), CEnemy::TYPE_NORMAL);
+			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -160.0f), CEnemy::TYPE_NORMAL);
+		}
+	}
+
 	// カメラ更新
 	UpdateCamera();
 
@@ -160,7 +183,7 @@ void CGame::UpdateCamera(void)
 		if (m_state == STATE_NORMAL)
 		{
 			// 操作
-			pCamera->Control();
+			pCamera->FollowPlayer();
 		}
 	}
 	else

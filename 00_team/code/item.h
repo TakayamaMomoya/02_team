@@ -43,7 +43,7 @@ public:
 
 private:
 	void Load(void);
-	void GetItem(CObject *pObj);
+	void GetItem(CObject* pObj);
 	void ApplyEffect(CPlayer *pPlayer);
 
 	TYPE m_type;

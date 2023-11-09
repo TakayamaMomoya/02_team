@@ -127,6 +127,11 @@ void CWeapon::Update(void)
 
 	// プレイヤーの手とマトリックスをかけ合わせる
 	FollowPlayerHand();
+
+	if (m_info.nCntShot > 0)
+	{
+		m_info.nCntShot--;
+	}
 }
 
 //=====================================================

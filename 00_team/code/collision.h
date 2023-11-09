@@ -34,6 +34,7 @@ public:
 		TAG_ENEMYBULLET,	// 敵の弾
 		TAG_BLOCK,	// ブロック
 		TAG_ITEM,	// アイテム
+		TAG_GOAL,	// ゴール
 		TAG_MAX
 	}TAG;
 
@@ -104,6 +105,7 @@ public:
 	void SetRadius(float fRadius) { m_fRadius = fRadius; }
 	bool IsTriggerExit(TAG tag);
 	bool IsTriggerEnter(TAG tag);
+	void PushCollision(D3DXVECTOR3 *pPos,TAG tag);
 
 private:
 	float m_fRadius;

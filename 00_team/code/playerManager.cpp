@@ -64,6 +64,8 @@ void CPlayerManager::CreatePlayer(int nNumPlayer)
 			pPlayer->SetID(i);
 
 			m_apPlayer[i] = pPlayer;
+
+			pPlayer->SetPosition(D3DXVECTOR3(50.0f * i,0.0f,0.0f));
 		}
 	}
 }
