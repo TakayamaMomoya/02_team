@@ -287,6 +287,14 @@ bool CCollision::IsCrossTrigger(D3DXVECTOR3 posTarget, D3DXVECTOR3 posTargetOld,
 }
 
 //=====================================================
+// à íuê›íË
+//=====================================================
+void CCollision::SetPosition(D3DXVECTOR3 pos)
+{
+	m_pos = pos;
+}
+
+//=====================================================
 // ê∂ê¨èàóù
 //=====================================================
 CCollision *CCollision::Create(TAG tag, TYPE type, CObject *obj)

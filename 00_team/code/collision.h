@@ -56,7 +56,7 @@ public:
 	static void DeleteAll(void);
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }
 	D3DXVECTOR3 GetPositionOld(void) { return m_posOld; }
-	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }
+	void SetPosition(D3DXVECTOR3 pos);
 	void SetPositionOld(D3DXVECTOR3 pos) { m_posOld = pos; }
 	CCollision **GetCollision(void) { return &m_apCollision[0]; }
 	TAG GetTag(void) { return m_tag; }

@@ -90,14 +90,14 @@ CEnemy *CEnemyManager::CreateEnemy(D3DXVECTOR3 pos, CEnemy::TYPE type)
 
 		if (pEnemy != nullptr)
 		{
-			// ‰Šú‰»ˆ—
-			pEnemy->Init();
-
 			// ˆÊ’uÝ’è
 			pEnemy->SetPosition(pos);
 
 			// ƒ‚[ƒVƒ‡ƒ““Çž
 			pEnemy->Load(apPath[type]);
+
+			// ‰Šú‰»ˆ—
+			pEnemy->Init();
 		}
 	}
 
