@@ -14,6 +14,7 @@
 #include "motion.h"
 #include "debugproc.h"
 #include "inputjoypad.h"
+#include "inputkeyboard.h"
 #include "universal.h"
 #include "collision.h"
 #include "game.h"
@@ -175,8 +176,9 @@ void CPlayer::Input(void)
 void CPlayer::InputMove(void)
 {
 	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
 
-	if (pJoyPad == nullptr)
+	if (pJoyPad == nullptr || pKeyboard == nullptr)
 	{
 		return;
 	}
@@ -190,6 +192,23 @@ void CPlayer::InputMove(void)
 		pJoyPad->GetJoyStickLY(nId),
 		0.0f,
 	};
+
+	if (pKeyboard->GetPress(DIK_W))
+	{
+		vecStickL.y += MOVE_SPEED;
+	}
+	if (pKeyboard->GetPress(DIK_S))
+	{
+		vecStickL.y -= MOVE_SPEED;
+	}
+	if (pKeyboard->GetPress(DIK_A))
+	{
+		vecStickL.x -= MOVE_SPEED;
+	}
+	if (pKeyboard->GetPress(DIK_D))
+	{
+		vecStickL.x += MOVE_SPEED;
+	}
 
 	D3DXVECTOR3 vecMove =
 	{// ˆÚ“®ƒxƒNƒgƒ‹‚Ì‘ã“ü
