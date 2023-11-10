@@ -559,8 +559,11 @@ void CCollisionSphere::PushCollision(D3DXVECTOR3* pPos, TAG tag)
 					continue;
 				}
 
+				D3DXVECTOR3 pos = { pPos->x,0.0f,pPos->z };
+				D3DXVECTOR3 posTarget = { ppCollision[nCnt]->GetPosition().x,0.0f, ppCollision[nCnt]->GetPosition().z };
+
 				// ·•ªŽæ“¾
-				D3DXVECTOR3 vecDiff = ppCollision[nCnt]->GetPosition() - *pPos;
+				D3DXVECTOR3 vecDiff = posTarget - pos;
 
 				// ·•ª‚Ì’·‚³
 				float fLengthDiff = D3DXVec3Length(&vecDiff);
@@ -577,7 +580,7 @@ void CCollisionSphere::PushCollision(D3DXVECTOR3* pPos, TAG tag)
 
 					posAfter *= -fLength;
 
-					posAfter += ppCollision[nCnt]->GetPosition();
+					posAfter += posTarget;
 
 					*pPos = posAfter;
 				}

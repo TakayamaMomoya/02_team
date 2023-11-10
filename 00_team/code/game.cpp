@@ -80,7 +80,7 @@ HRESULT CGame::Init(void)
 
 	if (pPlayerManger != nullptr)
 	{
-		pPlayerManger->CreatePlayer(2);
+		pPlayerManger->CreatePlayer(1);
 	}
 
 	// 武器マネージャーの生成
@@ -148,6 +148,10 @@ void CGame::Update(void)
 		if (pEnemyManager != nullptr)
 		{
 			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -59.0f), CEnemy::TYPE_NORMAL);
+			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -88.0f), CEnemy::TYPE_NORMAL);
+			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -107.0f), CEnemy::TYPE_NORMAL);
+			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -130.0f), CEnemy::TYPE_NORMAL);
+			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -160.0f), CEnemy::TYPE_NORMAL);
 		}
 	}
 

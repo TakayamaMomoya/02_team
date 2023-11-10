@@ -29,7 +29,8 @@
 //*****************************************************
 #define SPEED_MOVE	(1.0f)	// 移動速度
 #define RATE_RADIUS	(1.5f)	// 当たり判定の大きさの倍率
-#define INITIAL_LIFE	(5.0f)	// 初期体力
+#define INITIAL_LIFE	(10.0f)	// 初期体力
+#define INITIAL_SPEED	(0.3f)	// 初期移動速度
 #define DAMAGE_FRAME	(10)	// ダメージ状態の継続フレーム数
 #define INITIAL_SCORE	(1000)	// 初期スコア
 #define TIME_DEATH	(30)	// 死亡までのタイム
@@ -215,8 +216,9 @@ HRESULT CEnemy::Init(void)
 		}
 	}
 
-	// 体力の初期設定
+	// パラメーター初期設定
 	m_fLife = INITIAL_LIFE;
+	SetMoveSpeed(INITIAL_SPEED);
 
 	// 通常状態にする
 	m_state = STATE_NORMAL;
@@ -251,6 +253,20 @@ void CEnemy::Update(void)
 
 	// 当たり判定の管理
 	ManageCollision();
+
+	// 目標追跡
+	ChaseTarget();
+
+	// 移動量を反映
+	D3DXVECTOR3 pos = GetPosition();
+	D3DXVECTOR3 move = GetMove();
+
+	pos += move;
+	SetPosition(pos);
+
+	// 移動量の減衰
+	move *= 0.1f;
+	SetMove(move);
 }
 
 //=====================================================
@@ -310,6 +326,8 @@ void CEnemy::ManageState(void)
 		{// 通常状態に戻る
 			m_nTimerState = 0;
 			m_state = STATE_NORMAL;
+
+			GetBody()->ResetAllCol();
 		}
 		else
 		{// カウントアップ
@@ -396,7 +414,7 @@ void CEnemy::ChaseTarget(void)
 
 	pUniversal->FactingRot(&rot.y, fAngleDist, 0.1f);
 
-	SetRot(rot);
+	//SetRot(rot);
 }
 
 //=====================================================
@@ -436,6 +454,11 @@ void CEnemy::Hit(float fDamage)
 		else
 		{
 			m_state = STATE_DAMAGE;
+
+			// ヒット色
+			D3DXCOLOR col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+
+			GetBody()->SetAllCol(col);
 		}
 	}
 }
@@ -493,8 +516,8 @@ void CEnemy::Draw(void)
 	CCharacter::Draw();
 
 #ifdef _DEBUG
-	//CDebugProc::GetInstance()->Print("\n敵の位置：[%f,%f,%f]", GetPosition().x, GetPosition().y, GetPosition().z);
-	//CDebugProc::GetInstance()->Print("\n敵の半径：[%f]", m_pCollisionSphere->GetRadius());
+	CDebugProc::GetInstance()->Print("\n敵の位置：[%f,%f,%f]", GetPosition().x, GetPosition().y, GetPosition().z);
+	CDebugProc::GetInstance()->Print("\n敵の移動量：[%f,%f,%f]", GetMove().x, GetMove().y, GetMove().z);
 #endif
 }
 
