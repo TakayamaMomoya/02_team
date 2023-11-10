@@ -24,6 +24,7 @@ public:
 	void SetOffSet(D3DXMATRIX *pMtxWorldOffset, D3DXMATRIX mtxWorldOwner, D3DXVECTOR3 posOffset, D3DXVECTOR3 rot = { 0.0f,0.0f,0.0f });	//オフセット設定処理
 	void FactingRot(float *pfRot, float fRotDest, float rotateFact);	//向き補正処理
 	bool DistCmp(D3DXVECTOR3 posOwn, D3DXVECTOR3 posTarget,float fLengthMax,float *fDiff);
+	int RandRange(int nMax, int nMin);
 	static CUniversal *GetInstance(void) { return m_pUniversal; }
 
 private:
