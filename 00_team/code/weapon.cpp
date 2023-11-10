@@ -69,7 +69,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			// ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 			char* apPath[CWeapon::TYPE_MAX] =
 			{
-				"data\\MODEL\\weapon\\shotgun.x",
+				"data\\MODEL\\weapon\\magnum.x",
 				"data\\MODEL\\weapon\\katana.x",
 			};
 
