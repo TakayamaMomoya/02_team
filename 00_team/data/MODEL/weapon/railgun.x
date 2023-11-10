@@ -2437,7 +2437,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\ñºèÃñ¢ê›íË 1.png";
+    "data\\TEXTURE\\MATERIAL\\potato.png";
    }
   }
   Material {
