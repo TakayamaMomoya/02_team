@@ -132,6 +132,12 @@ void CGame::Update(void)
 		// シーンの更新
 		CScene::Update();
 	}
+	else
+	{
+		// エディットの更新
+		CEdit* pEdit = CEdit::GetInstatnce();
+		pEdit->Update();
+	}
 
 	// カメラ更新
 	UpdateCamera();

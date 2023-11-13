@@ -123,6 +123,9 @@
     <ClCompile Include="code\result.cpp" />
     <ClCompile Include="code\edit.cpp" />
     <ClCompile Include="code\block.cpp" />
+    <ClCompile Include="code\select.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -226,5 +229,8 @@
     <ClInclude Include="code\result.h" />
     <ClInclude Include="code\edit.h" />
     <ClInclude Include="code\block.h" />
+    <ClInclude Include="code\select.h">
+      <Filter>scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
