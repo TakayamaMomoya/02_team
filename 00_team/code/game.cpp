@@ -28,6 +28,7 @@
 #include "weaponManager.h"
 #include "enemyManager.h"
 #include "goal.h"
+#include "edit.h"
 
 //*****************************************************
 // マクロ定義
@@ -99,6 +100,11 @@ HRESULT CGame::Init(void)
 	// ゴールの生成
 	CGoal::Create();
 
+#ifdef _DEBUG
+	// エディットの生成
+	CEdit::Create();
+#endif
+
 	return S_OK;
 }
 
@@ -126,33 +132,11 @@ void CGame::Update(void)
 		// シーンの更新
 		CScene::Update();
 	}
-
-	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
-
-	if (pKeyboard != nullptr)
+	else
 	{
-		if (pKeyboard->GetTrigger(DIK_RETURN))
-		{
-			if (pFade != nullptr)
-			{
-				pFade->SetFade(CScene::MODE_RANKING);
-			}
-		}
-	}
-
-	if (CEnemy::GetNumAll() == 0)
-	{
-		// 敵マネージャーの生成
-		CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
-
-		if (pEnemyManager != nullptr)
-		{
-			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -59.0f), CEnemy::TYPE_NORMAL);
-			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -88.0f), CEnemy::TYPE_NORMAL);
-			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -107.0f), CEnemy::TYPE_NORMAL);
-			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -130.0f), CEnemy::TYPE_NORMAL);
-			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -160.0f), CEnemy::TYPE_NORMAL);
-		}
+		// エディットの更新
+		CEdit* pEdit = CEdit::GetInstatnce();
+		pEdit->Update();
 	}
 
 	// カメラ更新

@@ -38,11 +38,23 @@ public:
 	void SetID(int nID) { m_info.nID = nID; }
 	int GetID(void) { return m_info.nID; }
 	void ReleaseWeapon(void) { m_info.pWeapon = nullptr; }
+	void Hit(float fDamage);
 
 private:
+	enum STATE
+	{
+		STATE_NONE = 0,	// 何でもない状態
+		STATE_NORMAL,	// 通常状態
+		STATE_DAMAGE,	// ダメージ状態
+		STATE_DEATH,	// 死亡状態
+		STATE_MAX
+	};
 	struct SInfo
 	{
 		int nID;	// 番号
+		float fLife;	// 体力
+		float fTimerState;	// 状態遷移カウンタ
+		STATE state;	// 状態
 		CCollisionSphere *pCollisionSphere;	// 当たり判定
 		CWeapon *pWeapon;	// 武器
 	};
@@ -51,6 +63,7 @@ private:
 	void InputMove(void);
 	void InputAttack(void);
 	void Aim(void);
+	void ManageState(void);
 	void Debug(void);
 
 	SInfo m_info;	// 自身の情報

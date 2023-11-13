@@ -11,6 +11,7 @@
 #include "manager.h"
 #include "renderer.h"
 #include "universal.h"
+#include <stdio.h>
 
 //*****************************************
 // 静的メンバ変数宣言
@@ -141,4 +142,15 @@ bool CUniversal::DistCmp(D3DXVECTOR3 posOwn, D3DXVECTOR3 posTarget, float fLengt
 	{
 		return false;
 	}
+}
+
+//========================================
+// 範囲内のランダム数値を返す処理
+//========================================
+int CUniversal::RandRange(int nMax, int nMin)
+{
+	int nRange = nMax - nMin;
+	int nRand = rand() % nRange + nMin;
+
+	return nRand;
 }

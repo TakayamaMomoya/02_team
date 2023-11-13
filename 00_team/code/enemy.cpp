@@ -516,8 +516,8 @@ void CEnemy::Draw(void)
 	CCharacter::Draw();
 
 #ifdef _DEBUG
-	CDebugProc::GetInstance()->Print("\n敵の位置：[%f,%f,%f]", GetPosition().x, GetPosition().y, GetPosition().z);
-	CDebugProc::GetInstance()->Print("\n敵の移動量：[%f,%f,%f]", GetMove().x, GetMove().y, GetMove().z);
+	//CDebugProc::GetInstance()->Print("\n敵の位置：[%f,%f,%f]", GetPosition().x, GetPosition().y, GetPosition().z);
+	//CDebugProc::GetInstance()->Print("\n敵の移動量：[%f,%f,%f]", GetMove().x, GetMove().y, GetMove().z);
 #endif
 }
 

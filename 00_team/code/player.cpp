@@ -18,6 +18,7 @@
 #include "universal.h"
 #include "collision.h"
 #include "game.h"
+#include "manager.h"
 
 //*****************************************************
 // マクロ定義
@@ -25,6 +26,8 @@
 #define BODY_PATH	"data\\MOTION\\rayleigh.txt"	// 体のパス
 #define MOVE_SPEED	(1.0f)	// 移動速度
 #define ROT_SPEED	(0.1f)	// 回転速度
+#define INITIAL_LIFE	(30.0f)	// 初期体力
+#define DAMAGE_TIME	(0.5f)	// ダメージ状態の秒数
 
 //=====================================================
 // 優先順位を決めるコンストラクタ
@@ -81,6 +84,9 @@ HRESULT CPlayer::Init(void)
 		}
 	}
 
+	m_info.fLife = INITIAL_LIFE;
+	m_info.state = STATE_NORMAL;
+
 	return S_OK;
 }
 
@@ -100,6 +106,12 @@ void CPlayer::Uninit(void)
 	{
 		m_info.pCollisionSphere->Uninit();
 		m_info.pCollisionSphere = nullptr;
+	}
+
+	if (m_info.pWeapon != nullptr)
+	{
+		m_info.pWeapon->Uninit();
+		m_info.pWeapon = nullptr;
 	}
 	
 	// 継承クラスの終了
@@ -128,19 +140,39 @@ void CPlayer::Update(void)
 	if (m_info.pCollisionSphere != nullptr)
 	{
 		D3DXVECTOR3 pos = GetPosition();
+		D3DXVECTOR3 posWaist = GetBody()->GetMtxPos(0);
+		
+		// 敵との接触判定
+		m_info.pCollisionSphere->SetPosition(posWaist);
 
-		m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_PLAYER);
-		m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_ENEMY);
+		bool bHit = m_info.pCollisionSphere->SphereCollision(CCollision::TAG_ENEMY);
 
-		m_info.pCollisionSphere->SetPositionOld(m_info.pCollisionSphere->GetPosition());
-		m_info.pCollisionSphere->SetPosition(pos);
+		if (bHit)
+		{
+			Hit(5.0f);
+		}
 
-		SetPosition(pos);
+		if (m_info.pCollisionSphere != nullptr)
+		{
+			// 敵との押し出し判定
+			m_info.pCollisionSphere->SetPosition(pos);
+
+			m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_PLAYER);
+			m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_ENEMY);
+
+			m_info.pCollisionSphere->SetPositionOld(m_info.pCollisionSphere->GetPosition());
+			m_info.pCollisionSphere->SetPosition(pos);
+
+			SetPosition(pos);
+		}
 	}
 
 	// 移動量の減衰
 	move *= 0.1f;
 	SetMove(move);
+
+	// 状態管理
+	ManageState();
 }
 
 //=====================================================
@@ -303,6 +335,47 @@ void CPlayer::Aim(void)
 }
 
 //=====================================================
+// 状態管理
+//=====================================================
+void CPlayer::ManageState(void)
+{
+	switch (m_info.state)
+	{
+	case STATE_NORMAL:
+	{// 通常状態
+
+	}
+		break;
+	case STATE_DAMAGE:
+	{// ダメージ状態
+		float fTick = CManager::GetTick();
+
+		m_info.fTimerState -= fTick;
+
+		if (m_info.fTimerState <= 0.0f)
+		{
+			m_info.state = STATE_NORMAL;
+
+			CMotion *pBody = GetBody();
+
+			if (pBody != nullptr)
+			{
+				pBody->ResetAllCol();
+			}
+		}
+	}
+		break;
+	case STATE_DEATH:
+	{// 死亡状態
+
+	}
+		break;
+	default:
+		break;
+	}
+}
+
+//=====================================================
 // 描画処理
 //=====================================================
 void CPlayer::Draw(void)
@@ -330,6 +403,39 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 	if (m_info.pWeapon != nullptr)
 	{
 		m_info.pWeapon->SetPlayer(this);
+	}
+}
+
+//=====================================================
+// ヒット処理
+//=====================================================
+void CPlayer::Hit(float fDamage)
+{
+	if (m_info.state == STATE_NORMAL)
+	{
+		m_info.fLife -= fDamage;
+
+		if (m_info.fLife <= 0.0f)
+		{// 死亡判定
+			m_info.fLife = 0.0f;
+
+			m_info.state = STATE_DEATH;
+
+			Uninit();
+		}
+		else
+		{// ダメージ判定
+			m_info.state = STATE_DAMAGE;
+
+			m_info.fTimerState = DAMAGE_TIME;
+
+			CMotion *pBody = GetBody();
+
+			if (pBody != nullptr)
+			{
+				pBody->SetAllCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+			}
+		}
 	}
 }
 

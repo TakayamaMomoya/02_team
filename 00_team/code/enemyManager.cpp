@@ -12,12 +12,15 @@
 #include "enemyManager.h"
 #include "enemyNormal.h"
 #include "manager.h"
+#include "camera.h"
+#include "universal.h"
 #include <stdio.h>
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
 #define FILE_PATH	"data\\MAP\\enemies.txt"	// 配置データのパス
+#define RAND_SPAWN	(100)	// スポーン範囲
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -29,6 +32,8 @@ CEnemyManager *CEnemyManager::m_pEnemyManager = nullptr;	// 自身のポインタ
 //=====================================================
 CEnemyManager::CEnemyManager()
 {
+	m_nCntSpawn = 0;
+
 	m_pHead = nullptr;
 	m_pTail = nullptr;
 }
@@ -85,14 +90,14 @@ CEnemy *CEnemyManager::CreateEnemy(D3DXVECTOR3 pos, CEnemy::TYPE type)
 
 		if (pEnemy != nullptr)
 		{
-			// 初期化処理
-			pEnemy->Init();
-
 			// 位置設定
 			pEnemy->SetPosition(pos);
 
 			// モーション読込
 			pEnemy->Load(apPath[type]);
+
+			// 初期化処理
+			pEnemy->Init();
 		}
 	}
 
@@ -191,7 +196,40 @@ void CEnemyManager::Uninit(void)
 //=====================================================
 void CEnemyManager::Update(void)
 {
+	m_nCntSpawn++;
 
+	if (m_nCntSpawn >= 60)
+	{
+		// カメラの注視点座標を取得
+		CCamera *pCamera = CManager::GetCamera();
+		CCamera::Camera *pCameraInfo = nullptr;
+
+		if (pCamera != nullptr)
+		{
+			pCameraInfo = pCamera->GetCamera();
+		}
+
+		if (pCameraInfo == nullptr)
+		{
+			return;
+		}
+
+		CUniversal *pUniversal = CUniversal::GetInstance();
+
+		// 注視点を中心に設定
+		D3DXVECTOR3 posCenter = pCameraInfo->posR;
+
+		int nPosX = pUniversal->RandRange(RAND_SPAWN, -RAND_SPAWN);
+		int nPosZ = pUniversal->RandRange(RAND_SPAWN, -RAND_SPAWN);
+
+		posCenter.x += nPosX;
+		posCenter.z += nPosZ;
+
+		// 敵スポーン
+		CreateEnemy(posCenter, CEnemy::TYPE_NORMAL);
+
+		m_nCntSpawn = 0;
+	}
 }
 
 //=====================================================

@@ -36,7 +36,7 @@ CEdit::CEdit()
 {
 	m_pObjectCursor = nullptr;
 	m_nIdxObject = 0;
-	m_type = CBlock::TYPE_FLOOR;
+	m_type = CBlock::TYPE_DESK;
 }
 
 //=====================================================
@@ -76,7 +76,7 @@ HRESULT CEdit::Init(void)
 	m_pObjectCursor = CObjectX::Create();
 
 	// タイプの初期設定
-	m_type = CBlock::TYPE_FLOOR;
+	m_type = CBlock::TYPE_DESK;
 
 	// モデル番号の設定
 	m_pObjectCursor->SetIdxModel(pIdx[m_type]);
@@ -172,19 +172,7 @@ void CEdit::Update(void)
 			CBlock::Create(m_pObjectCursor->GetPosition(), m_pObjectCursor->GetRot(),m_type);
 		}
 
-		if (pKeyboard->GetTrigger(DIK_BACKSPACE))
-		{// 敵の生成
-			CEnemyManager *pEnemyManager = nullptr;
-
-			pEnemyManager = CEnemyManager::GetInstance();
-
-			if (pEnemyManager != nullptr)
-			{
-				pEnemyManager->CreateEnemy(m_pObjectCursor->GetPosition(), CEnemy::TYPE_DRONE);
-			}
-		}
-
-		if (pKeyboard->GetTrigger(DIK_0) && CBlock::GetNumAll() != 0)
+		if (pKeyboard->GetTrigger(DIK_8) && CBlock::GetNumAll() != 0)
 		{// オブジェクト選択処理
 			if (pBlock[m_nIdxObject] != nullptr)
 			{
@@ -199,7 +187,7 @@ void CEdit::Update(void)
 			}
 		}
 
-		if (pKeyboard->GetTrigger(DIK_MINUS) && CBlock::GetNumAll() != 0)
+		if (pKeyboard->GetTrigger(DIK_9) && CBlock::GetNumAll() != 0)
 		{// オブジェクト選択処理
 			if (pBlock[m_nIdxObject] != nullptr)
 			{
@@ -214,7 +202,7 @@ void CEdit::Update(void)
 			}
 		}
 
-		if (pKeyboard->GetTrigger(DIK_6))
+		if (pKeyboard->GetTrigger(DIK_1))
 		{
 			m_type = (CBlock::TYPE)((m_type + CBlock::TYPE_MAX - 1) % CBlock::TYPE_MAX);
 
@@ -223,7 +211,7 @@ void CEdit::Update(void)
 			m_pObjectCursor->BindModel(pIdx[m_type]);
 		}
 
-		if (pKeyboard->GetTrigger(DIK_7))
+		if (pKeyboard->GetTrigger(DIK_2))
 		{// ブロックタイプ切り替え
 			m_type = (CBlock::TYPE)((m_type + 1) % CBlock::TYPE_MAX);
 
@@ -232,12 +220,12 @@ void CEdit::Update(void)
 			m_pObjectCursor->BindModel(pIdx[m_type]);
 		}
 
-		if(pKeyboard->GetTrigger(DIK_9))
+		if(pKeyboard->GetTrigger(DIK_0))
 		{// 指定のブロックを削除
 			CBlock::Delete(m_nIdxObject);
 		}
 
-		if (pKeyboard->GetTrigger(DIK_8))
+		if (pKeyboard->GetTrigger(DIK_F2))
 		{// ブロックの保存
 			CBlock::Save();
 		}

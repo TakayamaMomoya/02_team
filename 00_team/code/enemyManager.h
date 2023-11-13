@@ -40,7 +40,8 @@ private:
 
 	CEnemy *m_pHead;	// 先頭のアドレス
 	CEnemy *m_pTail;	// 最後尾のアドレス
-	
+	int m_nCntSpawn;	// スポーンカウンター
+
 	static CEnemyManager *m_pEnemyManager;	// 自身のポインタ
 };
 
