@@ -8,7 +8,7 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "title.h"
+#include "select.h"
 #include "object.h"
 #include "inputkeyboard.h"
 #include "inputmouse.h"
@@ -35,7 +35,7 @@
 //=====================================================
 // コンストラクタ
 //=====================================================
-CTitle::CTitle()
+CSelect::CSelect()
 {
 	m_pStart = nullptr;
 	m_state = STATE_NONE;
@@ -44,7 +44,7 @@ CTitle::CTitle()
 //=====================================================
 // デストラクタ
 //=====================================================
-CTitle::~CTitle()
+CSelect::~CSelect()
 {
 
 }
@@ -52,7 +52,7 @@ CTitle::~CTitle()
 //=====================================================
 // 初期化処理
 //=====================================================
-HRESULT CTitle::Init(void)
+HRESULT CSelect::Init(void)
 {
 	// ロゴの生成
 	CObject2D *pObject2D = CObject2D::Create(7);
@@ -82,7 +82,7 @@ HRESULT CTitle::Init(void)
 //=====================================================
 // 終了処理
 //=====================================================
-void CTitle::Uninit(void)
+void CSelect::Uninit(void)
 {
 	// オブジェクト全破棄
 	CObject::ReleaseAll();
@@ -91,7 +91,7 @@ void CTitle::Uninit(void)
 //=====================================================
 // 更新処理
 //=====================================================
-void CTitle::Update(void)
+void CSelect::Update(void)
 {
 	// 情報取得
 	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
@@ -115,7 +115,7 @@ void CTitle::Update(void)
 			{// フェード
 				if (pFade != nullptr)
 				{
-					pFade->SetFade(CScene::MODE_SELECT);
+					pFade->SetFade(CScene::MODE_GAME);
 				}
 			}
 		}
@@ -130,7 +130,7 @@ void CTitle::Update(void)
 //=====================================================
 // スタート表示の管理
 //=====================================================
-void CTitle::ManageStart(void)
+void CSelect::ManageStart(void)
 {
 	if (m_pStart == nullptr)
 	{
@@ -166,7 +166,7 @@ void CTitle::ManageStart(void)
 //=====================================================
 // 描画処理
 //=====================================================
-void CTitle::Draw(void)
+void CSelect::Draw(void)
 {
 
 }

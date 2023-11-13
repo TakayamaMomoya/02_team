@@ -1,52 +1,50 @@
 //*****************************************************
 //
-// シーン処理[scene.h]
-// Author:髙山桃也
+// 選択処理[select.h]
+// Author:小笠原彪
 //
 //*****************************************************
-#ifndef _SCENE_H_
-#define _SCENE_H_
+#ifndef _SELECT_H_
+#define _SELECT_H_
 
 //*****************************************************
 // インクルード
 //*****************************************************
 #include "main.h"
+#include "scene.h"
 
 //*****************************************************
 // 前方宣言
 //*****************************************************
-class CPlayer;
-class CMeshField;
+class CMenu;
+class CObject2D;
 
 //*****************************************************
 // クラスの定義
 //*****************************************************
-class CScene
+class CSelect : public CScene
 {
 public:
-	enum MODE
-	{
-		MODE_TITLE = 0,
-		MODE_SELECT,
-		MODE_TUTORIAL,
-		MODE_GAME,
-		MODE_RANKING,
-		MODE_MAX
-	};
-
-	CScene();	// コンストラクタ
-	~CScene();	// デストラクタ
+	CSelect();	// コンストラクタ
+	~CSelect();	// デストラクタ
 
 	virtual HRESULT Init(void);
 	virtual void Uninit(void);
 	virtual void Update();
 	virtual void Draw();
-	static CScene *Create(MODE mode);
-	int GetTimer(void) { return m_nTimerTrans; }
-	void SetTimer(int nTime) { m_nTimerTrans = nTime; }
 
 private:
-	int m_nTimerTrans;	// 遷移タイマー
+	enum STATE
+	{
+		STATE_NONE = 0,	// 何もしてない状態
+		STATE_OUT,	// フェードアウト状態
+		START_MAX
+	};
+
+	void ManageStart(void);
+
+	CObject2D *m_pStart;	// スタート表示のポインタ
+	STATE m_state;	// 状態
 };
 
 #endif
