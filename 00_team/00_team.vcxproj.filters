@@ -121,6 +121,8 @@
     <ClCompile Include="code\goal.cpp" />
     <ClCompile Include="code\goalTimer.cpp" />
     <ClCompile Include="code\result.cpp" />
+    <ClCompile Include="code\edit.cpp" />
+    <ClCompile Include="code\block.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -222,5 +224,7 @@
     <ClInclude Include="code\goal.h" />
     <ClInclude Include="code\goalTimer.h" />
     <ClInclude Include="code\result.h" />
+    <ClInclude Include="code\edit.h" />
+    <ClInclude Include="code\block.h" />
   </ItemGroup>
 </Project>
