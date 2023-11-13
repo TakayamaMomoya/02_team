@@ -16,6 +16,7 @@
 #include "debugproc.h"
 #include "particle.h"
 #include "sound.h"
+#include "universal.h"
 
 //*****************************************************
 // マクロ定義
@@ -39,8 +40,11 @@ CMotion::CMotion(int nPriority) : CObject(nPriority)
 	m_nNumMotion = 0;
 	m_nNumParts = 0;
 	m_bFinish = false;
+	m_bShadow = false;
 	m_pos = { 0.0f,0.0f,0.0f };
 	m_posOld = { 0.0f,0.0f,0.0f };
+	m_posShadow = { 0.0f,0.0f,0.0f };
+	m_move = { 0.0f,0.0f,0.0f };
 }
 
 //=====================================================
@@ -86,6 +90,9 @@ void CMotion::Update(void)
 	{
 		return;
 	}
+
+	// 汎用処理取得
+	CUniversal *pUniversal = CUniversal::GetInstance();
 
 	// 現在の位置を保存
 	m_posOld = m_pos;
@@ -151,6 +158,10 @@ void CMotion::Update(void)
 		float DiffRotZ = m_aMotionInfo[m_motionType].aKeyInfo[nNextKey].aKey[nCntParts].fRotZ -
 			m_aKeyOld[nCntParts].fRotZ;
 
+		pUniversal->LimitRot(&DiffRotX);
+		pUniversal->LimitRot(&DiffRotY);
+		pUniversal->LimitRot(&DiffRotZ);
+
 		//目的の値=======================================================================================================
 		float DestPosX = pos.x + m_aKeyOld[nCntParts].fPosX +
 			DiffPosX * (float)(1.0f / (float)m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame) * m_nCounterMotion;
@@ -173,7 +184,13 @@ void CMotion::Update(void)
 		//パーツの向き・位置設定
 		m_apParts[nCntParts]->pParts->SetPosition(D3DXVECTOR3(DestPosX, DestPosY, DestPosZ));
 
-		m_apParts[nCntParts]->pParts->SetRot(D3DXVECTOR3(DestRotX, DestRotY, DestRotZ));
+		pUniversal->LimitRot(&DestRotX);
+		pUniversal->LimitRot(&DestRotY);
+		pUniversal->LimitRot(&DestRotZ);
+
+		rot = D3DXVECTOR3(DestRotX, DestRotY, DestRotZ);
+
+		m_apParts[nCntParts]->pParts->SetRot(rot);
 	}
 
 	m_nCounterMotion++;
@@ -205,7 +222,7 @@ void CMotion::Update(void)
 }
 
 //=====================================================
-//モーション設定
+// モーション設定
 //=====================================================
 void CMotion::SetMotion(int nMotionType)
 {
@@ -236,6 +253,20 @@ void CMotion::SetKeyOld(void)
 		m_aKeyOld[nCntPart].fRotX = m_apParts[nCntPart]->pParts->GetRot().x;
 		m_aKeyOld[nCntPart].fRotY = m_apParts[nCntPart]->pParts->GetRot().y;
 		m_aKeyOld[nCntPart].fRotZ = m_apParts[nCntPart]->pParts->GetRot().z;
+	}
+}
+
+//=====================================================
+// ポーズの初期設定
+//=====================================================
+void CMotion::InitPose(int nMotion)
+{
+	for (int i = 0; i < m_aMotionInfo[nMotion].nNumKey;i++)
+	{
+		for (int nCntPart = 0; nCntPart < m_nNumParts; nCntPart++)
+		{
+			m_aKeyOld[nCntPart] = m_aMotionInfo[nMotion].aKeyInfo[i].aKey[nCntPart];
+		}
 	}
 }
 
@@ -272,13 +303,29 @@ void CMotion::SetMatrix(void)
 //=====================================================
 void CMotion::MultiplyMtx(void)
 {
+	// 親のマトリックス
+	SetMatrix();
+
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
 
-	//変数宣言
 	D3DXMATRIX mtxRotModel, mtxTransModel;
 	D3DXMATRIX *pMtxParent;
 	D3DXMATRIX *pMtx;
+
+	D3DXMATRIX mtxShadow;
+	D3DLIGHT9 light;
+	D3DXVECTOR4 posLight;
+	D3DXVECTOR3 normal;
+	D3DXPLANE plane;
+
+	// ライトの位置設定
+	pDevice->GetLight(2, &light);
+	posLight = { -light.Direction.x, -light.Direction.y, -light.Direction.z, 0.0f };
+
+	// 平面情報の生成
+	normal = { 0.0f,1.0f,0.0f };
+	D3DXPlaneFromPointNormal(&plane, &m_posShadow, &normal);
 
 	for (int nCntParts = 0;nCntParts < m_nNumParts;nCntParts++)
 	{
@@ -311,6 +358,21 @@ void CMotion::MultiplyMtx(void)
 		//親パーツとパーツのワールドマトリックスをかけ合わせる
 		D3DXMatrixMultiply(pMtx, pMtx, pMtxParent);
 
+		if (m_bShadow)
+		{
+			// シャドウマトリックス初期化
+			D3DXMatrixIdentity(&mtxShadow);
+
+			// シャドウマトリックスの作成
+			D3DXMatrixShadow(&mtxShadow, &posLight, &plane);
+			D3DXMatrixMultiply(&mtxShadow, pMtx, &mtxShadow);
+
+			// シャドウマトリックスの設定
+			pDevice->SetTransform(D3DTS_WORLD, &mtxShadow);
+
+			m_apParts[nCntParts]->pParts->DrawShadow();
+		}
+
 		//ワールドマトリックス設定
 		pDevice->SetTransform(D3DTS_WORLD, pMtx);
 
@@ -323,8 +385,10 @@ void CMotion::MultiplyMtx(void)
 //=====================================================
 void CMotion::Draw(void)
 {
-	// 全ての親のマトリック設定
-	SetMatrix();
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
+
+	pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);
 
 	// マトリックスをかけ合わせる処理
 	MultiplyMtx();
@@ -549,6 +613,65 @@ void CMotion::Load(char *pPath)
 						nCntParticle++;
 					}
 
+					//if (strcmp(cTemp, "NUM_COLLISION") == 0)
+					//{// 当たり判定数判断
+					//	fscanf(pFile, "%s", &cTemp[0]);
+
+					//	fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].nNumCollision);
+
+					//	if (m_aMotionInfo[m_nNumMotion].nNumCollision != 0)
+					//	{
+					//		// 当たり判定情報を生成
+					//		m_aMotionInfo[m_nNumMotion].pCollision = new COLLISION_INFO[m_aMotionInfo[m_nNumMotion].nNumCollision];
+
+					//		// 当たり判定情報初期化
+					//		ZeroMemory(m_aMotionInfo[m_nNumMotion].pCollision, sizeof(COLLISION_INFO) * m_aMotionInfo[m_nNumMotion].nNumCollision);
+					//	}
+					//}
+
+					//if (strcmp(cTemp, "COLLISIONSET") == 0 && m_aMotionInfo[m_nNumMotion].pCollision != 0)
+					//{// 当たり判定情報設定
+					//	while (strcmp(cTemp, "END_COLLISIONSET") != 0)
+					//	{//終わりまで当たり判定設定
+					//		fscanf(pFile, "%s", &cTemp[0]);
+
+					//		if (strcmp(cTemp, "KEY") == 0)
+					//		{// 再生キー取得
+					//			fscanf(pFile, "%s", &cTemp[0]);
+
+					//			fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nKey);
+					//		}
+
+					//		if (strcmp(cTemp, "FRAME") == 0)
+					//		{// 再生フレーム取得
+					//			fscanf(pFile, "%s", &cTemp[0]);
+
+					//			fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nFrame);
+					//		}
+
+					//		if (strcmp(cTemp, "POS") == 0)
+					//		{//位置読み込み
+					//			D3DXVECTOR3 pos;
+
+					//			fscanf(pFile, "%s", &cTemp[0]);
+
+					//			for (int nCntPos = 0; nCntPos < 3; nCntPos++)
+					//			{
+					//				fscanf(pFile, "%f", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].offset[nCntPos]);
+					//			}
+					//		}
+
+					//		if (strcmp(cTemp, "PARENT") == 0)
+					//		{// 親パーツ番号取得
+					//			fscanf(pFile, "%s", &cTemp[0]);
+
+					//			fscanf(pFile, "%d", &m_aMotionInfo[m_nNumMotion].pParticle[nCntParticle].nIdxParent);
+					//		}
+					//	}
+
+					//	nCntParticle++;
+					//}
+
 					if (strcmp(cTemp, "KEYSET") == 0)
 					{//キースタート
 						while (strcmp(cTemp, "END_KEYSET") != 0)
@@ -638,6 +761,88 @@ float CMotion::GetRadiusMax(void)
 	}
 
 	return fRadiusMax;
+}
+
+//=====================================================
+// パーツの絶対位置取得
+//=====================================================
+D3DXVECTOR3 CMotion::GetMtxPos(int nIdx)
+{
+	D3DXVECTOR3 pos = { 0.0f,0.0f,0.0f };
+
+	if (nIdx < 0 && 
+		nIdx >= m_nNumParts)
+	{// 範囲外制限
+		return pos;
+	}
+
+	if (m_apParts[nIdx] != nullptr)
+	{
+		if (m_apParts[nIdx]->pParts != nullptr)
+		{
+			D3DXMATRIX mtx = *m_apParts[nIdx]->pParts->GetMatrix();
+
+			pos = 
+			{
+				mtx._41,
+				mtx._42,
+				mtx._43,
+			};
+		}
+	}
+
+	return pos;
+}
+
+//=====================================================
+// 残像の設定
+//=====================================================
+void CMotion::SetAfterImage(D3DXCOLOR col, int m_nLife)
+{
+	for (int nCntParts = 0; nCntParts < m_nNumParts; nCntParts++)
+	{
+		if (m_apParts[nCntParts] != nullptr)
+		{// 残像設定
+			D3DXMATRIX *pMtx = m_apParts[nCntParts]->pParts->GetMatrix();
+			CModel::Model *model = m_apParts[nCntParts]->pParts->GetModel();
+
+			//CAfterImage::Create(*m_apParts[nCntParts]->m_pParts->GetMatrix(), m_apParts[nCntParts]->m_pParts->GetIdxModel(),col,m_nLife);
+		}
+	}
+}
+
+//=====================================================
+// 全パーツの色設定
+//=====================================================
+void CMotion::SetAllCol(D3DXCOLOR col)
+{
+	for (int i = 0; i < m_nNumParts; i++)
+	{
+		if (m_apParts[i] != nullptr)
+		{
+			if (m_apParts[i]->pParts != nullptr)
+			{
+				m_apParts[i]->pParts->SetEmissiveCol(col);
+			}
+		}
+	}
+}
+
+//=====================================================
+// 全パーツの色リセット
+//=====================================================
+void CMotion::ResetAllCol(void)
+{
+	for (int i = 0; i < m_nNumParts; i++)
+	{
+		if (m_apParts[i] != nullptr)
+		{
+			if (m_apParts[i]->pParts != nullptr)
+			{
+				m_apParts[i]->pParts->ResetColor();
+			}
+		}
+	}
 }
 
 //=====================================================

@@ -115,7 +115,7 @@ void CTitle::Update(void)
 			{// フェード
 				if (pFade != nullptr)
 				{
-					pFade->SetFade(CScene::MODE_GAME);
+					pFade->SetFade(CScene::MODE_SELECT);
 				}
 			}
 		}

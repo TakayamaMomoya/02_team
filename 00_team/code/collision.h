@@ -34,6 +34,7 @@ public:
 		TAG_ENEMYBULLET,	// 敵の弾
 		TAG_BLOCK,	// ブロック
 		TAG_ITEM,	// アイテム
+		TAG_GOAL,	// ゴール
 		TAG_MAX
 	}TAG;
 
@@ -55,7 +56,7 @@ public:
 	static void DeleteAll(void);
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }
 	D3DXVECTOR3 GetPositionOld(void) { return m_posOld; }
-	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }
+	void SetPosition(D3DXVECTOR3 pos);
 	void SetPositionOld(D3DXVECTOR3 pos) { m_posOld = pos; }
 	CCollision **GetCollision(void) { return &m_apCollision[0]; }
 	TAG GetTag(void) { return m_tag; }
@@ -104,6 +105,7 @@ public:
 	void SetRadius(float fRadius) { m_fRadius = fRadius; }
 	bool IsTriggerExit(TAG tag);
 	bool IsTriggerEnter(TAG tag);
+	void PushCollision(D3DXVECTOR3 *pPos,TAG tag);
 
 private:
 	float m_fRadius;

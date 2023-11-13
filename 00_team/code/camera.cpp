@@ -16,13 +16,15 @@
 #include "inputmouse.h"
 #include "debugproc.h"
 #include "game.h"
+#include "playerManager.h"
+#include "player.h"
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
 #define MOVE_SPEED					(3.0f)						//移動スピード
 #define ROLL_SPEED					(0.02f)						//回転スピード
-#define MOVE_FACT					(0.3f)						//移動減衰係数
+#define MOVE_FACT					(0.1f)						//移動係数
 #define LIMIT_HEIGHT	(50)	// 位置を制限する高さ
 #define INITIAL_ANGLE	(45.0f)	// 初期の視野角
 #define ANGLE_GAME	(D3DX_PI * 0.4f)	// ゲーム中のカメラの角度
@@ -78,98 +80,7 @@ void CCamera::Uninit(void)
 //====================================================
 void CCamera::Update(void)
 {
-	CScene::MODE mode;
 
-	mode = CManager::GetMode();
-
-	switch (mode)
-	{
-	case CScene::MODE_TITLE:
-		UpdateTitle();
-		break;
-	case CScene::MODE_GAME:
-		UpdateGame();
-		break;
-	case CScene::MODE_RANKING:
-		break;
-	default:
-		break;
-	}
-}
-
-//====================================================
-// デバッグ処理
-//====================================================
-void CCamera::Debug(void)
-{
-	// 情報取得
-	//CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
-
-	//if (pKeyboard == nullptr)
-	//{
-	//	return;
-	//}
-
-	//if (pKeyboard->GetPress(DIK_UP))
-	//{
-	//	m_camera.fViewAngle += 0.4f;
-	//}
-	//if (pKeyboard->GetPress(DIK_DOWN))
-	//{
-	//	m_camera.fViewAngle -= 0.4f;
-	//}
-}
-
-//====================================================
-// タイトル更新
-//====================================================
-void CCamera::UpdateTitle(void)
-{
-	TitleMove();
-}
-
-//====================================================
-// ゲーム更新
-//====================================================
-void CCamera::UpdateGame(void)
-{
-
-}
-
-//====================================================
-// カメラの動き
-//====================================================
-void CCamera::TitleMove(void)
-{
-	//目標の注視点設定
-	m_camera.posRDest =
-	{
-		0.0f,
-		180.0f,
-		0.0f
-	};
-
-	m_camera.fLength = 240;
-
-	//目標の視点設定
-	m_camera.posVDest =
-	{
-		m_camera.posRDest.x + sinf(m_camera.rot.x) * sinf(m_camera.rot.y - D3DX_PI * 0.02f) * m_camera.fLength,
-		m_camera.posRDest.y + cosf(m_camera.rot.x) * m_camera.fLength,
-		m_camera.posRDest.z + sinf(m_camera.rot.x) * cosf(m_camera.rot.y - D3DX_PI * 0.02f) * m_camera.fLength
-	};
-
-	//注視点補正
-	m_camera.posR.x += (m_camera.posRDest.x - m_camera.posR.x) * MOVE_FACT;
-	m_camera.posR.y += (m_camera.posRDest.y - m_camera.posR.y) * MOVE_FACT;
-	m_camera.posR.z += (m_camera.posRDest.z - m_camera.posR.z) * MOVE_FACT;
-
-	//現在の視点補正
-	m_camera.posV.x += (m_camera.posVDest.x - m_camera.posV.x) * MOVE_FACT;
-	m_camera.posV.y += (m_camera.posVDest.y - m_camera.posV.y) * MOVE_FACT;
-	m_camera.posV.z += (m_camera.posVDest.z - m_camera.posV.z) * MOVE_FACT;
-
-	m_camera.rot.y += 0.01f;
 }
 
 //====================================================
@@ -265,23 +176,40 @@ void CCamera::SetTitle(void)
 //====================================================
 void CCamera::FollowPlayer(void)
 {
+	// プレイヤーの取得
+	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
 
-}
+	if (pPlayerManager == nullptr)
+	{
+		return;
+	}
 
-//====================================================
-// ボス戦時の動き
-//====================================================
-void CCamera::BossBattle(void)
-{
-	// 振動処理
-	Quake();
+	D3DXVECTOR3 posPlayer = { 0.0f,0.0f,0.0f };
 
-	m_camera.posRDest = POSR_BOSS;
-	m_camera.posVDest = POSV_BOSS;
+	for (int i = 0;i < NUM_PLAYER;i++)
+	{// 一番若い番号のプレイヤーの位置を参照
+		CPlayer* pPlayer = pPlayerManager->GetPlayer(i);
 
-	// 位置の補正
-	m_camera.posR += (m_camera.posRDest - m_camera.posR) * MOVE_FACT;
+		if (pPlayer != nullptr)
+		{
+			posPlayer = pPlayer->GetPosition();
+
+			break;
+		}
+	}
+
+	// 目的座標設定
+	m_camera.posRDest = posPlayer;
+	m_camera.posVDest = 
+	{
+		m_camera.posRDest.x,
+		m_camera.posRDest.y + 70.0f,
+		m_camera.posRDest.z - 100.0f,
+	};
+
+	// 目的座標に補正
 	m_camera.posV += (m_camera.posVDest - m_camera.posV) * MOVE_FACT;
+	m_camera.posR += (m_camera.posRDest - m_camera.posR) * MOVE_FACT;
 }
 
 //====================================================

@@ -11,6 +11,7 @@
 #include "manager.h"
 #include "renderer.h"
 #include "universal.h"
+#include <stdio.h>
 
 //*****************************************
 // 静的メンバ変数宣言
@@ -104,32 +105,52 @@ void CUniversal::SetOffSet(D3DXMATRIX *pMtxWorldOffset, D3DXMATRIX mtxWorldOwner
 //========================================
 void CUniversal::FactingRot(float *pfRot, float fRotDest, float rotateFact)
 {
+	// 引数の角度の補正
+	LimitRot(pfRot);
+	LimitRot(&fRotDest);
+
 	//差分角度を取得
 	float fRotDiff = fRotDest - *pfRot;
 
 	//角度の修正
-	if (fRotDiff < 0)
-	{
-		fRotDiff += 6.28f;
-	}
-	else if (fRotDiff > 0)
-	{
-		fRotDiff -= 6.28f;
-	}
+	LimitRot(&fRotDiff);
 
 	//角度補正
 	*pfRot += fRotDiff * rotateFact;
 
-	//角度の修正
-	if (fRotDiff < 0)
-	{
-		fRotDiff += 6.28f;
-	}
-	else if (fRotDiff > 0)
-	{
-		fRotDiff -= 6.28f;
-	}
+	LimitRot(pfRot);
+}
 
-	//角度補正
-	*pfRot += fRotDiff * rotateFact;
+//========================================
+// 距離の比較
+//========================================
+bool CUniversal::DistCmp(D3DXVECTOR3 posOwn, D3DXVECTOR3 posTarget, float fLengthMax, float *fDiff)
+{
+	D3DXVECTOR3 vecDiff = posTarget - posOwn;
+	float fLength = D3DXVec3Length(&vecDiff);
+
+	if (fLength < fLengthMax)
+	{
+		if (fDiff != nullptr)
+		{
+			*fDiff = fLength;
+		}
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+//========================================
+// 範囲内のランダム数値を返す処理
+//========================================
+int CUniversal::RandRange(int nMax, int nMin)
+{
+	int nRange = nMax - nMin;
+	int nRand = rand() % nRange + nMin;
+
+	return nRand;
 }

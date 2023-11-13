@@ -64,7 +64,7 @@ void CItem::Load(void)
 {
 	char* apPath[CItem::TYPE_MAX] =
 	{
-		"data\\MODEL\\weapon\\shotgun.x",
+		"data\\MODEL\\weapon\\magnum.x",
 		"data\\MODEL\\weapon\\katana.x",
 		"data\\MODEL\\weapon\\shotgun.x",
 	};

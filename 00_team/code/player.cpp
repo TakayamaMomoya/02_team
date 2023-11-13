@@ -14,8 +14,11 @@
 #include "motion.h"
 #include "debugproc.h"
 #include "inputjoypad.h"
+#include "inputkeyboard.h"
 #include "universal.h"
 #include "collision.h"
+#include "game.h"
+#include "manager.h"
 
 //*****************************************************
 // マクロ定義
@@ -23,6 +26,8 @@
 #define BODY_PATH	"data\\MOTION\\rayleigh.txt"	// 体のパス
 #define MOVE_SPEED	(1.0f)	// 移動速度
 #define ROT_SPEED	(0.1f)	// 回転速度
+#define INITIAL_LIFE	(30.0f)	// 初期体力
+#define DAMAGE_TIME	(0.5f)	// ダメージ状態の秒数
 
 //=====================================================
 // 優先順位を決めるコンストラクタ
@@ -79,6 +84,9 @@ HRESULT CPlayer::Init(void)
 		}
 	}
 
+	m_info.fLife = INITIAL_LIFE;
+	m_info.state = STATE_NORMAL;
+
 	return S_OK;
 }
 
@@ -98,6 +106,12 @@ void CPlayer::Uninit(void)
 	{
 		m_info.pCollisionSphere->Uninit();
 		m_info.pCollisionSphere = nullptr;
+	}
+
+	if (m_info.pWeapon != nullptr)
+	{
+		m_info.pWeapon->Uninit();
+		m_info.pWeapon = nullptr;
 	}
 	
 	// 継承クラスの終了
@@ -126,13 +140,39 @@ void CPlayer::Update(void)
 	if (m_info.pCollisionSphere != nullptr)
 	{
 		D3DXVECTOR3 pos = GetPosition();
+		D3DXVECTOR3 posWaist = GetBody()->GetMtxPos(0);
+		
+		// 敵との接触判定
+		m_info.pCollisionSphere->SetPosition(posWaist);
 
-		m_info.pCollisionSphere->SetPosition(pos);
+		bool bHit = m_info.pCollisionSphere->SphereCollision(CCollision::TAG_ENEMY);
+
+		if (bHit)
+		{
+			Hit(5.0f);
+		}
+
+		if (m_info.pCollisionSphere != nullptr)
+		{
+			// 敵との押し出し判定
+			m_info.pCollisionSphere->SetPosition(pos);
+
+			m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_PLAYER);
+			m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_ENEMY);
+
+			m_info.pCollisionSphere->SetPositionOld(m_info.pCollisionSphere->GetPosition());
+			m_info.pCollisionSphere->SetPosition(pos);
+
+			SetPosition(pos);
+		}
 	}
 
 	// 移動量の減衰
 	move *= 0.1f;
 	SetMove(move);
+
+	// 状態管理
+	ManageState();
 }
 
 //=====================================================
@@ -140,6 +180,18 @@ void CPlayer::Update(void)
 //=====================================================
 void CPlayer::Input(void)
 {
+	CGame *pGame = CGame::GetInstance();
+
+	if (pGame != nullptr)
+	{
+		CGame::STATE state = pGame->GetState();
+
+		if (state == CGame::STATE_RESULT || state == CGame::STATE_END)
+		{
+			return;
+		}
+	}
+
 	// 移動処理
 	InputMove();
 
@@ -156,8 +208,9 @@ void CPlayer::Input(void)
 void CPlayer::InputMove(void)
 {
 	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
 
-	if (pJoyPad == nullptr)
+	if (pJoyPad == nullptr || pKeyboard == nullptr)
 	{
 		return;
 	}
@@ -171,6 +224,23 @@ void CPlayer::InputMove(void)
 		pJoyPad->GetJoyStickLY(nId),
 		0.0f,
 	};
+
+	if (pKeyboard->GetPress(DIK_W))
+	{
+		vecStickL.y += MOVE_SPEED;
+	}
+	if (pKeyboard->GetPress(DIK_S))
+	{
+		vecStickL.y -= MOVE_SPEED;
+	}
+	if (pKeyboard->GetPress(DIK_A))
+	{
+		vecStickL.x -= MOVE_SPEED;
+	}
+	if (pKeyboard->GetPress(DIK_D))
+	{
+		vecStickL.x += MOVE_SPEED;
+	}
 
 	D3DXVECTOR3 vecMove =
 	{// 移動ベクトルの代入
@@ -200,7 +270,7 @@ void CPlayer::InputAttack(void)
 		m_info.pWeapon->Attack();
 	}
 	else
-	{
+	{// 素手の場合の処理
 
 	}
 }
@@ -258,11 +328,51 @@ void CPlayer::Aim(void)
 	D3DXVECTOR3 rot = GetRot();
 
 	pUniversal->LimitRot(&fAngleDest);
-	pUniversal->LimitRot(&rot.y);
 
-	pUniversal->FactingRot(&rot.y, fAngleDest, ROT_SPEED);
+	pUniversal->FactingRot(&rot.y, fAngleDest + D3DX_PI, ROT_SPEED);
 
 	SetRot(rot);
+}
+
+//=====================================================
+// 状態管理
+//=====================================================
+void CPlayer::ManageState(void)
+{
+	switch (m_info.state)
+	{
+	case STATE_NORMAL:
+	{// 通常状態
+
+	}
+		break;
+	case STATE_DAMAGE:
+	{// ダメージ状態
+		float fTick = CManager::GetTick();
+
+		m_info.fTimerState -= fTick;
+
+		if (m_info.fTimerState <= 0.0f)
+		{
+			m_info.state = STATE_NORMAL;
+
+			CMotion *pBody = GetBody();
+
+			if (pBody != nullptr)
+			{
+				pBody->ResetAllCol();
+			}
+		}
+	}
+		break;
+	case STATE_DEATH:
+	{// 死亡状態
+
+	}
+		break;
+	default:
+		break;
+	}
 }
 
 //=====================================================
@@ -293,6 +403,39 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 	if (m_info.pWeapon != nullptr)
 	{
 		m_info.pWeapon->SetPlayer(this);
+	}
+}
+
+//=====================================================
+// ヒット処理
+//=====================================================
+void CPlayer::Hit(float fDamage)
+{
+	if (m_info.state == STATE_NORMAL)
+	{
+		m_info.fLife -= fDamage;
+
+		if (m_info.fLife <= 0.0f)
+		{// 死亡判定
+			m_info.fLife = 0.0f;
+
+			m_info.state = STATE_DEATH;
+
+			Uninit();
+		}
+		else
+		{// ダメージ判定
+			m_info.state = STATE_DAMAGE;
+
+			m_info.fTimerState = DAMAGE_TIME;
+
+			CMotion *pBody = GetBody();
+
+			if (pBody != nullptr)
+			{
+				pBody->SetAllCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+			}
+		}
 	}
 }
 

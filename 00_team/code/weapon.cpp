@@ -69,7 +69,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			// モデルの読み込み
 			char* apPath[CWeapon::TYPE_MAX] =
 			{
-				"data\\MODEL\\weapon\\shotgun.x",
+				"data\\MODEL\\weapon\\magnum.x",
 				"data\\MODEL\\weapon\\katana.x",
 			};
 
@@ -127,6 +127,11 @@ void CWeapon::Update(void)
 
 	// プレイヤーの手とマトリックスをかけ合わせる
 	FollowPlayerHand();
+
+	if (m_info.nCntShot > 0)
+	{
+		m_info.nCntShot--;
+	}
 }
 
 //=====================================================

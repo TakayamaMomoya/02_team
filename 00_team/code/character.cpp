@@ -59,6 +59,15 @@ void CCharacter::Load(char *pPath)
 	if (m_info.pBody == nullptr && pPath != nullptr)
 	{
 		m_info.pBody = CMotion::Create(pPath);
+
+		if (m_info.pBody != nullptr)
+		{
+			D3DXVECTOR3 pos = GetPosition();
+			D3DXVECTOR3 rot = GetRot();
+
+			m_info.pBody->SetPosition(pos);
+			m_info.pBody->SetRot(rot);
+		}
 	}
 }
 

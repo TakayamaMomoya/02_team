@@ -287,6 +287,14 @@ bool CCollision::IsCrossTrigger(D3DXVECTOR3 posTarget, D3DXVECTOR3 posTargetOld,
 }
 
 //=====================================================
+// 位置設定
+//=====================================================
+void CCollision::SetPosition(D3DXVECTOR3 pos)
+{
+	m_pos = pos;
+}
+
+//=====================================================
 // 生成処理
 //=====================================================
 CCollision *CCollision::Create(TAG tag, TYPE type, CObject *obj)
@@ -346,8 +354,6 @@ CCollisionSphere::~CCollisionSphere()
 //=====================================================
 HRESULT CCollisionSphere::Init(void)
 {
-	m_fRadius = 100.0f;
-
 	if (m_pBillboard == nullptr)
 	{// ビルボードの生成
 		m_pBillboard = CBillboard::Create(GetPosition(),m_fRadius,m_fRadius);
@@ -536,6 +542,59 @@ bool CCollisionSphere::IsTriggerEnter(TAG tag)
 	}
 
 	return bExit;
+}
+
+//=====================================================
+// 球の押し出しの判定
+//=====================================================
+void CCollisionSphere::PushCollision(D3DXVECTOR3* pPos, TAG tag)
+{
+
+	CCollision** ppCollision = GetCollision();
+
+	for (int nCnt = 0; nCnt < NUM_OBJECT; nCnt++)
+	{
+		if (ppCollision[nCnt] != nullptr)
+		{
+			if (ppCollision[nCnt]->GetType() == TYPE_SPHERE)
+			{
+				if (tag == TAG_NONE)
+				{
+
+				}
+				else if (ppCollision[nCnt]->GetTag() != tag || ppCollision[nCnt] == this)
+				{
+					continue;
+				}
+
+				D3DXVECTOR3 pos = { pPos->x,0.0f,pPos->z };
+				D3DXVECTOR3 posTarget = { ppCollision[nCnt]->GetPosition().x,0.0f, ppCollision[nCnt]->GetPosition().z };
+
+				// 差分取得
+				D3DXVECTOR3 vecDiff = posTarget - pos;
+
+				// 差分の長さ
+				float fLengthDiff = D3DXVec3Length(&vecDiff);
+
+				// ぶつかる時の距離
+				float fLength = ppCollision[nCnt]->GetRadius() + GetRadius();
+
+				if (fLengthDiff < fLength)
+				{
+					D3DXVECTOR3 posAfter;	// 押し出し後の座標
+
+					// 差分ベクトルから押し出し後の位置を計算
+					D3DXVec3Normalize(&posAfter,&vecDiff);
+
+					posAfter *= -fLength;
+
+					posAfter += posTarget;
+
+					*pPos = posAfter;
+				}
+			}
+		}
+	}
 }
 
 //=====================================================

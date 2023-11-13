@@ -80,7 +80,9 @@ void CMagnum::Attack(void)
 
 	if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB,nID))
 	{// 射撃
-		if (nBullet > 0)
+		int nCntShot = GetCntShot();
+
+		if (nBullet > 0 && nCntShot == 0)
 		{// 弾の発射
 			D3DXMATRIX* pMtx = GetMatrix();
 
@@ -113,6 +115,11 @@ void CMagnum::Attack(void)
 			// 弾を減らす
 			nBullet--;
 			SetBullet(nBullet);
+
+			// 連射カウンターのリセット
+			nCntShot = GetRapid();
+
+			SetCntShot(nCntShot);
 		}
 		else
 		{// 弾切れの場合
