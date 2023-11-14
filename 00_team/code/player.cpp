@@ -343,7 +343,7 @@ bool CPlayer::InputInteract(void)
 		return bTrigger;
 	}
 
-	if (pJoyPad->GetPress(CInputJoypad::PADBUTTONS_LB,nID))
+	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_LB,nID))
 	{
 		bTrigger = true;
 	}

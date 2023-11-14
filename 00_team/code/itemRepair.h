@@ -14,6 +14,11 @@
 #include "item.h"
 
 //*****************************************************
+// 前方宣言
+//*****************************************************
+class CPlayer;
+
+//*****************************************************
 // クラスの定義
 //*****************************************************
 class CItemRepair : public CItem
@@ -31,6 +36,10 @@ public:
 private:
 	void Load(void);
 	void GetItem(CObject* pObj);
+	void CheckPlayerAlive(void);
+	void FollowPlayerHand(void);
+
+	CPlayer *m_pPlayer;
 };
 
 #endif
