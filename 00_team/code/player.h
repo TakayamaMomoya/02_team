@@ -19,6 +19,7 @@
 //*****************************************************
 class CMotion;
 class CCollisionSphere;
+class CCollisionCube;
 
 //*****************************************************
 // クラスの定義
@@ -55,7 +56,8 @@ private:
 		float fLife;	// 体力
 		float fTimerState;	// 状態遷移カウンタ
 		STATE state;	// 状態
-		CCollisionSphere *pCollisionSphere;	// 当たり判定
+		CCollisionSphere *pCollisionSphere;	// 球の当たり判定
+		CCollisionCube *pCollisionCube;	// 立方体の当たり判定
 		CWeapon *pWeapon;	// 武器
 	};
 

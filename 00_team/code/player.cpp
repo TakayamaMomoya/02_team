@@ -84,6 +84,21 @@ HRESULT CPlayer::Init(void)
 		}
 	}
 
+	if (m_info.pCollisionCube == nullptr)
+	{// 当たり判定生成
+		m_info.pCollisionCube = CCollisionCube::Create(CCollision::TAG_PLAYER, this);
+
+		if (m_info.pCollisionCube != nullptr)
+		{
+			D3DXVECTOR3 vtxMax = { 10.0f,10.0f,10.0f };
+			D3DXVECTOR3 vtxMin = { -10.0f,0.0f,-10.0f };
+
+			m_info.pCollisionCube->SetPosition(GetPosition());
+
+			m_info.pCollisionCube->SetVtx(vtxMax, vtxMin);
+		}
+	}
+
 	m_info.fLife = INITIAL_LIFE;
 	m_info.state = STATE_NORMAL;
 
@@ -106,6 +121,12 @@ void CPlayer::Uninit(void)
 	{
 		m_info.pCollisionSphere->Uninit();
 		m_info.pCollisionSphere = nullptr;
+	}
+
+	if (m_info.pCollisionCube != nullptr)
+	{
+		m_info.pCollisionCube->Uninit();
+		m_info.pCollisionCube = nullptr;
 	}
 
 	if (m_info.pWeapon != nullptr)
@@ -132,6 +153,9 @@ void CPlayer::Update(void)
 	// 位置の反映
 	D3DXVECTOR3 pos = GetPosition();
 	D3DXVECTOR3 move = GetMove();
+	
+	// 前回の位置を保存
+	SetPositionOld(pos);
 
 	pos += move;
 	SetPosition(pos);
@@ -164,6 +188,22 @@ void CPlayer::Update(void)
 			m_info.pCollisionSphere->SetPosition(pos);
 
 			SetPosition(pos);
+		}
+
+		if (m_info.pCollisionCube != nullptr)
+		{
+			D3DXVECTOR3 pos = GetPosition();
+			D3DXVECTOR3 posCollision = m_info.pCollisionCube->GetPosition();
+			D3DXVECTOR3 move = GetMove();
+
+			// 判定の追従
+			m_info.pCollisionCube->SetPositionOld(posCollision);
+			m_info.pCollisionCube->SetPosition(pos);
+
+			// ブロックとの押し出し判定
+			m_info.pCollisionCube->CubeCollision(CCollision::TAG_BLOCK, &move);
+
+			SetMove(move);
 		}
 	}
 

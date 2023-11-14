@@ -226,7 +226,7 @@ void CEnemyManager::Update(void)
 		posCenter.z += nPosZ;
 
 		// ìGÉXÉ|Å[Éì
-		CreateEnemy(posCenter, CEnemy::TYPE_NORMAL);
+		//CreateEnemy(posCenter, CEnemy::TYPE_NORMAL);
 
 		m_nCntSpawn = 0;
 	}
