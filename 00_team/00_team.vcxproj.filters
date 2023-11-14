@@ -135,6 +135,7 @@
     <ClCompile Include="code\item.cpp">
       <Filter>item</Filter>
     </ClCompile>
+    <ClCompile Include="code\itemRepair.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -247,5 +248,6 @@
     <ClInclude Include="code\itemWeapon.h">
       <Filter>item</Filter>
     </ClInclude>
+    <ClInclude Include="code\itemRepair.h" />
   </ItemGroup>
 </Project>

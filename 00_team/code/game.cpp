@@ -25,6 +25,7 @@
 #include "texture.h"
 #include "skybox.h"
 #include "itemWeapon.h"
+#include "itemRepair.h"
 #include "weaponManager.h"
 #include "enemyManager.h"
 #include "rocket.h"
@@ -93,6 +94,9 @@ HRESULT CGame::Init(void)
 
 	pItem = CItemWeapon::Create(CWeapon::TYPE_MACHINEGUN);
 	pItem->SetPosition(D3DXVECTOR3(40.0f, 0.0f, -40.0f));
+
+	CItemRepair *pRepair = CItemRepair::Create();
+	pRepair->SetPosition(D3DXVECTOR3(40.0f, 0.0f, 40.0f));
 
 	// 敵マネージャーの生成
 	CEnemyManager *pEnemyManager = CEnemyManager::Create();
