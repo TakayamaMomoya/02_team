@@ -132,7 +132,7 @@ void CEnemyManager::Load(void)
 		while (true)
 		{
 			// ï∂éöì«Ç›çûÇ›
-			fscanf(pFile, "%s", &cTemp[0]);
+			(void)fscanf(pFile, "%s", &cTemp[0]);
 
 			if (strcmp(cTemp, "ENEMYSET") == 0)
 			{
@@ -142,23 +142,23 @@ void CEnemyManager::Load(void)
 				while (true)
 				{
 					// ï∂éöì«Ç›çûÇ›
-					fscanf(pFile, "%s", &cTemp[0]);
+					(void)fscanf(pFile, "%s", &cTemp[0]);
 
 					if (strcmp(cTemp, "POS") == 0)
 					{// à íu
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
 						for (int nCntPos = 0; nCntPos < 3; nCntPos++)
 						{
-							fscanf(pFile, "%f", &pos[nCntPos]);
+							(void)fscanf(pFile, "%f", &pos[nCntPos]);
 						}
 					}
 
 					if (strcmp(cTemp, "TYPE") == 0)
 					{// éÌóﬁ
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 						
-						fscanf(pFile, "%d", &type);
+						(void)fscanf(pFile, "%d", &type);
 					}
 
 					if (strcmp(cTemp, "END_ENEMYSET") == 0)

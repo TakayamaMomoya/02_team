@@ -105,14 +105,14 @@ void CRocket::Load(void)
 		while (true)
 		{
 			// 文字読み込み
-			fscanf(pFile, "%s", &cTemp[0]);
+			(void)(void)fscanf(pFile, "%s", &cTemp[0]);
 
 			if (strcmp(cTemp, "ROCKETSET") == 0)
 			{// パラメーター読込開始
 				while (true)
 				{
 					// 文字読み込み
-					fscanf(pFile, "%s", &cTemp[0]);
+					(void)fscanf(pFile, "%s", &cTemp[0]);
 
 					// 基底パラメーター読み込み
 					ApplyInfo(pFile, &cTemp[0]);
@@ -146,13 +146,13 @@ void CRocket::ApplyInfo(FILE* pFile, char* pTemp)
 {
 	if (strcmp(pTemp, "POS") == 0)
 	{// 位置
-		fscanf(pFile, "%s", pTemp);
+		(void)fscanf(pFile, "%s", pTemp);
 
 		D3DXVECTOR3 pos = { 0.0f,0.0f,0.0f };
 
 		for (int i = 0;i < 3;i++)
 		{
-			fscanf(pFile, "%f", &pos[i]);
+			(void)fscanf(pFile, "%f", &pos[i]);
 		}
 
 		SetPosition(pos);
@@ -165,9 +165,9 @@ void CRocket::ApplyInfo(FILE* pFile, char* pTemp)
 
 	if (strcmp(pTemp, "MODEL") == 0)
 	{// モデル読み込み
-		fscanf(pFile, "%s", pTemp);
+		(void)fscanf(pFile, "%s", pTemp);
 
-		fscanf(pFile, "%s", pTemp);
+		(void)fscanf(pFile, "%s", pTemp);
 
 		// モデルの読込
 		int nIdx = CModel::Load(pTemp);
@@ -179,9 +179,9 @@ void CRocket::ApplyInfo(FILE* pFile, char* pTemp)
 	{// 判定の大きさ
 		float fRadius;
 
-		fscanf(pFile, "%s", pTemp);
+		(void)fscanf(pFile, "%s", pTemp);
 
-		fscanf(pFile, "%f", &fRadius);
+		(void)fscanf(pFile, "%f", &fRadius);
 
 		m_fRadius = fRadius;
 
