@@ -27,15 +27,16 @@ public:
 	CItemRepair(int nPriority = 5);	// コンストラクタ
 	~CItemRepair();	// デストラクタ
 
+	static CItemRepair *Create(void);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static CItemRepair *Create(void);
 
 private:
 	void Load(void);
 	void GetItem(CObject* pObj);
+	void CollisionRocket(void);
 	void CheckPlayerAlive(void);
 	void FollowPlayerHand(void);
 

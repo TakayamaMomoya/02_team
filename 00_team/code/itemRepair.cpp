@@ -14,6 +14,7 @@
 #include "universal.h"
 #include "parts.h"
 #include "motion.h"
+#include "collision.h"
 
 //=====================================================
 // コンストラクタ
@@ -29,6 +30,27 @@ CItemRepair::CItemRepair(int nPriority) : CItem(nPriority)
 CItemRepair::~CItemRepair()
 {
 
+}
+
+//=====================================================
+// 生成処理
+//=====================================================
+CItemRepair *CItemRepair::Create(void)
+{
+	CItemRepair *pItemRepair = nullptr;
+
+	if (pItemRepair == nullptr)
+	{
+		pItemRepair = new CItemRepair;
+
+		if (pItemRepair != nullptr)
+		{
+			// 初期化
+			pItemRepair->Init();
+		}
+	}
+
+	return pItemRepair;
 }
 
 //=====================================================
@@ -112,6 +134,9 @@ void CItemRepair::Update(void)
 	{// 持ち上げられている場合
 		FollowPlayerHand();
 	}
+
+	// ロケットとの当たり判定
+	CollisionRocket();
 }
 
 //=====================================================
@@ -189,6 +214,24 @@ void CItemRepair::GetItem(CObject *pObj)
 }
 
 //=====================================================
+// ロケットとの当たり判定
+//=====================================================
+void CItemRepair::CollisionRocket(void)
+{
+	CCollisionSphere *pCollisionSphere = GetCollisionSphere();
+
+	if (pCollisionSphere != nullptr)
+	{
+		bool bHit = pCollisionSphere->SphereCollision(CCollision::TAG_ROCKET);
+
+		if (bHit)
+		{
+			Uninit();
+		}
+	}
+}
+
+//=====================================================
 // 持ち主のプレイヤーが生存しているかの確認
 //=====================================================
 void CItemRepair::CheckPlayerAlive(void)
@@ -229,25 +272,4 @@ void CItemRepair::Draw(void)
 {
 	// 継承クラスの描画
 	CItem::Draw();
-}
-
-//=====================================================
-// 生成処理
-//=====================================================
-CItemRepair *CItemRepair::Create(void)
-{
-	CItemRepair *pItemRepair = nullptr;
-
-	if (pItemRepair == nullptr)
-	{
-		pItemRepair = new CItemRepair;
-
-		if (pItemRepair != nullptr)
-		{
-			// 初期化
-			pItemRepair->Init();
-		}
-	}
-
-	return pItemRepair;
 }

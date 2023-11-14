@@ -73,6 +73,14 @@ HRESULT CPlayer::Init(void)
 	// ‘Ì‚Ì“Ç
 	CCharacter::Load(BODY_PATH);
 
+	CMotion *pBody = GetBody();
+
+	if (pBody != nullptr)
+	{
+		pBody->SetPosShadow(D3DXVECTOR3(0.0f, 0.5f, 0.0f));
+		pBody->EnableShadow(true);
+	}
+
 	// “–‚½‚è”»’è‚Ì¶¬
 	if (m_info.pCollisionSphere == nullptr)
 	{
