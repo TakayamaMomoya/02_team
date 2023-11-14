@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include "collision.h"
 #include "fade.h"
+#include "block.h"
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -260,6 +261,6 @@ void CRenderer::DrawFPS(void)
 	//文字列に代入
 	CDebugProc::GetInstance()->Print("FPS:%d\n", GetFPS());
 	CDebugProc::GetInstance()->Print("オブジェクト総数:[%d]\n", CObject::GetNumAll());
-	CDebugProc::GetInstance()->Print("ティック:[%f]\n", CManager::GetTick());
+	CDebugProc::GetInstance()->Print("ブロック総数:[%d]\n", CBlock::GetNumAll());
 	CDebugProc::GetInstance()->Print("保存スコア:[%d]\n", CManager::GetScore());
 }

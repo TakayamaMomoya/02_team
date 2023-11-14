@@ -32,6 +32,16 @@ public:
 	static CEdit *GetInstatnce(void) { return m_pEdit; }
 
 private:
+	enum MODE
+	{
+		MODE_CREATE_BLOCK = 0,	// ブロック生成
+		MODE_DELTE_BLOCK,	// ブロック削除
+		MODE_MAX
+	};
+
+	int CheckDelete(void);
+
+	MODE m_mode;	// モード
 	CObjectX *m_pObjectCursor;	// カーソルのオブジェクトXへのポインタ
 	int m_nIdxObject;
 	CBlock::TYPE m_type;
