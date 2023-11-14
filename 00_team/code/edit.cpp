@@ -171,11 +171,6 @@ void CEdit::Update(void)
 			m_pObjectCursor->SetRot(rot);
 		}
 
-		if (pKeyboard->GetTrigger(DIK_B))
-		{
-			m_pObjectCursor->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-		}
-
 		if (pKeyboard->GetTrigger(DIK_RETURN) || pMouse->GetTrigger(CInputMouse::BUTTON_LMB))
 		{// ƒuƒƒbƒN‚Ì¶¬
 			CBlock::Create(m_pObjectCursor->GetPosition(), m_pObjectCursor->GetRot(),m_type);
