@@ -118,7 +118,7 @@ void CItem::Update(void)
 			CObject *pObj = m_pCollisionSphere->GetOther();
 
 			// ƒAƒCƒeƒ€“üèˆ—
-			//GetItem(pObj);
+			GetItem(pObj);
 		}
 		else
 		{

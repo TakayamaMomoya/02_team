@@ -40,6 +40,7 @@ public:
 	int GetID(void) { return m_info.nID; }
 	void ReleaseWeapon(void) { m_info.pWeapon = nullptr; }
 	void Hit(float fDamage);
+	bool InputInteract(void);
 
 private:
 	enum STATE

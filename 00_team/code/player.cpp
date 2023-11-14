@@ -329,6 +329,29 @@ void CPlayer::InputAttack(void)
 }
 
 //=====================================================
+// インタラクトの入力
+//=====================================================
+bool CPlayer::InputInteract(void)
+{
+	bool bTrigger = false;
+
+	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	int nID = GetID();
+
+	if (pJoyPad == nullptr)
+	{
+		return bTrigger;
+	}
+
+	if (pJoyPad->GetPress(CInputJoypad::PADBUTTONS_LB,nID))
+	{
+		bTrigger = true;
+	}
+
+	return bTrigger;
+}
+
+//=====================================================
 // エイミングの処理
 //=====================================================
 void CPlayer::Aim(void)

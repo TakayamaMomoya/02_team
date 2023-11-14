@@ -102,10 +102,15 @@ void CItemWeapon::GetItem(CObject *pObj)
 		{
 			if ((CObject*)pPlayer == pObj)
 			{// プレイヤー検出
-				// 効果の付与
-				ApplyEffect(pPlayer);
+				bool bGet = pPlayer->InputInteract();
 
-				Uninit();
+				if (bGet)
+				{
+					// 効果の付与
+					ApplyEffect(pPlayer);
+
+					Uninit();
+				}
 			}
 		}
 	}
