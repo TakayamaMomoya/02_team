@@ -349,4 +349,8 @@ void CParticle::Load(void)
 		// ファイルを閉じる
 		fclose(pFile);
 	}
+	else
+	{
+		assert(("パーティクル情報読み込みに失敗", false));
+	}
 }

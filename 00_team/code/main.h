@@ -15,6 +15,7 @@
 #define DIRECTINPUT_VERSION (0x0800)						//ビルド時の警告対処用マクロ
 #include "dinput.h"
 #include "xaudio2.h"
+#include <assert.h>
 
 //*****************************************************
 // ライブラリ

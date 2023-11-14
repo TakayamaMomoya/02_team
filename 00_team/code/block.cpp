@@ -255,6 +255,7 @@ HRESULT CBlock::Load(char *pPath)
 	}
 	else
 	{//ファイルが開けなかった場合
+		assert(("ブロック配置データ読み込みに失敗", false));
 	}
 
 	return S_OK;
@@ -357,6 +358,6 @@ void CBlock::Save(void)
 	}
 	else
 	{//ファイルが開けなかった場合
-
+		assert(("ブロックデータの保存失敗", false));
 	}
 }

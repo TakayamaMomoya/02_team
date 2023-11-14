@@ -126,6 +126,10 @@ void CWeaponManager::LoadParam(void)
 		// ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
 		fclose(pFile);
 	}
+	else
+	{
+		assert(("•Šíî•ñ“Ç‚İ‚İ‚É¸”s", false));
+	}
 }
 
 //=====================================================

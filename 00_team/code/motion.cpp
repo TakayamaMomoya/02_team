@@ -736,6 +736,7 @@ void CMotion::Load(char *pPath)
 	}
 	else
 	{
+		assert(("モーションデータ読み込みに失敗", false));
 	}
 }
 

@@ -110,7 +110,7 @@ CEnemy *CEnemyManager::CreateEnemy(D3DXVECTOR3 pos, CEnemy::TYPE type)
 HRESULT CEnemyManager::Init(void)
 {
 	// 読込処理
-	Load();
+	//Load();
 
 	return S_OK;
 }
@@ -178,6 +178,10 @@ void CEnemyManager::Load(void)
 
 		// ファイルを閉じる
 		fclose(pFile);
+	}
+	else
+	{
+		assert(("敵配置データの読み込みに失敗",false));
 	}
 }
 
