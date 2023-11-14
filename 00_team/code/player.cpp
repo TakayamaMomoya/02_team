@@ -459,4 +459,11 @@ void CPlayer::Debug(void)
 
 	pDebugProc->Print("\nプレイヤー番号[%d]", m_info.nID);
 	pDebugProc->Print("\nプレイヤーの向き[%f,%f,%f]", GetRot().x, GetRot().y, GetRot().z);
+
+	if (GetBody() != nullptr)
+	{
+		int nMotion = GetBody()->GetMotion();
+
+		pDebugProc->Print("\nモーション[%d]", nMotion);
+	}
 }

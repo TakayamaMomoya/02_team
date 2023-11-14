@@ -135,6 +135,11 @@ CBlock *CBlock::Create(D3DXVECTOR3 pos,D3DXVECTOR3 rot ,TYPE type)
 		pBlock->SetIdxModel(m_pIdxObject[type]);
 		pBlock->BindModel(m_pIdxObject[type]);
 
+		if (rot.y != 0)
+		{// 角度によって最大頂点、最小頂点を変える処理
+			pBlock->SwapVtx();
+		}
+
 		if (pBlock->m_pCollisionCube == nullptr)
 		{// 当たり判定生成
 			pBlock->m_pCollisionCube = CCollisionCube::Create(CCollision::TAG_BLOCK, pBlock);
@@ -149,6 +154,22 @@ CBlock *CBlock::Create(D3DXVECTOR3 pos,D3DXVECTOR3 rot ,TYPE type)
 	}
 
 	return pBlock;
+}
+
+//=====================================================
+// 頂点を入れ替える処理
+//=====================================================
+void CBlock::SwapVtx(void)
+{
+	D3DXVECTOR3 vtxMax = GetVtxMax();
+	D3DXVECTOR3 vtxMin = GetVtxMin();
+	D3DXVECTOR3 vtxTemp = vtxMin;
+	
+	vtxMin = { -vtxMax.z,vtxMin.y,-vtxMax.x };
+	vtxMax = { -vtxTemp.z,vtxMax.y,-vtxTemp.x };
+
+	SetVtxMax(vtxMax);
+	SetVtxMin(vtxMin);
 }
 
 //=====================================================
