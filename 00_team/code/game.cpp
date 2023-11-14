@@ -24,7 +24,7 @@
 #include "playerManager.h"
 #include "texture.h"
 #include "skybox.h"
-#include "item.h"
+#include "itemWeapon.h"
 #include "weaponManager.h"
 #include "enemyManager.h"
 #include "rocket.h"
@@ -88,10 +88,10 @@ HRESULT CGame::Init(void)
 	CWeaponManager::Create();
 
 	// アイテム
-	CItem *pItem = CItem::Create(CItem::TYPE_MAGNUM);
+	CItemWeapon *pItem = CItemWeapon::Create(CWeapon::TYPE_MAGNUM);
 	pItem->SetPosition(D3DXVECTOR3(0.0f,0.0f,-40.0f));
 
-	pItem = CItem::Create(CItem::TYPE_MACHINEGUN);
+	pItem = CItemWeapon::Create(CWeapon::TYPE_MACHINEGUN);
 	pItem->SetPosition(D3DXVECTOR3(40.0f, 0.0f, -40.0f));
 
 	// 敵マネージャーの生成

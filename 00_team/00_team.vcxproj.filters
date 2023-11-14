@@ -20,6 +20,9 @@
     <Filter Include="enemy">
       <UniqueIdentifier>{01c3d09f-2183-4573-aa6d-b489588a3608}</UniqueIdentifier>
     </Filter>
+    <Filter Include="item">
+      <UniqueIdentifier>{97eda31d-b1e9-48f6-945a-ad4c17c5679e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\animation2D.cpp" />
@@ -96,7 +99,6 @@
     <ClCompile Include="code\character.cpp" />
     <ClCompile Include="code\bullet.cpp" />
     <ClCompile Include="code\skybox.cpp" />
-    <ClCompile Include="code\item.cpp" />
     <ClCompile Include="code\weapon.cpp">
       <Filter>weapon</Filter>
     </ClCompile>
@@ -127,6 +129,12 @@
       <Filter>scene</Filter>
     </ClCompile>
     <ClCompile Include="code\rocket.cpp" />
+    <ClCompile Include="code\itemWeapon.cpp">
+      <Filter>item</Filter>
+    </ClCompile>
+    <ClCompile Include="code\item.cpp">
+      <Filter>item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -203,7 +211,6 @@
     <ClInclude Include="code\character.h" />
     <ClInclude Include="code\bullet.h" />
     <ClInclude Include="code\skybox.h" />
-    <ClInclude Include="code\item.h" />
     <ClInclude Include="code\weapon.h">
       <Filter>weapon</Filter>
     </ClInclude>
@@ -234,5 +241,11 @@
       <Filter>scene</Filter>
     </ClInclude>
     <ClInclude Include="code\rocket.h" />
+    <ClInclude Include="code\item.h">
+      <Filter>item</Filter>
+    </ClInclude>
+    <ClInclude Include="code\itemWeapon.h">
+      <Filter>item</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

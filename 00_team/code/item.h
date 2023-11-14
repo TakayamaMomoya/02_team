@@ -17,6 +17,7 @@
 // 前方宣言
 //*****************************************************
 class CCollisionSphere;
+class CBillboard;
 
 //*****************************************************
 // クラスの定義
@@ -39,15 +40,12 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static CItem *Create(TYPE type);
+	static CItem *Create(void);
+	virtual void GetItem(CObject* pObj);
 
 private:
-	void Load(void);
-	void GetItem(CObject* pObj);
-	void ApplyEffect(CPlayer *pPlayer);
-
-	TYPE m_type;
 	CCollisionSphere *m_pCollisionSphere;
+	CBillboard *m_pInteract;
 };
 
 #endif

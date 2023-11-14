@@ -62,6 +62,7 @@ public:
 	virtual float GetHeight(void) { return 0.0f; }	// サイズ取得
 	void EnableWire(bool bWire) { m_bWire = bWire; }
 	static int GetNumAll(void) { return m_nNumAll; }
+	bool IsDeath(void) { return m_bDeath; }
 
 protected:
 	void Release(void);	// 個別リリース処理
