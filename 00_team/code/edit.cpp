@@ -158,13 +158,13 @@ void CEdit::Update(void)
 		}
 
 		// 回転
-		if (pKeyboard->GetTrigger(DIK_N))
+		if (pKeyboard->GetTrigger(DIK_Z))
 		{
 			rot.y = 0.0f;
 
 			m_pObjectCursor->SetRot(rot);
 		}
-		if (pKeyboard->GetTrigger(DIK_M))
+		if (pKeyboard->GetTrigger(DIK_C))
 		{
 			rot.y = D3DX_PI * 0.5f;
 
@@ -222,13 +222,14 @@ void CEdit::Update(void)
 		CDebugProc::GetInstance()->Print("//=======================\n");
 		CDebugProc::GetInstance()->Print("エディターの位置：[%f,%f,%f]\n", m_pObjectCursor->GetPosition().x, m_pObjectCursor->GetPosition().y, m_pObjectCursor->GetPosition().z);
 		CDebugProc::GetInstance()->Print("エディターの向き：[%f,%f,%f]\n", m_pObjectCursor->GetRot().x, m_pObjectCursor->GetRot().y, m_pObjectCursor->GetRot().z);
-		CDebugProc::GetInstance()->Print("移動[IJKL]\n");
-		CDebugProc::GetInstance()->Print("上下移動[UO]\n");
+		CDebugProc::GetInstance()->Print("移動[WASD]\n");
+		CDebugProc::GetInstance()->Print("上下移動[QE]\n");
+		CDebugProc::GetInstance()->Print("回転[ZC]\n");
 		CDebugProc::GetInstance()->Print("設置[ENTER]\n");
-		CDebugProc::GetInstance()->Print("保存[8]\n");
-		CDebugProc::GetInstance()->Print("選択中のブロック：[%d]:[0]\n", m_nIdxObject);
-		CDebugProc::GetInstance()->Print("選択ブロック削除[9]\n");
-		CDebugProc::GetInstance()->Print("設置するタイプ：[%d]:[7]\n", m_type);
+		CDebugProc::GetInstance()->Print("保存[F2]\n");
+		CDebugProc::GetInstance()->Print("選択中のブロック：[%d]\n", m_nIdxObject);
+		CDebugProc::GetInstance()->Print("選択ブロック削除[BACK SPACE]\n");
+		CDebugProc::GetInstance()->Print("設置するタイプ：[%d]:[1,2]\n", m_type);
 		CDebugProc::GetInstance()->Print("//=======================\n");
 	}
 }
