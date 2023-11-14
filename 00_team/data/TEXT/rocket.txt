@@ -5,10 +5,10 @@
 #
 #====================================================================
 
-GOALSET
+ROCKETSET
 	POS = 100.0 0.0 0.0	# 座標
 	MODEL = data\\MODEL\\block\\desk00.x	# 表示するモデル
-	RADIUS = 20.0	# 判定の半径
-END_GOALSET
+	RADIUS = 100.0	# 判定の半径
+END_ROCKETSET
 
 END_SCRIPT

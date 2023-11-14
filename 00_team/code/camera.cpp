@@ -39,7 +39,7 @@ HRESULT CCamera::Init(void)
 {
 	ZeroMemory(&m_camera,sizeof(Camera));
 
-	m_camera.posV = D3DXVECTOR3(0.0f, 50.0f, 100.0f);
+	m_camera.posV = D3DXVECTOR3(0.0f, 500.0f, 1000.0f);
 	m_camera.posVOld = D3DXVECTOR3(0.0f, 30.0f, 100.0f);
 	m_camera.posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_camera.posVDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

@@ -24,7 +24,7 @@
 // マクロ定義
 //*****************************************************
 #define BODY_PATH	"data\\MOTION\\motionPotatoman00.txt"	// 体のパス
-#define MOVE_SPEED	(1.0f)	// 移動速度
+#define MOVE_SPEED	(3.0f)	// 移動速度
 #define ROT_SPEED	(0.1f)	// 回転速度
 #define INITIAL_LIFE	(30.0f)	// 初期体力
 #define DAMAGE_TIME	(0.5f)	// ダメージ状態の秒数
@@ -213,6 +213,19 @@ void CPlayer::Update(void)
 
 	// 状態管理
 	ManageState();
+
+	// 武器の追従
+	if (m_info.pWeapon != nullptr)
+	{
+		CMotion *pBody = GetBody();
+
+		if (pBody != nullptr)
+		{
+			pBody->MultiplyMtx();
+		}
+
+		m_info.pWeapon->FollowPlayerHand();
+	}
 }
 
 //=====================================================
@@ -438,7 +451,7 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 		m_info.pWeapon = nullptr;
 	}
 
-	m_info.pWeapon = CWeapon::Create(type,8);
+	m_info.pWeapon = CWeapon::Create(type,5);
 
 	if (m_info.pWeapon != nullptr)
 	{

@@ -27,7 +27,7 @@
 #include "item.h"
 #include "weaponManager.h"
 #include "enemyManager.h"
-#include "goal.h"
+#include "rocket.h"
 #include "edit.h"
 
 //*****************************************************
@@ -97,8 +97,8 @@ HRESULT CGame::Init(void)
 	// 敵マネージャーの生成
 	CEnemyManager *pEnemyManager = CEnemyManager::Create();
 
-	// ゴールの生成
-	CGoal::Create();
+	// ロケットの生成
+	CRocket::Create();
 
 #ifdef _DEBUG
 	// エディットの生成
@@ -167,7 +167,7 @@ void CGame::UpdateCamera(void)
 		if (m_state == STATE_NORMAL)
 		{
 			// 操作
-			pCamera->FollowPlayer();
+			//pCamera->FollowPlayer();
 		}
 	}
 	else

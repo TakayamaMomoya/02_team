@@ -107,7 +107,7 @@ void CRocket::Load(void)
 			// 文字読み込み
 			fscanf(pFile, "%s", &cTemp[0]);
 
-			if (strcmp(cTemp, "RocketSET") == 0)
+			if (strcmp(cTemp, "ROCKETSET") == 0)
 			{// パラメーター読込開始
 				while (true)
 				{
@@ -117,7 +117,7 @@ void CRocket::Load(void)
 					// 基底パラメーター読み込み
 					ApplyInfo(pFile, &cTemp[0]);
 
-					if (strcmp(cTemp, "END_RocketSET") == 0)
+					if (strcmp(cTemp, "END_ROCKETSET") == 0)
 					{// パラメーター読込終了
 						break;
 					}

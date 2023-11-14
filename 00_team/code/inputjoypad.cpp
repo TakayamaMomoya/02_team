@@ -183,8 +183,6 @@ void CInputJoypad::CheckStickTrigger(XINPUT_STATE state, int nPlayer)
 	{
 		int n = 10;
 	}
-
-	CDebugProc::GetInstance()->Print("スティック差分[%f]", fDiff);
 }
 
 //====================================================
