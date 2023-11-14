@@ -126,6 +126,7 @@
     <ClCompile Include="code\select.cpp">
       <Filter>scene</Filter>
     </ClCompile>
+    <ClCompile Include="code\rocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -232,5 +233,6 @@
     <ClInclude Include="code\select.h">
       <Filter>scene</Filter>
     </ClInclude>
+    <ClInclude Include="code\rocket.h" />
   </ItemGroup>
 </Project>
