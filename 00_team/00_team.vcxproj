@@ -63,6 +63,7 @@
     <ClCompile Include="code\ranking.cpp" />
     <ClCompile Include="code\renderer.cpp" />
     <ClCompile Include="code\result.cpp" />
+    <ClCompile Include="code\rocket.cpp" />
     <ClCompile Include="code\scene.cpp" />
     <ClCompile Include="code\score.cpp" />
     <ClCompile Include="code\select.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="code\ranking.h" />
     <ClInclude Include="code\renderer.h" />
     <ClInclude Include="code\result.h" />
+    <ClInclude Include="code\rocket.h" />
     <ClInclude Include="code\scene.h" />
     <ClInclude Include="code\score.h" />
     <ClInclude Include="code\select.h" />

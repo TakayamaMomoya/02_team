@@ -35,6 +35,7 @@ public:
 		TAG_BLOCK,	// ブロック
 		TAG_ITEM,	// アイテム
 		TAG_GOAL,	// ゴール
+		TAG_ROCKET,	// ロケット
 		TAG_MAX
 	}TAG;
 
