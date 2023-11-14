@@ -54,6 +54,8 @@ public:
 	void SetMatrix(void);
 	D3DXVECTOR3 GetVtxMax(void) { return m_vtxMax; }	// æ“¾ˆ—
 	D3DXVECTOR3 GetVtxMin(void) { return m_vtxMin; }	// æ“¾ˆ—
+	void SetVtxMax(D3DXVECTOR3 vtx) { m_vtxMax = vtx; }
+	void SetVtxMin(D3DXVECTOR3 vtx) { m_vtxMin = vtx; }
 	void SetEmissiveCol(D3DXCOLOR col) { m_col = col; m_bChangeCol = true; }
 	void ResetColor(void) { m_bChangeCol = false; }
 	float GetScale(void) { return m_fScale; }

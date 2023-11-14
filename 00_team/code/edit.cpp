@@ -158,13 +158,17 @@ void CEdit::Update(void)
 		}
 
 		// 回転
-		if (pKeyboard->GetPress(DIK_N))
+		if (pKeyboard->GetTrigger(DIK_N))
 		{
-			rot.y += SPEED_ROTATION;
+			rot.y = 0.0f;
+
+			m_pObjectCursor->SetRot(rot);
 		}
-		if (pKeyboard->GetPress(DIK_M))
+		if (pKeyboard->GetTrigger(DIK_M))
 		{
-			rot.y -= SPEED_ROTATION;
+			rot.y = D3DX_PI * 0.5f;
+
+			m_pObjectCursor->SetRot(rot);
 		}
 
 		if (pKeyboard->GetTrigger(DIK_B))
@@ -211,7 +215,6 @@ void CEdit::Update(void)
 		if (m_pObjectCursor != nullptr)
 		{// カーソルのトランスフォーム
 			m_pObjectCursor->SetPosition(m_pObjectCursor->GetPosition() + pos);
-			m_pObjectCursor->SetRot(m_pObjectCursor->GetRot() + rot);
 		}
 
 		CDebugProc::GetInstance()->Print("\n//=======================\n");
