@@ -247,7 +247,7 @@ void CPlayer::Input(void)
 	{
 		CGame::STATE state = pGame->GetState();
 
-		if (state == CGame::STATE_RESULT || state == CGame::STATE_END)
+		if (state == CGame::STATE_ESCAPE || state == CGame::STATE_RESULT || state == CGame::STATE_END)
 		{
 			return;
 		}

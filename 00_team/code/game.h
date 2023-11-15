@@ -30,6 +30,7 @@ public:
 	{// 状態
 		STATE_NONE,	// 何もしていない状態
 		STATE_NORMAL,	// 通常状態
+		STATE_ESCAPE,	// 脱出状態
 		STATE_RESULT,	// リザルト状態
 		STATE_END,	// 終了状態
 		STATE_MAX

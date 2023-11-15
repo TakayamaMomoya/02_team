@@ -30,6 +30,7 @@
 #include "enemyManager.h"
 #include "rocket.h"
 #include "edit.h"
+#include "result.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
@@ -169,10 +170,9 @@ void CGame::UpdateCamera(void)
 
 	if (m_bStop == false)
 	{
-		if (m_state == STATE_NORMAL)
+		if (m_state == STATE_ESCAPE)
 		{
-			// ‘€ì
-			//pCamera->FollowPlayer();
+			pCamera->UpdateResult();
 		}
 	}
 	else
@@ -192,6 +192,19 @@ void CGame::ManageState(void)
 	switch (m_state)
 	{
 	case CGame::STATE_NORMAL:
+		break;
+	case CGame::STATE_ESCAPE:
+
+		m_nCntState++;
+
+		if (m_nCntState >= TRANS_TIME)
+		{
+			m_nCntState = 0;
+			SetState(STATE_RESULT);
+
+			CResult::Create();
+		}
+
 		break;
 	case CGame::STATE_END:
 
