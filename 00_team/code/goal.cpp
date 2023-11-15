@@ -296,6 +296,11 @@ void CGoal::SetResult(void)
 	// リザルトの生成
 	CResult *pResult = CResult::Create();
 
+	if (pResult == nullptr)
+	{
+		return;
+	}
+
 	// 範囲内のプレイヤー検出
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 

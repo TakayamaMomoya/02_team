@@ -14,13 +14,22 @@
 #include "texture.h"
 #include "fade.h"
 #include "game.h"
+#include "player.h"
+#include "number.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define CAPTION_WIDTH	(918.0f * 0.4f)	// 見出しの幅
-#define CAPTION_HEIGHT	(178.0f * 0.4f)	// 見出しの高さ
-#define CAPTION_PATH "data\\TEXTURE\\UI\\caption01.png"	// 見出しのパス
+namespace
+{
+	const float CAPTION_WIDTH = 918.0f * 0.4f;	// 見出しの幅
+	const float CAPTION_HEIGHT = 178.0f * 0.4f;	// 見出しの高さ
+	const char* CAPTION_PATH = "data\\TEXTURE\\UI\\result.png";	// 見出しのパス
+
+	const int NUM_PLACE = 1;	// 桁数
+	const float NUMBER_WIDTH = 25.0f;	// 数字の幅
+	const float NUMBER_HEIGHT = 55.0f;	// 数字の高さ
+}
 
 //====================================================
 // コンストラクタ
@@ -30,7 +39,7 @@ CResult::CResult()
 	m_state = STATE_NONE;
 	m_pBg = nullptr;
 	m_pCaption = nullptr;
-	ZeroMemory(&m_apSuvived[0], sizeof(m_apSuvived));
+	ZeroMemory(&m_aInfoSurvived[0], sizeof(m_aInfoSurvived));
 	m_nNumSuvived = 0;
 }
 
@@ -70,8 +79,8 @@ void CResult::Create2D(bool bWin)
 
 	char *pPathCaption[2] =
 	{
-		"data\\TEXTURE\\UI\\caption02.png",
-		"data\\TEXTURE\\UI\\caption03.png",
+		"data\\TEXTURE\\UI\\result.png",
+		"data\\TEXTURE\\UI\\result.png",
 	};
 
 	// 背景の生成
@@ -142,7 +151,7 @@ void CResult::Uninit(void)
 		m_pCaption = nullptr;
 	}
 
-	ZeroMemory(&m_apSuvived[0], sizeof(m_apSuvived));
+	ZeroMemory(&m_aInfoSurvived[0], sizeof(m_aInfoSurvived));
 
 	Release();
 }
@@ -182,8 +191,42 @@ void CResult::SetSurvived(CPlayer *pPlayer)
 		return;
 	}
 
-	// 情報の保存
-	m_apSuvived[m_nNumSuvived] = pPlayer;
+	if (m_aInfoSurvived[m_nNumSuvived].pSuvived == nullptr)
+	{
+		// 情報の保存
+		m_aInfoSurvived[m_nNumSuvived].pSuvived = pPlayer;
 
-	m_nNumSuvived++;
+		// 情報の表示
+		DispSuvived(&m_aInfoSurvived[m_nNumSuvived]);
+
+		m_nNumSuvived++;
+	}
+	else
+	{
+		assert(("リザルトでプレイヤー情報の受け取りに失敗", false));
+	}
+}
+
+//====================================================
+// 生存者の表示
+//====================================================
+void CResult::DispSuvived(SInfoSuvived *pInfo)
+{
+	int nIdx = m_nNumSuvived;
+
+	if (pInfo->pSuvived != nullptr)
+	{
+		int nID = pInfo->pSuvived->GetID();
+
+		if (pInfo->pNumber == nullptr)
+		{// ID表示の数字を生成
+			pInfo->pNumber = CNumber::Create(NUM_PLACE, nID);
+
+			if (pInfo->pNumber != nullptr)
+			{
+				pInfo->pNumber->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f + NUMBER_HEIGHT * nIdx, 0.0f));
+				pInfo->pNumber->SetSizeAll(NUMBER_WIDTH, NUMBER_HEIGHT);
+			}
+		}
+	}
 }

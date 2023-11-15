@@ -18,6 +18,7 @@
 //*****************************************************
 class CObject2D;
 class CPlayer;
+class CNumber;
 
 //*****************************************************
 // クラス定義
@@ -43,14 +44,21 @@ private:
 		STATE_CURRENT,	// 入力している状態
 		STATE_MAX
 	};
+	struct SInfoSuvived
+	{// 生存者情報
+		CPlayer *pSuvived;	// 生存者のポインタ
+		CNumber *pNumber;	// IDを表示する数字
+		CObject2D *pCaption;	// キャプション
+	};
 
 	void Input(void);
 	void Create2D(bool bWin);
+	void DispSuvived(SInfoSuvived *pInfo);
 
 	CObject2D *m_pBg;	// 背景のポインタ
 	CObject2D *m_pCaption;	// 見出しのポインタ
 	STATE m_state;	// 状態
-	CPlayer *m_apSuvived[NUM_PLAYER];	// 生存者の配列
+	SInfoSuvived m_aInfoSurvived[NUM_PLAYER];	// 生存者情報
 	int m_nNumSuvived;	// 生存者数
 };
 

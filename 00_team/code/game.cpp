@@ -30,7 +30,7 @@
 #include "enemyManager.h"
 #include "rocket.h"
 #include "edit.h"
-#include "result.h"
+#include "goal.h"
 
 //*****************************************************
 // マクロ定義
@@ -209,7 +209,13 @@ void CGame::ManageState(void)
 			m_nCntState = 0;
 			SetState(STATE_RESULT);
 
-			CResult::Create();
+			// ゴールでリザルトの表示
+			CGoal *pGoal = CGoal::GetInstance();
+
+			if (pGoal != nullptr)
+			{
+				pGoal->SetResult();
+			}
 		}
 
 		break;
