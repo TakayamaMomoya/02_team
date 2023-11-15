@@ -56,7 +56,7 @@ private:
 	void DispSuvived(SInfoSuvived *pInfo);
 
 	CObject2D *m_pBg;	// 背景のポインタ
-	CObject2D *m_pCaption;	// 見出しのポインタ
+	CObject2D *m_p2DResult;	// 見出しのポインタ
 	STATE m_state;	// 状態
 	SInfoSuvived m_aInfoSurvived[NUM_PLAYER];	// 生存者情報
 	int m_nNumSuvived;	// 生存者数

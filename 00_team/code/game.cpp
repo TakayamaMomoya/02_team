@@ -84,7 +84,7 @@ HRESULT CGame::Init(void)
 
 	if (pPlayerManger != nullptr)
 	{
-		pPlayerManger->CreatePlayer(1);
+		pPlayerManger->CreatePlayer(2);
 	}
 
 	// 武器マネージャーの生成
