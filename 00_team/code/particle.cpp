@@ -211,7 +211,7 @@ void CParticle::Load(void)
 	PARTICLE_INFO *pInfo = nullptr;
 
 	// ファイルから読み込む
-	FILE *pFile = fopen("data\\particle.txt", "r");
+	FILE *pFile = fopen("data\\TEXT\\particle.txt", "r");
 
 	if (pFile != nullptr)
 	{// ファイルが開けた場合

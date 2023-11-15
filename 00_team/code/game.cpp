@@ -30,6 +30,7 @@
 #include "enemyManager.h"
 #include "rocket.h"
 #include "edit.h"
+#include "result.h"
 
 //*****************************************************
 // マクロ定義
@@ -48,6 +49,7 @@ CGame *CGame::m_pGame = nullptr;	// 自身のポインタ
 CGame::CGame()
 {
 	m_nCntState = 0;
+	m_bStop = false;
 }
 
 //=====================================================
@@ -168,10 +170,9 @@ void CGame::UpdateCamera(void)
 
 	if (m_bStop == false)
 	{
-		if (m_state == STATE_NORMAL)
+		if (m_state == STATE_ESCAPE)
 		{
-			// 操作
-			//pCamera->FollowPlayer();
+			pCamera->UpdateResult();
 		}
 	}
 	else
@@ -191,6 +192,19 @@ void CGame::ManageState(void)
 	switch (m_state)
 	{
 	case CGame::STATE_NORMAL:
+		break;
+	case CGame::STATE_ESCAPE:
+
+		m_nCntState++;
+
+		if (m_nCntState >= TRANS_TIME)
+		{
+			m_nCntState = 0;
+			SetState(STATE_RESULT);
+
+			CResult::Create();
+		}
+
 		break;
 	case CGame::STATE_END:
 
@@ -223,6 +237,12 @@ void CGame::Debug(void)
 	if (pKeyboard->GetTrigger(DIK_F))
 	{
 		m_bStop = m_bStop ? false : true;
+	}
+
+	if (pKeyboard->GetTrigger(DIK_G))
+	{
+		CItemRepair *pRepair = CItemRepair::Create();
+		pRepair->SetPosition(D3DXVECTOR3(40.0f, 0.0f, 300.0f));
 	}
 }
 

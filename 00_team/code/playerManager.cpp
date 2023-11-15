@@ -71,11 +71,11 @@ void CPlayerManager::CreatePlayer(int nNumPlayer)
 }
 
 //=====================================================
-// 初期化処理
+// プレイヤーを単体で生成する処理
 //=====================================================
-void CPlayerManager::CreatePlayer1(int nNumPlayer)
+void CPlayerManager::CreateOnePlayer(int nIdx)
 {
-	if (nNumPlayer < 0 || nNumPlayer > NUM_PLAYER)
+	if (nIdx < 0 || nIdx >= NUM_PLAYER)
 	{
 		return;
 	}
@@ -86,11 +86,11 @@ void CPlayerManager::CreatePlayer1(int nNumPlayer)
 
 	if (pPlayer != nullptr)
 	{
-		pPlayer->SetID(nNumPlayer);
+		pPlayer->SetID(nIdx);
 
-		m_apPlayer[nNumPlayer] = pPlayer;
+		m_apPlayer[nIdx] = pPlayer;
 
-		pPlayer->SetPosition(D3DXVECTOR3(50.0f * nNumPlayer, 0.0f, 0.0f));
+		pPlayer->SetPosition(D3DXVECTOR3(50.0f * nIdx, 0.0f, 0.0f));
 	}
 }
 

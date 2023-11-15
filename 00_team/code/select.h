@@ -54,14 +54,11 @@ private:
 		D3DXCOLOR col;
 	};
 
-	void ManageStart(void);
-
 	void MenuInit(void);
 	void MenuUpdate(void);
 
 	MenuData m_aMenuData[NUM_PLAYER];	//選択メニュー
 	CPlayerManager* m_pPlayerManager;	//プレイヤー管理
-	CObject2D *m_pStart;	// スタート表示のポインタ
 	STATE m_state;	// 状態
 	bool bJoin[NUM_PLAYER];	//参加したかどうか
 };

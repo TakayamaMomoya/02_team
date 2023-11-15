@@ -23,7 +23,7 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define BODY_PATH	"data\\MOTION\\motionPotatoman00.txt"	// 体のパス
+#define BODY_PATH	"data\\MOTION\\motionPotatoman01.txt"	// 体のパス
 #define MOVE_SPEED	(3.0f)	// 移動速度
 #define ROT_SPEED	(0.1f)	// 回転速度
 #define INITIAL_LIFE	(30.0f)	// 初期体力
@@ -247,7 +247,7 @@ void CPlayer::Input(void)
 	{
 		CGame::STATE state = pGame->GetState();
 
-		if (state == CGame::STATE_RESULT || state == CGame::STATE_END)
+		if (state == CGame::STATE_ESCAPE || state == CGame::STATE_RESULT || state == CGame::STATE_END)
 		{
 			return;
 		}
@@ -482,7 +482,7 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 		m_info.pWeapon = nullptr;
 	}
 
-	m_info.pWeapon = CWeapon::Create(type,5);
+	m_info.pWeapon = CWeapon::Create(type,7);
 
 	if (m_info.pWeapon != nullptr)
 	{

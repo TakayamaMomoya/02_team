@@ -29,7 +29,7 @@ public:
 
 	static CPlayerManager *Create(void);
 	void CreatePlayer(int nNumPlayer);
-	void CreatePlayer1(int nNumPlayer);
+	void CreateOnePlayer(int nIdx);
 	HRESULT Init(void);
 	void Uninit(void);
 	void ReleasePlayer(int nIdx);

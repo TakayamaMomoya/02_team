@@ -16,11 +16,17 @@
 #include "playerManager.h"
 #include "player.h"
 #include "result.h"
+#include "goal.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define INFO_PATH	"data\\TEXT\\rocket.txt"	// ゴール情報のテキスト
+namespace
+{
+	const char* INFO_PATH = "data\\TEXT\\rocket.txt";	// ロケット情報のテキスト
+	const int MAX_PROGRESS = 3;	// 最大の進行状況
+	const int MIN_PROGRESS = 0;	// 最大の進行状況
+}
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -33,6 +39,9 @@ CRocket *CRocket::m_pRocket = nullptr;	// 自身のポインタ
 CRocket::CRocket(int nPriority) : CObjectX(nPriority)
 {
 	m_fRadius = 0.0f;
+	m_fSpeed = 0.0f;
+	m_nProgress = 0;
+	m_state = STATE_NONE;
 	m_pCollisionRocket = nullptr;
 }
 
@@ -84,6 +93,8 @@ HRESULT CRocket::Init(void)
 
 	// 情報読み込み
 	Load();
+
+	m_state = STATE_NORMAL;
 
 	return S_OK;
 }
@@ -190,6 +201,14 @@ void CRocket::ApplyInfo(FILE* pFile, char* pTemp)
 			m_pCollisionRocket->SetRadius(fRadius);
 		}
 	}
+
+	if (strcmp(pTemp, "SPEED") == 0)
+	{// 上昇速度
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_fSpeed);
+
+	}
 }
 
 //=====================================================
@@ -216,6 +235,29 @@ void CRocket::Update(void)
 {
 	// 継承クラスの更新
 	CObjectX::Update();
+
+	if (m_state == STATE::STATE_ESCAPE)
+	{// 脱出状態の更新
+		UpdateEscape();
+	}
+}
+
+//=====================================================
+// 脱出の更新
+//=====================================================
+void CRocket::UpdateEscape(void)
+{
+	D3DXVECTOR3 pos = GetPosition();
+	D3DXVECTOR3 move = GetMove();
+
+	// 上昇量の加算
+	move.y += m_fSpeed;
+
+	// 移動量の反映
+	pos += move;
+
+	SetPosition(pos);
+	SetMove(move);
 }
 
 //=====================================================
@@ -225,4 +267,36 @@ void CRocket::Draw(void)
 {
 	// 継承クラスの描画
 	CObjectX::Draw();
+}
+
+//=====================================================
+// 進行状況の加算
+//=====================================================
+void CRocket::AddProgress(int nProgress)
+{
+	if (m_state != STATE_NORMAL)
+	{// 通常状態のみ進行可能
+		return;
+	}
+
+	// 進行状況加算
+	m_nProgress += nProgress;
+
+	// 最大、最小値の補正
+	if (m_nProgress < MIN_PROGRESS)
+	{
+		m_nProgress = MIN_PROGRESS;
+	}
+	if (m_nProgress >= MAX_PROGRESS)
+	{
+		m_nProgress = MAX_PROGRESS;
+
+		// ゴールの生成
+		CGoal *pGoal = CGoal::Create();
+
+		D3DXVECTOR3 pos = GetPosition();
+		pGoal->SetPosition(pos);
+	}
+
+	// ロケットモデルの変化
 }
