@@ -22,11 +22,11 @@ MODEL_FILENAME = data/MODEL/potatoman_01/hand_l.x
 MODEL_FILENAME = data/MODEL/potatoman_01/upper_arm_r.x
 MODEL_FILENAME = data/MODEL/potatoman_01/fore_arm_r.x
 MODEL_FILENAME = data/MODEL/potatoman_01/hand_r.x
-MODEL_FILENAME = data/MODEL/potatoman_01/shin_l.x
 MODEL_FILENAME = data/MODEL/potatoman_01/thigh_l.x
+MODEL_FILENAME = data/MODEL/potatoman_01/shin_l.x
 MODEL_FILENAME = data/MODEL/potatoman_01/foot_l.x
-MODEL_FILENAME = data/MODEL/potatoman_01/shin_r.x
 MODEL_FILENAME = data/MODEL/potatoman_01/thigh_r.x
+MODEL_FILENAME = data/MODEL/potatoman_01/shin_r.x
 MODEL_FILENAME = data/MODEL/potatoman_01/foot_r.x
 MODEL_FILENAME = data/MODEL/potatoman_01/joint_body.x
 

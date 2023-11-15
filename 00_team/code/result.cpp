@@ -14,13 +14,27 @@
 #include "texture.h"
 #include "fade.h"
 #include "game.h"
+#include "player.h"
+#include "number.h"
+#include "inputjoypad.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define CAPTION_WIDTH	(918.0f * 0.4f)	// 見出しの幅
-#define CAPTION_HEIGHT	(178.0f * 0.4f)	// 見出しの高さ
-#define CAPTION_PATH "data\\TEXTURE\\UI\\caption01.png"	// 見出しのパス
+namespace
+{
+	const float RESULT_WIDTH = 918.0f * 0.4f;	// 結果の幅
+	const float RESULT_HEIGHT = 178.0f * 0.4f;	// 結果の高さ
+	const char* RESULT_PATH = "data\\TEXTURE\\UI\\result.png";	// 結果のパス
+
+	const float CAPTION_WIDTH = 150.0f;	// キャプションの幅
+	const float CAPTION_HEIGHT = 55.0f;	// キャプションの高さ
+	const char* CAPTION_PATH = "data\\TEXTURE\\UI\\caption.png";	// キャプションのパス
+
+	const int NUM_PLACE = 1;	// 桁数
+	const float NUMBER_WIDTH = 25.0f;	// 数字の幅
+	const float NUMBER_HEIGHT = 55.0f;	// 数字の高さ
+}
 
 //====================================================
 // コンストラクタ
@@ -29,8 +43,8 @@ CResult::CResult()
 {
 	m_state = STATE_NONE;
 	m_pBg = nullptr;
-	m_pCaption = nullptr;
-	ZeroMemory(&m_apSuvived[0], sizeof(m_apSuvived));
+	m_p2DResult = nullptr;
+	ZeroMemory(&m_aInfoSurvived[0], sizeof(m_aInfoSurvived));
 	m_nNumSuvived = 0;
 }
 
@@ -70,8 +84,8 @@ void CResult::Create2D(bool bWin)
 
 	char *pPathCaption[2] =
 	{
-		"data\\TEXTURE\\UI\\caption02.png",
-		"data\\TEXTURE\\UI\\caption03.png",
+		"data\\TEXTURE\\UI\\result.png",
+		"data\\TEXTURE\\UI\\result.png",
 	};
 
 	// 背景の生成
@@ -89,21 +103,21 @@ void CResult::Create2D(bool bWin)
 	}
 
 	// 見出しの生成
-	m_pCaption = CObject2D::Create(7);
+	m_p2DResult = CObject2D::Create(7);
 
-	if (m_pCaption != nullptr)
+	if (m_p2DResult != nullptr)
 	{
-		m_pCaption->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.4f, 0.0f));
+		m_p2DResult->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.4f, 0.0f));
 
-		m_pCaption->SetSize(CAPTION_WIDTH, CAPTION_HEIGHT);
+		m_p2DResult->SetSize(RESULT_WIDTH, RESULT_HEIGHT);
 
-		m_pCaption->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		m_p2DResult->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
 		nIdxTexture = CTexture::GetInstance()->Regist(pPathCaption[bWin]);
 
-		m_pCaption->SetIdxTexture(nIdxTexture);
+		m_p2DResult->SetIdxTexture(nIdxTexture);
 
-		m_pCaption->SetVtx();
+		m_p2DResult->SetVtx();
 	}
 }
 
@@ -136,13 +150,13 @@ void CResult::Uninit(void)
 		m_pBg = nullptr;
 	}
 
-	if (m_pCaption != nullptr)
+	if (m_p2DResult != nullptr)
 	{
-		m_pCaption->Uninit();
-		m_pCaption = nullptr;
+		m_p2DResult->Uninit();
+		m_p2DResult = nullptr;
 	}
 
-	ZeroMemory(&m_apSuvived[0], sizeof(m_apSuvived));
+	ZeroMemory(&m_aInfoSurvived[0], sizeof(m_aInfoSurvived));
 
 	Release();
 }
@@ -161,7 +175,26 @@ void CResult::Update(void)
 //====================================================
 void CResult::Input(void)
 {
+	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
 
+	if (pJoypad == nullptr)
+	{
+		return;
+	}
+
+	for (int i = 0; i < NUM_PLAYER; i++)
+	{
+		if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, i))
+		{
+			// ゲームを終了状態にする
+			CGame *pGame = CGame::GetInstance();
+
+			if (pGame != nullptr)
+			{
+				pGame->SetState(CGame::STATE::STATE_END);
+			}
+		}
+	}
 }
 
 //====================================================
@@ -182,8 +215,57 @@ void CResult::SetSurvived(CPlayer *pPlayer)
 		return;
 	}
 
-	// 情報の保存
-	m_apSuvived[m_nNumSuvived] = pPlayer;
+	if (m_aInfoSurvived[m_nNumSuvived].pSuvived == nullptr)
+	{
+		// 情報の保存
+		m_aInfoSurvived[m_nNumSuvived].pSuvived = pPlayer;
 
-	m_nNumSuvived++;
+		// 情報の表示
+		DispSuvived(&m_aInfoSurvived[m_nNumSuvived]);
+
+		m_nNumSuvived++;
+	}
+	else
+	{
+		assert(("リザルトでプレイヤー情報の受け取りに失敗", false));
+	}
+}
+
+//====================================================
+// 生存者の表示
+//====================================================
+void CResult::DispSuvived(SInfoSuvived *pInfo)
+{
+	int nIdx = m_nNumSuvived;
+
+	if (pInfo->pSuvived != nullptr)
+	{
+		int nID = pInfo->pSuvived->GetID();
+
+		if (pInfo->pNumber == nullptr)
+		{// ID表示の数字を生成
+			pInfo->pNumber = CNumber::Create(NUM_PLACE, nID + 1);
+
+			if (pInfo->pNumber != nullptr)
+			{
+				pInfo->pNumber->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.6f + NUMBER_HEIGHT * nIdx * 2, 0.0f));
+				pInfo->pNumber->SetSizeAll(NUMBER_WIDTH, NUMBER_HEIGHT);
+			}
+		}
+		
+		if (pInfo->pCaption == nullptr)
+		{// キャプションの生成
+			pInfo->pCaption = CObject2D::Create(7);
+
+			if (pInfo->pCaption != nullptr)
+			{
+				pInfo->pCaption->SetSize(CAPTION_WIDTH, CAPTION_HEIGHT);
+				pInfo->pCaption->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.35f + NUMBER_WIDTH + CAPTION_WIDTH, SCREEN_HEIGHT * 0.6f + NUMBER_HEIGHT * nIdx * 2, 0.0f));
+
+				int nIdx = CTexture::GetInstance()->Regist(CAPTION_PATH);
+				pInfo->pCaption->SetIdxTexture(nIdx);
+				pInfo->pCaption->SetVtx();
+			}
+		}
+	}
 }

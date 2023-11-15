@@ -20,7 +20,7 @@
 class CObject2D	: public CObject
 {
 public:
-	CObject2D(int nPriority = 3);
+	CObject2D(int nPriority = 7);
 	~CObject2D();	//	デストラクタ
 
 	HRESULT Init(void);	// 初期化処理
