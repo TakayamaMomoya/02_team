@@ -156,14 +156,14 @@ void CItemRepair::FollowPlayerHand(void)
 
 	if (pBody != nullptr)
 	{
-		CParts *pParts = pBody->GetParts(5)->pParts;
+		CParts *pParts = pBody->GetParts(7)->pParts;
 
 		if (pParts != nullptr)
 		{
 			// オフセットの設定
 			D3DXMATRIX *pMtx = GetMatrix();
 			D3DXMATRIX *pMtxPart = pParts->GetMatrix();
-			D3DXVECTOR3 offset = { -15.0f,0.0f,0.0f };
+			D3DXVECTOR3 offset = { -10.0f,0.0f,0.0f };
 
 			pUniversal->SetOffSet(pMtx, *pMtxPart, offset);
 

@@ -482,7 +482,7 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 		m_info.pWeapon = nullptr;
 	}
 
-	m_info.pWeapon = CWeapon::Create(type,5);
+	m_info.pWeapon = CWeapon::Create(type,7);
 
 	if (m_info.pWeapon != nullptr)
 	{
