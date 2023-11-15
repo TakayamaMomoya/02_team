@@ -23,7 +23,7 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define BODY_PATH	"data\\MOTION\\motionPotatoman00.txt"	// 体のパス
+#define BODY_PATH	"data\\MOTION\\motionPotatoman01.txt"	// 体のパス
 #define MOVE_SPEED	(3.0f)	// 移動速度
 #define ROT_SPEED	(0.1f)	// 回転速度
 #define INITIAL_LIFE	(30.0f)	// 初期体力

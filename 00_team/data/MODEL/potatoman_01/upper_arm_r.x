@@ -291,7 +291,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TEXTURE\\MATERIAL\\UV_potetoman.png";
+    "data\\TEXTURE\\MATERIAL\\UV_potetoman_01.png";
    }
   }
  }
