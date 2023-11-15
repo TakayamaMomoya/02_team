@@ -15,6 +15,7 @@
 #include "parts.h"
 #include "motion.h"
 #include "collision.h"
+#include "rocket.h"
 
 //=====================================================
 // コンストラクタ
@@ -226,6 +227,14 @@ void CItemRepair::CollisionRocket(void)
 
 		if (bHit)
 		{
+			// ロケットの修理状況を加算
+			CRocket *pRocket = CRocket::GetInstance();
+
+			if (pRocket != nullptr)
+			{
+				pRocket->AddProgress(1);
+			}
+
 			Uninit();
 		}
 	}

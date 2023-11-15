@@ -34,12 +34,15 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	int GetProgress(void) { return m_nProgress; }
+	void AddProgress(int nProgress);
 
 private:
 	void Load(void);
 	void ApplyInfo(FILE *pFile,char *pTemp);
 
 	float m_fRadius;	// 判定の半径
+	int m_nProgress;	// 進行状況
 	CCollisionSphere *m_pCollisionRocket;	// ゴール判定
 	static CRocket *m_pRocket;	// 自身のポインタ
 };

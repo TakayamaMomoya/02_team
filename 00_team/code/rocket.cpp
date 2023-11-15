@@ -16,11 +16,17 @@
 #include "playerManager.h"
 #include "player.h"
 #include "result.h"
+#include "goal.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define INFO_PATH	"data\\TEXT\\rocket.txt"	// ゴール情報のテキスト
+namespace
+{
+	const char* INFO_PATH = "data\\TEXT\\rocket.txt";	// ロケット情報のテキスト
+	const int MAX_PROGRESS = 3;	// 最大の進行状況
+	const int MIN_PROGRESS = 0;	// 最大の進行状況
+}
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -33,6 +39,7 @@ CRocket *CRocket::m_pRocket = nullptr;	// 自身のポインタ
 CRocket::CRocket(int nPriority) : CObjectX(nPriority)
 {
 	m_fRadius = 0.0f;
+	m_nProgress = 0;
 	m_pCollisionRocket = nullptr;
 }
 
@@ -225,4 +232,31 @@ void CRocket::Draw(void)
 {
 	// 継承クラスの描画
 	CObjectX::Draw();
+}
+
+//=====================================================
+// 進行状況の加算
+//=====================================================
+void CRocket::AddProgress(int nProgress)
+{
+	// 進行状況加算
+	m_nProgress += nProgress;
+
+	// 最大、最小値の補正
+	if (m_nProgress < MIN_PROGRESS)
+	{
+		m_nProgress = MIN_PROGRESS;
+	}
+	if (m_nProgress >= MAX_PROGRESS)
+	{
+		m_nProgress = MAX_PROGRESS;
+
+		// ゴールの生成
+		CGoal *pGoal = CGoal::Create();
+
+		D3DXVECTOR3 pos = GetPosition();
+		pGoal->SetPosition(pos);
+	}
+
+	// ロケットモデルの変化
 }

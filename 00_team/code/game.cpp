@@ -48,6 +48,7 @@ CGame *CGame::m_pGame = nullptr;	// 自身のポインタ
 CGame::CGame()
 {
 	m_nCntState = 0;
+	m_bStop = false;
 }
 
 //=====================================================
@@ -223,6 +224,12 @@ void CGame::Debug(void)
 	if (pKeyboard->GetTrigger(DIK_F))
 	{
 		m_bStop = m_bStop ? false : true;
+	}
+
+	if (pKeyboard->GetTrigger(DIK_G))
+	{
+		CItemRepair *pRepair = CItemRepair::Create();
+		pRepair->SetPosition(D3DXVECTOR3(40.0f, 0.0f, 300.0f));
 	}
 }
 
