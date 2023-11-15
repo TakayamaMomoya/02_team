@@ -278,35 +278,49 @@ void CGoal::DeadLine(void)
 	{
 		pGame->SetState(CGame::STATE::STATE_ESCAPE);
 	}
+}
+
+//=====================================================
+// リザルトに移る処理
+//=====================================================
+void CGoal::SetResult(void)
+{
+	// ゲームをリザルト状態にする
+	CGame *pGame = CGame::GetInstance();
+
+	if (pGame != nullptr)
+	{
+		pGame->SetState(CGame::STATE::STATE_RESULT);
+	}
 
 	// リザルトの生成
-	//CResult *pResult = CResult::Create();
+	CResult *pResult = CResult::Create();
 
-	//// 範囲内のプレイヤー検出
-	//CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
+	// 範囲内のプレイヤー検出
+	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 
-	//if (pPlayerManager != nullptr)
-	//{
-	//	for (int i = 0;i < NUM_PLAYER;i++)
-	//	{
-	//		CPlayer *pPlayer = pPlayerManager->GetPlayer(i);
+	if (pPlayerManager != nullptr)
+	{
+		for (int i = 0;i < NUM_PLAYER;i++)
+		{
+			CPlayer *pPlayer = pPlayerManager->GetPlayer(i);
 
-	//		if (pPlayer != nullptr)
-	//		{
-	//			if (pResult != nullptr)
-	//			{// リザルトにプレイヤー情報を渡す
-	//				// 座標の差分から距離を計算
-	//				D3DXVECTOR3 pos = GetPosition();
-	//				D3DXVECTOR3 posPlayer = pPlayer->GetPosition();
-	//				D3DXVECTOR3 vecDiff = posPlayer - pos;
-	//				float fDiff = D3DXVec3Length(&vecDiff);
-	//				
-	//				if (fDiff < m_fRadius)
-	//				{
-	//					pResult->SetSurvived(pPlayer);
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
+			if (pPlayer != nullptr)
+			{
+				if (pResult != nullptr)
+				{// リザルトにプレイヤー情報を渡す
+					// 座標の差分から距離を計算
+					D3DXVECTOR3 pos = GetPosition();
+					D3DXVECTOR3 posPlayer = pPlayer->GetPosition();
+					D3DXVECTOR3 vecDiff = posPlayer - pos;
+					float fDiff = D3DXVec3Length(&vecDiff);
+					
+					if (fDiff < m_fRadius)
+					{
+						pResult->SetSurvived(pPlayer);
+					}
+				}
+			}
+		}
+	}
 }

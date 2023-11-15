@@ -258,5 +258,27 @@ void CGame::Debug(void)
 //=====================================================
 void CGame::Draw(void)
 {
+#ifndef _DEBUG
 
+	return;
+
+#endif
+
+	CDebugProc *pDebugProc = CDebugProc::GetInstance();
+
+	if (pDebugProc == nullptr)
+	{
+		return;
+	}
+
+	char *apString[STATE::STATE_MAX] =
+	{
+		"NONE",
+		"NORMAL",
+		"ESCAPE",
+		"RESULT",
+		"END",
+	};
+
+	pDebugProc->Print("\nƒQ[ƒ€‚Ìó‘Ô[%s]\n", apString[m_state]);
 }
