@@ -35,7 +35,7 @@ public:
 
 private:
 	void Load(void);
-	void GetItem(CObject* pObj);
+	void Interact(CObject* pObj);
 	void CollisionRocket(void);
 	void CheckPlayerAlive(void);
 	void FollowPlayerHand(void);

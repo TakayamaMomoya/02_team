@@ -9,6 +9,8 @@ ROCKETSET
 	POS = 100.0 0.0 0.0	# 座標
 	MODEL = data\\MODEL\\block\\desk00.x	# 表示するモデル
 	RADIUS = 100.0	# 判定の半径
+	SPEED = 0.01	# 脱出時の上昇速度
+	DELETE_HEIGHT = 2000.0	# 消えるまでの高さ
 END_ROCKETSET
 
 END_SCRIPT

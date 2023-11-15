@@ -18,6 +18,7 @@
 #include "game.h"
 #include "playerManager.h"
 #include "player.h"
+#include "rocket.h"
 
 //*****************************************************
 // マクロ定義
@@ -217,7 +218,32 @@ void CCamera::FollowPlayer(void)
 //====================================================
 void CCamera::UpdateResult(void)
 {
+	// ロケットの座標取得
+	CRocket *pRocket = CRocket::GetInstance();
 
+	D3DXVECTOR3 posTarget = { 0.0f,0.0f,0.0f };
+
+	if (pRocket != nullptr)
+	{
+		posTarget = pRocket->GetPosition();
+	}
+	else
+	{
+		return;
+	}
+
+	// 目的座標設定
+	m_camera.posRDest = posTarget;
+	m_camera.posVDest =
+	{
+		0.0f,
+		100.0f,
+		-100.0f,
+	};
+
+	// 目的座標に補正
+	m_camera.posV += (m_camera.posVDest - m_camera.posV) * MOVE_FACT;
+	m_camera.posR += (m_camera.posRDest - m_camera.posR) * MOVE_FACT;
 }
 
 //====================================================

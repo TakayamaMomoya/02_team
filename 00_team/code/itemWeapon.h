@@ -31,7 +31,7 @@ public:
 
 private:
 	void Load(void);
-	void GetItem(CObject* pObj);
+	void Interact(CObject* pObj);
 	void ApplyEffect(CPlayer *pPlayer);
 
 	CWeapon::TYPE m_type;

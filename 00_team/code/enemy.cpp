@@ -199,7 +199,7 @@ HRESULT CEnemy::Init(void)
 		if (m_pCollisionSphere != nullptr)
 		{// î•ñ‚Ìİ’è
 			m_pCollisionSphere->SetPosition(GetPosition());
-			m_pCollisionSphere->SetRadius(5);
+			m_pCollisionSphere->SetRadius(50.0f);
 		}
 	}
 

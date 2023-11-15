@@ -247,7 +247,7 @@ void CPlayer::Input(void)
 	{
 		CGame::STATE state = pGame->GetState();
 
-		if (state == CGame::STATE_RESULT || state == CGame::STATE_END)
+		if (state == CGame::STATE_ESCAPE || state == CGame::STATE_RESULT || state == CGame::STATE_END)
 		{
 			return;
 		}
@@ -482,7 +482,7 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 		m_info.pWeapon = nullptr;
 	}
 
-	m_info.pWeapon = CWeapon::Create(type,5);
+	m_info.pWeapon = CWeapon::Create(type,7);
 
 	if (m_info.pWeapon != nullptr)
 	{

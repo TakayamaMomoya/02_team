@@ -20,7 +20,7 @@
 class CUI	: public CObject2D
 {
 public:
-	CUI(int nPriority = 3);
+	CUI(int nPriority = 7);
 	~CUI();	//	デストラクタ
 
 	static CUI *Create(void);	// 生成処理

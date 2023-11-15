@@ -39,7 +39,10 @@ CRocket *CRocket::m_pRocket = nullptr;	// 自身のポインタ
 CRocket::CRocket(int nPriority) : CObjectX(nPriority)
 {
 	m_fRadius = 0.0f;
+	m_fSpeed = 0.0f;
+	m_fDeleteHeight = 0.0f;
 	m_nProgress = 0;
+	m_state = STATE_NONE;
 	m_pCollisionRocket = nullptr;
 }
 
@@ -91,6 +94,8 @@ HRESULT CRocket::Init(void)
 
 	// 情報読み込み
 	Load();
+
+	m_state = STATE_NORMAL;
 
 	return S_OK;
 }
@@ -197,6 +202,20 @@ void CRocket::ApplyInfo(FILE* pFile, char* pTemp)
 			m_pCollisionRocket->SetRadius(fRadius);
 		}
 	}
+
+	if (strcmp(pTemp, "SPEED") == 0)
+	{// 上昇速度
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_fSpeed);
+	}
+
+	if (strcmp(pTemp, "DELETE_HEIGHT") == 0)
+	{// 削除する高さ
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_fDeleteHeight);
+	}
 }
 
 //=====================================================
@@ -223,6 +242,34 @@ void CRocket::Update(void)
 {
 	// 継承クラスの更新
 	CObjectX::Update();
+
+	if (m_state == STATE::STATE_ESCAPE)
+	{// 脱出状態の更新
+		UpdateEscape();
+	}
+}
+
+//=====================================================
+// 脱出の更新
+//=====================================================
+void CRocket::UpdateEscape(void)
+{
+	D3DXVECTOR3 pos = GetPosition();
+	D3DXVECTOR3 move = GetMove();
+
+	// 上昇量の加算
+	move.y += m_fSpeed;
+
+	// 移動量の反映
+	pos += move;
+
+	SetPosition(pos);
+	SetMove(move);
+
+	if (pos.y >= m_fDeleteHeight)
+	{
+		Uninit();
+	}
 }
 
 //=====================================================
@@ -239,6 +286,11 @@ void CRocket::Draw(void)
 //=====================================================
 void CRocket::AddProgress(int nProgress)
 {
+	if (m_state != STATE_NORMAL)
+	{// 通常状態のみ進行可能
+		return;
+	}
+
 	// 進行状況加算
 	m_nProgress += nProgress;
 

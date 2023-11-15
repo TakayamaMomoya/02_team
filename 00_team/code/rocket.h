@@ -25,6 +25,14 @@ class CCollisionSphere;
 class CRocket : public CObjectX
 {
 public:
+	enum STATE
+	{
+		STATE_NONE = 0,	// 何もしていない状態
+		STATE_NORMAL,	// 通常状態
+		STATE_ESCAPE,	// 脱出状態
+		STATE_MAX
+	};
+
 	CRocket(int nPriority = 3);	// コンストラクタ
 	~CRocket();	// デストラクタ
 
@@ -36,13 +44,18 @@ public:
 	void Draw(void);
 	int GetProgress(void) { return m_nProgress; }
 	void AddProgress(int nProgress);
+	void SetState(STATE state) { m_state = state; }
 
 private:
 	void Load(void);
 	void ApplyInfo(FILE *pFile,char *pTemp);
+	void UpdateEscape(void);
 
 	float m_fRadius;	// 判定の半径
+	float m_fSpeed;	// 上昇速度
+	float m_fDeleteHeight;	// 削除する高さ
 	int m_nProgress;	// 進行状況
+	STATE m_state;	// 状態
 	CCollisionSphere *m_pCollisionRocket;	// ゴール判定
 	static CRocket *m_pRocket;	// 自身のポインタ
 };

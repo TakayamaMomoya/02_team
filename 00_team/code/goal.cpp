@@ -17,6 +17,8 @@
 #include "playerManager.h"
 #include "player.h"
 #include "result.h"
+#include "rocket.h"
+#include "game.h"
 
 //*****************************************************
 // マクロ定義
@@ -71,7 +73,7 @@ CGoal *CGoal::Create()
 HRESULT CGoal::Init(void)
 {
 	// 継承クラスの初期化
-	CObjectX::Init();
+	//CObjectX::Init();
 
 	if (m_pCollisionGoal == nullptr)
 	{// 球の当たり判定生成
@@ -167,14 +169,14 @@ void CGoal::ApplyInfo(FILE* pFile, char* pTemp)
 
 	if (strcmp(pTemp, "MODEL") == 0)
 	{// モデル読み込み
-		(void)fscanf(pFile, "%s", pTemp);
+		//(void)fscanf(pFile, "%s", pTemp);
 
-		(void)fscanf(pFile, "%s", pTemp);
+		//(void)fscanf(pFile, "%s", pTemp);
 
-		// モデルの読込
-		int nIdx = CModel::Load(pTemp);
-		SetIdxModel(nIdx);
-		BindModel(nIdx);
+		//// モデルの読込
+		//int nIdx = CModel::Load(pTemp);
+		//SetIdxModel(nIdx);
+		//BindModel(nIdx);
 	}
 
 	if (strcmp(pTemp, "RADIUS") == 0)
@@ -261,8 +263,43 @@ void CGoal::DeadLine(void)
 {
 	m_bFinish = true;
 
+	// ロケットを飛ばす
+	CRocket *pRocket = CRocket::GetInstance();
+
+	if (pRocket != nullptr)
+	{
+		pRocket->SetState(CRocket::STATE::STATE_ESCAPE);
+	}
+
+	// ゲームを脱出状態にする
+	CGame *pGame = CGame::GetInstance();
+
+	if (pGame != nullptr)
+	{
+		pGame->SetState(CGame::STATE::STATE_ESCAPE);
+	}
+}
+
+//=====================================================
+// リザルトに移る処理
+//=====================================================
+void CGoal::SetResult(void)
+{
+	// ゲームをリザルト状態にする
+	CGame *pGame = CGame::GetInstance();
+
+	if (pGame != nullptr)
+	{
+		pGame->SetState(CGame::STATE::STATE_RESULT);
+	}
+
 	// リザルトの生成
 	CResult *pResult = CResult::Create();
+
+	if (pResult == nullptr)
+	{
+		return;
+	}
 
 	// 範囲内のプレイヤー検出
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();

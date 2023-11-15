@@ -30,6 +30,7 @@
 #include "enemyManager.h"
 #include "rocket.h"
 #include "edit.h"
+#include "goal.h"
 
 //*****************************************************
 // マクロ定義
@@ -83,7 +84,7 @@ HRESULT CGame::Init(void)
 
 	if (pPlayerManger != nullptr)
 	{
-		pPlayerManger->CreatePlayer(1);
+		pPlayerManger->CreatePlayer(2);
 	}
 
 	// 武器マネージャーの生成
@@ -96,8 +97,15 @@ HRESULT CGame::Init(void)
 	pItem = CItemWeapon::Create(CWeapon::TYPE_MACHINEGUN);
 	pItem->SetPosition(D3DXVECTOR3(40.0f, 0.0f, -40.0f));
 
+	// 修理アイテム
 	CItemRepair *pRepair = CItemRepair::Create();
 	pRepair->SetPosition(D3DXVECTOR3(40.0f, 0.0f, 300.0f));
+
+	pRepair = CItemRepair::Create();
+	pRepair->SetPosition(D3DXVECTOR3(-40.0f, 0.0f, 300.0f));
+
+	pRepair = CItemRepair::Create();
+	pRepair->SetPosition(D3DXVECTOR3(-200.0f, 0.0f, 300.0f));
 
 	// 敵マネージャーの生成
 	CEnemyManager *pEnemyManager = CEnemyManager::Create();
@@ -169,10 +177,9 @@ void CGame::UpdateCamera(void)
 
 	if (m_bStop == false)
 	{
-		if (m_state == STATE_NORMAL)
+		if (m_state == STATE_ESCAPE || m_state == STATE_RESULT)
 		{
-			// 操作
-			//pCamera->FollowPlayer();
+			pCamera->UpdateResult();
 		}
 	}
 	else
@@ -192,6 +199,25 @@ void CGame::ManageState(void)
 	switch (m_state)
 	{
 	case CGame::STATE_NORMAL:
+		break;
+	case CGame::STATE_ESCAPE:
+
+		m_nCntState++;
+
+		if (m_nCntState >= TRANS_TIME)
+		{
+			m_nCntState = 0;
+			SetState(STATE_RESULT);
+
+			// ゴールでリザルトの表示
+			CGoal *pGoal = CGoal::GetInstance();
+
+			if (pGoal != nullptr)
+			{
+				pGoal->SetResult();
+			}
+		}
+
 		break;
 	case CGame::STATE_END:
 
@@ -238,5 +264,27 @@ void CGame::Debug(void)
 //=====================================================
 void CGame::Draw(void)
 {
+#ifndef _DEBUG
 
+	return;
+
+#endif
+
+	CDebugProc *pDebugProc = CDebugProc::GetInstance();
+
+	if (pDebugProc == nullptr)
+	{
+		return;
+	}
+
+	char *apString[STATE::STATE_MAX] =
+	{
+		"NONE",
+		"NORMAL",
+		"ESCAPE",
+		"RESULT",
+		"END",
+	};
+
+	pDebugProc->Print("\nゲームの状態[%s]\n", apString[m_state]);
 }
