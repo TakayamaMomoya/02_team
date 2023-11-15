@@ -11,6 +11,7 @@
 #include "edit.h"
 #include "objectX.h"
 #include "inputkeyboard.h"
+#include "inputmouse.h"
 #include "manager.h"
 #include "debugproc.h"
 #include "block.h"
@@ -36,7 +37,8 @@ CEdit::CEdit()
 {
 	m_pObjectCursor = nullptr;
 	m_nIdxObject = 0;
-	m_type = CBlock::TYPE_FLOOR;
+	m_type = CBlock::TYPE_DESK;
+	m_mode = MODE_CREATE_BLOCK;
 }
 
 //=====================================================
@@ -76,7 +78,7 @@ HRESULT CEdit::Init(void)
 	m_pObjectCursor = CObjectX::Create();
 
 	// タイプの初期設定
-	m_type = CBlock::TYPE_FLOOR;
+	m_type = CBlock::TYPE_DESK;
 
 	// モデル番号の設定
 	m_pObjectCursor->SetIdxModel(pIdx[m_type]);
@@ -113,108 +115,76 @@ void CEdit::Update(void)
 
 	// 情報取得
 	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
+	CInputMouse* pMouse = CInputMouse::GetInstance();
 
-	// 変数宣言
 	D3DXVECTOR3 pos = { 0.0f,0.0f,0.0f };
 	D3DXVECTOR3 rot = { 0.0f,0.0f,0.0f };
 	float fSpeed = SPEED_MOVE;
 	CBlock **pBlock = CBlock::GetBlock();
 
-	if (m_pObjectCursor != nullptr && pKeyboard != nullptr)
+	if (m_pObjectCursor != nullptr && pKeyboard != nullptr && pMouse != nullptr)
 	{
-		if (pKeyboard->GetPress(DIK_RSHIFT))
+		if (pMouse->GetPress(CInputMouse::BUTTON_RMB) == false)
 		{
-			fSpeed *= 5.0f;
-		}
+			if (pKeyboard->GetPress(DIK_RSHIFT))
+			{
+				fSpeed *= 5.0f;
+			}
 
-		if (pKeyboard->GetPress(DIK_J))
-		{
-			pos.x -= fSpeed;
-		}
-		if (pKeyboard->GetPress(DIK_L))
-		{
-			pos.x += fSpeed;
-		}
-		if (pKeyboard->GetPress(DIK_I))
-		{
-			pos.z += fSpeed;
-		}
-		if (pKeyboard->GetPress(DIK_K))
-		{
-			pos.z -= fSpeed;
-		}
-		if (pKeyboard->GetPress(DIK_U))
-		{
-			pos.y += fSpeed;
-		}
-		if (pKeyboard->GetPress(DIK_O))
-		{
-			pos.y -= fSpeed;
+			if (pKeyboard->GetPress(DIK_A))
+			{
+				pos.x -= fSpeed;
+			}
+			if (pKeyboard->GetPress(DIK_D))
+			{
+				pos.x += fSpeed;
+			}
+			if (pKeyboard->GetPress(DIK_W))
+			{
+				pos.z += fSpeed;
+			}
+			if (pKeyboard->GetPress(DIK_S))
+			{
+				pos.z -= fSpeed;
+			}
+			if (pKeyboard->GetPress(DIK_E))
+			{
+				pos.y += fSpeed;
+			}
+			if (pKeyboard->GetPress(DIK_Q))
+			{
+				pos.y -= fSpeed;
+			}
 		}
 
 		// 回転
-		if (pKeyboard->GetPress(DIK_N))
+		if (pKeyboard->GetTrigger(DIK_Z))
 		{
-			rot.y += SPEED_ROTATION;
+			rot.y = 0.0f;
+
+			m_pObjectCursor->SetRot(rot);
 		}
-		if (pKeyboard->GetPress(DIK_M))
+		if (pKeyboard->GetTrigger(DIK_C))
 		{
-			rot.y -= SPEED_ROTATION;
+			rot.y = D3DX_PI * 0.5f;
+
+			m_pObjectCursor->SetRot(rot);
 		}
 
-		if (pKeyboard->GetTrigger(DIK_B))
-		{
-			m_pObjectCursor->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-		}
-
-		if (pKeyboard->GetTrigger(DIK_RETURN))
+		if (pKeyboard->GetTrigger(DIK_RETURN) || pMouse->GetTrigger(CInputMouse::BUTTON_LMB))
 		{// ブロックの生成
 			CBlock::Create(m_pObjectCursor->GetPosition(), m_pObjectCursor->GetRot(),m_type);
 		}
 
-		if (pKeyboard->GetTrigger(DIK_BACKSPACE))
-		{// 敵の生成
-			CEnemyManager *pEnemyManager = nullptr;
+		// 削除ブロック選択
+		int nIdxDelete = CheckDelete();
 
-			pEnemyManager = CEnemyManager::GetInstance();
-
-			if (pEnemyManager != nullptr)
-			{
-				pEnemyManager->CreateEnemy(m_pObjectCursor->GetPosition(), CEnemy::TYPE_DRONE);
-			}
+		if (pKeyboard->GetTrigger(DIK_BACKSPACE) && nIdxDelete != -1)
+		{
+			CBlock::Delete(nIdxDelete);
 		}
 
-		if (pKeyboard->GetTrigger(DIK_0) && CBlock::GetNumAll() != 0)
-		{// オブジェクト選択処理
-			if (pBlock[m_nIdxObject] != nullptr)
-			{
-				pBlock[m_nIdxObject]->ResetColor();
-			}
-
-			m_nIdxObject = (m_nIdxObject + 1) % CBlock::GetNumAll();
-
-			if (pBlock[m_nIdxObject] != nullptr)
-			{
-				pBlock[m_nIdxObject]->SetEmissiveCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
-			}
-		}
-
-		if (pKeyboard->GetTrigger(DIK_MINUS) && CBlock::GetNumAll() != 0)
-		{// オブジェクト選択処理
-			if (pBlock[m_nIdxObject] != nullptr)
-			{
-				pBlock[m_nIdxObject]->ResetColor();
-			}
-			
-			m_nIdxObject = (m_nIdxObject + CBlock::GetNumAll() - 1) % CBlock::GetNumAll();
-
-			if (pBlock[m_nIdxObject] != nullptr)
-			{
-				pBlock[m_nIdxObject]->SetEmissiveCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
-			}
-		}
-
-		if (pKeyboard->GetTrigger(DIK_6))
+		if (pKeyboard->GetTrigger(DIK_1))
 		{
 			m_type = (CBlock::TYPE)((m_type + CBlock::TYPE_MAX - 1) % CBlock::TYPE_MAX);
 
@@ -223,7 +193,7 @@ void CEdit::Update(void)
 			m_pObjectCursor->BindModel(pIdx[m_type]);
 		}
 
-		if (pKeyboard->GetTrigger(DIK_7))
+		if (pKeyboard->GetTrigger(DIK_2) || pMouse->GetMoveIZ() > 0.0f)
 		{// ブロックタイプ切り替え
 			m_type = (CBlock::TYPE)((m_type + 1) % CBlock::TYPE_MAX);
 
@@ -232,12 +202,7 @@ void CEdit::Update(void)
 			m_pObjectCursor->BindModel(pIdx[m_type]);
 		}
 
-		if(pKeyboard->GetTrigger(DIK_9))
-		{// 指定のブロックを削除
-			CBlock::Delete(m_nIdxObject);
-		}
-
-		if (pKeyboard->GetTrigger(DIK_8))
+		if (pKeyboard->GetTrigger(DIK_F2))
 		{// ブロックの保存
 			CBlock::Save();
 		}
@@ -245,7 +210,6 @@ void CEdit::Update(void)
 		if (m_pObjectCursor != nullptr)
 		{// カーソルのトランスフォーム
 			m_pObjectCursor->SetPosition(m_pObjectCursor->GetPosition() + pos);
-			m_pObjectCursor->SetRot(m_pObjectCursor->GetRot() + rot);
 		}
 
 		CDebugProc::GetInstance()->Print("\n//=======================\n");
@@ -253,13 +217,57 @@ void CEdit::Update(void)
 		CDebugProc::GetInstance()->Print("//=======================\n");
 		CDebugProc::GetInstance()->Print("エディターの位置：[%f,%f,%f]\n", m_pObjectCursor->GetPosition().x, m_pObjectCursor->GetPosition().y, m_pObjectCursor->GetPosition().z);
 		CDebugProc::GetInstance()->Print("エディターの向き：[%f,%f,%f]\n", m_pObjectCursor->GetRot().x, m_pObjectCursor->GetRot().y, m_pObjectCursor->GetRot().z);
-		CDebugProc::GetInstance()->Print("移動[IJKL]\n");
-		CDebugProc::GetInstance()->Print("上下移動[UO]\n");
+		CDebugProc::GetInstance()->Print("移動[WASD]\n");
+		CDebugProc::GetInstance()->Print("上下移動[QE]\n");
+		CDebugProc::GetInstance()->Print("回転[ZC]\n");
 		CDebugProc::GetInstance()->Print("設置[ENTER]\n");
-		CDebugProc::GetInstance()->Print("保存[8]\n");
-		CDebugProc::GetInstance()->Print("選択中のブロック：[%d]:[0]\n", m_nIdxObject);
-		CDebugProc::GetInstance()->Print("選択ブロック削除[9]\n");
-		CDebugProc::GetInstance()->Print("設置するタイプ：[%d]:[7]\n", m_type);
+		CDebugProc::GetInstance()->Print("保存[F2]\n");
+		CDebugProc::GetInstance()->Print("選択中のブロック：[%d]\n", m_nIdxObject);
+		CDebugProc::GetInstance()->Print("選択ブロック削除[BACK SPACE]\n");
+		CDebugProc::GetInstance()->Print("設置するタイプ：[%d]:[1,2]\n", m_type);
 		CDebugProc::GetInstance()->Print("//=======================\n");
 	}
+}
+
+//=====================================================
+// 削除ブロックのチェック
+//=====================================================
+int CEdit::CheckDelete(void)
+{
+	CBlock** ppBlock = CBlock::GetBlock();
+	int nNumBlock = CBlock::GetNumAll();
+
+	if (ppBlock == nullptr)
+	{
+		return -1;
+	}
+
+	for (int i = 0; i < nNumBlock; i++)
+	{
+		CBlock* pBlock = ppBlock[i];
+
+		if (pBlock != nullptr)
+		{
+			pBlock->ResetColor();
+
+			D3DXVECTOR3 posBlock = pBlock->GetPosition();
+			D3DXVECTOR3 pos = m_pObjectCursor->GetPosition();
+			D3DXVECTOR3 vtxMax = pBlock->GetVtxMax();
+			D3DXVECTOR3 vtxMin = pBlock->GetVtxMin();
+
+			if (pos.x >= posBlock.x + vtxMin.x && 
+				pos.x <= posBlock.x + vtxMax.x &&
+				pos.z >= posBlock.z + vtxMin.z &&
+				pos.z <= posBlock.z + vtxMax.z &&
+				pos.y >= posBlock.y + vtxMin.y &&
+				pos.y <= posBlock.y + vtxMax.y)
+			{// ブロック内にいるとき
+				pBlock->SetEmissiveCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+
+				return i;
+			}
+		}
+	}
+
+	return -1;
 }

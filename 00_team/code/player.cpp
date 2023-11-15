@@ -23,8 +23,8 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define BODY_PATH	"data\\MOTION\\rayleigh.txt"	// 体のパス
-#define MOVE_SPEED	(1.0f)	// 移動速度
+#define BODY_PATH	"data\\MOTION\\motionPotatoman00.txt"	// 体のパス
+#define MOVE_SPEED	(3.0f)	// 移動速度
 #define ROT_SPEED	(0.1f)	// 回転速度
 #define INITIAL_LIFE	(30.0f)	// 初期体力
 #define DAMAGE_TIME	(0.5f)	// ダメージ状態の秒数
@@ -73,6 +73,14 @@ HRESULT CPlayer::Init(void)
 	// 体の読込
 	CCharacter::Load(BODY_PATH);
 
+	CMotion *pBody = GetBody();
+
+	if (pBody != nullptr)
+	{
+		pBody->SetPosShadow(D3DXVECTOR3(0.0f, 0.5f, 0.0f));
+		pBody->EnableShadow(true);
+	}
+
 	// 当たり判定の生成
 	if (m_info.pCollisionSphere == nullptr)
 	{
@@ -81,6 +89,21 @@ HRESULT CPlayer::Init(void)
 		if (m_info.pCollisionSphere != nullptr)
 		{
 			m_info.pCollisionSphere->SetRadius(5.0f);
+		}
+	}
+
+	if (m_info.pCollisionCube == nullptr)
+	{// 当たり判定生成
+		m_info.pCollisionCube = CCollisionCube::Create(CCollision::TAG_PLAYER, this);
+
+		if (m_info.pCollisionCube != nullptr)
+		{
+			D3DXVECTOR3 vtxMax = { 10.0f,10.0f,10.0f };
+			D3DXVECTOR3 vtxMin = { -10.0f,0.0f,-10.0f };
+
+			m_info.pCollisionCube->SetPosition(GetPosition());
+
+			m_info.pCollisionCube->SetVtx(vtxMax, vtxMin);
 		}
 	}
 
@@ -108,6 +131,12 @@ void CPlayer::Uninit(void)
 		m_info.pCollisionSphere = nullptr;
 	}
 
+	if (m_info.pCollisionCube != nullptr)
+	{
+		m_info.pCollisionCube->Uninit();
+		m_info.pCollisionCube = nullptr;
+	}
+
 	if (m_info.pWeapon != nullptr)
 	{
 		m_info.pWeapon->Uninit();
@@ -132,6 +161,9 @@ void CPlayer::Update(void)
 	// 位置の反映
 	D3DXVECTOR3 pos = GetPosition();
 	D3DXVECTOR3 move = GetMove();
+	
+	// 前回の位置を保存
+	SetPositionOld(pos);
 
 	pos += move;
 	SetPosition(pos);
@@ -165,6 +197,22 @@ void CPlayer::Update(void)
 
 			SetPosition(pos);
 		}
+
+		if (m_info.pCollisionCube != nullptr)
+		{
+			D3DXVECTOR3 pos = GetPosition();
+			D3DXVECTOR3 posCollision = m_info.pCollisionCube->GetPosition();
+			D3DXVECTOR3 move = GetMove();
+
+			// 判定の追従
+			m_info.pCollisionCube->SetPositionOld(posCollision);
+			m_info.pCollisionCube->SetPosition(pos);
+
+			// ブロックとの押し出し判定
+			m_info.pCollisionCube->CubeCollision(CCollision::TAG_BLOCK, &move);
+
+			SetMove(move);
+		}
 	}
 
 	// 移動量の減衰
@@ -173,6 +221,19 @@ void CPlayer::Update(void)
 
 	// 状態管理
 	ManageState();
+
+	// 武器の追従
+	if (m_info.pWeapon != nullptr)
+	{
+		CMotion *pBody = GetBody();
+
+		if (pBody != nullptr)
+		{
+			pBody->MultiplyMtx();
+		}
+
+		m_info.pWeapon->FollowPlayerHand();
+	}
 }
 
 //=====================================================
@@ -273,6 +334,29 @@ void CPlayer::InputAttack(void)
 	{// 素手の場合の処理
 
 	}
+}
+
+//=====================================================
+// インタラクトの入力
+//=====================================================
+bool CPlayer::InputInteract(void)
+{
+	bool bTrigger = false;
+
+	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	int nID = GetID();
+
+	if (pJoyPad == nullptr)
+	{
+		return bTrigger;
+	}
+
+	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_LB,nID))
+	{
+		bTrigger = true;
+	}
+
+	return bTrigger;
 }
 
 //=====================================================
@@ -398,7 +482,7 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 		m_info.pWeapon = nullptr;
 	}
 
-	m_info.pWeapon = CWeapon::Create(type,8);
+	m_info.pWeapon = CWeapon::Create(type,5);
 
 	if (m_info.pWeapon != nullptr)
 	{
@@ -459,4 +543,11 @@ void CPlayer::Debug(void)
 
 	pDebugProc->Print("\nプレイヤー番号[%d]", m_info.nID);
 	pDebugProc->Print("\nプレイヤーの向き[%f,%f,%f]", GetRot().x, GetRot().y, GetRot().z);
+
+	if (GetBody() != nullptr)
+	{
+		int nMotion = GetBody()->GetMotion();
+
+		pDebugProc->Print("\nモーション[%d]", nMotion);
+	}
 }

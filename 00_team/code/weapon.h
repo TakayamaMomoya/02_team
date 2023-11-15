@@ -61,9 +61,9 @@ public:
 	int GetRapid(void) { return m_info.nRapid; }
 	void SetCntShot(int nCntShot) { m_info.nCntShot = nCntShot; }
 	int GetCntShot(void) { return m_info.nCntShot; }
+	void FollowPlayerHand(void);
 
 private:
-	void FollowPlayerHand(void);
 
 	SInfo m_info;
 };

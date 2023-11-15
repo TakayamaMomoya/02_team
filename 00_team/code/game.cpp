@@ -24,10 +24,12 @@
 #include "playerManager.h"
 #include "texture.h"
 #include "skybox.h"
-#include "item.h"
+#include "itemWeapon.h"
+#include "itemRepair.h"
 #include "weaponManager.h"
 #include "enemyManager.h"
-#include "goal.h"
+#include "rocket.h"
+#include "edit.h"
 
 //*****************************************************
 // マクロ定義
@@ -87,17 +89,25 @@ HRESULT CGame::Init(void)
 	CWeaponManager::Create();
 
 	// アイテム
-	CItem *pItem = CItem::Create(CItem::TYPE_MAGNUM);
+	CItemWeapon *pItem = CItemWeapon::Create(CWeapon::TYPE_MAGNUM);
 	pItem->SetPosition(D3DXVECTOR3(0.0f,0.0f,-40.0f));
 
-	pItem = CItem::Create(CItem::TYPE_MACHINEGUN);
+	pItem = CItemWeapon::Create(CWeapon::TYPE_MACHINEGUN);
 	pItem->SetPosition(D3DXVECTOR3(40.0f, 0.0f, -40.0f));
+
+	CItemRepair *pRepair = CItemRepair::Create();
+	pRepair->SetPosition(D3DXVECTOR3(40.0f, 0.0f, 300.0f));
 
 	// 敵マネージャーの生成
 	CEnemyManager *pEnemyManager = CEnemyManager::Create();
 
-	// ゴールの生成
-	CGoal::Create();
+	// ロケットの生成
+	CRocket::Create();
+
+#ifdef _DEBUG
+	// エディットの生成
+	CEdit::Create();
+#endif
 
 	return S_OK;
 }
@@ -126,33 +136,11 @@ void CGame::Update(void)
 		// シーンの更新
 		CScene::Update();
 	}
-
-	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
-
-	if (pKeyboard != nullptr)
+	else
 	{
-		if (pKeyboard->GetTrigger(DIK_RETURN))
-		{
-			if (pFade != nullptr)
-			{
-				pFade->SetFade(CScene::MODE_RANKING);
-			}
-		}
-	}
-
-	if (CEnemy::GetNumAll() == 0)
-	{
-		// 敵マネージャーの生成
-		CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
-
-		if (pEnemyManager != nullptr)
-		{
-			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -59.0f), CEnemy::TYPE_NORMAL);
-			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -88.0f), CEnemy::TYPE_NORMAL);
-			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -107.0f), CEnemy::TYPE_NORMAL);
-			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -130.0f), CEnemy::TYPE_NORMAL);
-			pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, -160.0f), CEnemy::TYPE_NORMAL);
-		}
+		// エディットの更新
+		CEdit* pEdit = CEdit::GetInstatnce();
+		pEdit->Update();
 	}
 
 	// カメラ更新
@@ -183,7 +171,7 @@ void CGame::UpdateCamera(void)
 		if (m_state == STATE_NORMAL)
 		{
 			// 操作
-			pCamera->FollowPlayer();
+			//pCamera->FollowPlayer();
 		}
 	}
 	else

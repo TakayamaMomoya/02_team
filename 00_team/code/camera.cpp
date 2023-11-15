@@ -39,7 +39,7 @@ HRESULT CCamera::Init(void)
 {
 	ZeroMemory(&m_camera,sizeof(Camera));
 
-	m_camera.posV = D3DXVECTOR3(0.0f, 50.0f, 100.0f);
+	m_camera.posV = D3DXVECTOR3(0.0f, 500.0f, 1000.0f);
 	m_camera.posVOld = D3DXVECTOR3(0.0f, 30.0f, 100.0f);
 	m_camera.posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_camera.posVDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -119,28 +119,28 @@ void CCamera::Control(void)
 		//Ž‹“_ˆÚ“®===============================================
 		if (pKeyboard->GetPress(DIK_A) == true)
 		{//¶ˆÚ“®
-			m_camera.posV.x -= sinf(m_camera.rot.y - D3DX_PI * 0.5f) * fMove;
-			m_camera.posV.z -= cosf(m_camera.rot.y - D3DX_PI * 0.5f) * fMove;
+			m_camera.posV.x += sinf(m_camera.rot.y - D3DX_PI * 0.5f) * fMove;
+			m_camera.posV.z += cosf(m_camera.rot.y - D3DX_PI * 0.5f) * fMove;
 			SetPosR();
 		}
 		if (pKeyboard->GetPress(DIK_D) == true)
 		{//‰EˆÚ“®
-			m_camera.posV.x -= sinf(m_camera.rot.y - D3DX_PI * -0.5f) * fMove;
-			m_camera.posV.z -= cosf(m_camera.rot.y - D3DX_PI * -0.5f) * fMove;
+			m_camera.posV.x += sinf(m_camera.rot.y - D3DX_PI * -0.5f) * fMove;
+			m_camera.posV.z += cosf(m_camera.rot.y - D3DX_PI * -0.5f) * fMove;
 			SetPosR();
 		}
 		if (pKeyboard->GetPress(DIK_W) == true)
 		{//‘OˆÚ“®
-			m_camera.posV.x += sinf(m_camera.rot.x + D3DX_PI) * sinf(m_camera.rot.y) * fMove;
+			m_camera.posV.x -= sinf(m_camera.rot.x + D3DX_PI) * sinf(m_camera.rot.y) * fMove;
 			m_camera.posV.y += cosf(m_camera.rot.x + D3DX_PI) * MOVE_SPEED;
-			m_camera.posV.z += sinf(m_camera.rot.x + D3DX_PI) * cosf(m_camera.rot.y) * fMove;
+			m_camera.posV.z -= sinf(m_camera.rot.x + D3DX_PI) * cosf(m_camera.rot.y) * fMove;
 			SetPosR();
 		}
 		if (pKeyboard->GetPress(DIK_S) == true)
 		{//ŒãˆÚ“®
-			m_camera.posV.x += sinf(m_camera.rot.x) * sinf(m_camera.rot.y) * fMove;
+			m_camera.posV.x -= sinf(m_camera.rot.x) * sinf(m_camera.rot.y) * fMove;
 			m_camera.posV.y += cosf(m_camera.rot.x) * MOVE_SPEED;
-			m_camera.posV.z += sinf(m_camera.rot.x) * cosf(m_camera.rot.y) * fMove;
+			m_camera.posV.z -= sinf(m_camera.rot.x) * cosf(m_camera.rot.y) * fMove;
 			SetPosR();
 		}
 		if (pKeyboard->GetPress(DIK_E) == true)
@@ -282,9 +282,9 @@ void CCamera::SetPosR(void)
 {
 	m_camera.posR =
 	{
-		m_camera.posV.x - sinf(m_camera.rot.x) * sinf(m_camera.rot.y) * m_camera.fLength,
+		m_camera.posV.x - sinf(m_camera.rot.x) * sinf(m_camera.rot.y + D3DX_PI) * m_camera.fLength,
 		m_camera.posV.y - cosf(m_camera.rot.x) * m_camera.fLength,
-		m_camera.posV.z - sinf(m_camera.rot.x) * cosf(m_camera.rot.y) * m_camera.fLength
+		m_camera.posV.z - sinf(m_camera.rot.x) * cosf(m_camera.rot.y + D3DX_PI) * m_camera.fLength
 	};
 }
 

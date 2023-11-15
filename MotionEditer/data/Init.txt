@@ -1,1 +1,1 @@
-data\\motion.txt
+data\\MOTION\\motionPotatoman00.txt

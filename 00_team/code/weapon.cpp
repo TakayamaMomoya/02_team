@@ -70,7 +70,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			char* apPath[CWeapon::TYPE_MAX] =
 			{
 				"data\\MODEL\\weapon\\magnum.x",
-				"data\\MODEL\\weapon\\katana.x",
+				"data\\MODEL\\weapon\\mac10.x",
 			};
 
 			int nIdx = CModel::Load(apPath[type]);
@@ -125,9 +125,6 @@ void CWeapon::Update(void)
 	// 継承クラスの更新
 	CObjectX::Update();
 
-	// プレイヤーの手とマトリックスをかけ合わせる
-	FollowPlayerHand();
-
 	if (m_info.nCntShot > 0)
 	{
 		m_info.nCntShot--;
@@ -156,7 +153,7 @@ void CWeapon::FollowPlayerHand(void)
 		{
 			D3DXMATRIX *pMtx = GetMatrix();
 			D3DXMATRIX *pMtxPart = pParts->GetMatrix();
-			D3DXVECTOR3 offset = { 0.0f,0.0f,0.0f };
+			D3DXVECTOR3 offset = { -15.0f,0.0f,0.0f };
 
 			pUniversal->SetOffSet(pMtx, *pMtxPart, offset);
 		}

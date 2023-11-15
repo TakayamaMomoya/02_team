@@ -27,6 +27,7 @@ CParticle::CParticle(int nPriority) : CObject(nPriority)
 	m_type = TYPE_NONE;
 	m_pPosOwner = nullptr;
 	m_nPriorityEffect = 0;
+	m_nLife = 0;
 
 	SetType(TYPE_PARTICLE);
 }
@@ -217,7 +218,7 @@ void CParticle::Load(void)
 		while (true)
 		{
 			// 文字読み込み
-			fscanf(pFile, "%s", &cTemp[0]);
+			(void)fscanf(pFile, "%s", &cTemp[0]);
 
 			if (strcmp(cTemp, "PARTICLESET") == 0)
 			{// 読込開始
@@ -232,7 +233,7 @@ void CParticle::Load(void)
 				while (true)
 				{
 					// 文字読み込み
-					fscanf(pFile, "%s", &cTemp[0]);
+					(void)fscanf(pFile, "%s", &cTemp[0]);
 
 					if (strcmp(cTemp, "END_PARTICLESET") == 0)
 					{// パーティクル情報終了条件
@@ -241,79 +242,79 @@ void CParticle::Load(void)
 
 					if (strcmp(cTemp, "LIFE_PARTICLE") == 0)
 					{// パーティクル寿命取得
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf(pFile, "%d", &pInfo->nLife);
+						(void)fscanf(pFile, "%d", &pInfo->nLife);
 					}
 
 					if (strcmp(cTemp, "NUM_EFFECT") == 0)
 					{// エフェクト数取得
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf(pFile, "%d", &pInfo->nNumEffect);
+						(void)fscanf(pFile, "%d", &pInfo->nNumEffect);
 					}
 
 					if (strcmp(cTemp, "LIFE_EFFECT") == 0)
 					{// エフェクト寿命取得
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf(pFile, "%d", &pInfo->nLifeEffect);
+						(void)fscanf(pFile, "%d", &pInfo->nLifeEffect);
 					}
 
 					if (strcmp(cTemp, "RADIUS_EFFECT") == 0)
 					{// エフェクト半径取得
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf(pFile, "%f", &pInfo->fRadiusEffect);
+						(void)fscanf(pFile, "%f", &pInfo->fRadiusEffect);
 					}
 
 					if (strcmp(cTemp, "SPEED_EFFECT") == 0)
 					{// エフェクト速度取得
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf(pFile, "%f", &pInfo->fSpeed);
+						(void)fscanf(pFile, "%f", &pInfo->fSpeed);
 					}
 
 					if (strcmp(cTemp, "GRAVITY") == 0)
 					{// 重力取得
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf(pFile, "%f", &pInfo->fGravity);
+						(void)fscanf(pFile, "%f", &pInfo->fGravity);
 					}
 
 					if (strcmp(cTemp, "DECREASE") == 0)
 					{// 重力取得
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf(pFile, "%f", &pInfo->fDecrease);
+						(void)fscanf(pFile, "%f", &pInfo->fDecrease);
 					}
 
 					if (strcmp(cTemp, "RANGEROT") == 0)
 					{// 向きのランダム幅取得
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf(pFile, "%f", &pInfo->fRangeRot);
+						(void)fscanf(pFile, "%f", &pInfo->fRangeRot);
 					}
 
 					if (strcmp(cTemp, "IS_ADD") == 0)
 					{// 加算合成かどうか取得
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf(pFile, "%d", &pInfo->nAdd);
+						(void)fscanf(pFile, "%d", &pInfo->nAdd);
 					}
 
 					if (strcmp(cTemp, "IS_ROT") == 0)
 					{// 加算合成かどうか取得
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf(pFile, "%d", &pInfo->nRot);
+						(void)fscanf(pFile, "%d", &pInfo->nRot);
 					}
 
 					if (strcmp(cTemp, "IS_TURN") == 0)
 					{// 加算合成かどうか取得
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
 						if (strcmp(cTemp, "1") == 0)
 						{
@@ -327,12 +328,12 @@ void CParticle::Load(void)
 
 					if (strcmp(cTemp, "COLOR") == 0)
 					{// 色取得
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						fscanf(pFile, "%f", &pInfo->col.r);
-						fscanf(pFile, "%f", &pInfo->col.g);
-						fscanf(pFile, "%f", &pInfo->col.b);
-						fscanf(pFile, "%f", &pInfo->col.a);
+						(void)fscanf(pFile, "%f", &pInfo->col.r);
+						(void)fscanf(pFile, "%f", &pInfo->col.g);
+						(void)fscanf(pFile, "%f", &pInfo->col.b);
+						(void)fscanf(pFile, "%f", &pInfo->col.a);
 					}
 				}
 
@@ -348,5 +349,9 @@ void CParticle::Load(void)
 
 		// ファイルを閉じる
 		fclose(pFile);
+	}
+	else
+	{
+		assert(("パーティクル情報読み込みに失敗", false));
 	}
 }
