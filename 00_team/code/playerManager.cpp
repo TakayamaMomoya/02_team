@@ -21,7 +21,9 @@ CPlayerManager *CPlayerManager::m_pPlayerManager = nullptr;	// 自身のポインタ
 //=====================================================
 CPlayerManager::CPlayerManager()
 {
+	m_nNumPlayer = 0;
 	ZeroMemory(&m_apPlayer[0], sizeof(m_apPlayer));
+	ZeroMemory(&m_anIDJoypad[0], sizeof(m_anIDJoypad));
 }
 
 //=====================================================
@@ -51,31 +53,37 @@ CPlayerManager *CPlayerManager::Create(void)
 //=====================================================
 // プレイヤー生成処理
 //=====================================================
-void CPlayerManager::CreatePlayer(int nNumPlayer)
+void CPlayerManager::CreatePlayer(void)
 {
-	for (int i = 0; i < nNumPlayer; i++)
+	for (int i = 0; i < NUM_PLAYER; i++)
 	{
-		CPlayer *pPlayer = nullptr;
-
-		pPlayer = CPlayer::Create();
-
-		if (pPlayer != nullptr)
+		if(m_anIDJoypad[i] != -1)
 		{
-			pPlayer->SetID(i);
+			CPlayer* pPlayer = nullptr;
 
-			m_apPlayer[i] = pPlayer;
+			pPlayer = CPlayer::Create();
 
-			pPlayer->SetPosition(D3DXVECTOR3(50.0f * i,0.0f,0.0f));
+			if (pPlayer != nullptr)
+			{
+				pPlayer->SetID(m_nNumPlayer);
+				pPlayer->SetIDJoypad(m_anIDJoypad[i]);
+
+				pPlayer->SetPosition(D3DXVECTOR3(50.0f * m_nNumPlayer, 0.0f, 0.0f));
+
+				m_apPlayer[m_nNumPlayer] = pPlayer;
+
+				m_nNumPlayer++;
+			}
 		}
 	}
 }
 
 //=====================================================
-// プレイヤーを単体で生成する処理
+// プレイヤー登録処理
 //=====================================================
-void CPlayerManager::CreateOnePlayer(int nIdx)
+void CPlayerManager::BindPlayer(int nIdxJoypad)
 {
-	if (nIdx < 0 || nIdx >= NUM_PLAYER)
+	if (nIdxJoypad < 0 || nIdxJoypad >= NUM_PLAYER)
 	{
 		return;
 	}
@@ -86,11 +94,16 @@ void CPlayerManager::CreateOnePlayer(int nIdx)
 
 	if (pPlayer != nullptr)
 	{
-		pPlayer->SetID(nIdx);
+		pPlayer->SetID(m_nNumPlayer);
+		pPlayer->SetIDJoypad(nIdxJoypad);
 
-		m_apPlayer[nIdx] = pPlayer;
+		m_apPlayer[m_nNumPlayer] = pPlayer;
 
-		pPlayer->SetPosition(D3DXVECTOR3(50.0f * nIdx, 0.0f, 0.0f));
+		m_anIDJoypad[m_nNumPlayer] = nIdxJoypad;
+
+		pPlayer->SetPosition(D3DXVECTOR3(50.0f * m_nNumPlayer, 0.0f, 0.0f));
+
+		m_nNumPlayer++;
 	}
 }
 
@@ -99,6 +112,12 @@ void CPlayerManager::CreateOnePlayer(int nIdx)
 //=====================================================
 HRESULT CPlayerManager::Init(void)
 {
+	// プレイヤーの番号の初期設定
+	for (int i = 0; i < NUM_PLAYER; i++)
+	{
+		m_anIDJoypad[i] = -1;
+	}
+
 	return S_OK;
 }
 
@@ -117,7 +136,7 @@ void CPlayerManager::Uninit(void)
 		}
 	}
 
-	Release();
+	delete this;
 }
 
 //=====================================================
@@ -126,20 +145,6 @@ void CPlayerManager::Uninit(void)
 void CPlayerManager::ReleasePlayer(int nIdx)
 {
 	m_apPlayer[nIdx] = nullptr;
-}
 
-//=====================================================
-// 更新処理
-//=====================================================
-void CPlayerManager::Update(void)
-{
-
-}
-
-//=====================================================
-// 描画処理
-//=====================================================
-void CPlayerManager::Draw(void)
-{
-
+	m_nNumPlayer--;
 }
