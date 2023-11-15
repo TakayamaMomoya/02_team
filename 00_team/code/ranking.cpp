@@ -320,7 +320,7 @@ void CRanking::Save(void)
 	}
 	else
 	{//ファイルが開けなかった場合
-
+		assert(("ランキング保存に失敗", false));
 	}
 }
 
@@ -346,5 +346,6 @@ void CRanking::Load(void)
 	}
 	else
 	{//ファイルが開けなかった場合
+		assert(("ランキング読み込みに失敗", false));
 	}
 }

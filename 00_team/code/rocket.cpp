@@ -1,6 +1,6 @@
 //*****************************************************
 //
-// ゴールの処理[goal.cpp]
+// ロケットの処理[rocket.cpp]
 // Author:髙山桃也
 //
 //*****************************************************
@@ -8,40 +8,45 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "goal.h"
+#include "rocket.h"
 #include "manager.h"
 #include "renderer.h"
 #include "collision.h"
 #include "fade.h"
-#include "goalTimer.h"
 #include "playerManager.h"
 #include "player.h"
 #include "result.h"
+#include "goal.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define INFO_PATH	"data\\TEXT\\goal.txt"	// ゴール情報のテキスト
+namespace
+{
+	const char* INFO_PATH = "data\\TEXT\\rocket.txt";	// ロケット情報のテキスト
+	const int MAX_PROGRESS = 3;	// 最大の進行状況
+	const int MIN_PROGRESS = 0;	// 最大の進行状況
+}
 
 //*****************************************************
 // 静的メンバ変数宣言
 //*****************************************************
-CGoal *CGoal::m_pGoal = nullptr;	// 自身のポインタ
+CRocket *CRocket::m_pRocket = nullptr;	// 自身のポインタ
 
 //=====================================================
 // コンストラクタ
 //=====================================================
-CGoal::CGoal(int nPriority) : CObjectX(nPriority)
+CRocket::CRocket(int nPriority) : CObjectX(nPriority)
 {
-	m_bFinish = false;
 	m_fRadius = 0.0f;
-	m_pCollisionGoal = nullptr;
+	m_nProgress = 0;
+	m_pCollisionRocket = nullptr;
 }
 
 //=====================================================
 // デストラクタ
 //=====================================================
-CGoal::~CGoal()
+CRocket::~CRocket()
 {
 
 }
@@ -49,38 +54,38 @@ CGoal::~CGoal()
 //=====================================================
 // 生成処理
 //=====================================================
-CGoal *CGoal::Create()
+CRocket *CRocket::Create()
 {
-	if (m_pGoal == nullptr)
+	if (m_pRocket == nullptr)
 	{
-		m_pGoal = new CGoal;
+		m_pRocket = new CRocket;
 
-		if (m_pGoal != nullptr)
+		if (m_pRocket != nullptr)
 		{
 			// 初期化
-			m_pGoal->Init();
+			m_pRocket->Init();
 		}
 	}
 
-	return m_pGoal;
+	return m_pRocket;
 }
 
 //=====================================================
 // 初期化処理
 //=====================================================
-HRESULT CGoal::Init(void)
+HRESULT CRocket::Init(void)
 {
 	// 継承クラスの初期化
 	CObjectX::Init();
 
-	if (m_pCollisionGoal == nullptr)
+	if (m_pCollisionRocket == nullptr)
 	{// 球の当たり判定生成
-		m_pCollisionGoal = CCollisionSphere::Create(CCollision::TAG_GOAL, CCollision::TYPE_SPHERE, this);
+		m_pCollisionRocket = CCollisionSphere::Create(CCollision::TAG_ROCKET, CCollision::TYPE_SPHERE, this);
 
-		if (m_pCollisionGoal != nullptr)
+		if (m_pCollisionRocket != nullptr)
 		{// 情報の設定
-			m_pCollisionGoal->SetPosition(GetPosition());
-			m_pCollisionGoal->SetRadius(5);
+			m_pCollisionRocket->SetPosition(GetPosition());
+			m_pCollisionRocket->SetRadius(5);
 		}
 	}
 
@@ -93,7 +98,7 @@ HRESULT CGoal::Init(void)
 //=====================================================
 // 読み込み処理
 //=====================================================
-void CGoal::Load(void)
+void CRocket::Load(void)
 {
 	// 変数宣言
 	char cTemp[256];
@@ -107,9 +112,9 @@ void CGoal::Load(void)
 		while (true)
 		{
 			// 文字読み込み
-			(void)fscanf(pFile, "%s", &cTemp[0]);
+			(void)(void)fscanf(pFile, "%s", &cTemp[0]);
 
-			if (strcmp(cTemp, "GOALSET") == 0)
+			if (strcmp(cTemp, "ROCKETSET") == 0)
 			{// パラメーター読込開始
 				while (true)
 				{
@@ -119,7 +124,7 @@ void CGoal::Load(void)
 					// 基底パラメーター読み込み
 					ApplyInfo(pFile, &cTemp[0]);
 
-					if (strcmp(cTemp, "END_GOALSET") == 0)
+					if (strcmp(cTemp, "END_ROCKETSET") == 0)
 					{// パラメーター読込終了
 						break;
 					}
@@ -137,14 +142,14 @@ void CGoal::Load(void)
 	}
 	else
 	{
-		assert(("ゴール情報読み込みに失敗", false));
+		assert(("ロケット情報の読み込みに失敗", false));
 	}
 }
 
 //=====================================================
 // 情報反映
 //=====================================================
-void CGoal::ApplyInfo(FILE* pFile, char* pTemp)
+void CRocket::ApplyInfo(FILE* pFile, char* pTemp)
 {
 	if (strcmp(pTemp, "POS") == 0)
 	{// 位置
@@ -159,9 +164,9 @@ void CGoal::ApplyInfo(FILE* pFile, char* pTemp)
 
 		SetPosition(pos);
 
-		if (m_pCollisionGoal != nullptr)
+		if (m_pCollisionRocket != nullptr)
 		{// 当たり判定の位置設定
-			m_pCollisionGoal->SetPosition(pos);
+			m_pCollisionRocket->SetPosition(pos);
 		}
 	}
 
@@ -187,9 +192,9 @@ void CGoal::ApplyInfo(FILE* pFile, char* pTemp)
 
 		m_fRadius = fRadius;
 
-		if (m_pCollisionGoal != nullptr)
+		if (m_pCollisionRocket != nullptr)
 		{// 当たり判定の位置設定
-			m_pCollisionGoal->SetRadius(fRadius);
+			m_pCollisionRocket->SetRadius(fRadius);
 		}
 	}
 }
@@ -197,15 +202,15 @@ void CGoal::ApplyInfo(FILE* pFile, char* pTemp)
 //=====================================================
 // 終了処理
 //=====================================================
-void CGoal::Uninit(void)
+void CRocket::Uninit(void)
 {
-	if (m_pCollisionGoal != nullptr)
+	if (m_pCollisionRocket != nullptr)
 	{
-		m_pCollisionGoal->Uninit();
-		m_pCollisionGoal = nullptr;
+		m_pCollisionRocket->Uninit();
+		m_pCollisionRocket = nullptr;
 	}
 
-	m_pGoal = nullptr;
+	m_pRocket = nullptr;
 
 	// 継承クラスの終了
 	CObjectX::Uninit();
@@ -214,81 +219,44 @@ void CGoal::Uninit(void)
 //=====================================================
 // 更新処理
 //=====================================================
-void CGoal::Update(void)
+void CRocket::Update(void)
 {
 	// 継承クラスの更新
 	CObjectX::Update();
-
-	// プレイヤーの検出
-	DetectPlayer();
-}
-
-//=====================================================
-// プレイヤーの検出
-//=====================================================
-void CGoal::DetectPlayer(void)
-{
-	CGoalTimer *pGoalTimer = CGoalTimer::GetInstance();
-
-	if (pGoalTimer != nullptr)
-	{
-		return;
-	}
-
-	if (m_pCollisionGoal != nullptr)
-	{
-		if (m_pCollisionGoal->SphereCollision(CCollision::TAG_PLAYER))
-		{
-			// ゴールタイマーの生成
-			CGoalTimer::Create();
-		}
-	}
 }
 
 //=====================================================
 // 描画処理
 //=====================================================
-void CGoal::Draw(void)
+void CRocket::Draw(void)
 {
 	// 継承クラスの描画
 	CObjectX::Draw();
 }
 
 //=====================================================
-// 制限時間の終了
+// 進行状況の加算
 //=====================================================
-void CGoal::DeadLine(void)
+void CRocket::AddProgress(int nProgress)
 {
-	m_bFinish = true;
+	// 進行状況加算
+	m_nProgress += nProgress;
 
-	// リザルトの生成
-	CResult *pResult = CResult::Create();
-
-	// 範囲内のプレイヤー検出
-	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
-
-	if (pPlayerManager != nullptr)
+	// 最大、最小値の補正
+	if (m_nProgress < MIN_PROGRESS)
 	{
-		for (int i = 0;i < NUM_PLAYER;i++)
-		{
-			CPlayer *pPlayer = pPlayerManager->GetPlayer(i);
-
-			if (pPlayer != nullptr)
-			{
-				if (pResult != nullptr)
-				{// リザルトにプレイヤー情報を渡す
-					// 座標の差分から距離を計算
-					D3DXVECTOR3 pos = GetPosition();
-					D3DXVECTOR3 posPlayer = pPlayer->GetPosition();
-					D3DXVECTOR3 vecDiff = posPlayer - pos;
-					float fDiff = D3DXVec3Length(&vecDiff);
-					
-					if (fDiff < m_fRadius)
-					{
-						pResult->SetSurvived(pPlayer);
-					}
-				}
-			}
-		}
+		m_nProgress = MIN_PROGRESS;
 	}
+	if (m_nProgress >= MAX_PROGRESS)
+	{
+		m_nProgress = MAX_PROGRESS;
+
+		// ゴールの生成
+		CGoal *pGoal = CGoal::Create();
+
+		D3DXVECTOR3 pos = GetPosition();
+		pGoal->SetPosition(pos);
+	}
+
+	// ロケットモデルの変化
 }

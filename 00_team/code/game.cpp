@@ -24,10 +24,11 @@
 #include "playerManager.h"
 #include "texture.h"
 #include "skybox.h"
-#include "item.h"
+#include "itemWeapon.h"
+#include "itemRepair.h"
 #include "weaponManager.h"
 #include "enemyManager.h"
-#include "goal.h"
+#include "rocket.h"
 #include "edit.h"
 
 //*****************************************************
@@ -47,6 +48,7 @@ CGame *CGame::m_pGame = nullptr;	// 自身のポインタ
 CGame::CGame()
 {
 	m_nCntState = 0;
+	m_bStop = false;
 }
 
 //=====================================================
@@ -88,17 +90,20 @@ HRESULT CGame::Init(void)
 	CWeaponManager::Create();
 
 	// アイテム
-	CItem *pItem = CItem::Create(CItem::TYPE_MAGNUM);
+	CItemWeapon *pItem = CItemWeapon::Create(CWeapon::TYPE_MAGNUM);
 	pItem->SetPosition(D3DXVECTOR3(0.0f,0.0f,-40.0f));
 
-	pItem = CItem::Create(CItem::TYPE_MACHINEGUN);
+	pItem = CItemWeapon::Create(CWeapon::TYPE_MACHINEGUN);
 	pItem->SetPosition(D3DXVECTOR3(40.0f, 0.0f, -40.0f));
+
+	CItemRepair *pRepair = CItemRepair::Create();
+	pRepair->SetPosition(D3DXVECTOR3(40.0f, 0.0f, 300.0f));
 
 	// 敵マネージャーの生成
 	CEnemyManager *pEnemyManager = CEnemyManager::Create();
 
-	// ゴールの生成
-	CGoal::Create();
+	// ロケットの生成
+	CRocket::Create();
 
 #ifdef _DEBUG
 	// エディットの生成
@@ -167,7 +172,7 @@ void CGame::UpdateCamera(void)
 		if (m_state == STATE_NORMAL)
 		{
 			// 操作
-			pCamera->FollowPlayer();
+			//pCamera->FollowPlayer();
 		}
 	}
 	else
@@ -219,6 +224,12 @@ void CGame::Debug(void)
 	if (pKeyboard->GetTrigger(DIK_F))
 	{
 		m_bStop = m_bStop ? false : true;
+	}
+
+	if (pKeyboard->GetTrigger(DIK_G))
+	{
+		CItemRepair *pRepair = CItemRepair::Create();
+		pRepair->SetPosition(D3DXVECTOR3(40.0f, 0.0f, 300.0f));
 	}
 }
 

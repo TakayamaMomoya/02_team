@@ -44,6 +44,8 @@
     <ClCompile Include="code\inputManager.cpp" />
     <ClCompile Include="code\inputmouse.cpp" />
     <ClCompile Include="code\item.cpp" />
+    <ClCompile Include="code\itemRepair.cpp" />
+    <ClCompile Include="code\itemWeapon.cpp" />
     <ClCompile Include="code\light.cpp" />
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\manager.cpp" />
@@ -63,6 +65,7 @@
     <ClCompile Include="code\ranking.cpp" />
     <ClCompile Include="code\renderer.cpp" />
     <ClCompile Include="code\result.cpp" />
+    <ClCompile Include="code\rocket.cpp" />
     <ClCompile Include="code\scene.cpp" />
     <ClCompile Include="code\score.cpp" />
     <ClCompile Include="code\select.cpp" />
@@ -106,6 +109,8 @@
     <ClInclude Include="code\inputManager.h" />
     <ClInclude Include="code\inputmouse.h" />
     <ClInclude Include="code\item.h" />
+    <ClInclude Include="code\itemRepair.h" />
+    <ClInclude Include="code\itemWeapon.h" />
     <ClInclude Include="code\light.h" />
     <ClInclude Include="code\main.h" />
     <ClInclude Include="code\manager.h" />
@@ -125,6 +130,7 @@
     <ClInclude Include="code\ranking.h" />
     <ClInclude Include="code\renderer.h" />
     <ClInclude Include="code\result.h" />
+    <ClInclude Include="code\rocket.h" />
     <ClInclude Include="code\scene.h" />
     <ClInclude Include="code\score.h" />
     <ClInclude Include="code\select.h" />
@@ -146,19 +152,19 @@
     <ProjectGuid>{35541F49-3336-48EE-AB85-2AECEB818A54}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>My00_team</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -225,6 +231,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <DisableSpecificWarnings>;26812;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

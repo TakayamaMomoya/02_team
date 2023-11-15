@@ -110,7 +110,7 @@ CEnemy *CEnemyManager::CreateEnemy(D3DXVECTOR3 pos, CEnemy::TYPE type)
 HRESULT CEnemyManager::Init(void)
 {
 	// 読込処理
-	Load();
+	//Load();
 
 	return S_OK;
 }
@@ -132,7 +132,7 @@ void CEnemyManager::Load(void)
 		while (true)
 		{
 			// 文字読み込み
-			fscanf(pFile, "%s", &cTemp[0]);
+			(void)fscanf(pFile, "%s", &cTemp[0]);
 
 			if (strcmp(cTemp, "ENEMYSET") == 0)
 			{
@@ -142,23 +142,23 @@ void CEnemyManager::Load(void)
 				while (true)
 				{
 					// 文字読み込み
-					fscanf(pFile, "%s", &cTemp[0]);
+					(void)fscanf(pFile, "%s", &cTemp[0]);
 
 					if (strcmp(cTemp, "POS") == 0)
 					{// 位置
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 
 						for (int nCntPos = 0; nCntPos < 3; nCntPos++)
 						{
-							fscanf(pFile, "%f", &pos[nCntPos]);
+							(void)fscanf(pFile, "%f", &pos[nCntPos]);
 						}
 					}
 
 					if (strcmp(cTemp, "TYPE") == 0)
 					{// 種類
-						fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
 						
-						fscanf(pFile, "%d", &type);
+						(void)fscanf(pFile, "%d", &type);
 					}
 
 					if (strcmp(cTemp, "END_ENEMYSET") == 0)
@@ -178,6 +178,10 @@ void CEnemyManager::Load(void)
 
 		// ファイルを閉じる
 		fclose(pFile);
+	}
+	else
+	{
+		assert(("敵配置データの読み込みに失敗",false));
 	}
 }
 
@@ -226,7 +230,7 @@ void CEnemyManager::Update(void)
 		posCenter.z += nPosZ;
 
 		// 敵スポーン
-		CreateEnemy(posCenter, CEnemy::TYPE_NORMAL);
+		//CreateEnemy(posCenter, CEnemy::TYPE_NORMAL);
 
 		m_nCntSpawn = 0;
 	}

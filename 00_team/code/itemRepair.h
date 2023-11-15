@@ -1,17 +1,17 @@
 //*****************************************************
 //
-// プレイヤーマネージャー[PlayerManager.h]
+// 修理アイテムの処理[ItemRepair.h]
 // Author:髙山桃也
 //
 //*****************************************************
 
-#ifndef _PLAYERMANAGER_H_
-#define _PLAYERMANAGER_H_
+#ifndef _ITEMREPIR_H_
+#define _ITEMREPIR_H_
 
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "object.h"
+#include "item.h"
 
 //*****************************************************
 // 前方宣言
@@ -21,27 +21,27 @@ class CPlayer;
 //*****************************************************
 // クラスの定義
 //*****************************************************
-class CPlayerManager : public CObject
+class CItemRepair : public CItem
 {
 public:
-	CPlayerManager();	// コンストラクタ
-	~CPlayerManager();	// デストラクタ
+	CItemRepair(int nPriority = 5);	// コンストラクタ
+	~CItemRepair();	// デストラクタ
 
-	static CPlayerManager *Create(void);
-	void CreatePlayer(int nNumPlayer);
-	void CreateOnePlayer(int nIdx);
+	static CItemRepair *Create(void);
 	HRESULT Init(void);
 	void Uninit(void);
-	void ReleasePlayer(int nIdx);
 	void Update(void);
 	void Draw(void);
-	CPlayer *GetPlayer(int nIdx) { return m_apPlayer[nIdx]; }
-	static CPlayerManager *GetInstance(void) { return m_pPlayerManager; }
 
 private:
-	CPlayer *m_apPlayer[NUM_PLAYER];	// プレイヤーの配列
+	void Load(void);
+	void GetItem(CObject* pObj);
+	void CollisionRocket(void);
+	void CheckPlayerAlive(void);
+	void FollowPlayerHand(void);
 
-	static CPlayerManager *m_pPlayerManager;	// 自身のポインタ
+	CPlayer *m_pPlayer;
 };
 
 #endif
+

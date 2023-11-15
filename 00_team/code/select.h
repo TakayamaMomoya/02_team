@@ -16,8 +16,8 @@
 //*****************************************************
 // 前方宣言
 //*****************************************************
-class CMenu;
 class CObject2D;
+class CPlayerManager;
 
 //*****************************************************
 // クラスの定義
@@ -41,10 +41,26 @@ private:
 		START_MAX
 	};
 
-	void ManageStart(void);
+	enum MENU
+	{
+		MENU_FRAME = 0,
+		MENU_NUMBER,
+		MENU_MAX
+	};
 
-	CObject2D *m_pStart;	// スタート表示のポインタ
+	struct MenuData
+	{
+		CObject2D* pMenu2D[MENU_MAX];
+		D3DXCOLOR col;
+	};
+
+	void MenuInit(void);
+	void MenuUpdate(void);
+
+	MenuData m_aMenuData[NUM_PLAYER];	//選択メニュー
+	CPlayerManager* m_pPlayerManager;	//プレイヤー管理
 	STATE m_state;	// 状態
+	bool bJoin[NUM_PLAYER];	//参加したかどうか
 };
 
 #endif

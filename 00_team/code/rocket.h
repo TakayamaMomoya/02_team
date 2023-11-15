@@ -1,47 +1,51 @@
 //*****************************************************
 //
-// プレイヤーマネージャー[PlayerManager.h]
+// ロケットの処理[rocket.h]
 // Author:髙山桃也
 //
 //*****************************************************
 
-#ifndef _PLAYERMANAGER_H_
-#define _PLAYERMANAGER_H_
+#ifndef _ROCKET_H_
+#define _ROCKET_H_
 
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "object.h"
+#include "objectX.h"
+#include <stdio.h>
 
 //*****************************************************
 // 前方宣言
 //*****************************************************
-class CPlayer;
+class CCollisionSphere;
 
 //*****************************************************
 // クラスの定義
 //*****************************************************
-class CPlayerManager : public CObject
+class CRocket : public CObjectX
 {
 public:
-	CPlayerManager();	// コンストラクタ
-	~CPlayerManager();	// デストラクタ
+	CRocket(int nPriority = 3);	// コンストラクタ
+	~CRocket();	// デストラクタ
 
-	static CPlayerManager *Create(void);
-	void CreatePlayer(int nNumPlayer);
-	void CreateOnePlayer(int nIdx);
+	static CRocket *Create(void);
+	static CRocket *GetInstance(void) { return m_pRocket; }
 	HRESULT Init(void);
 	void Uninit(void);
-	void ReleasePlayer(int nIdx);
 	void Update(void);
 	void Draw(void);
-	CPlayer *GetPlayer(int nIdx) { return m_apPlayer[nIdx]; }
-	static CPlayerManager *GetInstance(void) { return m_pPlayerManager; }
+	int GetProgress(void) { return m_nProgress; }
+	void AddProgress(int nProgress);
 
 private:
-	CPlayer *m_apPlayer[NUM_PLAYER];	// プレイヤーの配列
+	void Load(void);
+	void ApplyInfo(FILE *pFile,char *pTemp);
 
-	static CPlayerManager *m_pPlayerManager;	// 自身のポインタ
+	float m_fRadius;	// 判定の半径
+	int m_nProgress;	// 進行状況
+	CCollisionSphere *m_pCollisionRocket;	// ゴール判定
+	static CRocket *m_pRocket;	// 自身のポインタ
 };
 
 #endif
+

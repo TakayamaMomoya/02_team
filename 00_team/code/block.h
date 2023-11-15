@@ -55,6 +55,8 @@ public:
 	//void Hit(float fDamage);
 
 private:
+	void SwapVtx(void);
+
 	TYPE m_type;
 	static int *m_pIdxObject;	// モデルのタイプ番号のポインタ
 	static CBlock *m_apBlock[NUM_OBJECT];	// ブロックの配列
