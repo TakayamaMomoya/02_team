@@ -73,6 +73,30 @@ void CPlayerManager::CreatePlayer(int nNumPlayer)
 //=====================================================
 // ‰Šú‰»ˆ—
 //=====================================================
+void CPlayerManager::CreatePlayer1(int nNumPlayer)
+{
+	if (nNumPlayer < 0 || nNumPlayer > NUM_PLAYER)
+	{
+		return;
+	}
+
+	CPlayer* pPlayer = nullptr;
+
+	pPlayer = CPlayer::Create();
+
+	if (pPlayer != nullptr)
+	{
+		pPlayer->SetID(nNumPlayer);
+
+		m_apPlayer[nNumPlayer] = pPlayer;
+
+		pPlayer->SetPosition(D3DXVECTOR3(50.0f * nNumPlayer, 0.0f, 0.0f));
+	}
+}
+
+//=====================================================
+// ‰Šú‰»ˆ—
+//=====================================================
 HRESULT CPlayerManager::Init(void)
 {
 	return S_OK;
