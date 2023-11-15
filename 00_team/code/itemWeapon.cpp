@@ -84,7 +84,7 @@ void CItemWeapon::Update(void)
 //=====================================================
 // ƒAƒCƒeƒ€“üè‚Ìˆ—
 //=====================================================
-void CItemWeapon::GetItem(CObject *pObj)
+void CItemWeapon::Interact(CObject *pObj)
 {
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 

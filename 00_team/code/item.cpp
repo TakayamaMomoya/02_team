@@ -118,7 +118,7 @@ void CItem::Update(void)
 			CObject *pObj = m_pCollisionSphere->GetOther();
 
 			// アイテム入手処理
-			GetItem(pObj);
+			Interact(pObj);
 		}
 		else
 		{
@@ -134,7 +134,7 @@ void CItem::Update(void)
 //=====================================================
 // アイテム入手時の処理
 //=====================================================
-void CItem::GetItem(CObject *pObj)
+void CItem::Interact(CObject *pObj)
 {
 
 }

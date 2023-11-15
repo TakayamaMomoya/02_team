@@ -41,7 +41,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	static CItem *Create(void);
-	virtual void GetItem(CObject* pObj);
+	virtual void Interact(CObject* pObj);
 	CCollisionSphere *GetCollisionSphere(void) { return m_pCollisionSphere; }
 
 private:

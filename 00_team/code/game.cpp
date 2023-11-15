@@ -170,7 +170,7 @@ void CGame::UpdateCamera(void)
 
 	if (m_bStop == false)
 	{
-		if (m_state == STATE_ESCAPE)
+		if (m_state == STATE_ESCAPE || m_state == STATE_RESULT)
 		{
 			pCamera->UpdateResult();
 		}
