@@ -16,6 +16,7 @@
 #include "game.h"
 #include "player.h"
 #include "number.h"
+#include "inputjoypad.h"
 
 //*****************************************************
 // íËêîíËã`
@@ -174,7 +175,26 @@ void CResult::Update(void)
 //====================================================
 void CResult::Input(void)
 {
+	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
 
+	if (pJoypad == nullptr)
+	{
+		return;
+	}
+
+	for (int i = 0; i < NUM_PLAYER; i++)
+	{
+		if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, i))
+		{
+			// ÉQÅ[ÉÄÇèIóπèÛë‘Ç…Ç∑ÇÈ
+			CGame *pGame = CGame::GetInstance();
+
+			if (pGame != nullptr)
+			{
+				pGame->SetState(CGame::STATE::STATE_END);
+			}
+		}
+	}
 }
 
 //====================================================
