@@ -185,7 +185,7 @@ void CItemRepair::FollowPlayerHand(void)
 //=====================================================
 // ƒAƒCƒeƒ€“üè‚Ìˆ—
 //=====================================================
-void CItemRepair::GetItem(CObject *pObj)
+void CItemRepair::Interact(CObject *pObj)
 {
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 

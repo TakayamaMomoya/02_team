@@ -53,6 +53,7 @@ private:
 
 	float m_fRadius;	// 判定の半径
 	float m_fSpeed;	// 上昇速度
+	float m_fDeleteHeight;	// 削除する高さ
 	int m_nProgress;	// 進行状況
 	STATE m_state;	// 状態
 	CCollisionSphere *m_pCollisionRocket;	// ゴール判定

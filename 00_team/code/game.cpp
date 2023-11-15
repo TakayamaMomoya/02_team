@@ -97,8 +97,15 @@ HRESULT CGame::Init(void)
 	pItem = CItemWeapon::Create(CWeapon::TYPE_MACHINEGUN);
 	pItem->SetPosition(D3DXVECTOR3(40.0f, 0.0f, -40.0f));
 
+	// 修理アイテム
 	CItemRepair *pRepair = CItemRepair::Create();
 	pRepair->SetPosition(D3DXVECTOR3(40.0f, 0.0f, 300.0f));
+
+	pRepair = CItemRepair::Create();
+	pRepair->SetPosition(D3DXVECTOR3(-40.0f, 0.0f, 300.0f));
+
+	pRepair = CItemRepair::Create();
+	pRepair->SetPosition(D3DXVECTOR3(-200.0f, 0.0f, 300.0f));
 
 	// 敵マネージャーの生成
 	CEnemyManager *pEnemyManager = CEnemyManager::Create();
@@ -170,7 +177,7 @@ void CGame::UpdateCamera(void)
 
 	if (m_bStop == false)
 	{
-		if (m_state == STATE_ESCAPE)
+		if (m_state == STATE_ESCAPE || m_state == STATE_RESULT)
 		{
 			pCamera->UpdateResult();
 		}
@@ -251,5 +258,27 @@ void CGame::Debug(void)
 //=====================================================
 void CGame::Draw(void)
 {
+#ifndef _DEBUG
 
+	return;
+
+#endif
+
+	CDebugProc *pDebugProc = CDebugProc::GetInstance();
+
+	if (pDebugProc == nullptr)
+	{
+		return;
+	}
+
+	char *apString[STATE::STATE_MAX] =
+	{
+		"NONE",
+		"NORMAL",
+		"ESCAPE",
+		"RESULT",
+		"END",
+	};
+
+	pDebugProc->Print("\nゲームの状態[%s]\n", apString[m_state]);
 }

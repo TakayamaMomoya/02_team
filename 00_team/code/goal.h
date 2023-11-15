@@ -36,6 +36,7 @@ public:
 	void Draw(void);
 	void DeadLine(void);
 	bool IsFinish(void) { return m_bFinish; }
+	void SetResult(void);
 
 private:
 	void Load(void);
