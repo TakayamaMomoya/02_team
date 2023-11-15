@@ -40,6 +40,7 @@ CRocket::CRocket(int nPriority) : CObjectX(nPriority)
 {
 	m_fRadius = 0.0f;
 	m_fSpeed = 0.0f;
+	m_fDeleteHeight = 0.0f;
 	m_nProgress = 0;
 	m_state = STATE_NONE;
 	m_pCollisionRocket = nullptr;
@@ -207,7 +208,13 @@ void CRocket::ApplyInfo(FILE* pFile, char* pTemp)
 		(void)fscanf(pFile, "%s", pTemp);
 
 		(void)fscanf(pFile, "%f", &m_fSpeed);
+	}
 
+	if (strcmp(pTemp, "DELETE_HEIGHT") == 0)
+	{// íœ‚·‚é‚‚³
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_fDeleteHeight);
 	}
 }
 
@@ -258,6 +265,11 @@ void CRocket::UpdateEscape(void)
 
 	SetPosition(pos);
 	SetMove(move);
+
+	if (pos.y >= m_fDeleteHeight)
+	{
+		Uninit();
+	}
 }
 
 //=====================================================
