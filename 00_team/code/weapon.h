@@ -37,7 +37,7 @@ public:
 		int nRapid;
 		int nCntShot;
 		int nIdxHand;
-		int nIdxPlayer;
+		int nIdxJoypad;
 		CPlayer *pPlayer;
 		TYPE type;
 	};
@@ -53,7 +53,7 @@ public:
 	virtual void Attack(void) {};
 	CPlayer *GetPlayer(void) { return m_info.pPlayer; }
 	void SetPlayer(CPlayer *pPlayer);
-	int GetID(void) { return m_info.nIdxPlayer; }
+	int GetID(void) { return m_info.nIdxJoypad; }
 	void SetBullet(int nBullet);
 	int GetBullet(void) { return m_info.nNumBullet; }
 	void SetMaxBullet(int nBullet);

@@ -19,6 +19,7 @@
 class CScore;
 class CTimer;
 class CGame;
+class CPlayer;
 
 //*****************************************************
 // ƒNƒ‰ƒX‚Ì’è‹`

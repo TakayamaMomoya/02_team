@@ -277,7 +277,7 @@ void CPlayer::InputMove(void)
 	}
 
 	// プレイヤーID取得
-	int nId = m_info.nID;
+	int nId = m_info.nIDJoypad;
 
 	D3DXVECTOR3 vecStickL = 
 	{// スティックのベクトル取得
@@ -344,7 +344,7 @@ bool CPlayer::InputInteract(void)
 	bool bTrigger = false;
 
 	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
-	int nID = GetID();
+	int nID = GetIDJoypad();
 
 	if (pJoyPad == nullptr)
 	{
@@ -373,7 +373,7 @@ void CPlayer::Aim(void)
 	}
 
 	// プレイヤーID取得
-	int nId = m_info.nID;
+	int nId = m_info.nIDJoypad;
 
 	D3DXVECTOR3 vecStickR =
 	{// スティックのベクトル取得

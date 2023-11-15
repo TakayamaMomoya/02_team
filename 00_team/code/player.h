@@ -37,6 +37,8 @@ public:
 	void Draw(void);
 	void SetWeapon(CWeapon::TYPE type);
 	void SetID(int nID) { m_info.nID = nID; }
+	void SetIDJoypad(int nID) { m_info.nIDJoypad = nID; }
+	int GetIDJoypad(void) { return m_info.nIDJoypad; }
 	int GetID(void) { return m_info.nID; }
 	void ReleaseWeapon(void) { m_info.pWeapon = nullptr; }
 	void Hit(float fDamage);
@@ -54,6 +56,7 @@ private:
 	struct SInfo
 	{
 		int nID;	// 番号
+		int nIDJoypad;	// コントローラーの番号
 		float fLife;	// 体力
 		float fTimerState;	// 状態遷移カウンタ
 		STATE state;	// 状態

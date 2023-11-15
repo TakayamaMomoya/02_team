@@ -80,11 +80,11 @@ HRESULT CGame::Init(void)
 	CSkybox::Create();
 
 	// プレイヤーの生成
-	CPlayerManager *pPlayerManger = CPlayerManager::Create();
+	CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();
 
 	if (pPlayerManger != nullptr)
 	{
-		pPlayerManger->CreatePlayer(2);
+		pPlayerManger->CreatePlayer();
 	}
 
 	// 武器マネージャーの生成
@@ -128,6 +128,14 @@ void CGame::Uninit(void)
 {
 	// オブジェクト全棄
 	CObject::ReleaseAll();
+
+	// プレイヤーマネージャーの終了
+	CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();
+
+	if (pPlayerManger != nullptr)
+	{
+		pPlayerManger->Uninit();
+	}
 
 	m_pGame = nullptr;
 }
