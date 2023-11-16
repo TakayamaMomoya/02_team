@@ -124,7 +124,7 @@ HRESULT CBlock::Init(void)
 	// É^ÉCÉvÇÃê›íË
 	SetType(TYPE_BLOCK);
 
-	m_fLife = 50.0f;
+	m_fLife = 100.0f;
 
 	return S_OK;
 }
@@ -172,7 +172,7 @@ void CBlock::Hit(float fDamage)
 
 	if (m_fLife <= 0.0f)
 	{// îjâÛîªíË
-		Uninit();
+		Delete(m_nID);
 	}
 }
 

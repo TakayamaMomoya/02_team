@@ -208,8 +208,8 @@ HRESULT CEnemy::Init(void)
 	{// —§•û‘Ì‚Ì“–‚½‚è”»’è
 		m_pCollisionCube = CCollisionCube::Create(CCollision::TAG_ENEMY, this);
 
-		D3DXVECTOR3 vtxMax = { 5,5,5 };
-		D3DXVECTOR3 vtxMin = { -5,-5,-5 };
+		D3DXVECTOR3 vtxMax = { 20,20,20 };
+		D3DXVECTOR3 vtxMin = { -20,0.0f,-20 };
 
 		if (m_pCollisionCube != nullptr)
 		{
@@ -262,6 +262,8 @@ void CEnemy::Update(void)
 	D3DXVECTOR3 pos = GetPosition();
 	D3DXVECTOR3 move = GetMove();
 
+	SetPositionOld(pos);
+
 	pos += move;
 	SetPosition(pos);
 
@@ -301,6 +303,7 @@ void CEnemy::ManageCollision(void)
 	if (m_pCollisionCube != nullptr)
 	{// —§•û‘Ì‚Ì“–‚½‚è”»’è‚ÌŠÇ—
 		// “–‚½‚è”»’è‚ÌˆÊ’uÝ’è
+		m_pCollisionCube->SetPositionOld(m_pCollisionCube->GetPosition());
 		m_pCollisionCube->SetPosition(GetPosition());
 
 		D3DXVECTOR3 move = GetMove();

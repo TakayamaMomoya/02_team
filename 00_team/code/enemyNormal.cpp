@@ -69,9 +69,7 @@ void CEnemyNormal::Update(void)
 
 	if (pBlock != nullptr)
 	{
-		int nID = pBlock->GetID();
-
-		CBlock::Delete(nID);
+		pBlock->Hit(5.0f);
 	}
 }
 
