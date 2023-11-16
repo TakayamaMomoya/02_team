@@ -165,6 +165,13 @@ void CBullet::Update(void)
 
 		if (m_pCollisionSphere->TriggerCube(CCollision::TAG_BLOCK))
 		{// ƒuƒƒbƒN‚Æ‚Ì“–‚½‚è”»’è
+			CObject *pObj = m_pCollisionSphere->GetOther();
+
+			if (pObj != nullptr)
+			{
+				pObj->Hit(5.0f);
+			}
+
 			Death();
 		}
 	}
