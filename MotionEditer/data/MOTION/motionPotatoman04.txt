@@ -1,0 +1,137 @@
+#====================================================================
+#
+# モーションスクリプトファイル[motion.txt]
+# Author：Momoya Takayama
+#
+#====================================================================
+SCRIPT
+
+#====================================================================
+# モデル数
+#====================================================================
+NUM_MODEL = 15
+
+#====================================================================
+# モデルファイル名
+#====================================================================
+MODEL_FILENAME = data/MODEL/potatoman_04/upper_body.x
+MODEL_FILENAME = data/MODEL/potatoman_04/lower_body.x
+MODEL_FILENAME = data/MODEL/potatoman_04/upper_arm_l.x
+MODEL_FILENAME = data/MODEL/potatoman_04/fore_arm_l.x
+MODEL_FILENAME = data/MODEL/potatoman_04/hand_l.x
+MODEL_FILENAME = data/MODEL/potatoman_04/upper_arm_r.x
+MODEL_FILENAME = data/MODEL/potatoman_04/fore_arm_r.x
+MODEL_FILENAME = data/MODEL/potatoman_04/hand_r.x
+
+MODEL_FILENAME = data/MODEL/potatoman_04/thigh_l.x
+MODEL_FILENAME = data/MODEL/potatoman_04/shin_l.x
+MODEL_FILENAME = data/MODEL/potatoman_04/foot_l.x
+
+MODEL_FILENAME = data/MODEL/potatoman_04/thigh_r.x
+MODEL_FILENAME = data/MODEL/potatoman_04/shin_r.x
+MODEL_FILENAME = data/MODEL/potatoman_04/foot_r.x
+
+MODEL_FILENAME = data/MODEL/potatoman_04/joint_body.x
+
+#====================================================================
+# キャラクター情報
+#====================================================================
+CHARACTERSET
+    NUM_PARTS = 15
+
+    PARTSSET
+        INDEX = 0
+        PARENT = -1
+        POS = 0.0 37.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 1
+        PARENT = 0
+        POS = 0.0 -9.5 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 2
+        PARENT = 0
+        POS = 11.0 0.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 3
+        PARENT = 2
+        POS = 17.8 0.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 4
+        PARENT = 3
+        POS = 11.2 0.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 5
+        PARENT = 0
+        POS = -11.0 0.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 6
+        PARENT = 5
+        POS = -18.0 0.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 7
+        PARENT = 6
+        POS = -11.2 0.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 8
+        PARENT = 1
+        POS = 6.6 -10.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 9
+        PARENT = 8
+        POS = 0.0 -7.1 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 10
+        PARENT = 9
+        POS = 0.0 -5.4 0.5
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 11
+        PARENT = 1
+        POS = -7.7 -10.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 12
+        PARENT = 11
+        POS = 0.0 -7.1 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 13
+        PARENT = 12
+        POS = 0.0 -5.4 0.5
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 14
+        PARENT = 0
+        POS = 0.0 0.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+END_CHARACTERSET
+
+#====================================================================
+# モーション情報
+#====================================================================
+END_SCRIPT
