@@ -101,6 +101,9 @@ void CItemRepair::Update(void)
 
 		if (bGet)
 		{// 持ち上げているプレイヤーの検出
+			// 武器を無効化する
+			m_pPlayer->EnableWeapon(true);
+
 			m_pPlayer = nullptr;
 		}
 	}
@@ -206,8 +209,11 @@ void CItemRepair::Interact(CObject *pObj)
 				bool bGet = pPlayer->InputInteract();
 
 				if (bGet)
-				{// 持ち上げているプレイヤーの検出
+				{// 持ち上げる
 					m_pPlayer = pPlayer;
+
+					// 武器を無効化する
+					pPlayer->EnableWeapon(false);
 				}
 			}
 		}

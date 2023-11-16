@@ -331,7 +331,12 @@ void CPlayer::InputAttack(void)
 {
 	if (m_info.pWeapon != nullptr)
 	{// •Ší‚ÌUŒ‚
-		m_info.pWeapon->Attack();
+		bool bEnable = m_info.pWeapon->IsEnable();
+
+		if (bEnable)
+		{
+			m_info.pWeapon->Attack();
+		}
 	}
 	else
 	{// ‘fè‚Ìê‡‚Ìˆ—
@@ -360,6 +365,17 @@ bool CPlayer::InputInteract(void)
 	}
 
 	return bTrigger;
+}
+
+//=====================================================
+// •Ší‚Ì—LŒø‰Â
+//=====================================================
+void CPlayer::EnableWeapon(bool bEnable)
+{
+	if (m_info.pWeapon != nullptr)
+	{
+		m_info.pWeapon->SetEnable(bEnable);
+	}
 }
 
 //=====================================================

@@ -32,14 +32,15 @@ public:
 	};
 	struct SInfo
 	{// 自身の情報
-		int nNumBullet;
-		int nMaxBullet;
-		int nRapid;
-		int nCntShot;
-		int nIdxHand;
-		int nIdxJoypad;
-		CPlayer *pPlayer;
-		TYPE type;
+		int nNumBullet;	// 弾数
+		int nMaxBullet;	// 最大弾数
+		int nRapid;	// 連射
+		int nCntShot;	// 連射カウンタ
+		int nIdxHand;	// 手の番号
+		int nIdxJoypad;	// コントローラー番号
+		bool bEnable;	// 使用できるかどうか
+		CPlayer *pPlayer;	// 所持してるプレイヤー
+		TYPE type;	// 種類
 	};
 
 	CWeapon(int nPriority = 3);	// コンストラクタ
@@ -62,6 +63,8 @@ public:
 	void SetCntShot(int nCntShot) { m_info.nCntShot = nCntShot; }
 	int GetCntShot(void) { return m_info.nCntShot; }
 	void FollowPlayerHand(void);
+	void SetEnable(bool bEnable) { m_info.bEnable = bEnable; }
+	bool IsEnable(void) { return m_info.bEnable; }
 
 private:
 
