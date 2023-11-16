@@ -18,7 +18,7 @@ Scene {
 	}
 }
 Material 1 {
-	"lambert3SG" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("data\TEXTURE\MATERIAL\UV_potetoman.png")
+	"lambert3SG" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("data\TEXTURE\MATERIAL\UV_potetoman_03.png")
 }
 Object "obj1" {
 	visible 15
