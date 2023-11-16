@@ -304,7 +304,10 @@ void CBlock::LoadModel(void)
 {
 	char *pPath[CBlock::TYPE_MAX] =
 	{
-		"data\\MODEL\\BLOCK\\desk00.x",	// 机
+		"data\\MODEL\\BLOCK\\desk00.x",			// 机
+		"data\\MODEL\\BLOCK\\concrete_00.x",	// コンクリート壁
+		"data\\MODEL\\BLOCK\\WodenWall_00.x",	// 木製壁
+		"data\\MODEL\\BLOCK\\door000.x",		// ドア
 	};
 
 	if (m_pIdxObject == nullptr)
