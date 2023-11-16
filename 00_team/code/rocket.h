@@ -50,6 +50,7 @@ private:
 	void Load(void);
 	void ApplyInfo(FILE *pFile,char *pTemp);
 	void UpdateEscape(void);
+	void SwapModel(int nProgress);
 
 	float m_fRadius;	// îªíËÇÃîºåa
 	float m_fSpeed;	// è„è∏ë¨ìx
