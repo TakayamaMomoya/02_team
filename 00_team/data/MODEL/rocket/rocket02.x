@@ -2476,7 +2476,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "abe\\02_team\\00_team\\data\\TEXTURE\\MATERIAL\\crack.jpg";
+    "data\\TEXTURE\\MATERIAL\\crack.jpg";
    }
   }
   Material {
@@ -2485,7 +2485,7 @@ Mesh {
    0.100000;0.100000;0.100000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "abe\\02_team\\00_team\\data\\TEXTURE\\MATERIAL\\crack.jpg";
+    "data\\TEXTURE\\MATERIAL\\crack.jpg";
    }
   }
   Material {
@@ -2500,7 +2500,7 @@ Mesh {
    0.100000;0.100000;0.100000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "abe\\02_team\\00_team\\data\\TEXTURE\\MATERIAL\\crack.jpg";
+    "data\\TEXTURE\\MATERIAL\\crack.jpg";
    }
   }
   Material {
@@ -2515,7 +2515,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "abe\\02_team\\00_team\\data\\TEXTURE\\MATERIAL\\crack.jpg";
+    "data\\TEXTURE\\MATERIAL\\crack.jpg";
    }
   }
  }

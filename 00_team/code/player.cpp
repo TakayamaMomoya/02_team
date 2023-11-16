@@ -21,13 +21,16 @@
 #include "manager.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define BODY_PATH	"data\\MOTION\\motionPotatoman01.txt"	// 体のパス
-#define MOVE_SPEED	(3.0f)	// 移動速度
-#define ROT_SPEED	(0.1f)	// 回転速度
-#define INITIAL_LIFE	(30.0f)	// 初期体力
-#define DAMAGE_TIME	(0.5f)	// ダメージ状態の秒数
+namespace
+{
+	const char* BODY_PATH = "data\\MOTION\\motionPotatoman01.txt";	// 体のパス
+	const float MOVE_SPEED = 3.0f;	// 移動速度
+	const float ROT_SPEED = 0.1f;	// 回転速度
+	const float INITIAL_LIFE = 30.0f;	// 初期体力
+	const float DAMAGE_TIME = 0.5f;	// ダメージ状態の秒数
+}
 
 //=====================================================
 // 優先順位を決めるコンストラクタ
@@ -71,7 +74,7 @@ HRESULT CPlayer::Init(void)
 	CCharacter::Init();
 
 	// 体の読込
-	CCharacter::Load(BODY_PATH);
+	CCharacter::Load((char*)BODY_PATH);
 
 	CMotion *pBody = GetBody();
 
@@ -328,7 +331,12 @@ void CPlayer::InputAttack(void)
 {
 	if (m_info.pWeapon != nullptr)
 	{// 武器の攻撃
-		m_info.pWeapon->Attack();
+		bool bEnable = m_info.pWeapon->IsEnable();
+
+		if (bEnable)
+		{
+			m_info.pWeapon->Attack();
+		}
 	}
 	else
 	{// 素手の場合の処理
@@ -357,6 +365,17 @@ bool CPlayer::InputInteract(void)
 	}
 
 	return bTrigger;
+}
+
+//=====================================================
+// 武器の有効可
+//=====================================================
+void CPlayer::EnableWeapon(bool bEnable)
+{
+	if (m_info.pWeapon != nullptr)
+	{
+		m_info.pWeapon->SetEnable(bEnable);
+	}
 }
 
 //=====================================================

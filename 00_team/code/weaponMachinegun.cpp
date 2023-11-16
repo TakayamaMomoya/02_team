@@ -12,6 +12,7 @@
 #include "inputjoypad.h"
 #include "bullet.h"
 #include "player.h"
+#include "universal.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
@@ -65,11 +66,12 @@ void CMachinegun::Update(void)
 }
 
 //=====================================================
-// UŒ‚ˆ—
+// UŒ‚ˆ—	Autor:“ú–ìàV
 //=====================================================
 void CMachinegun::Attack(void)
 {
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
+	CUniversal *pUniversal = CUniversal::GetInstance();
 
 	if (pJoypad == nullptr)
 	{
