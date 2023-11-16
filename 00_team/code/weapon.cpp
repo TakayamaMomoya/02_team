@@ -90,10 +90,6 @@ HRESULT CWeapon::Init(void)
 	// 継承クラスの初期化
 	CObjectX::Init();
 
-	// モデルの読込
-	int nIdx = CModel::Load("data\\MODEL\\weapon\\shotgun.x");
-	BindModel(nIdx);
-
 	// 基底パラメーター取得
 	CWeaponManager* pWeaponManager = CWeaponManager::GetInstance();
 
@@ -168,6 +164,7 @@ void CWeapon::Draw(void)
 	// 継承クラスの描画
 	CObjectX::JustDraw();
 
+#ifdef _DEBUG
 	CDebugProc* pDebugProc = CDebugProc::GetInstance();
 
 	if (pDebugProc == nullptr)
@@ -177,6 +174,8 @@ void CWeapon::Draw(void)
 
 	pDebugProc->Print("\n最大弾数[%d]", m_info.nMaxBullet);
 	pDebugProc->Print("\n弾数[%d]", m_info.nNumBullet);
+	pDebugProc->Print("\n使用可能[%d]", m_info.bEnable);
+#endif
 }
 
 //=====================================================
@@ -190,6 +189,8 @@ void CWeapon::SetPlayer(CPlayer *pPlayer)
 	{
 		m_info.nIdxJoypad = pPlayer->GetIDJoypad();
 	}
+
+	m_info.bEnable = true;
 }
 
 //=====================================================

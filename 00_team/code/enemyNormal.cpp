@@ -19,6 +19,7 @@
 #include "player.h"
 #include "game.h"
 #include "enemyManager.h"
+#include "block.h"
 
 //=====================================================
 // コンストラクタ
@@ -63,6 +64,13 @@ void CEnemyNormal::Update(void)
 {
 	// 継承クラスの更新
 	CEnemy::Update();
+
+	CBlock *pBlock = GetTouchBlock();
+
+	if (pBlock != nullptr)
+	{
+		pBlock->Hit(5.0f);
+	}
 }
 
 //=====================================================

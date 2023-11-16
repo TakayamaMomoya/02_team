@@ -45,6 +45,8 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void Hit(float fDamage);
+	int GetID(void) { return m_nID; }
 	static HRESULT Load(char *pPath);	// 読込
 	static void Save(void);	// 保存
 	static void Delete(int nIdx);	// 部分削除処理
@@ -55,7 +57,6 @@ public:
 	static void LoadModel(void);
 	static void DeleteIdx(void);
 	static int *GetIndex(void) { return m_pIdxObject; }
-	//void Hit(float fDamage);
 
 private:
 	void SwapVtx(void);
@@ -65,7 +66,8 @@ private:
 	static CBlock *m_apBlock[NUM_OBJECT];	// ブロックの配列
 	static int m_nNumAll;	// 総数
 	CCollisionCube *m_pCollisionCube;	// 立方体の当たり判定
-	int m_nLife;	// 体力
+	float m_fLife;	// 体力
+	int m_nID;	// ID
 };
 
 #endif

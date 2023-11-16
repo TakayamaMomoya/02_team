@@ -81,11 +81,11 @@ void CPlayerManager::CreatePlayer(void)
 //=====================================================
 // ÉvÉåÉCÉÑÅ[ìoò^èàóù
 //=====================================================
-void CPlayerManager::BindPlayer(int nIdxJoypad)
+CPlayer *CPlayerManager::BindPlayer(int nIdxJoypad)
 {
 	if (nIdxJoypad < 0 || nIdxJoypad >= NUM_PLAYER)
 	{
-		return;
+		return nullptr;
 	}
 
 	CPlayer* pPlayer = nullptr;
@@ -105,6 +105,8 @@ void CPlayerManager::BindPlayer(int nIdxJoypad)
 
 		m_nNumPlayer++;
 	}
+
+	return pPlayer;
 }
 
 //=====================================================
