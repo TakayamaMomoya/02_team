@@ -1,7 +1,7 @@
 //*****************************************************
 //
 // マシンガンの処理[weaponMachinegun.cpp]
-// Author:髙山桃也
+// Author:日野澤匠泉
 //
 //*****************************************************
 
@@ -103,6 +103,12 @@ void CMachinegun::Attack(void)
 			if (pPlayer != nullptr)
 			{// プレイヤーの向きに移動量を設定
 				D3DXVECTOR3 rot = pPlayer->GetRot();
+
+				int nRange = pUniversal->RandRange(10, -10);
+
+				float fRand = nRange * 0.01f;
+
+				rot.y += fRand;
 
 				move =
 				{
