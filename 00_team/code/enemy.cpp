@@ -27,14 +27,11 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define SPEED_MOVE	(1.0f)	// 移動速度
-#define RATE_RADIUS	(1.5f)	// 当たり判定の大きさの倍率
 #define INITIAL_LIFE	(10.0f)	// 初期体力
 #define INITIAL_SPEED	(1.0f)	// 初期移動速度
 #define DAMAGE_FRAME	(10)	// ダメージ状態の継続フレーム数
 #define INITIAL_SCORE	(1000)	// 初期スコア
 #define TIME_DEATH	(30)	// 死亡までのタイム
-#define ROLL_FACT	(0.1f)	// 回転係数
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -366,6 +363,19 @@ void CEnemy::ManageState(void)
 //=====================================================
 void CEnemy::ChaseTarget(void)
 {
+	// ゲーム状態によって追跡させない
+	CGame *pGame = CGame::GetInstance();
+
+	if (pGame != nullptr)
+	{
+		CGame::STATE state = pGame->GetState();
+
+		if (state != CGame::STATE::STATE_NORMAL)
+		{
+			return;
+		}
+	}
+
 	CUniversal *pUniversal = CUniversal::GetInstance();
 
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
@@ -416,9 +426,11 @@ void CEnemy::ChaseTarget(void)
 	float fAngleDist = atan2f(move.x, move.z);
 	D3DXVECTOR3 rot = GetRot();
 
+	fAngleDist += D3DX_PI;
+
 	pUniversal->FactingRot(&rot.y, fAngleDist, 0.1f);
 
-	//SetRot(rot);
+	SetRot(rot);
 }
 
 //=====================================================
