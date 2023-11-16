@@ -35,12 +35,17 @@ int *CBlock::m_pIdxObject = nullptr;	// 番号のポインタ
 CBlock::CBlock(int nPriority)
 {
 	m_type = TYPE_DESK;
+	m_pCollisionCube = nullptr;
+	m_fLife = 0.0f;
+	m_nID = -1;
 
 	for (int nCntBlock = 0;nCntBlock < NUM_OBJECT;nCntBlock++)
 	{
 		if (m_apBlock[nCntBlock] == nullptr)
 		{// 保存用配列にコピー
 			m_apBlock[nCntBlock] = this;
+
+			m_nID = nCntBlock;
 
 			break;
 		}
@@ -58,60 +63,9 @@ CBlock::~CBlock()
 }
 
 //=====================================================
-// 初期化処理
-//=====================================================
-HRESULT CBlock::Init(void)
-{
-	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
-
-	// 継承クラスの初期化
-	CObjectX::Init();
-
-	// タイプの設定
-	SetType(TYPE_BLOCK);
-
-	return S_OK;
-}
-
-//=====================================================
-// 終了処理
-//=====================================================
-void CBlock::Uninit(void)
-{
-	if (m_pCollisionCube != nullptr)
-	{// 当たり判定の消去
-		m_pCollisionCube->Uninit();
-
-		m_pCollisionCube = nullptr;
-	}
-
-	// 継承クラスの終了
-	CObjectX::Uninit();
-}
-
-//=====================================================
-// 更新処理
-//=====================================================
-void CBlock::Update(void)
-{
-	// 継承クラスの更新
-	CObjectX::Update();
-}
-
-//=====================================================
-// 描画処理
-//=====================================================
-void CBlock::Draw(void)
-{
-	// 継承クラスの描画
-	CObjectX::Draw();
-}
-
-//=====================================================
 // 生成処理
 //=====================================================
-CBlock *CBlock::Create(D3DXVECTOR3 pos,D3DXVECTOR3 rot ,TYPE type)
+CBlock *CBlock::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, TYPE type)
 {
 	CBlock *pBlock = nullptr;
 
@@ -157,6 +111,72 @@ CBlock *CBlock::Create(D3DXVECTOR3 pos,D3DXVECTOR3 rot ,TYPE type)
 }
 
 //=====================================================
+// 初期化処理
+//=====================================================
+HRESULT CBlock::Init(void)
+{
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
+
+	// 継承クラスの初期化
+	CObjectX::Init();
+
+	// タイプの設定
+	SetType(TYPE_BLOCK);
+
+	m_fLife = 50.0f;
+
+	return S_OK;
+}
+
+//=====================================================
+// 終了処理
+//=====================================================
+void CBlock::Uninit(void)
+{
+	if (m_pCollisionCube != nullptr)
+	{// 当たり判定の消去
+		m_pCollisionCube->Uninit();
+
+		m_pCollisionCube = nullptr;
+	}
+
+	// 継承クラスの終了
+	CObjectX::Uninit();
+}
+
+//=====================================================
+// 更新処理
+//=====================================================
+void CBlock::Update(void)
+{
+	// 継承クラスの更新
+	CObjectX::Update();
+}
+
+//=====================================================
+// 描画処理
+//=====================================================
+void CBlock::Draw(void)
+{
+	// 継承クラスの描画
+	CObjectX::Draw();
+}
+
+//=====================================================
+// ヒット処理
+//=====================================================
+void CBlock::Hit(float fDamage)
+{
+	m_fLife -= fDamage;
+
+	if (m_fLife <= 0.0f)
+	{// 破壊判定
+		Uninit();
+	}
+}
+
+//=====================================================
 // 頂点を入れ替える処理
 //=====================================================
 void CBlock::SwapVtx(void)
@@ -177,12 +197,7 @@ void CBlock::SwapVtx(void)
 //=====================================================
 void CBlock::Delete(int nIdx)
 {
-	if (m_apBlock[nIdx] != nullptr)
-	{// 削除処理
-		m_apBlock[nIdx]->Uninit();
-
-		m_apBlock[nIdx] = nullptr;
-	}
+	CBlock *pBlockDelete = m_apBlock[nIdx];
 
 	// 配列を詰める
 	for (int nCntBlock = nIdx; nCntBlock < NUM_OBJECT - 1; nCntBlock++)
@@ -190,9 +205,20 @@ void CBlock::Delete(int nIdx)
 		if (m_apBlock[nCntBlock + 1] != nullptr)
 		{
 			m_apBlock[nCntBlock] = m_apBlock[nCntBlock + 1];
+
+			m_apBlock[nCntBlock]->m_nID = nCntBlock;
+
 			m_apBlock[nCntBlock + 1] = nullptr;
 		}
 	}
+
+	if (pBlockDelete != nullptr)
+	{// 削除処理
+		pBlockDelete->Uninit();
+
+		pBlockDelete = nullptr;
+	}
+
 }
 
 //=====================================================
