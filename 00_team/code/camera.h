@@ -52,6 +52,7 @@ public:
 	void Quake(void);
 	void UpdateResult(void);
 	void SetTitle(void);
+	void SetSelect(void);
 
 private:
 	void SetPosV(void);

@@ -41,6 +41,14 @@ private:
 		START_MAX
 	};
 
+	enum FADE_STATE
+	{
+		FADE_NONE = 0,
+		FADE_IN,
+		FADE_OUT,
+		FADE_MAX
+	};
+
 	enum MENU
 	{
 		MENU_PLUS = 0,
@@ -52,15 +60,18 @@ private:
 	{
 		CBillboard* pMenu2D[MENU_MAX];
 		D3DXCOLOR col;
+		FADE_STATE state;
 	};
 
 	void MenuInit(void);
-	void MenuUpdate(void);
+	void MenuDelete(int nPlayer);
+	void ColorChange(int nPlayer);
+	void EntryInput(int nPlayer);
 
 	MenuData m_aMenuData[NUM_PLAYER];	//それぞれの選択メニュー
 	CPlayerManager* m_pPlayerManager;	//プレイヤー管理
 	STATE m_state;	// 状態
-	bool bJoin[NUM_PLAYER];	//参加したかどうか
+	bool m_abJoin[NUM_PLAYER];	//参加したかどうか
 };
 
 #endif
