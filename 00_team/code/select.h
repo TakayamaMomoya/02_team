@@ -16,7 +16,7 @@
 //*****************************************************
 // 前方宣言
 //*****************************************************
-class CObject2D;
+class CBillboard;
 class CPlayerManager;
 
 //*****************************************************
@@ -43,21 +43,21 @@ private:
 
 	enum MENU
 	{
-		MENU_FRAME = 0,
-		MENU_NUMBER,
+		MENU_PLUS = 0,
+		MENU_CHAR,
 		MENU_MAX
 	};
 
 	struct MenuData
 	{
-		CObject2D* pMenu2D[MENU_MAX];
+		CBillboard* pMenu2D[MENU_MAX];
 		D3DXCOLOR col;
 	};
 
 	void MenuInit(void);
 	void MenuUpdate(void);
 
-	MenuData m_aMenuData[NUM_PLAYER];	//選択メニュー
+	MenuData m_aMenuData[NUM_PLAYER];	//それぞれの選択メニュー
 	CPlayerManager* m_pPlayerManager;	//プレイヤー管理
 	STATE m_state;	// 状態
 	bool bJoin[NUM_PLAYER];	//参加したかどうか

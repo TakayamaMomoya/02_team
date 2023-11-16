@@ -1,7 +1,7 @@
 //*****************************************************
 //
-// タイトル処理[title.cpp]
-// Author:髙山桃也
+// 人数選択処理[select.cpp]
+// Author:小笠原彪
 //
 //*****************************************************
 
@@ -14,20 +14,25 @@
 #include "inputmouse.h"
 #include "inputjoypad.h"
 #include "manager.h"
+#include "debugproc.h"
 #include "motion.h"
 #include "fade.h"
 #include "texture.h"
 #include "camera.h"
 #include "renderer.h"
 #include "sound.h"
-
+#include "billboard.h"
+#include "object3D.h"
 #include "playerManager.h"
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define NUMBER_POS	(D3DXVECTOR2(300.0f, 600.0f))
-#define SPACE	(220.0f)
+namespace
+{
+	const D3DXVECTOR2 NUMBER_POS(D3DXVECTOR2(-300.0f, 200.0f));
+	const float SPACE(220.0f);
+};
 
 //=====================================================
 // コンストラクタ
@@ -82,27 +87,29 @@ void CSelect::MenuInit(void)
 		"data\\TEXTURE\\UI\\4th.png",
 	};
 
+	//地面の生成
+	CObject3D* pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\MATERIAL\\28154955_s.jpg");
+	pObject->SetIdxTexture(nIdx);
+
 	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 	{
-		m_aMenuData[nCnt].pMenu2D[MENU_FRAME] = CObject2D::Create(6);
-		m_aMenuData[nCnt].pMenu2D[MENU_NUMBER] = CObject2D::Create(7);
+		m_aMenuData[nCnt].pMenu2D[MENU_PLUS] = CBillboard::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0), 50.0f, 50.0f);
+		m_aMenuData[nCnt].pMenu2D[MENU_CHAR] = CBillboard::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0), 50.0f, 50.0f);
 
-		// メニュー枠
-		m_aMenuData[nCnt].pMenu2D[MENU_FRAME]->SetPosition(D3DXVECTOR3(NUMBER_POS.x + (nCnt * SPACE), NUMBER_POS.y, 0.0f));
-		m_aMenuData[nCnt].pMenu2D[MENU_FRAME]->SetSize(80.0f, 80.0f);
-		m_aMenuData[nCnt].pMenu2D[MENU_FRAME]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		m_aMenuData[nCnt].pMenu2D[MENU_FRAME]->SetIdxTexture(CTexture::GetInstance()->Regist("frame.png"));
+		// +表示
+		m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetPosition(D3DXVECTOR3(NUMBER_POS.x + (nCnt * SPACE), NUMBER_POS.y, 0.0f));
+		m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetSize(50.0f, 50.0f);
+		m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetIdxTexture(CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\plus.png"));
 
 		// メニュー文字
-		m_aMenuData[nCnt].pMenu2D[MENU_NUMBER]->SetPosition(D3DXVECTOR3(NUMBER_POS.x + (nCnt * SPACE), NUMBER_POS.y, 0.0f));
-		m_aMenuData[nCnt].pMenu2D[MENU_NUMBER]->SetSize(50.0f, 50.0f);
-		m_aMenuData[nCnt].pMenu2D[MENU_NUMBER]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.3f));
+		m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetPosition(D3DXVECTOR3(NUMBER_POS.x + (nCnt * SPACE), NUMBER_POS.y, 0.0f));
+		m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetSize(50.0f, 50.0f);
+		m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.3f));
 
 		int nIdx = CTexture::GetInstance()->Regist(apPath[nCnt]);
-		m_aMenuData[nCnt].pMenu2D[MENU_NUMBER]->SetIdxTexture(nIdx);
-
-		m_aMenuData[nCnt].pMenu2D[MENU_FRAME]->SetVtx();
-		m_aMenuData[nCnt].pMenu2D[MENU_NUMBER]->SetVtx();
+		m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetIdxTexture(nIdx);
 	}
 }
 
