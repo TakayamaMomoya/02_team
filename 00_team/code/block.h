@@ -23,7 +23,10 @@ class CBlock : public CObjectX
 public:
 	typedef enum
 	{// 種類
-		TYPE_DESK,	// 机
+		TYPE_DESK,		// 机
+		TYPE_CONCRETE,	// コンクリート壁
+		TYPE_WOOD,		// 木壁
+		TYPE_DOOR,		// ドア
 		TYPE_MAX
 	}TYPE;
 

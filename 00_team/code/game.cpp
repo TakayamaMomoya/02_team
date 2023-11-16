@@ -31,6 +31,7 @@
 #include "rocket.h"
 #include "edit.h"
 #include "goal.h"
+#include "block.h"
 
 //*****************************************************
 // マクロ定義
@@ -78,6 +79,9 @@ HRESULT CGame::Init(void)
 	pObject->SetIdxTexture(nIdx);
 
 	CSkybox::Create();
+
+	// ブロックの読み込み
+	CBlock::Load("data\\MAP\\map00.bin");
 
 	// プレイヤーの生成
 	CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();
@@ -128,6 +132,9 @@ void CGame::Uninit(void)
 {
 	// オブジェクト全棄
 	CObject::ReleaseAll();
+
+	// ブロックの破棄
+	CBlock::DeleteAll();
 
 	// プレイヤーマネージャーの終了
 	CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();

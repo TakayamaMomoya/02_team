@@ -22,7 +22,7 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define SPEED_MOVE	(0.5f)	// 移動速度
+#define SPEED_MOVE	(1.0f)	// 移動速度
 #define SPEED_ROTATION	(0.01f)	// 回転
 
 //*****************************************************
@@ -131,19 +131,19 @@ void CEdit::Update(void)
 				fSpeed *= 5.0f;
 			}
 
-			if (pKeyboard->GetPress(DIK_A))
+			if (pKeyboard->GetTrigger(DIK_A))
 			{
 				pos.x -= fSpeed;
 			}
-			if (pKeyboard->GetPress(DIK_D))
+			if (pKeyboard->GetTrigger(DIK_D))
 			{
 				pos.x += fSpeed;
 			}
-			if (pKeyboard->GetPress(DIK_W))
+			if (pKeyboard->GetTrigger(DIK_W))
 			{
 				pos.z += fSpeed;
 			}
-			if (pKeyboard->GetPress(DIK_S))
+			if (pKeyboard->GetTrigger(DIK_S))
 			{
 				pos.z -= fSpeed;
 			}
