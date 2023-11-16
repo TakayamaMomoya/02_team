@@ -241,6 +241,12 @@ void CItemRepair::CollisionRocket(void)
 				pRocket->AddProgress(1);
 			}
 
+			if (m_pPlayer != nullptr)
+			{
+				// •Ší‚ð–³Œø‰»‚·‚é
+				m_pPlayer->EnableWeapon(true);
+			}
+
 			Uninit();
 		}
 	}

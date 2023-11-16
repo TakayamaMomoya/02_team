@@ -20,7 +20,7 @@
 // マクロ定義
 //*****************************************************
 #define FILE_PATH	"data\\MAP\\enemies.txt"	// 配置データのパス
-#define RAND_SPAWN	(100)	// スポーン範囲
+#define RAND_SPAWN	(3000)	// スポーン範囲
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -204,33 +204,19 @@ void CEnemyManager::Update(void)
 
 	if (m_nCntSpawn >= 60)
 	{
-		// カメラの注視点座標を取得
-		CCamera *pCamera = CManager::GetCamera();
-		CCamera::Camera *pCameraInfo = nullptr;
-
-		if (pCamera != nullptr)
-		{
-			pCameraInfo = pCamera->GetCamera();
-		}
-
-		if (pCameraInfo == nullptr)
-		{
-			return;
-		}
-
 		CUniversal *pUniversal = CUniversal::GetInstance();
 
 		// 注視点を中心に設定
-		D3DXVECTOR3 posCenter = pCameraInfo->posR;
+		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
 
 		int nPosX = pUniversal->RandRange(RAND_SPAWN, -RAND_SPAWN);
 		int nPosZ = pUniversal->RandRange(RAND_SPAWN, -RAND_SPAWN);
 
-		posCenter.x += nPosX;
-		posCenter.z += nPosZ;
+		posCenter.x = (float)nPosX;
+		posCenter.z = (float)nPosZ;
 
 		// 敵スポーン
-		//CreateEnemy(posCenter, CEnemy::TYPE_NORMAL);
+		CreateEnemy(posCenter, CEnemy::TYPE_NORMAL);
 
 		m_nCntSpawn = 0;
 	}
