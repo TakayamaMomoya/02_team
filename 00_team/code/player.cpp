@@ -25,7 +25,13 @@
 //*****************************************************
 namespace
 {
-	const char* BODY_PATH = "data\\MOTION\\motionPotatoman01.txt";	// 体のパス
+	const char* BODY_PATH[NUM_PLAYER] = 
+	{// 体のパス
+		"data\\MOTION\\motionPotatoman01.txt",
+		"data\\MOTION\\motionPotatoman02.txt",
+		"data\\MOTION\\motionPotatoman03.txt",
+		"data\\MOTION\\motionPotatoman04.txt",
+	};
 	const float MOVE_SPEED = 3.0f;	// 移動速度
 	const float ROT_SPEED = 0.1f;	// 回転速度
 	const float INITIAL_LIFE = 30.0f;	// 初期体力
@@ -72,17 +78,6 @@ HRESULT CPlayer::Init(void)
 {
 	// 継承クラスの初期化
 	CCharacter::Init();
-
-	// 体の読込
-	CCharacter::Load((char*)BODY_PATH);
-
-	CMotion *pBody = GetBody();
-
-	if (pBody != nullptr)
-	{
-		pBody->SetPosShadow(D3DXVECTOR3(0.0f, 0.5f, 0.0f));
-		pBody->EnableShadow(true);
-	}
 
 	// 当たり判定の生成
 	if (m_info.pCollisionSphere == nullptr)
@@ -506,6 +501,26 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 	if (m_info.pWeapon != nullptr)
 	{
 		m_info.pWeapon->SetPlayer(this);
+	}
+}
+
+//=====================================================
+// ID設定
+//=====================================================
+void CPlayer::SetID(int nID)
+{
+	m_info.nID = nID;
+
+	// IDに対応したモデルの設定
+	CCharacter::Load((char*)BODY_PATH[nID]);
+
+	// 影の有効化
+	CMotion *pBody = GetBody();
+
+	if (pBody != nullptr)
+	{
+		pBody->SetPosShadow(D3DXVECTOR3(0.0f, 0.5f, 0.0f));
+		pBody->EnableShadow(true);
 	}
 }
 
