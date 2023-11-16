@@ -156,6 +156,8 @@ bool CCollision::TriggerCube(TAG tag)
 						posOld.x < vtxMin.x || posOld.x > vtxMax.x ||
 						posOld.z < vtxMin.z || posOld.z > vtxMax.z)
 					{// 前回ブロックの中にいない
+						SetOther(ppCollision[nCnt]->GetOwner());
+
 						bHit = true;
 					}
 				}
