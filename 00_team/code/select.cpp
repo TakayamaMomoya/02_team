@@ -177,7 +177,7 @@ void CSelect::MenuUpdate(void)
 
 			if (m_pPlayerManager != nullptr)
 			{
-				m_pPlayerManager->CreateOnePlayer(nCntPlayer);
+				m_pPlayerManager->BindPlayer(nCntPlayer);
 			}
 		}
 	}

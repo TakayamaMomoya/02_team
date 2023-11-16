@@ -311,4 +311,24 @@ void CRocket::AddProgress(int nProgress)
 	}
 
 	// ロケットモデルの変化
+	SwapModel(m_nProgress);
+}
+
+//=====================================================
+// モデルの置き換え
+//=====================================================
+void CRocket::SwapModel(int nProgress)
+{
+	char *apPath[MAX_PROGRESS + 1] = 
+	{
+		"data\\MODEL\\rocket\\rocket00.x",
+		"data\\MODEL\\rocket\\rocket01.x",
+		"data\\MODEL\\rocket\\rocket02.x",
+		"data\\MODEL\\rocket\\rocket03.x",
+	};
+
+	// モデルの読込
+	int nIdx = CModel::Load(apPath[nProgress]);
+	SetIdxModel(nIdx);
+	BindModel(nIdx);
 }

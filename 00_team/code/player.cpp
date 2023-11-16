@@ -21,13 +21,16 @@
 #include "manager.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define BODY_PATH	"data\\MOTION\\motionPotatoman01.txt"	// 体のパス
-#define MOVE_SPEED	(3.0f)	// 移動速度
-#define ROT_SPEED	(0.1f)	// 回転速度
-#define INITIAL_LIFE	(30.0f)	// 初期体力
-#define DAMAGE_TIME	(0.5f)	// ダメージ状態の秒数
+namespace
+{
+	const char* BODY_PATH = "data\\MOTION\\motionPotatoman01.txt";	// 体のパス
+	const float MOVE_SPEED = 3.0f;	// 移動速度
+	const float ROT_SPEED = 0.1f;	// 回転速度
+	const float INITIAL_LIFE = 30.0f;	// 初期体力
+	const float DAMAGE_TIME = 0.5f;	// ダメージ状態の秒数
+}
 
 //=====================================================
 // 優先順位を決めるコンストラクタ
@@ -71,7 +74,7 @@ HRESULT CPlayer::Init(void)
 	CCharacter::Init();
 
 	// 体の読込
-	CCharacter::Load(BODY_PATH);
+	CCharacter::Load((char*)BODY_PATH);
 
 	CMotion *pBody = GetBody();
 
@@ -277,7 +280,7 @@ void CPlayer::InputMove(void)
 	}
 
 	// プレイヤーID取得
-	int nId = m_info.nID;
+	int nId = m_info.nIDJoypad;
 
 	D3DXVECTOR3 vecStickL = 
 	{// スティックのベクトル取得
@@ -344,7 +347,7 @@ bool CPlayer::InputInteract(void)
 	bool bTrigger = false;
 
 	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
-	int nID = GetID();
+	int nID = GetIDJoypad();
 
 	if (pJoyPad == nullptr)
 	{
@@ -373,7 +376,7 @@ void CPlayer::Aim(void)
 	}
 
 	// プレイヤーID取得
-	int nId = m_info.nID;
+	int nId = m_info.nIDJoypad;
 
 	D3DXVECTOR3 vecStickR =
 	{// スティックのベクトル取得

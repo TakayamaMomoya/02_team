@@ -177,7 +177,6 @@ void CWeapon::Draw(void)
 
 	pDebugProc->Print("\nÅ‘å’e”[%d]", m_info.nMaxBullet);
 	pDebugProc->Print("\n’e”[%d]", m_info.nNumBullet);
-	pDebugProc->Print("\n˜AŽË—Í[%d]", m_info.nRapid);
 }
 
 //=====================================================
@@ -189,7 +188,7 @@ void CWeapon::SetPlayer(CPlayer *pPlayer)
 
 	if (m_info.pPlayer != nullptr)
 	{
-		m_info.nIdxPlayer = pPlayer->GetID();
+		m_info.nIdxJoypad = pPlayer->GetIDJoypad();
 	}
 }
 
