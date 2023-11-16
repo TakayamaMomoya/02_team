@@ -122,7 +122,7 @@ public:
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
-	bool CubeCollision(TAG tag, D3DXVECTOR3 *pMove);
+	bool CubeCollision(TAG tag, D3DXVECTOR3 *pMove,CObject **ppObjOther = nullptr);
 	D3DXVECTOR3 GetVtxMax(void) { return m_vtxMax; }
 	D3DXVECTOR3 GetVtxMin(void) { return m_vtxMin; }
 	static CCollisionCube *Create(TAG tag, CObject *obj);

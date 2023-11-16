@@ -209,8 +209,8 @@ void CEnemyManager::Update(void)
 		// ’Ž‹“_‚ð’†S‚ÉÝ’è
 		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
 
-		int nPosX = pUniversal->RandRange(RAND_SPAWN, -RAND_SPAWN);
-		int nPosZ = pUniversal->RandRange(RAND_SPAWN, -RAND_SPAWN);
+		int nPosX = pUniversal->RandRange(1400, 800);
+		int nPosZ = pUniversal->RandRange(1400, 800);
 
 		posCenter.x = (float)nPosX;
 		posCenter.z = (float)nPosZ;

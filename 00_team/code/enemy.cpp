@@ -30,7 +30,7 @@
 #define SPEED_MOVE	(1.0f)	// 移動速度
 #define RATE_RADIUS	(1.5f)	// 当たり判定の大きさの倍率
 #define INITIAL_LIFE	(10.0f)	// 初期体力
-#define INITIAL_SPEED	(0.3f)	// 初期移動速度
+#define INITIAL_SPEED	(1.0f)	// 初期移動速度
 #define DAMAGE_FRAME	(10)	// ダメージ状態の継続フレーム数
 #define INITIAL_SCORE	(1000)	// 初期スコア
 #define TIME_DEATH	(30)	// 死亡までのタイム
@@ -72,6 +72,7 @@ CEnemy::CEnemy()
 	// 値のクリア
 	m_pPrev = nullptr;
 	m_pNext = nullptr;
+	m_pBlock = nullptr;
 
 	if (pHead == nullptr)
 	{// 先頭と最後尾アドレスの代入
@@ -305,7 +306,7 @@ void CEnemy::ManageCollision(void)
 		D3DXVECTOR3 move = GetMove();
 
 		// 押し出しの当たり判定
-		m_pCollisionCube->CubeCollision(CCollision::TAG_BLOCK, &move);
+		m_pCollisionCube->CubeCollision(CCollision::TAG_BLOCK, &move, (CObject**)&m_pBlock);
 		SetMove(move);
 	}
 }
