@@ -143,15 +143,32 @@ void CWeapon::FollowPlayerHand(void)
 
 	if (pBody != nullptr)
 	{
-		CParts *pParts = pBody->GetParts(m_info.nIdxHand)->pParts;
+		if (m_info.bEnable)
+		{// Žè‚É’Ç]
+			CParts *pParts = pBody->GetParts(m_info.nIdxHand)->pParts;
 
-		if (pParts != nullptr)
-		{
-			D3DXMATRIX *pMtx = GetMatrix();
-			D3DXMATRIX *pMtxPart = pParts->GetMatrix();
-			D3DXVECTOR3 offset = { -10.0f,0.0f,0.0f };
+			if (pParts != nullptr)
+			{
+				D3DXMATRIX *pMtx = GetMatrix();
+				D3DXMATRIX *pMtxPart = pParts->GetMatrix();
+				D3DXVECTOR3 offset = { -10.0f,0.0f,0.0f };
 
-			pUniversal->SetOffSet(pMtx, *pMtxPart, offset);
+				pUniversal->SetOffSet(pMtx, *pMtxPart, offset);
+			}
+		}
+		else
+		{// ”w’†‚É’Ç]
+			CParts *pParts = pBody->GetParts(0)->pParts;
+
+			if (pParts != nullptr)
+			{
+				D3DXMATRIX *pMtx = GetMatrix();
+				D3DXMATRIX *pMtxPart = pParts->GetMatrix();
+				D3DXVECTOR3 offset = { 0.0f,0.0f,20.0f };
+				D3DXVECTOR3 rot = { 0.0f,0.0f,D3DX_PI * 0.3f };
+
+				pUniversal->SetOffSet(pMtx, *pMtxPart, offset, rot);
+			}
 		}
 	}
 }
