@@ -138,6 +138,9 @@
     <ClCompile Include="code\itemRepair.cpp">
       <Filter>item</Filter>
     </ClCompile>
+    <ClCompile Include="code\container.cpp">
+      <Filter>item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -251,6 +254,9 @@
       <Filter>item</Filter>
     </ClInclude>
     <ClInclude Include="code\itemRepair.h">
+      <Filter>item</Filter>
+    </ClInclude>
+    <ClInclude Include="code\container.h">
       <Filter>item</Filter>
     </ClInclude>
   </ItemGroup>

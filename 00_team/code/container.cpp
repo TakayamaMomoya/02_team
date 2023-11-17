@@ -1,6 +1,6 @@
 //*****************************************************
 //
-// 武器アイテムの処理[ItemWeaponWeapon.cpp]
+// コンテナーの処理[container.cpp]
 // Author:髙山桃也
 //
 //*****************************************************
@@ -8,7 +8,7 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "ItemWeapon.h"
+#include "Container.h"
 #include "manager.h"
 #include "renderer.h"
 #include "playerManager.h"
@@ -18,15 +18,15 @@
 //=====================================================
 // コンストラクタ
 //=====================================================
-CItemWeapon::CItemWeapon(int nPriority) : CItem(nPriority)
+CContainer::CContainer(int nPriority) : CItem(nPriority)
 {
-	m_type = CWeapon::TYPE_MAGNUM;
+
 }
 
 //=====================================================
 // デストラクタ
 //=====================================================
-CItemWeapon::~CItemWeapon()
+CContainer::~CContainer()
 {
 
 }
@@ -34,7 +34,7 @@ CItemWeapon::~CItemWeapon()
 //=====================================================
 // 初期化処理
 //=====================================================
-HRESULT CItemWeapon::Init(void)
+HRESULT CContainer::Init(void)
 {
 	// 継承クラスの初期化
 	CItem::Init();
@@ -48,24 +48,15 @@ HRESULT CItemWeapon::Init(void)
 //=====================================================
 // 読み込み処理
 //=====================================================
-void CItemWeapon::Load(void)
+void CContainer::Load(void)
 {
-	char* apPath[CWeapon::TYPE_MAX] =
-	{
-		"data\\MODEL\\weapon\\magnum.x",
-		"data\\MODEL\\weapon\\mac10.x",
-	};
 
-	// モデルの読込
-	int nIdx = CModel::Load(apPath[m_type]);
-	SetIdxModel(nIdx);
-	BindModel(nIdx);
 }
 
 //=====================================================
 // 終了処理
 //=====================================================
-void CItemWeapon::Uninit(void)
+void CContainer::Uninit(void)
 {
 	// 継承クラスの終了
 	CItem::Uninit();
@@ -74,7 +65,7 @@ void CItemWeapon::Uninit(void)
 //=====================================================
 // 更新処理
 //=====================================================
-void CItemWeapon::Update(void)
+void CContainer::Update(void)
 {
 	// 継承クラスの更新
 	CItem::Update();
@@ -83,7 +74,7 @@ void CItemWeapon::Update(void)
 //=====================================================
 // アイテム入手時の処理
 //=====================================================
-void CItemWeapon::Interact(CObject *pObj)
+void CContainer::Interact(CObject *pObj)
 {
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 
@@ -100,14 +91,11 @@ void CItemWeapon::Interact(CObject *pObj)
 		if (pPlayer != nullptr)
 		{
 			if ((CObject*)pPlayer == pObj)
-			{// プレイヤー検出
+			{// プレイヤーのインタラクト検出
 				bool bGet = pPlayer->InputInteract();
 
 				if (bGet)
 				{
-					// 効果の付与
-					ApplyEffect(pPlayer);
-
 					Uninit();
 				}
 			}
@@ -116,36 +104,9 @@ void CItemWeapon::Interact(CObject *pObj)
 }
 
 //=====================================================
-// 効果を適用する処理
-//=====================================================
-void CItemWeapon::ApplyEffect(CPlayer* pPlayer)
-{
-	if (pPlayer == nullptr)
-	{
-		return;
-	}
-
-	switch (m_type)
-	{
-	case CWeapon::TYPE_MAGNUM:
-
-		pPlayer->SetWeapon(CWeapon::TYPE_MAGNUM);
-
-		break;
-	case CWeapon::TYPE_MACHINEGUN:
-
-		pPlayer->SetWeapon(CWeapon::TYPE_MACHINEGUN);
-
-		break;
-	default:
-		break;
-	}
-}
-
-//=====================================================
 // 描画処理
 //=====================================================
-void CItemWeapon::Draw(void)
+void CContainer::Draw(void)
 {
 	// 継承クラスの描画
 	CItem::Draw();
@@ -154,22 +115,20 @@ void CItemWeapon::Draw(void)
 //=====================================================
 // 生成処理
 //=====================================================
-CItemWeapon *CItemWeapon::Create(CWeapon::TYPE type)
+CContainer *CContainer::Create(void)
 {
-	CItemWeapon *pItemWeapon = nullptr;
+	CContainer *pContainer = nullptr;
 
-	if (pItemWeapon == nullptr)
+	if (pContainer == nullptr)
 	{
-		pItemWeapon = new CItemWeapon;
+		pContainer = new CContainer;
 
-		if (pItemWeapon != nullptr)
+		if (pContainer != nullptr)
 		{
-			pItemWeapon->m_type = type;
-
 			// 初期化
-			pItemWeapon->Init();
+			pContainer->Init();
 		}
 	}
 
-	return pItemWeapon;
+	return pContainer;
 }
