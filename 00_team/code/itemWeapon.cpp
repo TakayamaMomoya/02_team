@@ -156,6 +156,11 @@ void CItemWeapon::Draw(void)
 //=====================================================
 CItemWeapon *CItemWeapon::Create(CWeapon::TYPE type)
 {
+	if (type >= CWeapon::TYPE_MAX || type < 0)
+	{
+		assert(("‘z’èŠO‚Ì•Ší‚ðo‚»‚¤‚Æ‚µ‚Ä‚Ü‚·",false));
+	}
+
 	CItemWeapon *pItemWeapon = nullptr;
 
 	if (pItemWeapon == nullptr)

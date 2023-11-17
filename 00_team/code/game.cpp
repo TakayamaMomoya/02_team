@@ -32,6 +32,7 @@
 #include "edit.h"
 #include "goal.h"
 #include "block.h"
+#include "container.h"
 
 //*****************************************************
 // マクロ定義
@@ -116,6 +117,10 @@ HRESULT CGame::Init(void)
 
 	// ロケットの生成
 	CRocket::Create();
+
+	// コンテナの生成
+	CContainer *pContainer = CContainer::Create();
+	pContainer->SetPosition(D3DXVECTOR3(200.0f, 0.0f, 0.0f));
 
 #ifdef _DEBUG
 	// エディットの生成

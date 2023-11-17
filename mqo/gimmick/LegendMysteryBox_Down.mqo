@@ -4,8 +4,8 @@ Format Text Ver 1.0
 Scene {
 	pos 33.7331 -57.5051 6144.0000
 	lookat 0.0000 0.0000 0.0000
-	head 18.3019
-	pich 0.2408
+	head 18.6019
+	pich -0.2292
 	bank 0.0000
 	ortho 0
 	zoom2 1.2207
@@ -18,8 +18,8 @@ Scene {
 	}
 }
 Material 5 {
-	"mat1" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\wood.jpg")
-	"mat2" col(1.000 0.643 0.361 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\copper.jpg")
+	"mat1" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\data\MATERIAL\gold.jpg")
+	"mat2" col(0.490 0.318 0.176 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\copper.jpg")
 	"mat3" col(0.749 0.749 0.749 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\copper.jpg")
 	"mat4" col(0.361 0.361 0.361 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\copper.jpg")
 	"mat5" col(1.000 0.839 0.000 1.000) dif(0.800) amb(0.600) emi(0.700) spc(0.000) power(5.00)
