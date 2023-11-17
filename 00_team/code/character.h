@@ -42,6 +42,8 @@ public:
 	D3DXVECTOR3 GetRot(void) { return m_info.rot; }
 	CMotion *GetBody(void) { return m_info.pBody; }
 	void Load(char *pPath);
+	void SetMotion(int nMotion);
+	int GetMotion(void);
 
 private:
 	struct SInfo

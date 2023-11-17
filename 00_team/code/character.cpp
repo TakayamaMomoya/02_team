@@ -121,3 +121,29 @@ void CCharacter::Draw(void)
 {
 
 }
+
+//=====================================================
+// モーション設定
+//=====================================================
+void CCharacter::SetMotion(int nMotion)
+{
+	if (m_info.pBody != nullptr)
+	{
+		m_info.pBody->SetMotion(nMotion);
+	}
+}
+
+//=====================================================
+// モーション取得
+//=====================================================
+int CCharacter::GetMotion(void)
+{
+	int nMotion = 0;
+
+	if (m_info.pBody != nullptr)
+	{
+		nMotion = m_info.pBody->GetMotion();
+	}
+
+	return nMotion;
+}

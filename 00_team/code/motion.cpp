@@ -238,7 +238,10 @@ void CMotion::SetMotion(int nMotionType)
 	m_motionTypeOld = m_motionType;
 	SetKeyOld();
 
-	m_nFrame = m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame;
+	if (m_nKey != -1)
+	{
+		m_nFrame = m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame;
+	}
 
 	// ÉÇÅ[ÉVÉáÉìèÓïÒÇÃê›íË
 	m_motionType = nMotionType;

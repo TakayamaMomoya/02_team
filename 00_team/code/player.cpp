@@ -36,6 +36,7 @@ namespace
 	const float ROT_SPEED = 0.1f;	// 回転速度
 	const float INITIAL_LIFE = 30.0f;	// 初期体力
 	const float DAMAGE_TIME = 0.5f;	// ダメージ状態の秒数
+	const float MOVE_LINE = 0.2f;	// 動いている判断のしきい値
 }
 
 //=====================================================
@@ -219,6 +220,9 @@ void CPlayer::Update(void)
 
 	// 状態管理
 	ManageState();
+
+	// モーション管理
+	ManageMotion();
 
 	// 武器の追従
 	if (m_info.pWeapon != nullptr)
@@ -470,6 +474,35 @@ void CPlayer::ManageState(void)
 		break;
 	default:
 		break;
+	}
+}
+
+//=====================================================
+// モーション管理
+//=====================================================
+void CPlayer::ManageMotion(void)
+{
+	D3DXVECTOR3 move = GetMove();
+
+	float fSpeed = D3DXVec3Length(&move);
+
+	int nMotion = GetMotion();
+
+	CDebugProc::GetInstance()->Print("\nスピード[%f]",fSpeed);
+
+	if (fSpeed > MOVE_LINE)
+	{
+		if (nMotion != MOTION_WALK)
+		{
+			SetMotion(MOTION_WALK);
+		}
+	}
+	else
+	{
+		if (nMotion != MOTION_NEUTRAL)
+		{
+			SetMotion(MOTION_NEUTRAL);
+		}
 	}
 }
 
