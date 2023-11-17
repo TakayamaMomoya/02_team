@@ -12,9 +12,12 @@
 #include "Weapon.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define PARAM_PATH	"data\\TEXT\\weapon.txt"	// パラメーターのパス
+namespace
+{
+	const char* PARAM_PATH = "data\\TEXT\\weapon.txt";	// パラメーターのパス
+}
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -26,7 +29,8 @@ CWeaponManager *CWeaponManager::m_pWeaponManager = nullptr;	// 自身のポインタ
 //=====================================================
 CWeaponManager::CWeaponManager()
 {
-
+	ZeroMemory(&m_aInfo[0], sizeof(m_aInfo));
+	ZeroMemory(&m_anProb[0], sizeof(m_anProb));
 }
 
 //=====================================================
@@ -111,6 +115,32 @@ void CWeaponManager::LoadParam(void)
 					LoadBaseInfo(pFile, &cTemp[0], CWeapon::TYPE_MACHINEGUN);
 
 					if (strcmp(cTemp, "END_MACHINEGUNSET") == 0)
+					{// パラメーター読込終了
+						break;
+					}
+				}
+			}
+
+			if (strcmp(cTemp, "PROBSET") == 0)
+			{// 確率読込開始
+				int nCntProb = 0;
+
+				while (true)
+				{
+					// 文字読み込み
+					(void)fscanf(pFile, "%s", &cTemp[0]);
+
+					if (strcmp(cTemp, "PROB") == 0)
+					{
+						(void)fscanf(pFile, "%s", &cTemp[0]);
+
+						(void)fscanf(pFile, "%d", &m_anProb[nCntProb]);
+
+						nCntProb++;
+					}
+
+					if (strcmp(cTemp, "END_PROBSET") == 0 ||
+						nCntProb >= CWeapon::TYPE_MAX)
 					{// パラメーター読込終了
 						break;
 					}

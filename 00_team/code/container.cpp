@@ -16,6 +16,7 @@
 #include "player.h"
 #include "universal.h"
 #include "itemWeapon.h"
+#include "weaponManager.h"
 
 //*****************************************************
 // 定数定義
@@ -167,11 +168,12 @@ void CContainer::Open(void)
 	// 箱を開く状態
 	m_info.state = STATE_OPEN;
 
-	// 武器をランダムに出現させる
+	// 武器の種類をランダムで設定
 	CUniversal *pUniversal = CUniversal::GetInstance();
 
-	CWeapon::TYPE type = (CWeapon::TYPE)pUniversal->RandRange(CWeapon::TYPE::TYPE_MAX, 0);
+	CWeapon::TYPE type = (CWeapon::TYPE)WeaponRand();
 
+	// 武器の設置
 	CItemWeapon *pWeapon = CItemWeapon::Create(type);
 
 	if (pWeapon != nullptr)
@@ -180,6 +182,60 @@ void CContainer::Open(void)
 
 		pWeapon->SetPosition(pos);
 	}
+
+	Uninit();
+}
+
+//=====================================================
+// 武器のランダムで設定する処理
+//=====================================================
+int CContainer::WeaponRand(void)
+{
+	int anProb[CWeapon::TYPE::TYPE_MAX];	// 確率の保存用
+	int nMinProb = INT_MAX;
+	int nMax = 0;
+
+	ZeroMemory(&anProb[0], sizeof(int) * CWeapon::TYPE::TYPE_MAX);
+
+	// 武器マネージャーから各武器の確率を取得、最大値の設定
+	CWeaponManager *pWeaponManager = CWeaponManager::GetInstance();
+
+	if (pWeaponManager != nullptr)
+	{
+		for (int i = 0; i < CWeapon::TYPE::TYPE_MAX; i++)
+		{
+			anProb[i] = pWeaponManager->GetProb(i);
+
+			if (anProb[i] > nMax)
+			{
+				nMax = anProb[i];
+			}
+		}
+	}
+
+	// 乱数の設定
+	CUniversal *pUniversal = CUniversal::GetInstance();
+	int nProb = pUniversal->RandRange(nMax,1);	// 期待値の合計を最大値として乱数を振る
+	int nIdxWeapon = -1;
+
+	for (int i = 0; i < CWeapon::TYPE::TYPE_MAX; i++)
+	{
+		if (nProb <= anProb[i])
+		{// 確率内のとき
+			if (anProb[i] < nMinProb)
+			{// 他の当たった確率より低い場合のみ適用
+				nIdxWeapon = i;
+				nMinProb = anProb[i];
+			}
+		}
+	}
+
+	if (nIdxWeapon == -1)
+	{
+		assert(("武器の設定に失敗", false));
+	}
+
+	return nIdxWeapon;
 }
 
 //=====================================================
