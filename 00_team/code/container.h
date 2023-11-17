@@ -45,6 +45,7 @@ private:
 	void Load(void);
 	void Interact(CObject* pObj);
 	void Open(void);
+	int WeaponRand(void);
 
 	SInfo m_info;
 };
