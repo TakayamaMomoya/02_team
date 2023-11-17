@@ -25,6 +25,7 @@ namespace
 {
 	const char* BODY_PATH = "data\\MODEL\\gimmick\\MysteryBox_Down.x";	// 本体のパス
 	const char* CAP_PATH = "data\\MODEL\\gimmick\\MysteryBox_Up.x";	// 蓋のパス
+	const float TIME_DEATH = 1.5f;	// 死亡までの時間
 }
 
 //=====================================================
@@ -76,6 +77,7 @@ HRESULT CContainer::Init(void)
 	Load();
 
 	m_info.state = STATE_NORMAL;
+	m_info.fTimerDeath = TIME_DEATH;
 
 	return S_OK;
 }
@@ -126,6 +128,28 @@ void CContainer::Update(void)
 {
 	// 継承クラスの更新
 	CItem::Update();
+
+	if (m_info.state == STATE_OPEN)
+	{// 開いている状態の更新
+		UpdateOpen();
+	}
+}
+
+//=====================================================
+// 開いている状態の更新
+//=====================================================
+void CContainer::UpdateOpen(void)
+{
+	float fTick = CManager::GetTick();
+
+	m_info.fTimerDeath -= fTick;
+
+	if (m_info.fTimerDeath <= 0.0f)
+	{
+		m_info.fTimerDeath = 0.0f;
+
+		Uninit();
+	}
 }
 
 //=====================================================
@@ -133,6 +157,11 @@ void CContainer::Update(void)
 //=====================================================
 void CContainer::Interact(CObject *pObj)
 {
+	if (m_info.state != STATE_NORMAL)
+	{
+		return;
+	}
+
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 
 	if (pObj == nullptr || pPlayerManager == nullptr)
@@ -183,7 +212,7 @@ void CContainer::Open(void)
 		pWeapon->SetPosition(pos);
 	}
 
-	Uninit();
+	m_info.state = STATE_OPEN;
 }
 
 //=====================================================
