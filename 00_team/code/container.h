@@ -41,10 +41,13 @@ private:
 	{// 情報
 		CObjectX *pCap;	// 蓋のオブジェクト
 		STATE state;	// 状態
+		float fTimerDeath;	// 死亡までのタイマー
 	};
 	void Load(void);
+	void UpdateOpen(void);
 	void Interact(CObject* pObj);
 	void Open(void);
+	int WeaponRand(void);
 
 	SInfo m_info;
 };
