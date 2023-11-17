@@ -21,10 +21,13 @@
 #include "camera.h"
 #include "renderer.h"
 #include "sound.h"
+#include "object2D.h"
 #include "billboard.h"
 #include "object3D.h"
 #include "playerManager.h"
 #include "player.h"
+
+#include "edit.h"
 
 #include <stdio.h>
 
@@ -81,6 +84,10 @@ HRESULT CSelect::Init(void)
 	m_pPlayerManager = CPlayerManager::Create();
 
 	MenuInit();
+	StartInit();
+
+	// エディットの生成
+	//CEdit::Create();
 
 	return S_OK;
 }
@@ -124,10 +131,28 @@ void CSelect::MenuInit(void)
 }
 
 //=====================================================
+// スタートの初期化処理
+//=====================================================
+void CSelect::StartInit(void)
+{
+	m_pStartUI = CObject2D::Create();
+	m_pStartUI->SetPosition(D3DXVECTOR3(1100.0f, 650.0f, 0.0f));
+	m_pStartUI->SetSize(150.0f, 50.0f);
+
+	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\start.png");
+	m_pStartUI->SetIdxTexture(nIdx);
+
+	m_pStartUI->SetVtx();
+}
+
+//=====================================================
 // 終了処理
 //=====================================================
 void CSelect::Uninit(void)
 {
+	// ブロックの破棄
+	CBlock::DeleteAll();
+
 	// オブジェクト全破棄
 	CObject::ReleaseAll();
 }
@@ -142,8 +167,6 @@ void CSelect::Update(void)
 	CInputMouse *pMouse = CInputMouse::GetInstance();
 	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
 
-	CCamera *pCamera = CManager::GetCamera();
-
 	// シーンの更新
 	CScene::Update();
 	
@@ -153,12 +176,15 @@ void CSelect::Update(void)
 	{
 		if (pKeyboard != nullptr && pMouse != nullptr)
 		{
-			if (pKeyboard->GetTrigger(DIK_RETURN) ||
+			if (/*pKeyboard->GetTrigger(DIK_RETURN) ||*/
 				//pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
 				pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
 			{// フェード
-				if (pFade != nullptr)
+
+				if (pFade != nullptr && m_abJoin[0] != false)
 				{
+					m_pStartUI->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+
 					pFade->SetFade(CScene::MODE_GAME);
 				}
 			}
@@ -180,6 +206,14 @@ void CSelect::Update(void)
 	else if(m_state == STATE_OUT)
 	{
 
+	}
+
+	CCamera* pCamera = CManager::GetCamera();
+
+	if (pCamera != nullptr)
+	{
+		// 操作
+		pCamera->Control();
 	}
 }
 
@@ -248,14 +282,6 @@ void CSelect::EntryInput(int nPlayer)
 
 		// メニューの削除
 		MenuDelete(nPlayer);
-	}
-	
-	CCamera* pCamera = CManager::GetCamera();
-
-	if (pCamera != nullptr)
-	{
-		// 操作
-		pCamera->Control();
 	}
 }
 

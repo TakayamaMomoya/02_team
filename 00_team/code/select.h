@@ -17,6 +17,7 @@
 // 前方宣言
 //*****************************************************
 class CBillboard;
+class CObject2D;
 class CPlayerManager;
 
 //*****************************************************
@@ -65,10 +66,12 @@ private:
 
 	void MenuInit(void);
 	void MenuDelete(int nPlayer);
+	void StartInit(void);
 	void ColorChange(int nPlayer);
 	void EntryInput(int nPlayer);
 
 	MenuData m_aMenuData[NUM_PLAYER];	//それぞれの選択メニュー
+	CObject2D* m_pStartUI;
 	CPlayerManager* m_pPlayerManager;	//プレイヤー管理
 	STATE m_state;	// 状態
 	bool m_abJoin[NUM_PLAYER];	//参加したかどうか
