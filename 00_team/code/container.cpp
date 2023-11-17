@@ -14,13 +14,24 @@
 #include "playerManager.h"
 #include "weapon.h"
 #include "player.h"
+#include "universal.h"
+#include "itemWeapon.h"
+
+//*****************************************************
+// 定数定義
+//*****************************************************
+namespace
+{
+	const char* BODY_PATH = "data\\MODEL\\gimmick\\MysteryBox_Down.x";	// 本体のパス
+	const char* CAP_PATH = "data\\MODEL\\gimmick\\MysteryBox_Up.x";	// 蓋のパス
+}
 
 //=====================================================
 // コンストラクタ
 //=====================================================
 CContainer::CContainer(int nPriority) : CItem(nPriority)
 {
-
+	ZeroMemory(&m_info, sizeof(SInfo));
 }
 
 //=====================================================
@@ -29,6 +40,27 @@ CContainer::CContainer(int nPriority) : CItem(nPriority)
 CContainer::~CContainer()
 {
 
+}
+
+//=====================================================
+// 生成処理
+//=====================================================
+CContainer *CContainer::Create(void)
+{
+	CContainer *pContainer = nullptr;
+
+	if (pContainer == nullptr)
+	{
+		pContainer = new CContainer;
+
+		if (pContainer != nullptr)
+		{
+			// 初期化
+			pContainer->Init();
+		}
+	}
+
+	return pContainer;
 }
 
 //=====================================================
@@ -42,6 +74,8 @@ HRESULT CContainer::Init(void)
 	// 読み込み
 	Load();
 
+	m_info.state = STATE_NORMAL;
+
 	return S_OK;
 }
 
@@ -50,7 +84,23 @@ HRESULT CContainer::Init(void)
 //=====================================================
 void CContainer::Load(void)
 {
+	// 本体の読込
+	int nIdx = CModel::Load((char*)BODY_PATH);
+	SetIdxModel(nIdx);
+	BindModel(nIdx);
 
+	if (m_info.pCap == nullptr)
+	{// 蓋の生成
+		m_info.pCap = CObjectX::Create();
+
+		if (m_info.pCap != nullptr)
+		{
+			// 蓋の読み込み
+			int nIdx = CModel::Load((char*)CAP_PATH);
+			m_info.pCap->SetIdxModel(nIdx);
+			m_info.pCap->BindModel(nIdx);
+		}
+	}
 }
 
 //=====================================================
@@ -58,6 +108,12 @@ void CContainer::Load(void)
 //=====================================================
 void CContainer::Uninit(void)
 {
+	if (m_info.pCap != nullptr)
+	{
+		m_info.pCap->Uninit();
+		m_info.pCap = nullptr;
+	}
+
 	// 継承クラスの終了
 	CItem::Uninit();
 }
@@ -95,11 +151,50 @@ void CContainer::Interact(CObject *pObj)
 				bool bGet = pPlayer->InputInteract();
 
 				if (bGet)
-				{
-					Uninit();
+				{// 箱を開く
+					Open();
 				}
 			}
 		}
+	}
+}
+
+//=====================================================
+// 箱を開く処理
+//=====================================================
+void CContainer::Open(void)
+{
+	// 箱を開く状態
+	m_info.state = STATE_OPEN;
+
+	// 武器をランダムに出現させる
+	CUniversal *pUniversal = CUniversal::GetInstance();
+
+	CWeapon::TYPE type = (CWeapon::TYPE)pUniversal->RandRange(CWeapon::TYPE::TYPE_MAX, 0);
+
+	CItemWeapon *pWeapon = CItemWeapon::Create(type);
+
+	if (pWeapon != nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+
+		pWeapon->SetPosition(pos);
+	}
+}
+
+//=====================================================
+// 位置の設定
+//=====================================================
+void CContainer::SetPosition(D3DXVECTOR3 pos)
+{
+	// 継承クラスの設置
+	CObjectX::SetPosition(pos);
+
+	if (m_info.pCap != nullptr)
+	{// 蓋の追従
+		D3DXVECTOR3 pos = GetPosition();
+
+		m_info.pCap->SetPosition(pos);
 	}
 }
 
@@ -110,25 +205,4 @@ void CContainer::Draw(void)
 {
 	// 継承クラスの描画
 	CItem::Draw();
-}
-
-//=====================================================
-// 生成処理
-//=====================================================
-CContainer *CContainer::Create(void)
-{
-	CContainer *pContainer = nullptr;
-
-	if (pContainer == nullptr)
-	{
-		pContainer = new CContainer;
-
-		if (pContainer != nullptr)
-		{
-			// 初期化
-			pContainer->Init();
-		}
-	}
-
-	return pContainer;
 }
