@@ -27,14 +27,11 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define SPEED_MOVE	(1.0f)	// 移動速度
-#define RATE_RADIUS	(1.5f)	// 当たり判定の大きさの倍率
 #define INITIAL_LIFE	(10.0f)	// 初期体力
 #define INITIAL_SPEED	(1.0f)	// 初期移動速度
 #define DAMAGE_FRAME	(10)	// ダメージ状態の継続フレーム数
 #define INITIAL_SCORE	(1000)	// 初期スコア
 #define TIME_DEATH	(30)	// 死亡までのタイム
-#define ROLL_FACT	(0.1f)	// 回転係数
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -208,8 +205,8 @@ HRESULT CEnemy::Init(void)
 	{// 立方体の当たり判定
 		m_pCollisionCube = CCollisionCube::Create(CCollision::TAG_ENEMY, this);
 
-		D3DXVECTOR3 vtxMax = { 5,5,5 };
-		D3DXVECTOR3 vtxMin = { -5,-5,-5 };
+		D3DXVECTOR3 vtxMax = { 20,20,20 };
+		D3DXVECTOR3 vtxMin = { -20,0.0f,-20 };
 
 		if (m_pCollisionCube != nullptr)
 		{
@@ -262,6 +259,8 @@ void CEnemy::Update(void)
 	D3DXVECTOR3 pos = GetPosition();
 	D3DXVECTOR3 move = GetMove();
 
+	SetPositionOld(pos);
+
 	pos += move;
 	SetPosition(pos);
 
@@ -301,6 +300,7 @@ void CEnemy::ManageCollision(void)
 	if (m_pCollisionCube != nullptr)
 	{// 立方体の当たり判定の管理
 		// 当たり判定の位置設定
+		m_pCollisionCube->SetPositionOld(m_pCollisionCube->GetPosition());
 		m_pCollisionCube->SetPosition(GetPosition());
 
 		D3DXVECTOR3 move = GetMove();
@@ -363,6 +363,19 @@ void CEnemy::ManageState(void)
 //=====================================================
 void CEnemy::ChaseTarget(void)
 {
+	// ゲーム状態によって追跡させない
+	CGame *pGame = CGame::GetInstance();
+
+	if (pGame != nullptr)
+	{
+		CGame::STATE state = pGame->GetState();
+
+		if (state != CGame::STATE::STATE_NORMAL)
+		{
+			return;
+		}
+	}
+
 	CUniversal *pUniversal = CUniversal::GetInstance();
 
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
@@ -413,9 +426,11 @@ void CEnemy::ChaseTarget(void)
 	float fAngleDist = atan2f(move.x, move.z);
 	D3DXVECTOR3 rot = GetRot();
 
+	fAngleDist += D3DX_PI;
+
 	pUniversal->FactingRot(&rot.y, fAngleDist, 0.1f);
 
-	//SetRot(rot);
+	SetRot(rot);
 }
 
 //=====================================================

@@ -17,7 +17,6 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define NUM_ORBIT	(4)	// 軌跡の数
 #define MAX_HIT	(54)	// 最大で覚えられる命中したオブジェクト
 
 //*****************************************************
@@ -66,7 +65,7 @@ private:
 	static int m_nNumAll;	// 総数
 	bool m_bPierce;	// 貫通するかどうか
 	CCollisionSphere *m_pCollisionSphere;	// 球の当たり判定
-	COrbit *m_apOrbit[NUM_ORBIT];	// 軌跡のポインタ
+	COrbit *m_pOrbit;	// 軌跡のポインタ
 	D3DXCOLOR m_col;	// 色
 	float m_fDamage;	// 与ダメージ
 	float m_fSize;	// 弾のサイズ
