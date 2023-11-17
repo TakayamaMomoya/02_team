@@ -121,7 +121,7 @@ HRESULT CTitle::Init(void)
 		m_pStart->SetVtx();
 	}
 
-	//’n–Ê‚Ì¶¬
+	// ’n–Ê‚Ì¶¬
 	CObject3D* pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\field00.jpg");
 	pObject->SetIdxTexture(nIdx);
