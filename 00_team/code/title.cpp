@@ -1,7 +1,7 @@
 //*****************************************************
 //
 // タイトル処理[title.cpp]
-// Author:髙山桃也
+// Author:酒井南勝
 //
 //*****************************************************
 
@@ -14,23 +14,61 @@
 #include "inputmouse.h"
 #include "inputjoypad.h"
 #include "manager.h"
-#include "motion.h"
 #include "fade.h"
 #include "texture.h"
 #include "camera.h"
 #include "renderer.h"
 #include "sound.h"
 
+#include "object3D.h"
+
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define LOGO_PATH	"data\\TEXTURE\\UI\\logo000.png"	// ロゴのパス
-#define START_PATH	"data\\TEXTURE\\UI\\start.png"	// スタート表示のパス
-#define START_WIDTH	(200.0f)	// スタート表示の幅
-#define START_HEIGHT	(50.0f)	// スタート表示の高さ
-#define DEST_WIDTH	(500.0f)	// スタート表示の幅
-#define CHANGE_FACT	(0.1f)	// 変化する係数
-#define ALPHA_CHANGE	(0.05f)	// α値の変化量
+
+//*****************************************************
+// 定数定義
+//*****************************************************
+namespace
+{
+	const char* BODY_PATH[NUM_PLAYER] =
+	{// 体のパス
+		"data\\MOTION\\motionPotatoman01.txt",
+		"data\\MOTION\\motionPotatoman02.txt",
+		"data\\MOTION\\motionPotatoman03.txt",
+		"data\\MOTION\\motionPotatoman04.txt",
+	};
+
+	const D3DXVECTOR3 PLAYER_POS[NUM_PLAYER] =
+	{// プレイヤーの位置
+		D3DXVECTOR3(-100.0f, 0.0f, -200.0f),
+		D3DXVECTOR3( -50.0f, 0.0f, -150.0f),
+		D3DXVECTOR3(  50.0f, 0.0f, -150.0f),
+		D3DXVECTOR3( 100.0f, 0.0f, -200.0f),
+	};
+
+	const D3DXVECTOR3 PLAYER_ROT[NUM_PLAYER] =
+	{// プレイヤーの向き
+		D3DXVECTOR3(0.0f, D3DX_PI * -0.25f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * -0.10f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.10f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f),
+	};
+
+	const D3DXVECTOR3 LOGO_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 150.0f, 0.0f);	// ロゴの位置
+	const float LOGO_WIDTH = 875.0f * 0.35f;	// ロゴの幅
+	const float LOGO_HEIGHT = 320.0f * 0.35f;	// ロゴの高さ
+	const char* LOGO_PATH = "data\\TEXTURE\\UI\\logo000.png";	// ロゴのパス
+
+	const D3DXVECTOR3 STATE_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.85f, 0.0f);	// ロゴの位置
+	const float START_WIDTH = 200.0f;	// スタート表示の幅
+	const float START_HEIGHT = 50.0f;	// スタート表示の高さ
+	const char* START_PATH = "data\\TEXTURE\\UI\\start.png";	// スタート表示のパス
+
+	const float DEST_WIDTH = 500.0f;	// スタート表示の幅
+	const float CHANGE_FACT = 0.1f;		// 変化する係数
+	const float ALPHA_CHANGE = 0.05f;	// α値の変化量
+}
 
 //=====================================================
 // コンストラクタ
@@ -38,6 +76,7 @@
 CTitle::CTitle()
 {
 	m_pStart = nullptr;
+	ZeroMemory(&m_apModelPlayer[0], sizeof(m_apModelPlayer));
 	m_state = STATE_NONE;
 }
 
@@ -54,14 +93,20 @@ CTitle::~CTitle()
 //=====================================================
 HRESULT CTitle::Init(void)
 {
+	// 情報取得
+	CCamera* pCamera = CManager::GetCamera();
+
+	// カメラの設定
+	pCamera->SetTitle();
+
 	// ロゴの生成
-	CObject2D *pObject2D = CObject2D::Create(7);
-	pObject2D->SetSize(875.0f * 0.45f, 320.0f * 0.45f);
-	pObject2D->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.7f, 200.0f, 0.0f));
+	CObject2D *pLogo = CObject2D::Create(7);
+	pLogo->SetSize(LOGO_WIDTH, LOGO_HEIGHT);
+	pLogo->SetPosition(LOGO_POS);
 
 	int nIdx = CTexture::GetInstance()->Regist(LOGO_PATH);
-	pObject2D->SetIdxTexture(nIdx);
-	pObject2D->SetVtx();
+	pLogo->SetIdxTexture(nIdx);
+	pLogo->SetVtx();
 
 	// スタート表示の生成
 	m_pStart = CObject2D::Create(7);
@@ -69,11 +114,25 @@ HRESULT CTitle::Init(void)
 	if (m_pStart != nullptr)
 	{
 		m_pStart->SetSize(START_WIDTH, START_HEIGHT);
-		m_pStart->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.7f, 0.0f));
+		m_pStart->SetPosition(STATE_POS);
 
 		int nIdx = CTexture::GetInstance()->Regist(START_PATH);
 		m_pStart->SetIdxTexture(nIdx);
 		m_pStart->SetVtx();
+	}
+
+	//地面の生成
+	CObject3D* pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\field00.jpg");
+	pObject->SetIdxTexture(nIdx);
+
+	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+	{
+		// キャラクターの生成処理
+		m_apModelPlayer[nCount] = CMotion::Create((char*)BODY_PATH[nCount]);
+
+		m_apModelPlayer[nCount]->SetPosition(PLAYER_POS[nCount]);
+		m_apModelPlayer[nCount]->SetRot(PLAYER_ROT[nCount]);
 	}
 
 	return S_OK;

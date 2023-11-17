@@ -13,6 +13,8 @@
 #include "main.h"
 #include "scene.h"
 
+#include "motion.h"
+
 //*****************************************************
 // 前方宣言
 //*****************************************************
@@ -30,8 +32,8 @@ public:
 
 	virtual HRESULT Init(void);
 	virtual void Uninit(void);
-	virtual void Update();
-	virtual void Draw();
+	virtual void Update(void);
+	virtual void Draw(void);
 
 private:
 	enum STATE
@@ -43,8 +45,9 @@ private:
 
 	void ManageStart(void);
 
-	CObject2D *m_pStart;	// スタート表示のポインタ
-	STATE m_state;	// 状態
+	CObject2D *m_pStart;					// スタート表示のポインタ
+	CMotion* m_apModelPlayer[NUM_PLAYER];	// プレイヤーモデルのポインタ
+	STATE m_state;							// 状態
 };
 
 #endif
