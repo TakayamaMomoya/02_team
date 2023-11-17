@@ -25,14 +25,6 @@ class CBillboard;
 class CItem : public CObjectX
 {
 public:
-	enum TYPE
-	{
-		TYPE_MAGNUM = 0,	// マグナム
-		TYPE_MACHINEGUN,	// マシンガン
-		TYPE_RIFLE,	// ライフル
-		TYPE_MAX
-	};
-
 	CItem(int nPriority = 3);	// コンストラクタ
 	~CItem();	// デストラクタ
 

@@ -16,6 +16,7 @@
 class CCollisionSphere;
 class CCollisionCube;
 class CShadow;
+class CBlock;
 
 //*****************************************************
 // マクロ定義
@@ -74,6 +75,7 @@ public:
 protected:
 	CShadow *GetShadow(void) { return m_pShadow; }
 	void ManageScore(void);
+	CBlock *GetTouchBlock(void) { return m_pBlock; }
 
 private:
 	void ManageState(void);
@@ -87,6 +89,7 @@ private:
 	CCollisionSphere *m_pCollisionSphere;	// 球の当たり判定
 	CCollisionCube *m_pCollisionCube;	// 立方体の当たり判定
 	CShadow *m_pShadow;	// 影のポインタ
+	CBlock *m_pBlock;	// ブロックのポインタ
 	STATE m_state;	// 状態
 	int m_nScore;	// スコア値
 

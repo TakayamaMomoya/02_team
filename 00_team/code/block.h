@@ -46,6 +46,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	void Hit(float fDamage);
+	int GetID(void) { return m_nID; }
 	static HRESULT Load(char *pPath);	// “Ç
 	static void Save(void);	// •Û‘¶
 	static void Delete(int nIdx);	// •”•ªíœˆ—
@@ -66,6 +67,7 @@ private:
 	static int m_nNumAll;	// ‘”
 	CCollisionCube *m_pCollisionCube;	// —§•û‘Ì‚Ì“–‚½‚è”»’è
 	float m_fLife;	// ‘Ì—Í
+	int m_nID;	// ID
 };
 
 #endif

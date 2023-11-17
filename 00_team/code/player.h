@@ -36,7 +36,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	void SetWeapon(CWeapon::TYPE type);
-	void SetID(int nID) { m_info.nID = nID; }
+	void SetID(int nID);
 	void SetIDJoypad(int nID) { m_info.nIDJoypad = nID; }
 	int GetIDJoypad(void) { return m_info.nIDJoypad; }
 	int GetID(void) { return m_info.nID; }

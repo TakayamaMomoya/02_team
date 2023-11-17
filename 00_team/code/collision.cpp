@@ -673,7 +673,7 @@ void CCollisionCube::Update(void)
 //=====================================================
 // —§•û‘Ì‚Ì“–‚½‚è”»’è
 //=====================================================
-bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove)
+bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove, CObject **ppObjOther)
 {
 	bool bLand = false;
 	D3DXVECTOR3 pos;
@@ -693,6 +693,11 @@ bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove)
 		posOwnOld = GetOwner()->GetPositionOld();
 		vtxMaxOwn = GetVtxMax();
 		vtxMinOwn = GetVtxMin();
+	}
+
+	if (ppObjOther != nullptr)
+	{
+		*ppObjOther = nullptr;
 	}
 
 	for (int nCnt = 0; nCnt < NUM_OBJECT; nCnt++)
@@ -727,6 +732,11 @@ bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove)
 
 							//ˆÚ“®—Ê‚ð‚È‚­‚·
 							pMove->x = 0;
+
+							if (ppObjOther != nullptr)
+							{
+								*ppObjOther = ppCollision[nCnt]->GetOwner();
+							}
 						}
 
 						if (posOwnOld.x <= vtxMin.x - vtxMaxOwn.x &&
@@ -737,6 +747,11 @@ bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove)
 
 							//ˆÚ“®—Ê‚ð‚È‚­‚·
 							pMove->x = 0;
+
+							if (ppObjOther != nullptr)
+							{
+								*ppObjOther = ppCollision[nCnt]->GetOwner();
+							}
 						}
 					}
 
@@ -752,6 +767,11 @@ bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove)
 
 							//ˆÚ“®—Ê‚ð‚È‚­‚·
 							pMove->z = 0;
+
+							if (ppObjOther != nullptr)
+							{
+								*ppObjOther = ppCollision[nCnt]->GetOwner();
+							}
 						}
 
 						if (posOwnOld.z >= vtxMax.z - vtxMinOwn.z &&
@@ -762,6 +782,11 @@ bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove)
 
 							//ˆÚ“®—Ê‚ð‚È‚­‚·
 							pMove->z = 0;
+
+							if (ppObjOther != nullptr)
+							{
+								*ppObjOther = ppCollision[nCnt]->GetOwner();
+							}
 						}
 					}
 
@@ -782,6 +807,11 @@ bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove)
 							pMove->y = 0.0f;
 
 							bLand = true;
+
+							if (ppObjOther != nullptr)
+							{
+								*ppObjOther = ppCollision[nCnt]->GetOwner();
+							}
 						}
 					}
 				}

@@ -11,7 +11,6 @@
 #include "ItemWeapon.h"
 #include "manager.h"
 #include "renderer.h"
-#include "collision.h"
 #include "playerManager.h"
 #include "weapon.h"
 #include "player.h"

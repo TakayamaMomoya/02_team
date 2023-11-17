@@ -15,6 +15,7 @@
 #include "camera.h"
 #include "universal.h"
 #include <stdio.h>
+#include "game.h"
 
 //*****************************************************
 // マクロ定義
@@ -200,6 +201,19 @@ void CEnemyManager::Uninit(void)
 //=====================================================
 void CEnemyManager::Update(void)
 {
+	// ゲーム状態によってスポーンさせない
+	CGame *pGame = CGame::GetInstance();
+
+	if (pGame != nullptr)
+	{
+		CGame::STATE state = pGame->GetState();
+
+		if (state != CGame::STATE::STATE_NORMAL)
+		{
+			return;
+		}
+	}
+
 	m_nCntSpawn++;
 
 	if (m_nCntSpawn >= 60)
@@ -209,8 +223,8 @@ void CEnemyManager::Update(void)
 		// 注視点を中心に設定
 		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
 
-		int nPosX = pUniversal->RandRange(RAND_SPAWN, -RAND_SPAWN);
-		int nPosZ = pUniversal->RandRange(RAND_SPAWN, -RAND_SPAWN);
+		int nPosX = pUniversal->RandRange(1000, 800);
+		int nPosZ = pUniversal->RandRange(1000, 800);
 
 		posCenter.x = (float)nPosX;
 		posCenter.z = (float)nPosZ;

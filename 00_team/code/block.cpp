@@ -37,12 +37,15 @@ CBlock::CBlock(int nPriority)
 	m_type = TYPE_DESK;
 	m_pCollisionCube = nullptr;
 	m_fLife = 0.0f;
+	m_nID = -1;
 
 	for (int nCntBlock = 0;nCntBlock < NUM_OBJECT;nCntBlock++)
 	{
 		if (m_apBlock[nCntBlock] == nullptr)
 		{// 保存用配列にコピー
 			m_apBlock[nCntBlock] = this;
+
+			m_nID = nCntBlock;
 
 			break;
 		}
@@ -121,7 +124,7 @@ HRESULT CBlock::Init(void)
 	// タイプの設定
 	SetType(TYPE_BLOCK);
 
-	m_fLife = 50.0f;
+	m_fLife = 100.0f;
 
 	return S_OK;
 }
@@ -169,7 +172,7 @@ void CBlock::Hit(float fDamage)
 
 	if (m_fLife <= 0.0f)
 	{// 破壊判定
-		Uninit();
+		Delete(m_nID);
 	}
 }
 
@@ -194,12 +197,7 @@ void CBlock::SwapVtx(void)
 //=====================================================
 void CBlock::Delete(int nIdx)
 {
-	if (m_apBlock[nIdx] != nullptr)
-	{// 削除処理
-		m_apBlock[nIdx]->Uninit();
-
-		m_apBlock[nIdx] = nullptr;
-	}
+	CBlock *pBlockDelete = m_apBlock[nIdx];
 
 	// 配列を詰める
 	for (int nCntBlock = nIdx; nCntBlock < NUM_OBJECT - 1; nCntBlock++)
@@ -207,9 +205,20 @@ void CBlock::Delete(int nIdx)
 		if (m_apBlock[nCntBlock + 1] != nullptr)
 		{
 			m_apBlock[nCntBlock] = m_apBlock[nCntBlock + 1];
+
+			m_apBlock[nCntBlock]->m_nID = nCntBlock;
+
 			m_apBlock[nCntBlock + 1] = nullptr;
 		}
 	}
+
+	if (pBlockDelete != nullptr)
+	{// 削除処理
+		pBlockDelete->Uninit();
+
+		pBlockDelete = nullptr;
+	}
+
 }
 
 //=====================================================

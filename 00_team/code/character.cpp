@@ -67,6 +67,8 @@ void CCharacter::Load(char *pPath)
 
 			m_info.pBody->SetPosition(pos);
 			m_info.pBody->SetRot(rot);
+
+			m_info.pBody->MultiplyMtx();
 		}
 	}
 }

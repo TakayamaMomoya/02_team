@@ -21,11 +21,14 @@
 #include "game.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define SPEED_MOVE	(7.0f)	// 移動速度
-#define ROLL_SPEED	(0.1f)	// 回転速度
-#define EDGE_ORBIT	(20)	// 軌跡の辺の数
+namespace
+{
+	const float SPEED_MOVE = 7.0f;	// 移動速度
+	const float ROLL_MOVE = 0.1f;	// 回転速度
+	const int EDGE_ORBIT = 20;	// 軌跡の辺の数
+}
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -48,7 +51,7 @@ CBullet::CBullet(int nPriority) : CObject(nPriority)
 	m_posOld = { 0.0f,0.0f,0.0f };
 	m_col = { 0.0f,0.0f,0.0f,0.0f };
 	m_pCollisionSphere = nullptr;
-	ZeroMemory(&m_apOrbit[0], sizeof(m_apOrbit));
+	m_pOrbit = nullptr;
 
 	// 総数カウントアップ
 	m_nNumAll++;
@@ -77,20 +80,9 @@ HRESULT CBullet::Init(void)
 
 	Draw();
 
-	if (m_apOrbit[1] == nullptr)
+	if (m_pOrbit == nullptr)
 	{// 軌跡の生成
-		m_apOrbit[1] = COrbit::Create(m_mtxWorld, D3DXVECTOR3(0.0f, m_fSize, 0.0f), D3DXVECTOR3(0.0f, -m_fSize, 0.0f), m_col, EDGE_ORBIT);
-	}
-
-	for (int nCnt = 0; nCnt < 6; nCnt++)
-	{
-		for (int nCntOrbit = 0; nCntOrbit < NUM_ORBIT; nCntOrbit++)
-		{// 軌跡の更新
-			if (m_apOrbit[nCntOrbit] != nullptr)
-			{
-				m_apOrbit[nCntOrbit]->SetPositionOffset(m_mtxWorld, 0);
-			}
-		}
+		m_pOrbit = COrbit::Create(m_mtxWorld, D3DXVECTOR3(m_fSize, 0.0f, 0.0f), D3DXVECTOR3(-m_fSize, 0.0f, 0.0f), m_col, EDGE_ORBIT);
 	}
 
 	return S_OK;
@@ -108,13 +100,10 @@ void CBullet::Uninit(void)
 		m_pCollisionSphere = nullptr;
 	}
 
-	for (int nCntOrbit = 0; nCntOrbit < NUM_ORBIT; nCntOrbit++)
-	{
-		if (m_apOrbit[nCntOrbit] != nullptr)
-		{// 軌跡の終了
-			m_apOrbit[nCntOrbit]->Uninit();
-			m_apOrbit[nCntOrbit] = nullptr;
-		}
+	if (m_pOrbit != nullptr)
+	{// 軌跡の終了
+		m_pOrbit->Uninit();
+		m_pOrbit = nullptr;
 	}
 
 	Release();
@@ -165,13 +154,6 @@ void CBullet::Update(void)
 
 		if (m_pCollisionSphere->TriggerCube(CCollision::TAG_BLOCK))
 		{// ブロックとの当たり判定
-			CObject *pObj = m_pCollisionSphere->GetOther();
-
-			if (pObj != nullptr)
-			{
-				pObj->Hit(5.0f);
-			}
-
 			Death();
 		}
 	}
@@ -191,12 +173,9 @@ void CBullet::Update(void)
 		}
 	}
 
-	for (int nCntOrbit = 0; nCntOrbit < NUM_ORBIT; nCntOrbit++)
-	{// 軌跡の更新
-		if (m_apOrbit[nCntOrbit] != nullptr)
-		{
-			m_apOrbit[nCntOrbit]->SetPositionOffset(m_mtxWorld, 0);
-		}
+	if (m_pOrbit != nullptr)
+	{
+		m_pOrbit->SetPositionOffset(m_mtxWorld, 0);
 	}
 }
 

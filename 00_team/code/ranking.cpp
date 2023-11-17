@@ -29,7 +29,7 @@
 
 #define FLASH_SPEED					(10)	// 点滅スピード
 
-#define RANKING_BIN_FILE			"data\\BIN\\ranking"								// ランキングファイル名
+#define RANKING_BIN_FILE			"data\\BINARY\\ranking"								// ランキングファイル名
 
 #define RANKING_TEX_FILE			"data\\TEXTURE\\UI\\Number000.png"		// ランキングテクスチャ名
 #define BG_TEX_FILE					"data\\TEXTURE\\BG\\ResultBg000.png"	// ランキング背景テクスチャ名
