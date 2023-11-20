@@ -26,9 +26,10 @@ namespace
 	const char* BODY_PATH = "data\\MODEL\\gimmick\\MysteryBox_Down.x";	// 本体のパス
 	const char* CAP_PATH = "data\\MODEL\\gimmick\\MysteryBox_Up.x";	// 蓋のパス
 	const float TIME_DEATH = 1.5f;	// 死亡までの時間
-	const float TIME_DEPLOY = TIME_DEATH * 0.2f;	// アイテムを設置するまでのラグ
+	const float TIME_DEPLOY = TIME_DEATH * 0.1f;	// アイテムを設置するまでのラグ
 	const float ROLL_SPEED = 0.3f;	// 蓋の回転速度
 	const float OPEN_ANGLE = D3DX_PI * 0.7f;	// 回転制限
+	const float WEAPON_JUMP = 10.0f;	// 武器設置時のジャンプ力
 }
 
 //=====================================================
@@ -181,6 +182,10 @@ void CContainer::UpdateOpen(void)
 				D3DXVECTOR3 pos = GetPosition();
 
 				m_info.pWeapon->SetPosition(pos);
+
+				D3DXVECTOR3 move = { 0.0f,WEAPON_JUMP,0.0f };
+
+				m_info.pWeapon->SetMove(move);
 			}
 
 		}

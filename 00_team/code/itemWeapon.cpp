@@ -15,6 +15,14 @@
 #include "weapon.h"
 #include "player.h"
 
+//*****************************************************
+// 定数定義
+//*****************************************************
+namespace
+{
+	const float GRAVITY = 0.3f;	// 重力
+}
+
 //=====================================================
 // コンストラクタ
 //=====================================================
@@ -41,6 +49,13 @@ HRESULT CItemWeapon::Init(void)
 
 	// 読み込み
 	Load();
+
+	// 横向きにする
+	D3DXVECTOR3 rot = GetRot();
+
+	rot.x = D3DX_PI * 0.5f;
+
+	SetRot(rot);
 
 	return S_OK;
 }
@@ -78,6 +93,34 @@ void CItemWeapon::Update(void)
 {
 	// 継承クラスの更新
 	CItem::Update();
+
+	// 移動量を位置に反映
+	D3DXVECTOR3 pos = GetPosition();
+	D3DXVECTOR3 move = GetMove();
+
+	move.y -= GRAVITY;
+
+	pos += move;
+	SetPosition(pos);
+	SetMove(move);
+
+	// 床との当たり判定
+	CollisionField();
+}
+
+//=====================================================
+// 床との当たり判定
+//=====================================================
+void CItemWeapon::CollisionField(void)
+{
+	D3DXVECTOR3 pos = GetPosition();
+
+	if (pos.y <= 0.0f)
+	{
+		pos.y = 0.0f;
+	}
+
+	SetPosition(pos);
 }
 
 //=====================================================
