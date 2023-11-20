@@ -8,7 +8,7 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "item.h"
+#include "gimmick.h"
 #include "manager.h"
 #include "renderer.h"
 #include "collision.h"
@@ -26,7 +26,7 @@
 //=====================================================
 // コンストラクタ
 //=====================================================
-CItem::CItem(int nPriority) : CObjectX(nPriority)
+CGimmick::CGimmick(int nPriority) : CObjectX(nPriority)
 {
 	m_pCollisionSphere = nullptr;
 }
@@ -34,7 +34,7 @@ CItem::CItem(int nPriority) : CObjectX(nPriority)
 //=====================================================
 // デストラクタ
 //=====================================================
-CItem::~CItem()
+CGimmick::~CGimmick()
 {
 
 }
@@ -42,7 +42,7 @@ CItem::~CItem()
 //=====================================================
 // 初期化処理
 //=====================================================
-HRESULT CItem::Init(void)
+HRESULT CGimmick::Init(void)
 {
 	// 継承クラスの初期化
 	CObjectX::Init();
@@ -63,7 +63,7 @@ HRESULT CItem::Init(void)
 //=====================================================
 // 終了処理
 //=====================================================
-void CItem::Uninit(void)
+void CGimmick::Uninit(void)
 {
 	if (m_pCollisionSphere != nullptr)
 	{
@@ -84,7 +84,7 @@ void CItem::Uninit(void)
 //=====================================================
 // 更新処理
 //=====================================================
-void CItem::Update(void)
+void CGimmick::Update(void)
 {
 	// 継承クラスの更新
 	CObjectX::Update();
@@ -134,7 +134,7 @@ void CItem::Update(void)
 //=====================================================
 // アイテム入手時の処理
 //=====================================================
-void CItem::Interact(CObject *pObj)
+void CGimmick::Interact(CObject *pObj)
 {
 
 }
@@ -142,7 +142,7 @@ void CItem::Interact(CObject *pObj)
 //=====================================================
 // 描画処理
 //=====================================================
-void CItem::Draw(void)
+void CGimmick::Draw(void)
 {
 	// 継承クラスの描画
 	CObjectX::Draw();
@@ -151,13 +151,13 @@ void CItem::Draw(void)
 //=====================================================
 // 生成処理
 //=====================================================
-CItem *CItem::Create(void)
+CGimmick *CGimmick::Create(void)
 {
-	CItem *pItem = nullptr;
+	CGimmick *pItem = nullptr;
 
 	if (pItem == nullptr)
 	{
-		pItem = new CItem;
+		pItem = new CGimmick;
 
 		if (pItem != nullptr)
 		{

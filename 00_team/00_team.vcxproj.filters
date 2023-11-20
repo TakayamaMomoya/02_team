@@ -130,7 +130,7 @@
     <ClCompile Include="code\itemWeapon.cpp">
       <Filter>item</Filter>
     </ClCompile>
-    <ClCompile Include="code\item.cpp">
+    <ClCompile Include="code\gimmick.cpp">
       <Filter>item</Filter>
     </ClCompile>
     <ClCompile Include="code\itemRepair.cpp">
@@ -249,7 +249,7 @@
       <Filter>scene</Filter>
     </ClInclude>
     <ClInclude Include="code\rocket.h" />
-    <ClInclude Include="code\item.h">
+    <ClInclude Include="code\gimmick.h">
       <Filter>item</Filter>
     </ClInclude>
     <ClInclude Include="code\itemWeapon.h">

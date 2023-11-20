@@ -22,17 +22,17 @@ class CBillboard;
 //*****************************************************
 // クラスの定義
 //*****************************************************
-class CItem : public CObjectX
+class CGimmick : public CObjectX
 {
 public:
-	CItem(int nPriority = 3);	// コンストラクタ
-	~CItem();	// デストラクタ
+	CGimmick(int nPriority = 3);	// コンストラクタ
+	~CGimmick();	// デストラクタ
 
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static CItem *Create(void);
+	static CGimmick *Create(void);
 	virtual void Interact(CObject* pObj);
 	CCollisionSphere *GetCollisionSphere(void) { return m_pCollisionSphere; }
 

@@ -11,13 +11,13 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "item.h"
+#include "gimmick.h"
 #include "weapon.h"
 
 //*****************************************************
 // クラスの定義
 //*****************************************************
-class CItemWeapon : public CItem
+class CItemWeapon : public CGimmick
 {
 public:
 	CItemWeapon(int nPriority = 3);	// コンストラクタ

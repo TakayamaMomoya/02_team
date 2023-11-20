@@ -20,7 +20,7 @@
 //=====================================================
 // コンストラクタ
 //=====================================================
-CItemRepair::CItemRepair(int nPriority) : CItem(nPriority)
+CItemRepair::CItemRepair(int nPriority) : CGimmick(nPriority)
 {
 	m_pPlayer = nullptr;
 }
@@ -60,7 +60,7 @@ CItemRepair *CItemRepair::Create(void)
 HRESULT CItemRepair::Init(void)
 {
 	// 継承クラスの初期化
-	CItem::Init();
+	CGimmick::Init();
 
 	// 読み込み
 	Load();
@@ -87,7 +87,7 @@ void CItemRepair::Uninit(void)
 	m_pPlayer = nullptr;
 
 	// 継承クラスの終了
-	CItem::Uninit();
+	CGimmick::Uninit();
 }
 
 //=====================================================
@@ -109,7 +109,7 @@ void CItemRepair::Update(void)
 	}
 
 	// 継承クラスの更新
-	CItem::Update();
+	CGimmick::Update();
 
 	// プレイヤーの生存確認
 	CheckPlayerAlive();
@@ -292,5 +292,5 @@ void CItemRepair::CheckPlayerAlive(void)
 void CItemRepair::Draw(void)
 {
 	// 継承クラスの描画
-	CItem::Draw();
+	CGimmick::Draw();
 }
