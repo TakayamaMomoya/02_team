@@ -124,6 +124,7 @@ HRESULT CTitle::Init(void)
 
 	// ’n–Ê‚Ì¶¬
 	CObject3D* pField = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	pField->SetSize(1000.0f, 1000.0f);
 	nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\field00.jpg");
 	pField->SetIdxTexture(nIdx);
 
