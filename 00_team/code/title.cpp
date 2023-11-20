@@ -21,6 +21,7 @@
 #include "sound.h"
 
 #include "object3D.h"
+#include "objectX.h"
 
 //*****************************************************
 // マクロ定義
@@ -121,10 +122,15 @@ HRESULT CTitle::Init(void)
 		m_pStart->SetVtx();
 	}
 
-	//地面の生成
-	CObject3D* pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	// 地面の生成
+	CObject3D* pField = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\field00.jpg");
-	pObject->SetIdxTexture(nIdx);
+	pField->SetIdxTexture(nIdx);
+
+	// タイトルモデルの生成
+	CObjectX* pTitleModel = CObjectX::Create();
+	nIdx = CModel::Load("data\\MODEL\\title\\title_model.x");
+	pTitleModel->BindModel(nIdx);
 
 	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
 	{
@@ -133,6 +139,7 @@ HRESULT CTitle::Init(void)
 
 		m_apModelPlayer[nCount]->SetPosition(PLAYER_POS[nCount]);
 		m_apModelPlayer[nCount]->SetRot(PLAYER_ROT[nCount]);
+		m_apModelPlayer[nCount]->SetMotion(0);
 	}
 
 	return S_OK;

@@ -52,7 +52,6 @@ HRESULT CObjectX::Init(void)
 		int nIdx = CModel::Load("data\\MODEL\\weapon\\minigun.x");
 
 		// ÉÇÉfÉãì«çû
-		SetIdxModel(nIdx);
 		BindModel(nIdx);
 	}
 
