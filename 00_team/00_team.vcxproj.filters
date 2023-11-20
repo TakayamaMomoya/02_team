@@ -50,6 +50,7 @@
     <ClCompile Include="code\renderer.cpp" />
     <ClCompile Include="code\sound.cpp" />
     <ClCompile Include="code\texture.cpp" />
+    <ClCompile Include="code\tutorial.cpp" />
     <ClCompile Include="code\universal.cpp" />
     <ClCompile Include="code\playerManager.cpp" />
     <ClCompile Include="code\player.cpp" />
@@ -121,6 +122,7 @@
     </ClCompile>
     <ClCompile Include="code\goal.cpp" />
     <ClCompile Include="code\goalTimer.cpp" />
+    <ClCompile Include="code\result.cpp" />
     <ClCompile Include="code\edit.cpp" />
     <ClCompile Include="code\block.cpp" />
     <ClCompile Include="code\select.cpp">
@@ -142,11 +144,8 @@
     <ClCompile Include="code\door.cpp">
       <Filter>gimmick</Filter>
     </ClCompile>
-    <ClCompile Include="code\result.cpp">
-      <Filter>scene</Filter>
-    </ClCompile>
-    <ClCompile Include="code\tutorial.cpp">
-      <Filter>scene</Filter>
+    <ClCompile Include="code\gimmickManager.cpp">
+      <Filter>gimmick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +174,7 @@
     <ClInclude Include="code\renderer.h" />
     <ClInclude Include="code\sound.h" />
     <ClInclude Include="code\texture.h" />
+    <ClInclude Include="code\tutorial.h" />
     <ClInclude Include="code\universal.h" />
     <ClInclude Include="code\playerManager.h" />
     <ClInclude Include="code\player.h" />
@@ -246,6 +246,7 @@
     </ClInclude>
     <ClInclude Include="code\goal.h" />
     <ClInclude Include="code\goalTimer.h" />
+    <ClInclude Include="code\result.h" />
     <ClInclude Include="code\edit.h" />
     <ClInclude Include="code\block.h" />
     <ClInclude Include="code\select.h">
@@ -267,11 +268,8 @@
     <ClInclude Include="code\door.h">
       <Filter>gimmick</Filter>
     </ClInclude>
-    <ClInclude Include="code\result.h">
-      <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="code\tutorial.h">
-      <Filter>scene</Filter>
+    <ClInclude Include="code\gimmickManager.h">
+      <Filter>gimmick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

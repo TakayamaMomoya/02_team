@@ -41,6 +41,12 @@ private:
 	CCollisionSphere *m_pCollisionSphere;
 	CBillboard *m_pInteract;
 	bool m_bEnable;	// インタラクトできるかどうか
+
+	CGimmick *m_pPrev;	// 前のポインタ
+	CGimmick *m_pNext;	// 次のポインタ
+
+	static CGimmick *m_pHead;	// 先頭のアドレス
+	static CGimmick *m_pTail;	// 最後尾のアドレス
 };
 
 #endif
