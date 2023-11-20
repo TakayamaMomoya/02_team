@@ -35,13 +35,22 @@ public:
 	void SetPosition(D3DXVECTOR3 pos);
 
 private:
+	enum STATE
+	{
+		STATE_NONE = 0,	// ‰½‚à‚µ‚Ä‚¢‚È‚¢ó‘Ô
+		STATE_NORMAL,	// ’Êíó‘Ô
+		STATE_OPEN,	// ŠJ‚¢‚Ä‚¢‚éó‘Ô
+		STATE_MAX
+	};
 	struct SInfo
 	{// î•ñ
 		float fLife;	// ‘Ì—Í
 		CCollisionCube *pCollisionCube;	// ‰Ÿ‚µo‚µ‚Ì“–‚½‚è”»’è
+		STATE state;	// ó‘Ô
 	};
 	void Interact(CObject* pObj);
 	void proceed(void);
+	void Open(void);
 
 	SInfo m_info;
 };

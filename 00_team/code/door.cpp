@@ -21,6 +21,8 @@ namespace
 {
 	const char* BODY_PATH = "data\\MODEL\\gimmick\\door000.x";	// モデルのパス
 	const float INITIAL_LIFE = 5.0f;	// 体力
+	const float ROLL_SPEED = 0.3f;	// 回転速度
+	const float OPEN_ANGLE = D3DX_PI * 0.5f;	// 回転制限
 }
 
 //=====================================================
@@ -85,6 +87,7 @@ HRESULT CDoor::Init(void)
 
 	// 値の初期化
 	m_info.fLife = INITIAL_LIFE;
+	m_info.state = STATE_NORMAL;
 
 	return S_OK;
 }
@@ -111,6 +114,30 @@ void CDoor::Update(void)
 {
 	// 継承クラスの更新
 	CGimmick::Update();
+
+	if (m_info.state == STATE_OPEN)
+	{// 開く処理
+		Open();
+	}
+}
+
+//=====================================================
+// 開く処理
+//=====================================================
+void CDoor::Open(void)
+{
+	D3DXVECTOR3 rot = GetRot();
+
+	rot.y += ROLL_SPEED;
+
+	if (rot.y >= OPEN_ANGLE)
+	{
+		rot.y = OPEN_ANGLE;
+
+		m_info.state = STATE_NONE;
+	}
+
+	SetRot(rot);
 }
 
 //=====================================================
@@ -118,6 +145,11 @@ void CDoor::Update(void)
 //=====================================================
 void CDoor::Interact(CObject *pObj)
 {
+	if (m_info.state != STATE_NORMAL)
+	{
+		return;
+	}
+
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 
 	if (pObj == nullptr || pPlayerManager == nullptr)
@@ -156,7 +188,13 @@ void CDoor::proceed(void)
 
 	if (m_info.fLife < 0.0f)
 	{
-		Uninit();
+		m_info.state = STATE_OPEN;
+
+		if (m_info.pCollisionCube != nullptr)
+		{// 当たり判定の削除
+			m_info.pCollisionCube->Uninit();
+			m_info.pCollisionCube = nullptr;
+		}
 	}
 }
 
