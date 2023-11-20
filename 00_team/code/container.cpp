@@ -1,6 +1,6 @@
 //*****************************************************
 //
-// コンテナーの処理[container.cpp]
+// コンテナの処理[container.cpp]
 // Author:髙山桃也
 //
 //*****************************************************
@@ -35,7 +35,7 @@ namespace
 //=====================================================
 // コンストラクタ
 //=====================================================
-CContainer::CContainer(int nPriority) : CItem(nPriority)
+CContainer::CContainer(int nPriority) : CGimmick(nPriority)
 {
 	ZeroMemory(&m_info, sizeof(SInfo));
 }
@@ -75,7 +75,7 @@ CContainer *CContainer::Create(void)
 HRESULT CContainer::Init(void)
 {
 	// 継承クラスの初期化
-	CItem::Init();
+	CGimmick::Init();
 
 	// 読み込み
 	Load();
@@ -122,7 +122,7 @@ void CContainer::Uninit(void)
 	}
 
 	// 継承クラスの終了
-	CItem::Uninit();
+	CGimmick::Uninit();
 }
 
 //=====================================================
@@ -131,7 +131,7 @@ void CContainer::Uninit(void)
 void CContainer::Update(void)
 {
 	// 継承クラスの更新
-	CItem::Update();
+	CGimmick::Update();
 
 	if (m_info.state == STATE_OPEN)
 	{// 開いている状態の更新
@@ -320,5 +320,5 @@ void CContainer::SetPosition(D3DXVECTOR3 pos)
 void CContainer::Draw(void)
 {
 	// 継承クラスの描画
-	CItem::Draw();
+	CGimmick::Draw();
 }

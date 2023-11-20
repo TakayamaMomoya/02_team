@@ -43,7 +43,7 @@
     <ClCompile Include="code\inputkeyboard.cpp" />
     <ClCompile Include="code\inputManager.cpp" />
     <ClCompile Include="code\inputmouse.cpp" />
-    <ClCompile Include="code\item.cpp" />
+    <ClCompile Include="code\gimmick.cpp" />
     <ClCompile Include="code\container.cpp" />
     <ClCompile Include="code\itemRepair.cpp" />
     <ClCompile Include="code\itemWeapon.cpp" />
@@ -109,7 +109,7 @@
     <ClInclude Include="code\inputkeyboard.h" />
     <ClInclude Include="code\inputManager.h" />
     <ClInclude Include="code\inputmouse.h" />
-    <ClInclude Include="code\item.h" />
+    <ClInclude Include="code\gimmick.h" />
     <ClInclude Include="code\container.h" />
     <ClInclude Include="code\itemRepair.h" />
     <ClInclude Include="code\itemWeapon.h" />
