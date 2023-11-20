@@ -125,6 +125,7 @@ private:
 	int m_nNumMotion;	//モーションの総数
 	int m_motionType;	//モーションの種類
 	int m_motionTypeOld;	//前回のモーションの種類
+	int m_nFrame;	// フレーム数
 	bool m_bLoopMotion;	//ループするかどうか
 	int m_nNumKey;	//キーの総数
 	int m_nKey;	//現在のキー
@@ -134,7 +135,7 @@ private:
 	D3DXVECTOR3 m_posOld;	// 前回の位置
 	D3DXVECTOR3 m_posShadow;	// 影の位置
 	D3DXVECTOR3 m_move;	// 移動量
-	D3DXVECTOR3 m_rot;							//向き
+	D3DXVECTOR3 m_rot;	//向き
 	D3DXMATRIX m_mtxWorld;	// マトリックス
 	bool m_bFinish;	// モーションが終わったかどうか
 	bool m_bShadow;	// 影を描画するかどうか

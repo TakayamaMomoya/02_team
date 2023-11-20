@@ -54,6 +54,12 @@ private:
 		STATE_DEATH,	// 死亡状態
 		STATE_MAX
 	};
+	enum MOTION
+	{
+		MOTION_NEUTRAL = 0,	// 待機状態
+		MOTION_WALK,	// 歩きモーション
+		MOTION_MAX
+	};
 	struct SInfo
 	{
 		int nID;	// 番号
@@ -71,6 +77,7 @@ private:
 	void InputAttack(void);
 	void Aim(void);
 	void ManageState(void);
+	void ManageMotion(void);
 	void Debug(void);
 
 	SInfo m_info;	// 自身の情報

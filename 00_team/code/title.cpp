@@ -168,7 +168,7 @@ void CTitle::Update(void)
 
 	// シーンの更新
 	CScene::Update();
-	
+
 	CFade *pFade = CFade::GetInstance();
 
 	if (m_state == STATE_NONE)

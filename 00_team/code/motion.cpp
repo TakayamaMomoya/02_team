@@ -36,6 +36,7 @@ CMotion::CMotion(int nPriority) : CObject(nPriority)
 	m_motionTypeOld = 0;
 	m_nCounterMotion = 0;
 	m_nKey = 0;
+	m_nFrame = 0;
 	m_nNumKey = 0;
 	m_nNumMotion = 0;
 	m_nNumParts = 0;
@@ -60,6 +61,8 @@ CMotion::~CMotion()
 //=====================================================
 HRESULT CMotion::Init(void)
 {
+	SetMotion(0);
+	InitPose(0);
 	return S_OK;
 }
 
@@ -164,22 +167,22 @@ void CMotion::Update(void)
 
 		//目的の値=======================================================================================================
 		float DestPosX = pos.x + m_aKeyOld[nCntParts].fPosX +
-			DiffPosX * (float)(1.0f / (float)m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame) * m_nCounterMotion;
+			DiffPosX * (float)(1.0f / (float)m_nFrame) * m_nCounterMotion;
 
 		float DestPosY = pos.y + m_aKeyOld[nCntParts].fPosY +
-			DiffPosY * (float)(1.0f / (float)m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame) * m_nCounterMotion;
+			DiffPosY * (float)(1.0f / (float)m_nFrame) * m_nCounterMotion;
 
 		float DestPosZ = pos.z + m_aKeyOld[nCntParts].fPosZ +
-			DiffPosZ * (float)(1.0f / (float)m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame) * m_nCounterMotion;
+			DiffPosZ * (float)(1.0f / (float)m_nFrame) * m_nCounterMotion;
 
 		float DestRotX = m_aKeyOld[nCntParts].fRotX +
-			DiffRotX * (float)(1.0f / (float)m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame) * m_nCounterMotion;
+			DiffRotX * (float)(1.0f / (float)m_nFrame) * m_nCounterMotion;
 
 		float DestRotY = m_aKeyOld[nCntParts].fRotY +
-			DiffRotY * (float)(1.0f / (float)m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame) * m_nCounterMotion;
+			DiffRotY * (float)(1.0f / (float)m_nFrame) * m_nCounterMotion;
 
 		float DestRotZ = m_aKeyOld[nCntParts].fRotZ +
-			DiffRotZ * (float)(1.0f / (float)m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame) * m_nCounterMotion;
+			DiffRotZ * (float)(1.0f / (float)m_nFrame) * m_nCounterMotion;
 
 		//パーツの向き・位置設定
 		m_apParts[nCntParts]->pParts->SetPosition(D3DXVECTOR3(DestPosX, DestPosY, DestPosZ));
@@ -208,11 +211,13 @@ void CMotion::Update(void)
 		}
 	}
 
-	if (m_nCounterMotion > m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame)
+	if (m_nCounterMotion > m_nFrame)
 	{//キーのフレーム数に達したら
 		if (m_nKey < m_aMotionInfo[m_motionType].nNumKey)
 		{
 			m_nKey++;
+
+			m_nFrame = m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame;
 
 			m_nCounterMotion = 0;
 
@@ -233,9 +238,14 @@ void CMotion::SetMotion(int nMotionType)
 	m_motionTypeOld = m_motionType;
 	SetKeyOld();
 
+	if (m_nKey != -1)
+	{
+		m_nFrame = m_aMotionInfo[m_motionType].aKeyInfo[m_nKey].nFrame;
+	}
+
 	// モーション情報の設定
 	m_motionType = nMotionType;
-	m_nKey = 0;
+	m_nKey = -1;
 	m_nCounterMotion = 0;
 }
 
@@ -392,6 +402,9 @@ void CMotion::Draw(void)
 
 	// マトリックスをかけ合わせる処理
 	MultiplyMtx();
+
+	CDebugProc::GetInstance()->Print("\nフレーム[%d]", m_nFrame);
+	CDebugProc::GetInstance()->Print("\nキー[%d]", m_nKey);
 }
 
 //=====================================================
