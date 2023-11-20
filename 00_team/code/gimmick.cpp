@@ -30,6 +30,7 @@ CGimmick::CGimmick(int nPriority) : CObjectX(nPriority)
 {
 	m_pCollisionSphere = nullptr;
 	m_pInteract = nullptr;
+	m_bEnable = true;
 }
 
 //=====================================================
@@ -99,7 +100,7 @@ void CGimmick::Update(void)
 		// プレイヤーとの当たり判定
 		if (m_pCollisionSphere->SphereCollision(CCollision::TAG_PLAYER))
 		{
-			if (m_pInteract == nullptr)
+			if (m_pInteract == nullptr && m_bEnable == true)
 			{// インタラクト表示生成
 				D3DXVECTOR3 pos = GetPosition();
 

@@ -35,10 +35,12 @@ public:
 	static CGimmick *Create(void);
 	virtual void Interact(CObject* pObj);
 	CCollisionSphere *GetCollisionSphere(void) { return m_pCollisionSphere; }
+	void SetEnable(bool bEnable) { m_bEnable = bEnable; }
 
 private:
 	CCollisionSphere *m_pCollisionSphere;
 	CBillboard *m_pInteract;
+	bool m_bEnable;	// インタラクトできるかどうか
 };
 
 #endif
