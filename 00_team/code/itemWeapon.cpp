@@ -42,6 +42,12 @@ HRESULT CItemWeapon::Init(void)
 	// ì«Ç›çûÇ›
 	Load();
 
+	D3DXVECTOR3 rot = GetRot();
+
+	rot.x = D3DX_PI * 0.5f;
+
+	SetRot(rot);
+
 	return S_OK;
 }
 
