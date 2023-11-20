@@ -19,6 +19,7 @@
 class CBillboard;
 class CObject2D;
 class CPlayerManager;
+class CPlayer;
 
 //*****************************************************
 // クラスの定義
@@ -69,12 +70,14 @@ private:
 	void StartInit(void);
 	void ColorChange(int nPlayer);
 	void EntryInput(int nPlayer);
+	void MoveLimit(int nPlayer);
 
-	MenuData m_aMenuData[NUM_PLAYER];	//それぞれの選択メニュー
+	MenuData m_aMenuData[NUM_PLAYER];	// それぞれの選択メニュー
 	CObject2D* m_pStartUI;
-	CPlayerManager* m_pPlayerManager;	//プレイヤー管理
+	CPlayerManager* m_pPlayerManager;	// プレイヤー管理
+	CPlayer* m_apPlayer[NUM_PLAYER];	// プレイヤー
 	STATE m_state;	// 状態
-	bool m_abJoin[NUM_PLAYER];	//参加したかどうか
+	bool m_abJoin[NUM_PLAYER];	// 参加したかどうか
 };
 
 #endif
