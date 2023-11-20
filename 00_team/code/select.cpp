@@ -36,11 +36,11 @@
 //*****************************************************
 namespace
 {
-	const D3DXVECTOR3 NUMBER_POS(D3DXVECTOR3(-100.0f, 50.0f, 0.0f));
-	const float SPACE(100.0f);
-	const float SIZE_PLUS(20.0f);
-	const D3DXVECTOR2 SIZE_FONT(20.0f, 10.0f);
-	const float COLOR_CHANGE_SPEED(0.02f);
+	const D3DXVECTOR3 NUMBER_POS(D3DXVECTOR3(-100.0f, 50.0f, 0.0f));	//UIの位置
+	const float SPACE(100.0f);	//UI間の広さ
+	const float SIZE_PLUS(20.0f);	//UIの大きさ(+)
+	const D3DXVECTOR2 SIZE_FONT(20.0f, 10.0f);	//UIの大きさ(参加：A)
+	const float BLINKING_SPEED(0.02f);	//UI点滅の速さ(参加：A)
 };
 
 //=====================================================
@@ -218,13 +218,13 @@ void CSelect::Update(void)
 }
 
 //=====================================================
-// 色の変更
+// UI点滅
 //=====================================================
 void CSelect::ColorChange(int nPlayer)
 {
 	if (m_aMenuData[nPlayer].state == FADE_IN)
 	{//フェードイン状態
-		m_aMenuData[nPlayer].col.a -= COLOR_CHANGE_SPEED;			//ポリゴンを透明にしていく
+		m_aMenuData[nPlayer].col.a -= BLINKING_SPEED;			//ポリゴンを透明にしていく
 
 		if (m_aMenuData[nPlayer].col.a <= 0.0f)
 		{
@@ -235,7 +235,7 @@ void CSelect::ColorChange(int nPlayer)
 	}
 	else if (m_aMenuData[nPlayer].state == FADE_OUT)
 	{//フェードアウト状態
-		m_aMenuData[nPlayer].col.a += COLOR_CHANGE_SPEED;			//ポリゴンを不透明にしていく
+		m_aMenuData[nPlayer].col.a += BLINKING_SPEED;			//ポリゴンを不透明にしていく
 
 		if (m_aMenuData[nPlayer].col.a >= 1.0f)
 		{
@@ -273,7 +273,7 @@ void CSelect::EntryInput(int nPlayer)
 			// プレイヤーを生成
 			pPlayer = m_pPlayerManager->BindPlayer(nPlayer);
 
-			// 位置をビルボードの場所へ
+			// 位置をUIの場所へ
 			pPlayer->SetPosition(D3DXVECTOR3(
 				m_aMenuData[nPlayer].pMenu2D[MENU_PLUS]->GetPosition().x,
 				0.0f,
