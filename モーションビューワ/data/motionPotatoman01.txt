@@ -29,7 +29,7 @@ MODEL_FILENAME = data/MODEL/potatoman_01/thigh_r.x
 MODEL_FILENAME = data/MODEL/potatoman_01/shin_r.x
 MODEL_FILENAME = data/MODEL/potatoman_01/foot_r.x
 MODEL_FILENAME = data/MODEL/potatoman_01/joint_body.x
-MODEL_FILENAME = data/MODEL/potatoman_01/magnum.x
+MODEL_FILENAME = data/MODEL/potatoman_01/railgun.x
 
 #====================================================================
 # キャラクター情報
