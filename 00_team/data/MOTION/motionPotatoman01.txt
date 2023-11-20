@@ -9,7 +9,7 @@ SCRIPT
 #====================================================================
 # モデル数
 #====================================================================
-NUM_MODEL = 16
+NUM_MODEL = 15
 
 #====================================================================
 # モデルファイル名
@@ -29,13 +29,12 @@ MODEL_FILENAME = data/MODEL/potatoman_01/thigh_r.x
 MODEL_FILENAME = data/MODEL/potatoman_01/shin_r.x
 MODEL_FILENAME = data/MODEL/potatoman_01/foot_r.x
 MODEL_FILENAME = data/MODEL/potatoman_01/joint_body.x
-MODEL_FILENAME = data/MODEL/potatoman_01/magnum.x
 
 #====================================================================
 # キャラクター情報
 #====================================================================
 CHARACTERSET
-    NUM_PARTS = 16
+    NUM_PARTS = 15
 
     PARTSSET
         INDEX = 0
@@ -124,12 +123,6 @@ CHARACTERSET
     PARTSSET
         INDEX = 14
         PARENT = 0
-        POS = 0.0 0.0 0.0
-        ROT = 0.0 0.0 0.0
-    END_PARTSSET
-    PARTSSET
-        INDEX = 15
-        PARENT = 7
         POS = 0.0 0.0 0.0
         ROT = 0.0 0.0 0.0
     END_PARTSSET
