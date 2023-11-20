@@ -122,7 +122,6 @@
     </ClCompile>
     <ClCompile Include="code\goal.cpp" />
     <ClCompile Include="code\goalTimer.cpp" />
-    <ClCompile Include="code\result.cpp" />
     <ClCompile Include="code\edit.cpp" />
     <ClCompile Include="code\block.cpp" />
     <ClCompile Include="code\select.cpp">
@@ -140,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="code\container.cpp">
       <Filter>item</Filter>
+    </ClCompile>
+    <ClCompile Include="code\result.cpp">
+      <Filter>scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -240,7 +242,6 @@
     </ClInclude>
     <ClInclude Include="code\goal.h" />
     <ClInclude Include="code\goalTimer.h" />
-    <ClInclude Include="code\result.h" />
     <ClInclude Include="code\edit.h" />
     <ClInclude Include="code\block.h" />
     <ClInclude Include="code\select.h">
@@ -258,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="code\container.h">
       <Filter>item</Filter>
+    </ClInclude>
+    <ClInclude Include="code\result.h">
+      <Filter>scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

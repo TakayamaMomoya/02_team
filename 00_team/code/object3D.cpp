@@ -211,11 +211,11 @@ CObject3D *CObject3D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		// インスタンス生成
 		pObject3D = new CObject3D;
 
-		// サイズ設定
-		pObject3D->SetSize(500.0f,500.0f);
-
 		// 初期化処理
 		pObject3D->Init();
+
+		// サイズ設定
+		pObject3D->SetSize(500.0f, 500.0f);
 	}
 
 	return pObject3D;
@@ -228,6 +228,21 @@ void CObject3D::SetSize(float width, float height)
 {
 	m_width = width;
 	m_heigth = height;
+
+	//頂点情報のポインタ
+	VERTEX_3D* pVtx;
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//頂点座標の設定
+	pVtx[0].pos = D3DXVECTOR3(-m_width, 0.0f, m_heigth);
+	pVtx[1].pos = D3DXVECTOR3(m_width, 0.0f, m_heigth);
+	pVtx[2].pos = D3DXVECTOR3(-m_width, 0.0f, -m_heigth);
+	pVtx[3].pos = D3DXVECTOR3(m_width, 0.0f, -m_heigth);
+
+	//頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
 }
 
 //=====================================================

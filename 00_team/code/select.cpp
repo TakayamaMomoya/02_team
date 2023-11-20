@@ -87,7 +87,7 @@ HRESULT CSelect::Init(void)
 	StartInit();
 
 	// エディットの生成
-	//CEdit::Create();
+	CEdit::Create();
 
 	return S_OK;
 }
@@ -208,6 +208,7 @@ void CSelect::Update(void)
 
 	}
 
+#ifdef _DEBUG
 	CCamera* pCamera = CManager::GetCamera();
 
 	if (pCamera != nullptr)
@@ -215,6 +216,7 @@ void CSelect::Update(void)
 		// 操作
 		pCamera->Control();
 	}
+#endif
 }
 
 //=====================================================
