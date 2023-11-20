@@ -334,7 +334,7 @@ void CBlock::LoadModel(void)
 		"data\\MODEL\\BLOCK\\concrete_00.x",	// コンクリート壁
 		"data\\MODEL\\BLOCK\\WodenWall_00.x",	// 木製壁
 		"data\\MODEL\\GIMMICK\\door000.x",	// 木製壁
-		"data\\MODEL\\BLOCK\\soil.x",			// 土
+		"data\\MODEL\\BLOCK\\potato_bet00.x",			// 土
 		"data\\MODEL\\BLOCK\\shelf.x",			// 棚
 	};
 

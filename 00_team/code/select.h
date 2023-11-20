@@ -45,24 +45,38 @@ private:
 
 	enum FADE_STATE
 	{
-		FADE_NONE = 0,
-		FADE_IN,
-		FADE_OUT,
+		FADE_NONE = 0,	// 無し
+		FADE_IN,	// フェードイン
+		FADE_OUT,	// フェードアウト
 		FADE_MAX
+	};
+
+	enum PLAYER_STATE
+	{
+		PLAYER_NONE = 0,	// 無し
+		PLAYER_ENTRY,	// 参加状態
+		PLAYER_FREE,	// 自由状態
+		PLAYER_MAX
 	};
 
 	enum MENU
 	{
-		MENU_PLUS = 0,
-		MENU_CHAR,
+		MENU_PLUS = 0,	// プラス
+		MENU_CHAR,	// 文字
 		MENU_MAX
 	};
 
 	struct MenuData
 	{
-		CBillboard* pMenu2D[MENU_MAX];
-		D3DXCOLOR col;
-		FADE_STATE state;
+		CBillboard* pMenu2D[MENU_MAX];	//メニュー
+		D3DXCOLOR col;	// 色
+		FADE_STATE state;	// 状態
+	};
+
+	struct PlayerInfo
+	{
+		CPlayer* pPlayer;	// プライヤー
+		PLAYER_STATE state;	// 状態
 	};
 
 	void MenuInit(void);
@@ -73,11 +87,11 @@ private:
 	void MoveLimit(int nPlayer);
 
 	MenuData m_aMenuData[NUM_PLAYER];	// それぞれの選択メニュー
-	CObject2D* m_pStartUI;
+	CObject2D* m_pStartUI;	// Start文字
 	CPlayerManager* m_pPlayerManager;	// プレイヤー管理
-	CPlayer* m_apPlayer[NUM_PLAYER];	// プレイヤー
+	PlayerInfo m_apPlayerData[NUM_PLAYER];
 	STATE m_state;	// 状態
-	bool m_abJoin[NUM_PLAYER];	// 参加したかどうか
+	bool m_abEntry[NUM_PLAYER];	// 参加したかどうか
 };
 
 #endif

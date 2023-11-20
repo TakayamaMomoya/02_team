@@ -177,8 +177,8 @@ void CCamera::SetTitle(void)
 //====================================================
 void CCamera::SetSelect(void)
 {
-	D3DXVECTOR3 posV = { 30.0f,320.0f,-760.0f };
-	D3DXVECTOR3 posR = { 30.0f,-122.0f,60.0f };
+	D3DXVECTOR3 posV = { 54.0f,320.0f,-760.0f };
+	D3DXVECTOR3 posR = { 54.0f,-122.0f,60.0f };
 
 	m_camera.posV = posV;
 	m_camera.posVDest = posV;
