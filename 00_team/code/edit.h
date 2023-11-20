@@ -36,6 +36,8 @@ private:
 	{
 		MODE_CREATE_BLOCK = 0,	// ブロック生成
 		MODE_DELTE_BLOCK,	// ブロック削除
+		MODE_CREATE_GIMICK,	// ギミック生成
+		MODE_DELTE_GIMICK,	// ギミック削除
 		MODE_MAX
 	};
 

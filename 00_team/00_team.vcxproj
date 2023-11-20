@@ -37,6 +37,7 @@
     <ClCompile Include="code\enemyNormal.cpp" />
     <ClCompile Include="code\fade.cpp" />
     <ClCompile Include="code\game.cpp" />
+    <ClCompile Include="code\gimmickManager.cpp" />
     <ClCompile Include="code\goal.cpp" />
     <ClCompile Include="code\goalTimer.cpp" />
     <ClCompile Include="code\input.cpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="code\enemyNormal.h" />
     <ClInclude Include="code\fade.h" />
     <ClInclude Include="code\game.h" />
+    <ClInclude Include="code\gimmickManager.h" />
     <ClInclude Include="code\goal.h" />
     <ClInclude Include="code\goalTimer.h" />
     <ClInclude Include="code\input.h" />
