@@ -367,6 +367,29 @@ bool CPlayer::InputInteract(void)
 }
 
 //=====================================================
+// インタラクトの長押し
+//=====================================================
+bool CPlayer::InputInteractPress(void)
+{
+	bool bPress = false;
+
+	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	int nID = GetIDJoypad();
+
+	if (pJoyPad == nullptr)
+	{
+		return bPress;
+	}
+
+	if (pJoyPad->GetPress(CInputJoypad::PADBUTTONS_LB, nID))
+	{
+		bPress = true;
+	}
+
+	return bPress;
+}
+
+//=====================================================
 // 武器の有効可
 //=====================================================
 void CPlayer::EnableWeapon(bool bEnable)

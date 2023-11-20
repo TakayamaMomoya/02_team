@@ -33,6 +33,7 @@
 #include "goal.h"
 #include "block.h"
 #include "container.h"
+#include "door.h"
 
 //*****************************************************
 // マクロ定義
@@ -121,6 +122,9 @@ HRESULT CGame::Init(void)
 	// コンテナの生成
 	CContainer *pContainer = CContainer::Create();
 	pContainer->SetPosition(D3DXVECTOR3(200.0f, 0.0f, 0.0f));
+
+	// ドアの生成
+	CDoor::Create();
 
 #ifdef _DEBUG
 	// エディットの生成
