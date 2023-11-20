@@ -43,6 +43,7 @@ public:
 	void ReleaseWeapon(void) { m_info.pWeapon = nullptr; }
 	void Hit(float fDamage);
 	bool InputInteract(void);
+	bool InputInteractPress(void);
 	void EnableWeapon(bool bEnable);
 
 private:
