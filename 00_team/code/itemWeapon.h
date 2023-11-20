@@ -33,6 +33,7 @@ private:
 	void Load(void);
 	void Interact(CObject* pObj);
 	void ApplyEffect(CPlayer *pPlayer);
+	void CollisionField(void);
 
 	CWeapon::TYPE m_type;
 };
