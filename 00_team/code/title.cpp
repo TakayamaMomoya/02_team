@@ -58,14 +58,14 @@ namespace
 
 	const char* ENEMY_BODY_PATH[ENEMY::NUM_ENEMY] =
 	{// “G‚Ì‘Ì‚ÌƒpƒX
-		"data\\MOTION\\motionPotatoman01.txt",
-		"data\\MOTION\\motionPotatoman01.txt",
-		"data\\MOTION\\motionPotatoman01.txt",
-		"data\\MOTION\\motionPotatoman01.txt",
-		"data\\MOTION\\motionPotatoman01.txt",
-		"data\\MOTION\\motionPotatoman01.txt",
-		"data\\MOTION\\motionPotatoman01.txt",
-		"data\\MOTION\\motionPotatoman01.txt",
+		"data\\MOTION\\motionEnemy00.txt",
+		"data\\MOTION\\motionEnemy00.txt",
+		"data\\MOTION\\motionEnemy00.txt",
+		"data\\MOTION\\motionEnemy00.txt",
+		"data\\MOTION\\motionEnemy00.txt",
+		"data\\MOTION\\motionEnemy00.txt",
+		"data\\MOTION\\motionEnemy00.txt",
+		"data\\MOTION\\motionEnemy00.txt",
 	};
 	const D3DXVECTOR3 ENEMY_POS[ENEMY::NUM_ENEMY] =
 	{// “G‚ÌˆÊ’u

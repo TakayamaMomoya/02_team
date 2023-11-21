@@ -71,7 +71,7 @@ CEnemy *CEnemyManager::CreateEnemy(D3DXVECTOR3 pos, CEnemy::TYPE type)
 	char *apPath[CEnemy::TYPE_MAX] = 
 	{
 		nullptr,
-		"data\\MOTION\\motionPotatoman01.txt",
+		"data\\MOTION\\motionEnemy00.txt",
 	};
 
 	CEnemy *pEnemy = nullptr;
