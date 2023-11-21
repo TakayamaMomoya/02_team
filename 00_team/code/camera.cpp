@@ -162,8 +162,8 @@ void CCamera::Control(void)
 //====================================================
 void CCamera::SetTitle(void)
 {
-	D3DXVECTOR3 posV = { 0.0f,150.0f,-400.0f };
-	D3DXVECTOR3 posR = { 0.0f,100.0f,0.0f };
+	D3DXVECTOR3 posV = { 0.0f,75.0f,-400.0f };
+	D3DXVECTOR3 posR = { 0.0f,25.0f,0.0f };
 
 	m_camera.posV = posV;
 	m_camera.posVDest = posV;
@@ -173,17 +173,26 @@ void CCamera::SetTitle(void)
 }
 
 //====================================================
+// 逃げるタイトルの設定
+//====================================================
+void CCamera::SetTitleEsc(void)
+{
+	D3DXVECTOR3 posV = { 0.0f,75.0f,-400.0f };
+	D3DXVECTOR3 posR = { 0.0f,25.0f,0.0f };
+
+	m_camera.posVDest = posV;
+	m_camera.posRDest = posR;
+}
+
+//====================================================
 // セレクトの設定
 //====================================================
 void CCamera::SetSelect(void)
 {
-	D3DXVECTOR3 posV = { 54.0f,320.0f,-760.0f };
-	D3DXVECTOR3 posR = { 54.0f,-122.0f,60.0f };
+	D3DXVECTOR3 posV = { 0.0f,700.0f,-400.0f };
+	D3DXVECTOR3 posR = { 0.0f,200.0f,0.0f };
 
-	m_camera.posV = posV;
 	m_camera.posVDest = posV;
-
-	m_camera.posR = posR;
 	m_camera.posRDest = posR;
 }
 
@@ -226,6 +235,32 @@ void CCamera::FollowPlayer(void)
 	// 目的座標に補正
 	m_camera.posV += (m_camera.posVDest - m_camera.posV) * MOVE_FACT;
 	m_camera.posR += (m_camera.posRDest - m_camera.posR) * MOVE_FACT;
+}
+
+//====================================================
+// タイトルのカメラ挙動
+//====================================================
+void CCamera::UpdateTitle(void)
+{
+	
+}
+
+//====================================================
+// タイトルの逃げるときのカメラ挙動
+//====================================================
+void CCamera::UpdateTitleEsc(void)
+{
+	if (m_camera.posV == m_camera.posVDest &&
+		m_camera.posR == m_camera.posRDest)
+	{
+
+	}
+	else
+	{
+		// 目的座標に補正
+		m_camera.posV += (m_camera.posVDest - m_camera.posV) * 0.05f;
+		m_camera.posR += (m_camera.posRDest - m_camera.posR) * 0.05f;
+	}
 }
 
 //====================================================
