@@ -49,10 +49,13 @@ private:
 	};
 
 	void ManageStart(void);
+	void UpdateFade(void);
 	void UpdateCamera(void);
+	void SetFadeIn(void);
 
 	STATE m_state;	// 状態
 
+	CObject2D* m_pLogo;		// タイトルロゴのポインタ
 	CObject2D *m_pStart;	// スタート表示のポインタ
 
 	CMotion* m_apModelPlayer[NUM_PLAYER];		// プレイヤーモデルのポインタ
