@@ -195,6 +195,7 @@ void CContainer::UpdateOpen(void)
 	if (m_info.fTimerDeath <= 0.0f)
 	{
 		m_info.fTimerDeath = 0.0f;
+		m_info.state = STATE_END;
 
 		Uninit();
 	}

@@ -24,6 +24,15 @@ class CItemWeapon;
 class CContainer : public CGimmick
 {
 public:
+	enum STATE
+	{
+		STATE_NONE = 0,	// 何でもない状態
+		STATE_NORMAL,	// 通常状態
+		STATE_OPEN,	// 開いている状態
+		STATE_END,	// 終了
+		STATE_MAX
+	};
+public:
 	CContainer(int nPriority = 3);	// コンストラクタ
 	~CContainer();	// デストラクタ
 
@@ -34,21 +43,18 @@ public:
 	void SetPosition(D3DXVECTOR3 pos);
 	static CContainer *Create(void);
 
+	STATE GetState(void) { return m_info.state; }
+
 private:
-	enum STATE
-	{
-		STATE_NONE = 0,	// 何でもない状態
-		STATE_NORMAL,	// 通常状態
-		STATE_OPEN,	// 開いている状態
-		STATE_MAX
-	};
+	
 	struct SInfo
 	{// 情報
-		CItemWeapon *pWeapon;	// 武器アイテムのポインタ
-		CObjectX *pCap;	// 蓋のオブジェクト
+		CItemWeapon* pWeapon;	// 武器アイテムのポインタ
+		CObjectX* pCap;	// 蓋のオブジェクト
 		STATE state;	// 状態
 		float fTimerDeath;	// 死亡までのタイマー
 	};
+
 	void Load(void);
 	void UpdateOpen(void);
 	void Interact(CObject* pObj);
