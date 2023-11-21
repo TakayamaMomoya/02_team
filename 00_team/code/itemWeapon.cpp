@@ -15,12 +15,20 @@
 #include "weapon.h"
 #include "player.h"
 
+#include "effect3D.h"
+
 //*****************************************************
 // 定数定義
 //*****************************************************
 namespace
 {
 	const float GRAVITY = 0.3f;	// 重力
+
+	D3DXCOLOR WeponCol[2] =	//武器の色
+	{
+		{1.0f, 0.0f, 0.0f, 0.5f},	// マグナム
+		{0.8f, 0.6f, 0.1f, 0.5f},	// マシンガン
+	};
 }
 
 //=====================================================
@@ -98,6 +106,9 @@ void CItemWeapon::Update(void)
 	D3DXVECTOR3 pos = GetPosition();
 	D3DXVECTOR3 move = GetMove();
 
+	// エフェクト設定
+	BindEffect(pos, move);
+
 	move.y -= GRAVITY;
 
 	pos += move;
@@ -114,13 +125,16 @@ void CItemWeapon::Update(void)
 void CItemWeapon::CollisionField(void)
 {
 	D3DXVECTOR3 pos = GetPosition();
+	D3DXVECTOR3 move = GetMove();
 
 	if (pos.y <= 0.0f)
 	{
 		pos.y = 0.0f;
+		move.y = 0.0f;
 	}
 
 	SetPosition(pos);
+	SetMove(move);
 }
 
 //=====================================================
@@ -184,6 +198,27 @@ void CItemWeapon::ApplyEffect(CPlayer* pPlayer)
 		break;
 	}
 }
+
+//=====================================================
+// エフェクトの割り当て
+//=====================================================
+void CItemWeapon::BindEffect(D3DXVECTOR3 pos, D3DXVECTOR3 move)
+{
+	switch (m_type)
+	{
+	case CWeapon::TYPE::TYPE_MAGNUM:
+		CEffect3D::Create(pos, 50.0f, 10, WeponCol[0], move, 0.0f, true, 0.0f, nullptr, 6, true);
+		break;
+
+	case CWeapon::TYPE::TYPE_MACHINEGUN:
+		CEffect3D::Create(pos, 50.0f, 10, WeponCol[1], move, 0.0f, true, 0.0f, nullptr, 6, true);
+		break;
+
+	default:
+		break;
+	}
+}
+
 
 //=====================================================
 // 描画処理
