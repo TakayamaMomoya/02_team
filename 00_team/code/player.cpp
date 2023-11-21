@@ -367,6 +367,29 @@ bool CPlayer::InputInteract(void)
 }
 
 //=====================================================
+// インタラクトの長押し
+//=====================================================
+bool CPlayer::InputInteractPress(void)
+{
+	bool bPress = false;
+
+	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	int nID = GetIDJoypad();
+
+	if (pJoyPad == nullptr)
+	{
+		return bPress;
+	}
+
+	if (pJoyPad->GetPress(CInputJoypad::PADBUTTONS_LB, nID))
+	{
+		bPress = true;
+	}
+
+	return bPress;
+}
+
+//=====================================================
 // 武器の有効可
 //=====================================================
 void CPlayer::EnableWeapon(bool bEnable)
@@ -609,6 +632,7 @@ void CPlayer::Debug(void)
 	}
 
 	pDebugProc->Print("\nプレイヤー番号[%d]", m_info.nID);
+	pDebugProc->Print("\nプレイヤーの位置[%f,%f,%f]", GetPosition().x, GetPosition().y, GetPosition().z);
 	pDebugProc->Print("\nプレイヤーの向き[%f,%f,%f]", GetRot().x, GetRot().y, GetRot().z);
 
 	if (GetBody() != nullptr)

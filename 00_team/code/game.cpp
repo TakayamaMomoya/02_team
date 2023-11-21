@@ -32,7 +32,7 @@
 #include "edit.h"
 #include "goal.h"
 #include "block.h"
-#include "container.h"
+#include "gimmickManager.h"
 
 //*****************************************************
 // マクロ定義
@@ -95,32 +95,14 @@ HRESULT CGame::Init(void)
 	// 武器マネージャーの生成
 	CWeaponManager::Create();
 
-	// アイテム
-	CItemWeapon *pItem = CItemWeapon::Create(CWeapon::TYPE_MAGNUM);
-	pItem->SetPosition(D3DXVECTOR3(0.0f,0.0f,-40.0f));
-
-	pItem = CItemWeapon::Create(CWeapon::TYPE_MACHINEGUN);
-	pItem->SetPosition(D3DXVECTOR3(40.0f, 0.0f, -40.0f));
-
-	// 修理アイテム
-	CItemRepair *pRepair = CItemRepair::Create();
-	pRepair->SetPosition(D3DXVECTOR3(40.0f, 0.0f, 300.0f));
-
-	pRepair = CItemRepair::Create();
-	pRepair->SetPosition(D3DXVECTOR3(-40.0f, 0.0f, 300.0f));
-
-	pRepair = CItemRepair::Create();
-	pRepair->SetPosition(D3DXVECTOR3(-200.0f, 0.0f, 300.0f));
-
 	// 敵マネージャーの生成
 	CEnemyManager *pEnemyManager = CEnemyManager::Create();
 
 	// ロケットの生成
 	CRocket::Create();
 
-	// コンテナの生成
-	CContainer *pContainer = CContainer::Create();
-	pContainer->SetPosition(D3DXVECTOR3(200.0f, 0.0f, 0.0f));
+	// ギミックマネージャーの生成
+	CGimmickManager::Create();
 
 #ifdef _DEBUG
 	// エディットの生成

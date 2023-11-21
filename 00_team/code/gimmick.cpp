@@ -8,7 +8,7 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "item.h"
+#include "gimmick.h"
 #include "manager.h"
 #include "renderer.h"
 #include "collision.h"
@@ -19,30 +19,61 @@
 #include "texture.h"
 
 //*****************************************************
+// 静的メンバ変数宣言
+//*****************************************************
+CGimmick *CGimmick::m_pHead = nullptr;	// 先頭のポインタ
+CGimmick *CGimmick::m_pTail = nullptr;	// 最後尾のポインタ
+
+//*****************************************************
 // マクロ定義
 //*****************************************************
-#define SIZE_INTERACT	(20.0f)	// インタラクト表示のサイズ
+#define SIZE_INTERACT	(30.0f)	// インタラクト表示のサイズ
 
 //=====================================================
 // コンストラクタ
 //=====================================================
-CItem::CItem(int nPriority) : CObjectX(nPriority)
+CGimmick::CGimmick(int nPriority) : CObjectX(nPriority)
 {
 	m_pCollisionSphere = nullptr;
+	m_pInteract = nullptr;
+	m_bEnable = true;
+	m_pNext = nullptr;
+	m_pPrev = nullptr;
 }
 
 //=====================================================
 // デストラクタ
 //=====================================================
-CItem::~CItem()
+CGimmick::~CGimmick()
 {
 
 }
 
 //=====================================================
+// 生成処理
+//=====================================================
+CGimmick *CGimmick::Create(void)
+{
+	CGimmick *pItem = nullptr;
+
+	if (pItem == nullptr)
+	{
+		pItem = new CGimmick;
+
+		if (pItem != nullptr)
+		{
+			// 初期化
+			pItem->Init();
+		}
+	}
+
+	return pItem;
+}
+
+//=====================================================
 // 初期化処理
 //=====================================================
-HRESULT CItem::Init(void)
+HRESULT CGimmick::Init(void)
 {
 	// 継承クラスの初期化
 	CObjectX::Init();
@@ -63,7 +94,7 @@ HRESULT CItem::Init(void)
 //=====================================================
 // 終了処理
 //=====================================================
-void CItem::Uninit(void)
+void CGimmick::Uninit(void)
 {
 	if (m_pCollisionSphere != nullptr)
 	{
@@ -84,7 +115,7 @@ void CItem::Uninit(void)
 //=====================================================
 // 更新処理
 //=====================================================
-void CItem::Update(void)
+void CGimmick::Update(void)
 {
 	// 継承クラスの更新
 	CObjectX::Update();
@@ -98,7 +129,7 @@ void CItem::Update(void)
 		// プレイヤーとの当たり判定
 		if (m_pCollisionSphere->SphereCollision(CCollision::TAG_PLAYER))
 		{
-			if (m_pInteract == nullptr)
+			if (m_pInteract == nullptr && m_bEnable == true)
 			{// インタラクト表示生成
 				D3DXVECTOR3 pos = GetPosition();
 
@@ -134,7 +165,7 @@ void CItem::Update(void)
 //=====================================================
 // アイテム入手時の処理
 //=====================================================
-void CItem::Interact(CObject *pObj)
+void CGimmick::Interact(CObject *pObj)
 {
 
 }
@@ -142,29 +173,8 @@ void CItem::Interact(CObject *pObj)
 //=====================================================
 // 描画処理
 //=====================================================
-void CItem::Draw(void)
+void CGimmick::Draw(void)
 {
 	// 継承クラスの描画
 	CObjectX::Draw();
-}
-
-//=====================================================
-// 生成処理
-//=====================================================
-CItem *CItem::Create(void)
-{
-	CItem *pItem = nullptr;
-
-	if (pItem == nullptr)
-	{
-		pItem = new CItem;
-
-		if (pItem != nullptr)
-		{
-			// 初期化
-			pItem->Init();
-		}
-	}
-
-	return pItem;
 }

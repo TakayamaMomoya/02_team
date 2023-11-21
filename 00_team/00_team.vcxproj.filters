@@ -20,7 +20,7 @@
     <Filter Include="enemy">
       <UniqueIdentifier>{01c3d09f-2183-4573-aa6d-b489588a3608}</UniqueIdentifier>
     </Filter>
-    <Filter Include="item">
+    <Filter Include="gimmick">
       <UniqueIdentifier>{97eda31d-b1e9-48f6-945a-ad4c17c5679e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -130,16 +130,22 @@
     </ClCompile>
     <ClCompile Include="code\rocket.cpp" />
     <ClCompile Include="code\itemWeapon.cpp">
-      <Filter>item</Filter>
+      <Filter>gimmick</Filter>
     </ClCompile>
-    <ClCompile Include="code\item.cpp">
-      <Filter>item</Filter>
+    <ClCompile Include="code\gimmick.cpp">
+      <Filter>gimmick</Filter>
     </ClCompile>
     <ClCompile Include="code\itemRepair.cpp">
-      <Filter>item</Filter>
+      <Filter>gimmick</Filter>
     </ClCompile>
     <ClCompile Include="code\container.cpp">
-      <Filter>item</Filter>
+      <Filter>gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="code\door.cpp">
+      <Filter>gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gimmickManager.cpp">
+      <Filter>gimmick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,17 +253,23 @@
       <Filter>scene</Filter>
     </ClInclude>
     <ClInclude Include="code\rocket.h" />
-    <ClInclude Include="code\item.h">
-      <Filter>item</Filter>
+    <ClInclude Include="code\gimmick.h">
+      <Filter>gimmick</Filter>
     </ClInclude>
     <ClInclude Include="code\itemWeapon.h">
-      <Filter>item</Filter>
+      <Filter>gimmick</Filter>
     </ClInclude>
     <ClInclude Include="code\itemRepair.h">
-      <Filter>item</Filter>
+      <Filter>gimmick</Filter>
     </ClInclude>
     <ClInclude Include="code\container.h">
-      <Filter>item</Filter>
+      <Filter>gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="code\door.h">
+      <Filter>gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gimmickManager.h">
+      <Filter>gimmick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

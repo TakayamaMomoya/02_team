@@ -15,10 +15,18 @@
 #include "weapon.h"
 #include "player.h"
 
+//*****************************************************
+// 定数定義
+//*****************************************************
+namespace
+{
+	const float GRAVITY = 0.3f;	// 重力
+}
+
 //=====================================================
 // コンストラクタ
 //=====================================================
-CItemWeapon::CItemWeapon(int nPriority) : CItem(nPriority)
+CItemWeapon::CItemWeapon(int nPriority) : CGimmick(nPriority)
 {
 	m_type = CWeapon::TYPE_MAGNUM;
 }
@@ -37,10 +45,17 @@ CItemWeapon::~CItemWeapon()
 HRESULT CItemWeapon::Init(void)
 {
 	// 継承クラスの初期化
-	CItem::Init();
+	CGimmick::Init();
 
 	// 読み込み
 	Load();
+
+	// 横向きにする
+	D3DXVECTOR3 rot = GetRot();
+
+	rot.x = D3DX_PI * 0.5f;
+
+	SetRot(rot);
 
 	return S_OK;
 }
@@ -68,7 +83,7 @@ void CItemWeapon::Load(void)
 void CItemWeapon::Uninit(void)
 {
 	// 継承クラスの終了
-	CItem::Uninit();
+	CGimmick::Uninit();
 }
 
 //=====================================================
@@ -77,7 +92,35 @@ void CItemWeapon::Uninit(void)
 void CItemWeapon::Update(void)
 {
 	// 継承クラスの更新
-	CItem::Update();
+	CGimmick::Update();
+
+	// 移動量を位置に反映
+	D3DXVECTOR3 pos = GetPosition();
+	D3DXVECTOR3 move = GetMove();
+
+	move.y -= GRAVITY;
+
+	pos += move;
+	SetPosition(pos);
+	SetMove(move);
+
+	// 床との当たり判定
+	CollisionField();
+}
+
+//=====================================================
+// 床との当たり判定
+//=====================================================
+void CItemWeapon::CollisionField(void)
+{
+	D3DXVECTOR3 pos = GetPosition();
+
+	if (pos.y <= 0.0f)
+	{
+		pos.y = 0.0f;
+	}
+
+	SetPosition(pos);
 }
 
 //=====================================================
@@ -148,7 +191,7 @@ void CItemWeapon::ApplyEffect(CPlayer* pPlayer)
 void CItemWeapon::Draw(void)
 {
 	// 継承クラスの描画
-	CItem::Draw();
+	CGimmick::Draw();
 }
 
 //=====================================================
