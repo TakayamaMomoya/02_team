@@ -40,8 +40,8 @@
 namespace
 {
 	const D3DXVECTOR3 UI_POS_1P(D3DXVECTOR3(-168.0f, 80.0f, -72.0f));	//UIの位置
-	const D3DXVECTOR3 UI_POS_2P(D3DXVECTOR3(-30.0f, 80.0f, 6.0f));	//UIの位置
-	const D3DXVECTOR3 UI_POS_3P(D3DXVECTOR3(144.0f, 80.0f, 6.0f));	//UIの位置
+	const D3DXVECTOR3 UI_POS_2P(D3DXVECTOR3(-18.0f, 80.0f, -72.0f));	//UIの位置
+	const D3DXVECTOR3 UI_POS_3P(D3DXVECTOR3(132.0f, 80.0f, -72.0f));	//UIの位置
 	const D3DXVECTOR3 UI_POS_4P(D3DXVECTOR3(282.0f, 80.0f, -72.0f));	//UIの位置
 
 	const float SPOWN_HEIGHT(20.0f);	//プレイヤー出現高さ
@@ -75,6 +75,11 @@ CSelect::CSelect()
 	m_pStartUI = nullptr;
 	m_pPlayerManager = nullptr;
 	m_state = STATE_NONE;
+
+	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
+	{
+		m_apContainer[nCnt] = nullptr;
+	}
 }
 
 //=====================================================
@@ -93,31 +98,15 @@ HRESULT CSelect::Init(void)
 	CCamera* pCamera = CManager::GetCamera();
 	pCamera->SetSelect();
 
-	CWeaponManager::Create();
-
-	CContainer* pContainer = nullptr;
-
-	pContainer = CContainer::Create();
-	pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -250.0f));
-	pContainer = CContainer::Create();
-	pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -250.0f));
-	pContainer = CContainer::Create();
-	pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -300.0f));
-	pContainer = CContainer::Create();
-	pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -300.0f));
-	pContainer = CContainer::Create();
-	pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -350.0f));
-	pContainer = CContainer::Create();
-	pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -350.0f));
-
 	// プレイヤーマネージャーの生成
 	m_pPlayerManager = CPlayerManager::Create();
 
 	MenuInit();
 	StartInit();
+	ContainerInit();
 
 	// エディットの生成
-	//CEdit::Create();
+	CEdit::Create();
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
@@ -227,6 +216,44 @@ void CSelect::StartInit(void)
 }
 
 //=====================================================
+// コンテナの初期化処理
+//=====================================================
+void CSelect::ContainerInit(void)
+{
+	CWeaponManager::Create();
+
+	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
+	{
+		m_apContainer[nCnt] = CContainer::Create();
+
+		switch (nCnt)
+		{
+		case 0:
+			m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -250.0f));
+			break;
+		case 1:
+			m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -250.0f));
+			break;
+		case 2:
+			m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -300.0f));
+			break;
+		case 3:
+			m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -300.0f));
+			break;
+		case 4:
+			m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -350.0f));
+			break;
+		case 5:
+			m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -350.0f));
+			break;
+		default:
+			assert(("コンテナ設定の失敗(select.cpp)", false));
+			break;
+		}
+	}
+}
+
+//=====================================================
 // 終了処理
 //=====================================================
 void CSelect::Uninit(void)
@@ -286,6 +313,9 @@ void CSelect::Update(void)
 				MoveLimit(nCntPlayer);
 			}
 		}
+
+		// コンテナの再設置
+		//ReSetContainer();
 	}
 	else if(m_state == STATE_OUT)
 	{
@@ -302,6 +332,51 @@ void CSelect::Update(void)
 	}
 #endif
 }
+
+//=====================================================
+// 再設定
+//=====================================================
+void CSelect::ReSetContainer(void)
+{
+	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
+	{
+		if (m_apContainer[nCnt]->GetState() == CContainer::STATE_END)
+		{
+			m_apContainer[nCnt] = nullptr;
+		}
+
+		if (m_apContainer[nCnt] == nullptr)
+		{
+			m_apContainer[nCnt] = CContainer::Create();
+
+			switch (nCnt)
+			{
+			case 0:
+				m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -250.0f));
+				break;
+			case 1:
+				m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -250.0f));
+				break;
+			case 2:
+				m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -300.0f));
+				break;
+			case 3:
+				m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -300.0f));
+				break;
+			case 4:
+				m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -350.0f));
+				break;
+			case 5:
+				m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -350.0f));
+				break;
+			default:
+				assert(("コンテナ設定の失敗(select.cpp)", false));
+				break;
+			}
+		}
+	}
+}
+
 
 //=====================================================
 // UI点滅

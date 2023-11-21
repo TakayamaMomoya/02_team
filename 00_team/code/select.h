@@ -20,6 +20,15 @@ class CBillboard;
 class CObject2D;
 class CPlayerManager;
 class CPlayer;
+class CContainer;
+
+//*****************************************************
+// マクロ定義
+//*****************************************************
+namespace
+{
+	const int MAX_CONTAINER(6);
+};
 
 //*****************************************************
 // クラスの定義
@@ -82,6 +91,8 @@ private:
 	void MenuInit(void);
 	void MenuDelete(int nPlayer);
 	void StartInit(void);
+	void ContainerInit(void);
+	void ReSetContainer(void);
 	void ColorChange(int nPlayer);
 	void EntryInput(int nPlayer);
 	void MoveLimit(int nPlayer);
@@ -90,6 +101,7 @@ private:
 	CObject2D* m_pStartUI;	// Start文字
 	CPlayerManager* m_pPlayerManager;	// プレイヤー管理
 	PlayerInfo m_apPlayerData[NUM_PLAYER];
+	CContainer* m_apContainer[MAX_CONTAINER];
 	STATE m_state;	// 状態
 	bool m_abEntry[NUM_PLAYER];	// 参加したかどうか
 };
