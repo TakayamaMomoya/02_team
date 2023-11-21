@@ -50,8 +50,11 @@ public:
 	void FollowPlayer(void);
 	void SetQuake(float fQuakeSizeH, float fQuakeSizeV, int nTime);
 	void Quake(void);
+	void UpdateTitle(void);
+	void UpdateTitleEsc(void);
 	void UpdateResult(void);
 	void SetTitle(void);
+	void SetTitleEsc(void);
 	void SetSelect(void);
 
 private:

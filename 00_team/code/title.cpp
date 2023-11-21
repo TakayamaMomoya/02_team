@@ -39,7 +39,6 @@ namespace
 		"data\\MOTION\\motionPotatoman03.txt",
 		"data\\MOTION\\motionPotatoman04.txt",
 	};
-
 	const D3DXVECTOR3 PLAYER_POS[NUM_PLAYER] =
 	{// プレイヤーの位置
 		D3DXVECTOR3(-100.0f, 0.0f, -200.0f),
@@ -47,7 +46,6 @@ namespace
 		D3DXVECTOR3(  50.0f, 0.0f, -150.0f),
 		D3DXVECTOR3( 100.0f, 0.0f, -200.0f),
 	};
-
 	const D3DXVECTOR3 PLAYER_ROT[NUM_PLAYER] =
 	{// プレイヤーの向き
 		D3DXVECTOR3(0.0f, D3DX_PI * -0.25f, 0.0f),
@@ -55,6 +53,8 @@ namespace
 		D3DXVECTOR3(0.0f, D3DX_PI *  0.10f, 0.0f),
 		D3DXVECTOR3(0.0f, D3DX_PI *  0.25f, 0.0f),
 	};
+	const D3DXVECTOR3 PLAYER_ESC_MOVE = D3DXVECTOR3(0.0f, 0.0f, 4.0f);	// プレイヤーの逃げるときの移動量 
+	const D3DXVECTOR3 PLAYER_ESC_ROT = D3DXVECTOR3(0.0f, D3DX_PI, 0.0f);	// プレイヤーの逃げるときの向き
 
 	const char* ENEMY_BODY_PATH[ENEMY::NUM_ENEMY] =
 	{// 敵の体のパス
@@ -67,7 +67,6 @@ namespace
 		"data\\MOTION\\motionPotatoman01.txt",
 		"data\\MOTION\\motionPotatoman01.txt",
 	};
-
 	const D3DXVECTOR3 ENEMY_POS[ENEMY::NUM_ENEMY] =
 	{// 敵の位置
 		D3DXVECTOR3(-250.0f, 0.0f, -600.0f),
@@ -79,18 +78,11 @@ namespace
 		D3DXVECTOR3( 120.0f,  0.0f, -750.0f),
 		D3DXVECTOR3( 250.0f, 0.0f, -500.0f),
 	};
+	const D3DXVECTOR3 ENEMY_ROT = D3DXVECTOR3(0.0f, D3DX_PI, 0.0f);	// 敵の向き
+	const D3DXVECTOR3 ENEMY_MOVE = D3DXVECTOR3(0.0f, 0.0f, 4.0f);	// 敵の移動量
 
-	const D3DXVECTOR3 ENEMY_ROT[ENEMY::NUM_ENEMY] =
-	{// 敵の向き
-		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
-	};
+	const float FIELD_WIDTH = 10000.0f;		// フィールドの幅
+	const float FIELD_HEIGHT = 10000.0f;	// フィールドの高さ
 
 	const D3DXVECTOR3 LOGO_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 150.0f, 0.0f);	// ロゴの位置
 	const float LOGO_WIDTH = 875.0f * 0.35f;	// ロゴの幅
@@ -103,8 +95,12 @@ namespace
 	const char* START_PATH = "data\\TEXTURE\\UI\\start.png";	// スタート表示のパス
 
 	const float DEST_WIDTH = 500.0f;	// スタート表示の幅
-	const float CHANGE_FACT = 0.1f;		// 変化する係数
-	const float ALPHA_CHANGE = 0.05f;	// α値の変化量
+
+	const int FADE_COUNT = 180;			// フェードまでの時間
+
+	const float ALPHA_UPPER = 1.0f;		// α値の上限量
+	const float ALPHA_LOWER = 0.5f;		// α値の下限量
+	const float ALPHA_CHANGE = 0.1f;	// α値の変化量
 }
 
 //=====================================================
@@ -112,11 +108,12 @@ namespace
 //=====================================================
 CTitle::CTitle()
 {
+	m_state = STATE_NONE;
 	m_pStart = nullptr;
 	ZeroMemory(&m_apModelPlayer[0], sizeof(m_apModelPlayer));
-	m_state = STATE_NONE;
+	ZeroMemory(&m_apModelEnemy[0], sizeof(m_apModelEnemy));
 	m_nFadeCnt = 0;
-	m_bIsFade = false;
+	m_bIsAlphaChange = false;
 }
 
 //=====================================================
@@ -162,7 +159,7 @@ HRESULT CTitle::Init(void)
 
 	// 地面の生成
 	CObject3D* pField = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	pField->SetSize(10000.0f, 10000.0f);
+	pField->SetSize(FIELD_WIDTH, FIELD_HEIGHT);
 	nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\field00.jpg");
 	pField->SetIdxTexture(nIdx);
 
@@ -208,6 +205,9 @@ void CTitle::Update(void)
 	// シーンの更新
 	CScene::Update();
 
+	// カメラの更新
+	UpdateCamera();
+
 	CFade *pFade = CFade::GetInstance();
 
 	if (m_state == STATE_NONE)
@@ -220,8 +220,8 @@ void CTitle::Update(void)
 			{// フェード開始
 				if (pFade != nullptr)
 				{
-					// フェード開始を設定
-					m_bIsFade = true;
+					// フェードアウトに設定
+					m_state = STATE_OUT;
 
 					// プレイヤーのモーション設定処理（移動）
 					for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
@@ -235,7 +235,7 @@ void CTitle::Update(void)
 						m_apModelEnemy[nCount] = CMotion::Create((char*)ENEMY_BODY_PATH[nCount]);
 
 						m_apModelEnemy[nCount]->SetPosition(ENEMY_POS[nCount]);
-						m_apModelEnemy[nCount]->SetRot(ENEMY_ROT[nCount]);
+						m_apModelEnemy[nCount]->SetRot(ENEMY_ROT);
 						m_apModelEnemy[nCount]->SetMotion(1);
 					}
 				}
@@ -246,10 +246,7 @@ void CTitle::Update(void)
 	{
 		// スタート表示の管理
 		ManageStart();
-	}
 
-	if (m_bIsFade == true)
-	{
 		// フェードカウント進める
 		m_nFadeCnt++;
 
@@ -257,23 +254,30 @@ void CTitle::Update(void)
 		for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
 		{
 			D3DXVECTOR3 posPlayer = m_apModelPlayer[nCount]->GetPosition();
-			m_apModelPlayer[nCount]->SetPosition(D3DXVECTOR3(posPlayer.x,posPlayer.y,posPlayer.z + 4.0f));
-			m_apModelPlayer[nCount]->SetRot(D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
+			m_apModelPlayer[nCount]->SetPosition(posPlayer + PLAYER_ESC_MOVE);
+			m_apModelPlayer[nCount]->SetRot(PLAYER_ESC_ROT);
 		}
 
 		// 敵の設定処理
 		for (int nCount = 0; nCount < ENEMY::NUM_ENEMY; nCount++)
 		{
 			D3DXVECTOR3 posEnemy = m_apModelEnemy[nCount]->GetPosition();
-			m_apModelEnemy[nCount]->SetPosition(D3DXVECTOR3(posEnemy.x, posEnemy.y, posEnemy.z + 4.0f));
-			m_apModelEnemy[nCount]->SetRot(D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
+			m_apModelEnemy[nCount]->SetPosition(posEnemy + ENEMY_MOVE);
 		}
 
-		if (m_nFadeCnt == 180)
+		if (m_nFadeCnt == FADE_COUNT)
 		{
 			pFade->SetFade(CScene::MODE_SELECT);
 		}
 	}
+}
+
+//=====================================================
+// 描画処理
+//=====================================================
+void CTitle::Draw(void)
+{
+
 }
 
 //=====================================================
@@ -286,36 +290,52 @@ void CTitle::ManageStart(void)
 		return;
 	}
 
-	float fWidth = m_pStart->GetWidth();
-	float fHeight = m_pStart->GetHeight();
-	float fDiffWidth;
-	float fDiffHeight;
-
-	// 減少分の計算
-	fDiffWidth = (DEST_WIDTH - fWidth) * CHANGE_FACT;
-	fDiffHeight = (0.0f - fHeight) * CHANGE_FACT;
-
 	// 透明にする
 	D3DXCOLOR col = m_pStart->GetCol();
 
-	col.a -= ALPHA_CHANGE;
-
-	if (col.a <= 0.0f)
+	if (m_bIsAlphaChange == false)
 	{
-		col.a = 0.0f;
+		col.a -= ALPHA_CHANGE;
+	}
+	else if (m_bIsAlphaChange == true)
+	{
+		col.a += ALPHA_CHANGE;
 	}
 
-	m_pStart->SetCol(col);
+	if (col.a <= ALPHA_LOWER)
+	{
+		m_bIsAlphaChange = true;
+	}
+	else if (col.a >= ALPHA_UPPER)
+	{
+		m_bIsAlphaChange = false;
+	}
 
-	// サイズ設定
-	m_pStart->SetSize(fWidth + fDiffWidth, fHeight + fDiffHeight);
+	// 設定処理
+	m_pStart->SetCol(col);
 	m_pStart->SetVtx();
 }
 
 //=====================================================
-// 描画処理
+// カメラの更新処理
 //=====================================================
-void CTitle::Draw(void)
+void CTitle::UpdateCamera(void)
 {
+	CCamera* pCamera = CManager::GetCamera();
 
+	if (pCamera == nullptr)
+	{
+		return;
+	}
+
+	if (m_state == STATE_NONE)
+	{
+		// タイトルのカメラ更新
+		pCamera->UpdateTitle();
+	}
+	else if (m_state == STATE_OUT)
+	{
+		// タイトルの逃げるときのカメラ更新
+		pCamera->UpdateTitleEsc();
+	}
 }

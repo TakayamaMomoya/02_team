@@ -49,16 +49,17 @@ private:
 	};
 
 	void ManageStart(void);
+	void UpdateCamera(void);
+
+	STATE m_state;	// 状態
 
 	CObject2D *m_pStart;	// スタート表示のポインタ
 
 	CMotion* m_apModelPlayer[NUM_PLAYER];		// プレイヤーモデルのポインタ
 	CMotion* m_apModelEnemy[ENEMY::NUM_ENEMY];	// エネミーモデルのポインタ
 
-	STATE m_state;	// 状態
-
-	int m_nFadeCnt;	// フェードまでのカウント
-	bool m_bIsFade;	// フェードの有無
+	int m_nFadeCnt;			// フェードまでのカウント
+	bool m_bIsAlphaChange;	// α値の変化
 };
 
 #endif
