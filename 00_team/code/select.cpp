@@ -27,6 +27,9 @@
 #include "playerManager.h"
 #include "player.h"
 
+#include "container.h"
+#include "weaponManager.h"
+
 #include "edit.h"
 
 #include <stdio.h>
@@ -36,11 +39,19 @@
 //*****************************************************
 namespace
 {
-	const D3DXVECTOR3 NUMBER_POS(D3DXVECTOR3(-100.0f, 50.0f, 0.0f));
-	const float SPACE(100.0f);
-	const float SIZE_PLUS(20.0f);
-	const D3DXVECTOR2 SIZE_FONT(20.0f, 10.0f);
-	const float COLOR_CHANGE_SPEED(0.02f);
+	const D3DXVECTOR3 UI_POS_1P(D3DXVECTOR3(-168.0f, 80.0f, -72.0f));	//UIの位置
+	const D3DXVECTOR3 UI_POS_2P(D3DXVECTOR3(-30.0f, 80.0f, 6.0f));	//UIの位置
+	const D3DXVECTOR3 UI_POS_3P(D3DXVECTOR3(144.0f, 80.0f, 6.0f));	//UIの位置
+	const D3DXVECTOR3 UI_POS_4P(D3DXVECTOR3(282.0f, 80.0f, -72.0f));	//UIの位置
+
+	const float SPOWN_HEIGHT(20.0f);	//プレイヤー出現高さ
+
+	const float SPACE(115.0f);	//UI間の広さ
+	const float SIZE_PLUS(20.0f);	//UIの大きさ(+)
+	const D3DXVECTOR2 SIZE_FONT(20.0f, 10.0f);	//UIの大きさ(参加：A)
+	const float BLINKING_SPEED(0.02f);	//UI点滅の速さ(参加：A)
+
+	const float GRAVITY(1.0f);	//重力
 };
 
 //=====================================================
@@ -50,15 +61,18 @@ CSelect::CSelect()
 {
 	for (int nCntFirst = 0; nCntFirst < NUM_PLAYER; nCntFirst++)
 	{
+		m_apPlayerData[nCntFirst].pPlayer = nullptr;
+		m_apPlayerData[nCntFirst].state = PLAYER_NONE;
+
 		for (int nCntSecond = 0; nCntSecond < MENU_MAX; nCntSecond++)
 		{
 			m_aMenuData[nCntFirst].pMenu2D[nCntSecond] = nullptr;
 		}
 		m_aMenuData[nCntFirst].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 		m_aMenuData[nCntFirst].state = FADE_OUT;
-		m_abJoin[nCntFirst] = false;
+		m_abEntry[nCntFirst] = false;
 	}
-
+	m_pStartUI = nullptr;
 	m_pPlayerManager = nullptr;
 	m_state = STATE_NONE;
 }
@@ -77,8 +91,24 @@ CSelect::~CSelect()
 HRESULT CSelect::Init(void)
 {
 	CCamera* pCamera = CManager::GetCamera();
-
 	pCamera->SetSelect();
+
+	CWeaponManager::Create();
+
+	CContainer* pContainer = nullptr;
+
+	pContainer = CContainer::Create();
+	pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -250.0f));
+	pContainer = CContainer::Create();
+	pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -250.0f));
+	pContainer = CContainer::Create();
+	pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -300.0f));
+	pContainer = CContainer::Create();
+	pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -300.0f));
+	pContainer = CContainer::Create();
+	pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -350.0f));
+	pContainer = CContainer::Create();
+	pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -350.0f));
 
 	// プレイヤーマネージャーの生成
 	m_pPlayerManager = CPlayerManager::Create();
@@ -89,6 +119,9 @@ HRESULT CSelect::Init(void)
 	// エディットの生成
 	//CEdit::Create();
 
+	// ブロックの読み込み
+	CBlock::Load("data\\MAP\\select_map00.bin");
+
 	return S_OK;
 }
 
@@ -97,17 +130,19 @@ HRESULT CSelect::Init(void)
 //=====================================================
 void CSelect::MenuInit(void)
 {
-	char *apPath[NUM_PLAYER] =
+	char* apPath[NUM_PLAYER] =
 	{
 		"data\\TEXTURE\\UI\\join.png",
 		"data\\TEXTURE\\UI\\join.png",
 		"data\\TEXTURE\\UI\\join.png",
 		"data\\TEXTURE\\UI\\join.png",
-	};
+	}; 
+
+	int nIdx = 0;
 
 	//地面の生成
 	CObject3D* pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\MATERIAL\\28154955_s.jpg");
+	nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\MATERIAL\\concrete_02.jpg");
 	pObject->SetIdxTexture(nIdx);
 
 	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
@@ -116,17 +151,63 @@ void CSelect::MenuInit(void)
 		m_aMenuData[nCnt].pMenu2D[MENU_CHAR] = CBillboard::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0), SIZE_FONT.x, SIZE_FONT.y);
 		m_aMenuData[nCnt].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
-		// +表示
-		m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetPosition(D3DXVECTOR3(NUMBER_POS.x + (nCnt * SPACE), NUMBER_POS.y, NUMBER_POS.z));
-		m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetIdxTexture(CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\plus.png"));
+		switch (nCnt)
+		{
+		case 0:
+			m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetPosition(D3DXVECTOR3(UI_POS_1P.x, UI_POS_1P.y, UI_POS_1P.z));
+			m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetIdxTexture(CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\plus.png"));
 
-		// 文字
-		m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetPosition(D3DXVECTOR3(NUMBER_POS.x + (nCnt * SPACE), NUMBER_POS.y - 30.0f, NUMBER_POS.z));
-		m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			// 文字
+			m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetPosition(D3DXVECTOR3(UI_POS_1P.x, UI_POS_1P.y - 30.0f, UI_POS_1P.z));
+			m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-		int nIdx = CTexture::GetInstance()->Regist(apPath[nCnt]);
-		m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetIdxTexture(nIdx);
+			nIdx = CTexture::GetInstance()->Regist(apPath[nCnt]);
+			m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetIdxTexture(nIdx);
+			break;
+
+		case 1:
+			m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetPosition(D3DXVECTOR3(UI_POS_2P.x, UI_POS_2P.y, UI_POS_2P.z));
+			m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetIdxTexture(CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\plus.png"));
+
+			// 文字
+			m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetPosition(D3DXVECTOR3(UI_POS_2P.x, UI_POS_2P.y - 30.0f, UI_POS_2P.z));
+			m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+			nIdx = CTexture::GetInstance()->Regist(apPath[nCnt]);
+			m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetIdxTexture(nIdx);
+			break;
+
+		case 2:
+			m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetPosition(D3DXVECTOR3(UI_POS_3P.x, UI_POS_3P.y, UI_POS_3P.z));
+			m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetIdxTexture(CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\plus.png"));
+
+			// 文字
+			m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetPosition(D3DXVECTOR3(UI_POS_3P.x, UI_POS_3P.y - 30.0f, UI_POS_3P.z));
+			m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+			nIdx = CTexture::GetInstance()->Regist(apPath[nCnt]);
+			m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetIdxTexture(nIdx);
+			break;
+
+		case 3:
+			m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetPosition(D3DXVECTOR3(UI_POS_4P.x, UI_POS_4P.y, UI_POS_4P.z));
+			m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			m_aMenuData[nCnt].pMenu2D[MENU_PLUS]->SetIdxTexture(CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\plus.png"));
+
+			// 文字
+			m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetPosition(D3DXVECTOR3(UI_POS_4P.x, UI_POS_4P.y - 30.0f, UI_POS_4P.z));
+			m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+			nIdx = CTexture::GetInstance()->Regist(apPath[nCnt]);
+			m_aMenuData[nCnt].pMenu2D[MENU_CHAR]->SetIdxTexture(nIdx);
+			break;
+		default:
+			assert(("人数UIの設定失敗", false));
+			break;
+		}
 	}
 }
 
@@ -181,7 +262,7 @@ void CSelect::Update(void)
 				pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
 			{// フェード
 
-				if (pFade != nullptr && m_abJoin[0] != false)
+				if (pFade != nullptr && m_abEntry[0] != false)
 				{
 					m_pStartUI->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 
@@ -192,15 +273,18 @@ void CSelect::Update(void)
 
 		for (int nCntPlayer = 0; nCntPlayer < NUM_PLAYER; nCntPlayer++)
 		{
-			if (m_aMenuData[nCntPlayer].pMenu2D[MENU_CHAR] == nullptr && m_aMenuData[nCntPlayer].pMenu2D[MENU_PLUS] == nullptr)
+			if (m_aMenuData[nCntPlayer].pMenu2D[MENU_CHAR] != nullptr && m_aMenuData[nCntPlayer].pMenu2D[MENU_PLUS] != nullptr)
 			{
-				continue;
+				// 色の変更
+				ColorChange(nCntPlayer);
+				// 参加入力
+				EntryInput(nCntPlayer);
 			}
 
-			// 色の変更
-			ColorChange(nCntPlayer);
-			// 参加入力
-			EntryInput(nCntPlayer);
+			if (m_abEntry[nCntPlayer] == true)
+			{
+				MoveLimit(nCntPlayer);
+			}
 		}
 	}
 	else if(m_state == STATE_OUT)
@@ -208,6 +292,7 @@ void CSelect::Update(void)
 
 	}
 
+#ifdef _DEBUG
 	CCamera* pCamera = CManager::GetCamera();
 
 	if (pCamera != nullptr)
@@ -215,16 +300,17 @@ void CSelect::Update(void)
 		// 操作
 		pCamera->Control();
 	}
+#endif
 }
 
 //=====================================================
-// 色の変更
+// UI点滅
 //=====================================================
 void CSelect::ColorChange(int nPlayer)
 {
 	if (m_aMenuData[nPlayer].state == FADE_IN)
 	{//フェードイン状態
-		m_aMenuData[nPlayer].col.a -= COLOR_CHANGE_SPEED;			//ポリゴンを透明にしていく
+		m_aMenuData[nPlayer].col.a -= BLINKING_SPEED;			//ポリゴンを透明にしていく
 
 		if (m_aMenuData[nPlayer].col.a <= 0.0f)
 		{
@@ -235,7 +321,7 @@ void CSelect::ColorChange(int nPlayer)
 	}
 	else if (m_aMenuData[nPlayer].state == FADE_OUT)
 	{//フェードアウト状態
-		m_aMenuData[nPlayer].col.a += COLOR_CHANGE_SPEED;			//ポリゴンを不透明にしていく
+		m_aMenuData[nPlayer].col.a += BLINKING_SPEED;			//ポリゴンを不透明にしていく
 
 		if (m_aMenuData[nPlayer].col.a >= 1.0f)
 		{
@@ -257,32 +343,62 @@ void CSelect::EntryInput(int nPlayer)
 	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
 	CInputMouse* pMouse = CInputMouse::GetInstance();
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
-	CPlayer* pPlayer = nullptr;
 	
 	if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, nPlayer))
 	{
-		if (m_abJoin[nPlayer] == true)
+		if (m_abEntry[nPlayer] == true || m_apPlayerData[nPlayer].pPlayer != nullptr || m_pPlayerManager == nullptr)
 		{
 			return;
 		}
 
-		m_abJoin[nPlayer] = true;
+		// 参加した
+		m_abEntry[nPlayer] = true;
+		m_apPlayerData[nPlayer].state = PLAYER_ENTRY;
 
-		if (m_pPlayerManager != nullptr)
-		{
-			// プレイヤーを生成
-			pPlayer = m_pPlayerManager->BindPlayer(nPlayer);
+		// プレイヤーを生成
+		m_apPlayerData[nPlayer].pPlayer = m_pPlayerManager->BindPlayer(nPlayer);
 
-			// 位置をビルボードの場所へ
-			pPlayer->SetPosition(D3DXVECTOR3(
-				m_aMenuData[nPlayer].pMenu2D[MENU_PLUS]->GetPosition().x,
-				0.0f,
-				m_aMenuData[nPlayer].pMenu2D[MENU_PLUS]->GetPosition().z));
-		}
+		// 位置をUIの場所へ
+		m_apPlayerData[nPlayer].pPlayer->SetPosition(D3DXVECTOR3(
+			m_aMenuData[nPlayer].pMenu2D[MENU_PLUS]->GetPosition().x,
+			SPOWN_HEIGHT,
+			m_aMenuData[nPlayer].pMenu2D[MENU_PLUS]->GetPosition().z));
 
-		// メニューの削除
+		// UI削除
 		MenuDelete(nPlayer);
 	}
+}
+
+//=====================================================
+// 透明な壁
+//=====================================================
+void CSelect::MoveLimit(int nPlayer)
+{
+	if (m_apPlayerData[nPlayer].pPlayer == nullptr)
+	{
+		return;
+	}
+
+	// 情報の取得
+	D3DXVECTOR3 pos = m_apPlayerData[nPlayer].pPlayer->GetPosition();
+	D3DXVECTOR3 move = m_apPlayerData[nPlayer].pPlayer->GetMove();
+
+	move.y -= GRAVITY;
+
+	if (pos.z < -470.0f)
+	{
+		pos.z = -470.0f;
+	}
+
+	if (pos.y <= 0.0f)
+	{
+		pos.y = 0.0f;
+		move.y = 0.0f;
+	}
+
+	 //情報の反映
+	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
+	m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 }
 
 //=====================================================

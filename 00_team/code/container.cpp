@@ -1,6 +1,6 @@
 //*****************************************************
 //
-// コンテナーの処理[container.cpp]
+// コンテナの処理[container.cpp]
 // Author:髙山桃也
 //
 //*****************************************************
@@ -26,12 +26,16 @@ namespace
 	const char* BODY_PATH = "data\\MODEL\\gimmick\\MysteryBox_Down.x";	// 本体のパス
 	const char* CAP_PATH = "data\\MODEL\\gimmick\\MysteryBox_Up.x";	// 蓋のパス
 	const float TIME_DEATH = 1.5f;	// 死亡までの時間
+	const float TIME_DEPLOY = TIME_DEATH * 0.1f;	// アイテムを設置するまでのラグ
+	const float ROLL_SPEED = 0.3f;	// 蓋の回転速度
+	const float OPEN_ANGLE = D3DX_PI * 0.7f;	// 回転制限
+	const float WEAPON_JUMP = 10.0f;	// 武器設置時のジャンプ力
 }
 
 //=====================================================
 // コンストラクタ
 //=====================================================
-CContainer::CContainer(int nPriority) : CItem(nPriority)
+CContainer::CContainer(int nPriority) : CGimmick(nPriority)
 {
 	ZeroMemory(&m_info, sizeof(SInfo));
 }
@@ -71,7 +75,7 @@ CContainer *CContainer::Create(void)
 HRESULT CContainer::Init(void)
 {
 	// 継承クラスの初期化
-	CItem::Init();
+	CGimmick::Init();
 
 	// 読み込み
 	Load();
@@ -118,7 +122,7 @@ void CContainer::Uninit(void)
 	}
 
 	// 継承クラスの終了
-	CItem::Uninit();
+	CGimmick::Uninit();
 }
 
 //=====================================================
@@ -127,7 +131,7 @@ void CContainer::Uninit(void)
 void CContainer::Update(void)
 {
 	// 継承クラスの更新
-	CItem::Update();
+	CGimmick::Update();
 
 	if (m_info.state == STATE_OPEN)
 	{// 開いている状態の更新
@@ -139,11 +143,55 @@ void CContainer::Update(void)
 // 開いている状態の更新
 //=====================================================
 void CContainer::UpdateOpen(void)
-{
+{	
+	// 蓋を開く処理
+	if (m_info.pCap != nullptr)
+	{
+		D3DXVECTOR3 rot = m_info.pCap->GetRot();
+
+		rot.x += ROLL_SPEED;
+
+		if (rot.x >= OPEN_ANGLE)
+		{
+			rot.x = OPEN_ANGLE;
+		}
+
+		m_info.pCap->SetRot(rot);
+	}
+
+	// 経過時間取得
 	float fTick = CManager::GetTick();
 
 	m_info.fTimerDeath -= fTick;
 
+	// アイテムを出現させる処理
+	if (TIME_DEATH - TIME_DEPLOY > m_info.fTimerDeath)
+	{
+		if (m_info.pWeapon == nullptr)
+		{
+			// 武器の種類をランダムで設定
+			CUniversal *pUniversal = CUniversal::GetInstance();
+
+			CWeapon::TYPE type = (CWeapon::TYPE)WeaponRand();
+
+			// 武器の設置
+			m_info.pWeapon = CItemWeapon::Create(type);
+
+			if (m_info.pWeapon != nullptr)
+			{
+				D3DXVECTOR3 pos = GetPosition();
+
+				m_info.pWeapon->SetPosition(pos);
+
+				D3DXVECTOR3 move = { 0.0f,WEAPON_JUMP,0.0f };
+
+				m_info.pWeapon->SetMove(move);
+			}
+
+		}
+	}
+
+	// 箱を消す処理
 	if (m_info.fTimerDeath <= 0.0f)
 	{
 		m_info.fTimerDeath = 0.0f;
@@ -153,7 +201,7 @@ void CContainer::UpdateOpen(void)
 }
 
 //=====================================================
-// アイテム入手時の処理
+// インタラクト
 //=====================================================
 void CContainer::Interact(CObject *pObj)
 {
@@ -195,23 +243,6 @@ void CContainer::Interact(CObject *pObj)
 void CContainer::Open(void)
 {
 	// 箱を開く状態
-	m_info.state = STATE_OPEN;
-
-	// 武器の種類をランダムで設定
-	CUniversal *pUniversal = CUniversal::GetInstance();
-
-	CWeapon::TYPE type = (CWeapon::TYPE)WeaponRand();
-
-	// 武器の設置
-	CItemWeapon *pWeapon = CItemWeapon::Create(type);
-
-	if (pWeapon != nullptr)
-	{
-		D3DXVECTOR3 pos = GetPosition();
-
-		pWeapon->SetPosition(pos);
-	}
-
 	m_info.state = STATE_OPEN;
 }
 
@@ -289,5 +320,5 @@ void CContainer::SetPosition(D3DXVECTOR3 pos)
 void CContainer::Draw(void)
 {
 	// 継承クラスの描画
-	CItem::Draw();
+	CGimmick::Draw();
 }

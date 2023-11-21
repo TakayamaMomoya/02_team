@@ -27,6 +27,8 @@ public:
 		TYPE_CONCRETE,	// コンクリート壁
 		TYPE_WOOD,		// 木壁
 		TYPE_DOOR,		// ドア
+		TYPE_SOIL,		// 土
+		TYPE_SHELF,		// 棚
 		TYPE_MAX
 	}TYPE;
 

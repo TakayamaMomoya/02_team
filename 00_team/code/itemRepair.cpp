@@ -20,7 +20,7 @@
 //=====================================================
 // コンストラクタ
 //=====================================================
-CItemRepair::CItemRepair(int nPriority) : CItem(nPriority)
+CItemRepair::CItemRepair(int nPriority) : CGimmick(nPriority)
 {
 	m_pPlayer = nullptr;
 }
@@ -60,7 +60,7 @@ CItemRepair *CItemRepair::Create(void)
 HRESULT CItemRepair::Init(void)
 {
 	// 継承クラスの初期化
-	CItem::Init();
+	CGimmick::Init();
 
 	// 読み込み
 	Load();
@@ -87,7 +87,7 @@ void CItemRepair::Uninit(void)
 	m_pPlayer = nullptr;
 
 	// 継承クラスの終了
-	CItem::Uninit();
+	CGimmick::Uninit();
 }
 
 //=====================================================
@@ -101,15 +101,17 @@ void CItemRepair::Update(void)
 
 		if (bGet)
 		{// 持ち上げているプレイヤーの検出
-			// 武器を無効化する
+			// 武器を有効化する
 			m_pPlayer->EnableWeapon(true);
 
 			m_pPlayer = nullptr;
+
+			SetEnable(true);
 		}
 	}
 
 	// 継承クラスの更新
-	CItem::Update();
+	CGimmick::Update();
 
 	// プレイヤーの生存確認
 	CheckPlayerAlive();
@@ -214,6 +216,8 @@ void CItemRepair::Interact(CObject *pObj)
 
 					// 武器を無効化する
 					pPlayer->EnableWeapon(false);
+
+					SetEnable(false);
 				}
 			}
 		}
@@ -292,5 +296,5 @@ void CItemRepair::CheckPlayerAlive(void)
 void CItemRepair::Draw(void)
 {
 	// 継承クラスの描画
-	CItem::Draw();
+	CGimmick::Draw();
 }
