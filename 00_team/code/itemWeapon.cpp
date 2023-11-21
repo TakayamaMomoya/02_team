@@ -24,8 +24,8 @@ namespace
 {
 	const float GRAVITY = 0.3f;	// 重力
 
-	D3DXCOLOR WeponCol[2] =	//武器の色
-	{
+	D3DXCOLOR WeponCol[CWeapon::TYPE_MAX] =
+	{// 武器ごとのエフェクトの色
 		{1.0f, 0.0f, 0.0f, 0.5f},	// マグナム
 		{0.8f, 0.6f, 0.1f, 0.5f},	// マシンガン
 	};
@@ -204,21 +204,8 @@ void CItemWeapon::ApplyEffect(CPlayer* pPlayer)
 //=====================================================
 void CItemWeapon::BindEffect(D3DXVECTOR3 pos, D3DXVECTOR3 move)
 {
-	switch (m_type)
-	{
-	case CWeapon::TYPE::TYPE_MAGNUM:
-		CEffect3D::Create(pos, 50.0f, 10, WeponCol[0], move, 0.0f, true, 0.0f, nullptr, 6, true);
-		break;
-
-	case CWeapon::TYPE::TYPE_MACHINEGUN:
-		CEffect3D::Create(pos, 50.0f, 10, WeponCol[1], move, 0.0f, true, 0.0f, nullptr, 6, true);
-		break;
-
-	default:
-		break;
-	}
+	CEffect3D::Create(pos, 50.0f, 10, WeponCol[m_type], move, 0.0f, true, 0.0f, nullptr, 6, false);
 }
-
 
 //=====================================================
 // 描画処理

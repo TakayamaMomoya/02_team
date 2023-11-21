@@ -95,6 +95,7 @@ CSelect::~CSelect()
 //=====================================================
 HRESULT CSelect::Init(void)
 {
+	// ƒJƒƒ‰î•ñ‚ÌŽæ“¾
 	CCamera* pCamera = CManager::GetCamera();
 	pCamera->SetSelect();
 
