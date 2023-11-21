@@ -21,6 +21,11 @@
 class CMenu;
 class CObject2D;
 
+namespace ENEMY
+{
+	const int NUM_ENEMY = 8;	// 敵の最大数
+}
+
 //*****************************************************
 // クラスの定義
 //*****************************************************
@@ -45,9 +50,15 @@ private:
 
 	void ManageStart(void);
 
-	CObject2D *m_pStart;					// スタート表示のポインタ
-	CMotion* m_apModelPlayer[NUM_PLAYER];	// プレイヤーモデルのポインタ
-	STATE m_state;							// 状態
+	CObject2D *m_pStart;	// スタート表示のポインタ
+
+	CMotion* m_apModelPlayer[NUM_PLAYER];		// プレイヤーモデルのポインタ
+	CMotion* m_apModelEnemy[ENEMY::NUM_ENEMY];	// エネミーモデルのポインタ
+
+	STATE m_state;	// 状態
+
+	int m_nFadeCnt;	// フェードまでのカウント
+	bool m_bIsFade;	// フェードの有無
 };
 
 #endif
