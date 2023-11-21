@@ -32,8 +32,8 @@
 //*****************************************************
 namespace
 {
-	const char* BODY_PATH[NUM_PLAYER] =
-	{// 体のパス
+	const char* PLAYER_BODY_PATH[NUM_PLAYER] =
+	{// 敵の体のパス
 		"data\\MOTION\\motionPotatoman01.txt",
 		"data\\MOTION\\motionPotatoman02.txt",
 		"data\\MOTION\\motionPotatoman03.txt",
@@ -52,8 +52,44 @@ namespace
 	{// プレイヤーの向き
 		D3DXVECTOR3(0.0f, D3DX_PI * -0.25f, 0.0f),
 		D3DXVECTOR3(0.0f, D3DX_PI * -0.10f, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI * 0.10f, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI *  0.10f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI *  0.25f, 0.0f),
+	};
+
+	const char* ENEMY_BODY_PATH[ENEMY::NUM_ENEMY] =
+	{// 敵の体のパス
+		"data\\MOTION\\motionPotatoman01.txt",
+		"data\\MOTION\\motionPotatoman01.txt",
+		"data\\MOTION\\motionPotatoman01.txt",
+		"data\\MOTION\\motionPotatoman01.txt",
+		"data\\MOTION\\motionPotatoman01.txt",
+		"data\\MOTION\\motionPotatoman01.txt",
+		"data\\MOTION\\motionPotatoman01.txt",
+		"data\\MOTION\\motionPotatoman01.txt",
+	};
+
+	const D3DXVECTOR3 ENEMY_POS[ENEMY::NUM_ENEMY] =
+	{// 敵の位置
+		D3DXVECTOR3(-250.0f, 0.0f, -600.0f),
+		D3DXVECTOR3(-150.0f,  0.0f, -450.0f),
+		D3DXVECTOR3(-90.0f,  0.0f, -850.0f),
+		D3DXVECTOR3(-30.0f, 0.0f, -600.0f),
+		D3DXVECTOR3( 40.0f, 0.0f, -800.0f),
+		D3DXVECTOR3( 80.0f,  0.0f, -950.0f),
+		D3DXVECTOR3( 120.0f,  0.0f, -750.0f),
+		D3DXVECTOR3( 250.0f, 0.0f, -500.0f),
+	};
+
+	const D3DXVECTOR3 ENEMY_ROT[ENEMY::NUM_ENEMY] =
+	{// 敵の向き
+		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
 	};
 
 	const D3DXVECTOR3 LOGO_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 150.0f, 0.0f);	// ロゴの位置
@@ -79,6 +115,8 @@ CTitle::CTitle()
 	m_pStart = nullptr;
 	ZeroMemory(&m_apModelPlayer[0], sizeof(m_apModelPlayer));
 	m_state = STATE_NONE;
+	m_nFadeCnt = 0;
+	m_bIsFade = false;
 }
 
 //=====================================================
@@ -124,7 +162,7 @@ HRESULT CTitle::Init(void)
 
 	// 地面の生成
 	CObject3D* pField = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	pField->SetSize(1000.0f, 1000.0f);
+	pField->SetSize(10000.0f, 10000.0f);
 	nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\field00.jpg");
 	pField->SetIdxTexture(nIdx);
 
@@ -133,10 +171,10 @@ HRESULT CTitle::Init(void)
 	nIdx = CModel::Load("data\\MODEL\\title\\title_model.x");
 	pTitleModel->BindModel(nIdx);
 
+	// キャラクターの生成処理
 	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
 	{
-		// キャラクターの生成処理
-		m_apModelPlayer[nCount] = CMotion::Create((char*)BODY_PATH[nCount]);
+		m_apModelPlayer[nCount] = CMotion::Create((char*)PLAYER_BODY_PATH[nCount]);
 
 		m_apModelPlayer[nCount]->SetPosition(PLAYER_POS[nCount]);
 		m_apModelPlayer[nCount]->SetRot(PLAYER_ROT[nCount]);
@@ -179,10 +217,27 @@ void CTitle::Update(void)
 			if (pKeyboard->GetTrigger(DIK_RETURN) ||
 				pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
 				pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0))
-			{// フェード
+			{// フェード開始
 				if (pFade != nullptr)
 				{
-					pFade->SetFade(CScene::MODE_SELECT);
+					// フェード開始を設定
+					m_bIsFade = true;
+
+					// プレイヤーのモーション設定処理（移動）
+					for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+					{
+						m_apModelPlayer[nCount]->SetMotion(1);
+					}
+
+					// 敵の生成処理
+					for (int nCount = 0; nCount < ENEMY::NUM_ENEMY; nCount++)
+					{
+						m_apModelEnemy[nCount] = CMotion::Create((char*)ENEMY_BODY_PATH[nCount]);
+
+						m_apModelEnemy[nCount]->SetPosition(ENEMY_POS[nCount]);
+						m_apModelEnemy[nCount]->SetRot(ENEMY_ROT[nCount]);
+						m_apModelEnemy[nCount]->SetMotion(1);
+					}
 				}
 			}
 		}
@@ -191,6 +246,33 @@ void CTitle::Update(void)
 	{
 		// スタート表示の管理
 		ManageStart();
+	}
+
+	if (m_bIsFade == true)
+	{
+		// フェードカウント進める
+		m_nFadeCnt++;
+
+		// プレイヤーの設定処理
+		for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+		{
+			D3DXVECTOR3 posPlayer = m_apModelPlayer[nCount]->GetPosition();
+			m_apModelPlayer[nCount]->SetPosition(D3DXVECTOR3(posPlayer.x,posPlayer.y,posPlayer.z + 4.0f));
+			m_apModelPlayer[nCount]->SetRot(D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
+		}
+
+		// 敵の設定処理
+		for (int nCount = 0; nCount < ENEMY::NUM_ENEMY; nCount++)
+		{
+			D3DXVECTOR3 posEnemy = m_apModelEnemy[nCount]->GetPosition();
+			m_apModelEnemy[nCount]->SetPosition(D3DXVECTOR3(posEnemy.x, posEnemy.y, posEnemy.z + 4.0f));
+			m_apModelEnemy[nCount]->SetRot(D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
+		}
+
+		if (m_nFadeCnt == 180)
+		{
+			pFade->SetFade(CScene::MODE_SELECT);
+		}
 	}
 }
 
