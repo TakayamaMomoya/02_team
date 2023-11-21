@@ -177,8 +177,8 @@ void CCamera::SetTitle(void)
 //====================================================
 void CCamera::SetTitleEsc(void)
 {
-	D3DXVECTOR3 posV = { 0.0f,75.0f,-400.0f };
-	D3DXVECTOR3 posR = { 0.0f,25.0f,0.0f };
+	D3DXVECTOR3 posV = { 0.0f,200.0f,-800.0f };
+	D3DXVECTOR3 posR = { 0.0f,100.0f,0.0f };
 
 	m_camera.posVDest = posV;
 	m_camera.posRDest = posR;
@@ -257,9 +257,13 @@ void CCamera::UpdateTitleEsc(void)
 	}
 	else
 	{
+		// ÉJÉÅÉâÇÃà⁄ìÆèàóù
+		m_camera.posVDest = m_camera.posVDest + D3DXVECTOR3(0.0f, 0.0f, 7.0f);
+		m_camera.posRDest = m_camera.posRDest + D3DXVECTOR3(0.0f, 0.0f, 7.0f);
+
 		// ñ⁄ìIç¿ïWÇ…ï‚ê≥
-		m_camera.posV += (m_camera.posVDest - m_camera.posV) * 0.05f;
-		m_camera.posR += (m_camera.posRDest - m_camera.posR) * 0.05f;
+		m_camera.posV += (m_camera.posVDest - m_camera.posV) * 0.025f;
+		m_camera.posR += (m_camera.posRDest - m_camera.posR) * 0.025f;
 	}
 }
 

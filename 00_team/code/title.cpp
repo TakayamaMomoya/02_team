@@ -53,7 +53,7 @@ namespace
 		D3DXVECTOR3(0.0f, D3DX_PI *  0.10f, 0.0f),
 		D3DXVECTOR3(0.0f, D3DX_PI *  0.25f, 0.0f),
 	};
-	const D3DXVECTOR3 PLAYER_ESC_MOVE = D3DXVECTOR3(0.0f, 0.0f, 4.0f);	// プレイヤーの逃げるときの移動量 
+	const D3DXVECTOR3 PLAYER_ESC_MOVE = D3DXVECTOR3(0.0f, 0.0f, 8.0f);	// プレイヤーの逃げるときの移動量 
 	const D3DXVECTOR3 PLAYER_ESC_ROT = D3DXVECTOR3(0.0f, D3DX_PI, 0.0f);	// プレイヤーの逃げるときの向き
 
 	const char* ENEMY_BODY_PATH[ENEMY::NUM_ENEMY] =
@@ -79,7 +79,7 @@ namespace
 		D3DXVECTOR3( 250.0f, 0.0f, -500.0f),
 	};
 	const D3DXVECTOR3 ENEMY_ROT = D3DXVECTOR3(0.0f, D3DX_PI, 0.0f);	// 敵の向き
-	const D3DXVECTOR3 ENEMY_MOVE = D3DXVECTOR3(0.0f, 0.0f, 4.0f);	// 敵の移動量
+	const D3DXVECTOR3 ENEMY_MOVE = D3DXVECTOR3(0.0f, 0.0f, 7.5f);	// 敵の移動量
 
 	const float FIELD_WIDTH = 10000.0f;		// フィールドの幅
 	const float FIELD_HEIGHT = 10000.0f;	// フィールドの高さ
@@ -96,11 +96,12 @@ namespace
 
 	const float DEST_WIDTH = 500.0f;	// スタート表示の幅
 
-	const int FADE_COUNT = 180;			// フェードまでの時間
+	const int FADE_COUNT = 120;			// フェードまでの時間
 
-	const float ALPHA_UPPER = 1.0f;		// α値の上限量
-	const float ALPHA_LOWER = 0.5f;		// α値の下限量
-	const float ALPHA_CHANGE = 0.1f;	// α値の変化量
+	const float ALPHA_UPPER = 1.0f;			// α値の上限量
+	const float ALPHA_LOWER = 0.25f;		// α値の下限量
+	const float ALPHA_CHANGE = 0.1f;		// α値の変化量
+	const float ALPHA_CHANGE_LOGO = 0.01f;	// α値の変化量
 }
 
 //=====================================================
@@ -136,13 +137,13 @@ HRESULT CTitle::Init(void)
 	pCamera->SetTitle();
 
 	// ロゴの生成
-	CObject2D *pLogo = CObject2D::Create(7);
-	pLogo->SetSize(LOGO_WIDTH, LOGO_HEIGHT);
-	pLogo->SetPosition(LOGO_POS);
+	m_pLogo = CObject2D::Create(7);
+	m_pLogo->SetSize(LOGO_WIDTH, LOGO_HEIGHT);
+	m_pLogo->SetPosition(LOGO_POS);
 
 	int nIdx = CTexture::GetInstance()->Regist(LOGO_PATH);
-	pLogo->SetIdxTexture(nIdx);
-	pLogo->SetVtx();
+	m_pLogo->SetIdxTexture(nIdx);
+	m_pLogo->SetVtx();
 
 	// スタート表示の生成
 	m_pStart = CObject2D::Create(7);
@@ -196,19 +197,17 @@ void CTitle::Uninit(void)
 void CTitle::Update(void)
 {
 	// 情報取得
-	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
-	CInputMouse *pMouse = CInputMouse::GetInstance();
-	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
+	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
+	CInputMouse* pMouse = CInputMouse::GetInstance();
+	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
 
-	CCamera *pCamera = CManager::GetCamera();
+	CCamera* pCamera = CManager::GetCamera();
 
 	// シーンの更新
 	CScene::Update();
 
 	// カメラの更新
 	UpdateCamera();
-
-	CFade *pFade = CFade::GetInstance();
 
 	if (m_state == STATE_NONE)
 	{
@@ -218,57 +217,16 @@ void CTitle::Update(void)
 				pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
 				pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0))
 			{// フェード開始
-				if (pFade != nullptr)
-				{
-					// フェードアウトに設定
-					m_state = STATE_OUT;
 
-					// プレイヤーのモーション設定処理（移動）
-					for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
-					{
-						m_apModelPlayer[nCount]->SetMotion(1);
-					}
-
-					// 敵の生成処理
-					for (int nCount = 0; nCount < ENEMY::NUM_ENEMY; nCount++)
-					{
-						m_apModelEnemy[nCount] = CMotion::Create((char*)ENEMY_BODY_PATH[nCount]);
-
-						m_apModelEnemy[nCount]->SetPosition(ENEMY_POS[nCount]);
-						m_apModelEnemy[nCount]->SetRot(ENEMY_ROT);
-						m_apModelEnemy[nCount]->SetMotion(1);
-					}
-				}
+				// フェード設定
+				SetFadeIn();
 			}
 		}
 	}
-	else if(m_state == STATE_OUT)
+	else if (m_state == STATE_OUT)
 	{
-		// スタート表示の管理
-		ManageStart();
-
-		// フェードカウント進める
-		m_nFadeCnt++;
-
-		// プレイヤーの設定処理
-		for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
-		{
-			D3DXVECTOR3 posPlayer = m_apModelPlayer[nCount]->GetPosition();
-			m_apModelPlayer[nCount]->SetPosition(posPlayer + PLAYER_ESC_MOVE);
-			m_apModelPlayer[nCount]->SetRot(PLAYER_ESC_ROT);
-		}
-
-		// 敵の設定処理
-		for (int nCount = 0; nCount < ENEMY::NUM_ENEMY; nCount++)
-		{
-			D3DXVECTOR3 posEnemy = m_apModelEnemy[nCount]->GetPosition();
-			m_apModelEnemy[nCount]->SetPosition(posEnemy + ENEMY_MOVE);
-		}
-
-		if (m_nFadeCnt == FADE_COUNT)
-		{
-			pFade->SetFade(CScene::MODE_SELECT);
-		}
+		// フェード更新処理
+		UpdateFade();
 	}
 }
 
@@ -290,30 +248,78 @@ void CTitle::ManageStart(void)
 		return;
 	}
 
-	// 透明にする
-	D3DXCOLOR col = m_pStart->GetCol();
+	// 色の情報取得
+	D3DXCOLOR colStart = m_pStart->GetCol();
+	D3DXCOLOR colLogo = m_pLogo->GetCol();
 
 	if (m_bIsAlphaChange == false)
 	{
-		col.a -= ALPHA_CHANGE;
+		colStart.a -= ALPHA_CHANGE;
 	}
 	else if (m_bIsAlphaChange == true)
 	{
-		col.a += ALPHA_CHANGE;
+		colStart.a += ALPHA_CHANGE;
 	}
 
-	if (col.a <= ALPHA_LOWER)
+	if (colStart.a <= ALPHA_LOWER)
 	{
 		m_bIsAlphaChange = true;
 	}
-	else if (col.a >= ALPHA_UPPER)
+	else if (colStart.a >= ALPHA_UPPER)
 	{
 		m_bIsAlphaChange = false;
 	}
 
+	if (colLogo.a >= 0.0f)
+	{
+		// ロゴのα値を減少
+		colLogo.a -= ALPHA_CHANGE_LOGO;
+	}
+
 	// 設定処理
-	m_pStart->SetCol(col);
+	m_pStart->SetCol(colStart);
 	m_pStart->SetVtx();
+	m_pLogo->SetCol(colLogo);
+	m_pLogo->SetVtx();
+
+}
+
+//=====================================================
+// フェードの更新処理
+//=====================================================
+void CTitle::UpdateFade(void)
+{
+	// 情報取得
+	CFade* pFade = CFade::GetInstance();
+
+	// スタート表示の管理
+	ManageStart();
+
+	// フェードカウント進める
+	m_nFadeCnt++;
+
+	// プレイヤーの設定処理
+	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+	{
+		D3DXVECTOR3 posPlayer = m_apModelPlayer[nCount]->GetPosition();
+		m_apModelPlayer[nCount]->SetPosition(posPlayer + PLAYER_ESC_MOVE);
+		m_apModelPlayer[nCount]->SetRot(PLAYER_ESC_ROT);
+	}
+
+	// 敵の設定処理
+	for (int nCount = 0; nCount < ENEMY::NUM_ENEMY; nCount++)
+	{
+		D3DXVECTOR3 posEnemy = m_apModelEnemy[nCount]->GetPosition();
+		m_apModelEnemy[nCount]->SetPosition(posEnemy + ENEMY_MOVE);
+	}
+
+	if (m_nFadeCnt == FADE_COUNT)
+	{
+		if (pFade != nullptr)
+		{
+			pFade->SetFade(CScene::MODE_SELECT);
+		}
+	}
 }
 
 //=====================================================
@@ -337,5 +343,36 @@ void CTitle::UpdateCamera(void)
 	{
 		// タイトルの逃げるときのカメラ更新
 		pCamera->UpdateTitleEsc();
+	}
+}
+
+//=====================================================
+// フェード設定
+//=====================================================
+void CTitle::SetFadeIn(void)
+{
+	// 情報取得
+	CCamera* pCamera = CManager::GetCamera();
+
+	// フェードアウトに設定
+	m_state = STATE_OUT;
+
+	// カメラの逃げるとき設定
+	pCamera->SetTitleEsc();
+
+	// プレイヤーのモーション設定処理（移動）
+	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+	{
+		m_apModelPlayer[nCount]->SetMotion(1);
+	}
+
+	// 敵の生成処理
+	for (int nCount = 0; nCount < ENEMY::NUM_ENEMY; nCount++)
+	{
+		m_apModelEnemy[nCount] = CMotion::Create((char*)ENEMY_BODY_PATH[nCount]);
+
+		m_apModelEnemy[nCount]->SetPosition(ENEMY_POS[nCount]);
+		m_apModelEnemy[nCount]->SetRot(ENEMY_ROT);
+		m_apModelEnemy[nCount]->SetMotion(1);
 	}
 }
