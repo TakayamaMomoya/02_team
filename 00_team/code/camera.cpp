@@ -189,10 +189,13 @@ void CCamera::SetTitleEsc(void)
 //====================================================
 void CCamera::SetSelect(void)
 {
-	D3DXVECTOR3 posV = { 0.0f,700.0f,-400.0f };
-	D3DXVECTOR3 posR = { 0.0f,200.0f,0.0f };
+	D3DXVECTOR3 posV = { 54.0f,320.0f,-760.0f };
+	D3DXVECTOR3 posR = { 54.0f,-122.0f,60.0f };
 
+	m_camera.posV = posV;
 	m_camera.posVDest = posV;
+
+	m_camera.posR = posR;
 	m_camera.posRDest = posR;
 }
 
@@ -250,21 +253,13 @@ void CCamera::UpdateTitle(void)
 //====================================================
 void CCamera::UpdateTitleEsc(void)
 {
-	if (m_camera.posV == m_camera.posVDest &&
-		m_camera.posR == m_camera.posRDest)
-	{
+	// カメラの移動処理
+	m_camera.posVDest = m_camera.posVDest + D3DXVECTOR3(0.0f, 0.0f, 7.0f);
+	m_camera.posRDest = m_camera.posRDest + D3DXVECTOR3(0.0f, 0.0f, 7.0f);
 
-	}
-	else
-	{
-		// カメラの移動処理
-		m_camera.posVDest = m_camera.posVDest + D3DXVECTOR3(0.0f, 0.0f, 7.0f);
-		m_camera.posRDest = m_camera.posRDest + D3DXVECTOR3(0.0f, 0.0f, 7.0f);
-
-		// 目的座標に補正
-		m_camera.posV += (m_camera.posVDest - m_camera.posV) * 0.025f;
-		m_camera.posR += (m_camera.posRDest - m_camera.posR) * 0.025f;
-	}
+	// 目的座標に補正
+	m_camera.posV += (m_camera.posVDest - m_camera.posV) * 0.025f;
+	m_camera.posR += (m_camera.posRDest - m_camera.posR) * 0.025f;
 }
 
 //====================================================
