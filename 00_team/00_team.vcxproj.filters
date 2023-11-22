@@ -23,6 +23,9 @@
     <Filter Include="gimmick">
       <UniqueIdentifier>{97eda31d-b1e9-48f6-945a-ad4c17c5679e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="debris">
+      <UniqueIdentifier>{b785fb23-676e-4bd1-b636-3e7f80a2d08d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\animation2D.cpp" />
@@ -147,6 +150,12 @@
     <ClCompile Include="code\gimmickManager.cpp">
       <Filter>gimmick</Filter>
     </ClCompile>
+    <ClCompile Include="code\debrisspawner.cpp">
+      <Filter>debris</Filter>
+    </ClCompile>
+    <ClCompile Include="code\debris.cpp">
+      <Filter>debris</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -270,6 +279,12 @@
     </ClInclude>
     <ClInclude Include="code\gimmickManager.h">
       <Filter>gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="code\debrisSpawner.h">
+      <Filter>debris</Filter>
+    </ClInclude>
+    <ClInclude Include="code\debris.h">
+      <Filter>debris</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
