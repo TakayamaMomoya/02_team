@@ -14,14 +14,14 @@ NUM_MODEL = 8
 #====================================================================
 # モデルファイル名
 #====================================================================
-MODEL_FILENAME = data/MODEL/potatoman_01/upper_body.x
-MODEL_FILENAME = data/MODEL/potatoman_01/upper_arm_l.x
-MODEL_FILENAME = data/MODEL/potatoman_01/fore_arm_l.x
-MODEL_FILENAME = data/MODEL/potatoman_01/hand_l.x
-MODEL_FILENAME = data/MODEL/potatoman_01/upper_arm_r.x
-MODEL_FILENAME = data/MODEL/potatoman_01/fore_arm_r.x
-MODEL_FILENAME = data/MODEL/potatoman_01/hand_r.x
-MODEL_FILENAME = data/MODEL/potatoman_01/joint_body.x
+MODEL_FILENAME = data/MODEL/potatoman_02/upper_body.x
+MODEL_FILENAME = data/MODEL/potatoman_02/upper_arm_l.x
+MODEL_FILENAME = data/MODEL/potatoman_02/fore_arm_l.x
+MODEL_FILENAME = data/MODEL/potatoman_02/hand_l.x
+MODEL_FILENAME = data/MODEL/potatoman_02/upper_arm_r.x
+MODEL_FILENAME = data/MODEL/potatoman_02/fore_arm_r.x
+MODEL_FILENAME = data/MODEL/potatoman_02/hand_r.x
+MODEL_FILENAME = data/MODEL/potatoman_02/joint_body.x
 
 #====================================================================
 # キャラクター情報
