@@ -27,9 +27,12 @@
 #include "playerManager.h"
 #include "player.h"
 
+#include "debris.h"
+
 #include "container.h"
 #include "weaponManager.h"
 
+#include "debris.h"
 #include "edit.h"
 
 #include <stdio.h>
@@ -107,10 +110,15 @@ HRESULT CSelect::Init(void)
 	ContainerInit();
 
 	// エディットの生成
-	CEdit::Create();
+	//CEdit::Create();
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
+
+
+
+	//CDebris::Load();
+	//CDebris::Create(D3DXVECTOR3(0.0f, 0.0f, -500.0f), CDebris::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f), nullptr);
 
 	return S_OK;
 }
@@ -322,7 +330,7 @@ void CSelect::Update(void)
 	{
 
 	}
-
+		
 #ifdef _DEBUG
 	CCamera* pCamera = CManager::GetCamera();
 
