@@ -25,6 +25,7 @@ public:
 	void FactingRot(float *pfRot, float fRotDest, float rotateFact);	//Œü‚«•â³ˆ—
 	bool DistCmp(D3DXVECTOR3 posOwn, D3DXVECTOR3 posTarget,float fLengthMax,float *fDiff);
 	int RandRange(int nMax, int nMin);
+	float CrossProduct(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2);
 	static CUniversal *GetInstance(void) { return m_pUniversal; }
 
 private:

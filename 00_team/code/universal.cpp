@@ -145,6 +145,14 @@ bool CUniversal::DistCmp(D3DXVECTOR3 posOwn, D3DXVECTOR3 posTarget, float fLengt
 }
 
 //========================================
+// 外積の計算
+//========================================
+float CUniversal::CrossProduct(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2)
+{
+	return pos1.z * pos2.x - pos1.x * pos2.z;
+}
+
+//========================================
 // 範囲内のランダム数値を返す処理
 //========================================
 int CUniversal::RandRange(int nMax, int nMin)
