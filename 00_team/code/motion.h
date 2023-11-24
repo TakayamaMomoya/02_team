@@ -117,6 +117,7 @@ public:
 	void ResetAllCol(void);
 	void InitPose(int nMotion);
 	void EnableShadow(bool bShadow) { m_bShadow = bShadow; }
+	void EnableIndependent(bool bInde) { m_bInde = bInde; }
 
 private:
 	Parts *m_apParts[MAX_PARTS];	// パーツの構造体
@@ -139,6 +140,7 @@ private:
 	D3DXMATRIX m_mtxWorld;	// マトリックス
 	bool m_bFinish;	// モーションが終わったかどうか
 	bool m_bShadow;	// 影を描画するかどうか
+	bool m_bInde;	// 分離しているかどうか
 };
 
 #endif

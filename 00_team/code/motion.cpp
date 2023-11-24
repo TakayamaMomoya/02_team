@@ -46,6 +46,7 @@ CMotion::CMotion(int nPriority) : CObject(nPriority)
 	m_posOld = { 0.0f,0.0f,0.0f };
 	m_posShadow = { 0.0f,0.0f,0.0f };
 	m_move = { 0.0f,0.0f,0.0f };
+	m_bInde = false;
 }
 
 //=====================================================
@@ -318,8 +319,11 @@ void CMotion::SetMatrix(void)
 //=====================================================
 void CMotion::MultiplyMtx(void)
 {
-	// 親のマトリックス
-	SetMatrix();
+	if (m_bInde == false)
+	{
+		// 親のマトリックス
+		SetMatrix();
+	}
 
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();

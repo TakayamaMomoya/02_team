@@ -748,17 +748,20 @@ bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove, CObject **ppObjO
 
 					if (bHit)
 					{
-						if (apWall[nNumWall] == nullptr)
-						{// ï«èÓïÒÇÃï€ë∂
-							apWall[nNumWall] = new SWall;
+						if (nNumWall < NUM_WALL)
+						{
+							if (apWall[nNumWall] == nullptr)
+							{// ï«èÓïÒÇÃï€ë∂
+								apWall[nNumWall] = new SWall;
 
-							if (apWall[nNumWall] != nullptr)
-							{
-								apWall[nNumWall]->posStart = aVector[nIdx] + posTarget;
-								apWall[nNumWall]->posEnd = aVector[nCntEdge] + posTarget;
-								apWall[nNumWall]->posCross = posCross;
+								if (apWall[nNumWall] != nullptr)
+								{
+									apWall[nNumWall]->posStart = aVector[nIdx] + posTarget;
+									apWall[nNumWall]->posEnd = aVector[nCntEdge] + posTarget;
+									apWall[nNumWall]->posCross = posCross;
 
-								nNumWall++;
+									nNumWall++;
+								}
 							}
 						}
 					}
@@ -771,40 +774,40 @@ bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove, CObject **ppObjO
 	D3DXVECTOR3 pos = GetOwner()->GetPosition();
 	D3DXVECTOR3 posOld = GetOwner()->GetPositionOld();
 
-	//if (nNumWall > 1)
-	//{// ï°êîï«Ç™Ç†Ç¡ÇΩèÍçáÅAÉ\Å[ÉgÇ∑ÇÈ
-	//	// à⁄ìÆäpìxÇÃéÊìæ
-	//	D3DXVECTOR3 vecMove = pos - posOld;
+	if (nNumWall > 1)
+	{// ï°êîï«Ç™Ç†Ç¡ÇΩèÍçáÅAÉ\Å[ÉgÇ∑ÇÈ
+		// à⁄ìÆäpìxÇÃéÊìæ
+		D3DXVECTOR3 vecMove = pos - posOld;
 
-	//	float fRotMove = atan2f(vecMove.x, vecMove.z);
+		float fRotMove = atan2f(vecMove.x, vecMove.z);
 
-	//	// ÇPÇ¬ñ⁄ÇÃäpìxÇÃç∑ï™ÇÇÕÇ©ÇÈ
-	//	D3DXVECTOR3 vecWall1 = apWall[0]->posEnd - apWall[0]->posStart;
-	//	float fRot1 = atan2f(vecWall1.x, vecWall1.z);
+		// ÇPÇ¬ñ⁄ÇÃäpìxÇÃç∑ï™ÇÇÕÇ©ÇÈ
+		D3DXVECTOR3 vecWall1 = apWall[0]->posEnd - apWall[0]->posStart;
+		float fRot1 = atan2f(vecWall1.x, vecWall1.z);
 
-	//	float fRotDiff1 = fRotMove - fRot1;
+		float fRotDiff1 = fRotMove - fRot1;
 
-	//	pUniversal->LimitRot(&fRotDiff1);
+		pUniversal->LimitRot(&fRotDiff1);
 
-	//	// ÇQÇ¬ñ⁄ÇÃäpìxÇÃç∑ï™ÇÇÕÇ©ÇÈ
-	//	D3DXVECTOR3 vecWall2 = apWall[1]->posEnd - apWall[1]->posStart;
-	//	float fRot2 = atan2f(vecWall2.x, vecWall2.z);
+		// ÇQÇ¬ñ⁄ÇÃäpìxÇÃç∑ï™ÇÇÕÇ©ÇÈ
+		D3DXVECTOR3 vecWall2 = apWall[1]->posEnd - apWall[1]->posStart;
+		float fRot2 = atan2f(vecWall2.x, vecWall2.z);
 
-	//	float fRotDiff2 = fRotMove - fRot2;
+		float fRotDiff2 = fRotMove - fRot2;
 
-	//	pUniversal->LimitRot(&fRotDiff2);
+		pUniversal->LimitRot(&fRotDiff2);
 
-	//	if (fRot2 * fRot2 < fRot1 * fRot1)
-	//	{// ï«èÓïÒÇì¸ÇÍë÷Ç¶ÇÈ
-	//		SWall *pWallTemp = nullptr;
+		if (fRot2 * fRot2 < fRot1 * fRot1)
+		{// ï«èÓïÒÇì¸ÇÍë÷Ç¶ÇÈ
+			SWall *pWallTemp = nullptr;
 
-	//		pWallTemp = apWall[0];
+			pWallTemp = apWall[0];
 
-	//		apWall[1] = apWall[0];
+			apWall[0] = apWall[1];
 
-	//		apWall[0] = pWallTemp;
-	//	}
-	//}
+			apWall[1] = pWallTemp;
+		}
+	}
 
 	for (int i = 0; i < NUM_WALL; i++)
 	{// ìñÇΩÇ¡ÇΩï«Ç∆ÇÃìñÇΩÇËîªíË
