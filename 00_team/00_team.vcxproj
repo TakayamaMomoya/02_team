@@ -29,7 +29,7 @@
     <ClCompile Include="code\characterDiv.cpp" />
     <ClCompile Include="code\collision.cpp" />
     <ClCompile Include="code\debris.cpp" />
-    <ClCompile Include="code\debrisspawner.cpp" />
+    <ClCompile Include="code\debrisSpawner.cpp" />
     <ClCompile Include="code\debugproc.cpp" />
     <ClCompile Include="code\door.cpp" />
     <ClCompile Include="code\edit.cpp" />

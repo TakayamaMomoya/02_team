@@ -19,6 +19,7 @@
 #include "player.h"
 #include "game.h"
 #include "enemyManager.h"
+#include "debrisSpawner.h"
 #include "block.h"
 
 //=====================================================
