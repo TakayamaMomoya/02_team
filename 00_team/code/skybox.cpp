@@ -70,12 +70,13 @@ void CSkybox::Update(void)
 void CSkybox::Draw(void)
 {
 	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
+	CRenderer *pRenderer = CRenderer::GetInstance();
+	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
 
-	if (CRenderer::IsFog())
+	if (pRenderer->IsFog())
 	{
 		// フォグを無効化
-		pDevice->SetRenderState(D3DRS_FOGENABLE, FALSE);
+		//pDevice->SetRenderState(D3DRS_FOGENABLE, FALSE);
 	}
 
 	// ライティングを無効化
@@ -87,7 +88,7 @@ void CSkybox::Draw(void)
 	// ライティングを有効化
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
-	if (CRenderer::IsFog())
+	if (pRenderer->IsFog())
 	{
 		// フォグを有効化
 		pDevice->SetRenderState(D3DRS_FOGENABLE, TRUE);

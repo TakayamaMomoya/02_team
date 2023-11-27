@@ -140,6 +140,7 @@ void CBillboard::SetTex(D3DXVECTOR2 texLeftUp, D3DXVECTOR2 texRightDown)
 void CBillboard::Draw(void)
 {
 	// デバイスの取得
+	CRenderer *pRenderer = CRenderer::GetInstance();
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
 	D3DXMATRIX mtxView, mtxTrans;
 
@@ -153,7 +154,7 @@ void CBillboard::Draw(void)
 		pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	}
 
-	if (CRenderer::IsFog())
+	if (pRenderer->IsFog())
 	{
 		// フォグを無効化
 		pDevice->SetRenderState(D3DRS_FOGENABLE, FALSE);
@@ -202,7 +203,7 @@ void CBillboard::Draw(void)
 		pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	}
 
-	if (CRenderer::IsFog())
+	if (pRenderer->IsFog())
 	{
 		// フォグを有効化
 		pDevice->SetRenderState(D3DRS_FOGENABLE, TRUE);

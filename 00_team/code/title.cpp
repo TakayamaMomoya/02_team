@@ -183,6 +183,14 @@ HRESULT CTitle::Init(void)
 		m_apModelPlayer[nCount]->SetMotion(0);
 	}
 
+	// フォグをかける
+	CRenderer *pRenderer = CRenderer::GetInstance();
+
+	if (pRenderer != nullptr)
+	{
+		pRenderer->EnableFog(true);
+	}
+
 	return S_OK;
 }
 
@@ -193,6 +201,14 @@ void CTitle::Uninit(void)
 {
 	// オブジェクト全破棄
 	CObject::ReleaseAll();
+
+	// フォグをかける
+	CRenderer *pRenderer = CRenderer::GetInstance();
+
+	if (pRenderer != nullptr)
+	{
+		pRenderer->EnableFog(false);
+	}
 }
 
 //=====================================================
