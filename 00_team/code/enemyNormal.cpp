@@ -19,6 +19,7 @@
 #include "player.h"
 #include "game.h"
 #include "enemyManager.h"
+#include "debrisSpawner.h"
 #include "block.h"
 
 //=====================================================
@@ -70,6 +71,9 @@ void CEnemyNormal::Update(void)
 	if (pBlock != nullptr)
 	{
 		pBlock->Hit(5.0f);
+
+		// ”j•Ð‚ð¶¬
+		CDebrisSpawner::Create(D3DXVECTOR3(pBlock->GetPosition().x, pBlock->GetPosition().y + 50.0f, pBlock->GetPosition().z), CDebrisSpawner::TYPE::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 }
 

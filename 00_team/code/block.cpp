@@ -14,6 +14,7 @@
 #include "manager.h"
 #include "object.h"
 #include "collision.h"
+#include "debrisSpawner.h"
 #include <stdio.h>
 
 //*****************************************************
@@ -173,6 +174,7 @@ void CBlock::Hit(float fDamage)
 	if (m_fLife <= 0.0f)
 	{// ”j‰ó”»’è
 		Delete(m_nID);
+		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 50.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 }
 
