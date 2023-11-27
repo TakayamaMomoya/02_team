@@ -23,9 +23,10 @@
 //=====================================================
 CDebris::CDebris(int nPriority)
 {
+	m_rotVelocity = { 0.0f,0.0f,0.0f };
+	m_move = { 0.0f,0.0f,0.0f };
 	m_nLife = 0;
 	m_fDecreaseAlpha = 0.0f;
-	m_move = { 0.0f,0.0f,0.0f };
 	m_fGravity = 0.0f;
 }
 
@@ -46,6 +47,10 @@ HRESULT CDebris::Init(void)
 	CObjectX::Init();
 
 	int nIdx = CModel::Load("data\\MODEL\\sample_debris.x");
+
+	m_rotVelocity.x = (float)(rand() % 629 - 314) / 100.0f;
+	m_rotVelocity.y = (float)(rand() % 629 - 314) / 100.0f;
+	m_rotVelocity.z = (float)(rand() % 629 - 314) / 100.0f;
 
 	// モデル読込
 	BindModel(nIdx);
@@ -78,13 +83,23 @@ void CDebris::Update(void)
 	// 重力加算
 	m_move.y -= m_fGravity;
 
-	// αの減少
-
-
+	if (pos.y > 10.0f)
+	{
+		// 回転
+		D3DXVECTOR3 rot = GetRot();
+		rot.x += m_rotVelocity.x * 0.05f;
+		rot.y += m_rotVelocity.y * 0.05f;
+		rot.z += m_rotVelocity.z * 0.05f;
+		SetRot(rot);
+	}
 	if (pos.y <= 10.0f)
 	{
 		pos.y = 10.0f;
+		m_move.y += 5.0f;
 	}
+
+	m_move.z *= 0.98f;
+	m_move.x *= 0.98f;
 
 	// 位置更新
 	SetPosition(pos + m_move);
@@ -124,9 +139,6 @@ CDebris* CDebris::Create(D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 move, float fGr
 
 			// 初期化処理
 			pDebtisSpawner->Init();
-
-			// Xファイルの読込
-
 
 			pDebtisSpawner->m_nLife = nLife;
 
