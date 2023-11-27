@@ -99,6 +99,7 @@ HRESULT CWeapon::Init(void)
 
 		SetMaxBullet(info.nMaxBullet);
 		SetRapid(info.nRapid);
+		SetDamage(info.fDamage);
 	}
 
 	return S_OK;
@@ -192,6 +193,7 @@ void CWeapon::Draw(void)
 	pDebugProc->Print("\nÅ‘å’e”[%d]", m_info.nMaxBullet);
 	pDebugProc->Print("\n’e”[%d]", m_info.nNumBullet);
 	pDebugProc->Print("\nŽg—p‰Â”\[%d]", m_info.bEnable);
+	pDebugProc->Print("\nˆÐ—Í[%f]", m_info.fDamage);
 #endif
 }
 
