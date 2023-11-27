@@ -180,6 +180,13 @@ void CWeaponManager::LoadBaseInfo(FILE* pFile, char* pTemp, int nCntParam)
 
 		(void)fscanf(pFile, "%d", &m_aInfo[nCntParam].nRapid);
 	}
+
+	if (strcmp(pTemp, "DAMAGE") == 0)
+	{// ˆÐ—Í
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_aInfo[nCntParam].fDamage);
+	}
 }
 
 //=====================================================
