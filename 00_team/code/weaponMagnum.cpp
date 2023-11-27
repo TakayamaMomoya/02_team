@@ -109,8 +109,11 @@ void CMagnum::Attack(void)
 				};
 			}
 
+			// ˆÐ—ÍŽæ“¾
+			float fDamage = GetDamage();
+
 			// ’e‚ð”­ŽË
-			CBullet::Create(pos, -move, 100, CBullet::TYPE_PLAYER, false);
+			CBullet::Create(pos, -move, 100, CBullet::TYPE_PLAYER, false, 2.0f, fDamage);
 
 			// ’e‚ðŒ¸‚ç‚·
 			nBullet--;
