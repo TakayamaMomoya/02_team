@@ -16,7 +16,13 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define SPEED_MOVE	(7.0f)	// 移動速度
+namespace
+{
+	const float GEOWND(10.0f);	// 床判定の高さ
+	const float BOUNCE(4.0f);	// 跳ね返りの強さ
+	const float SPEED_MOVE(7.0f);	// 移動速度
+	const float ROT_VELOCITY(0.05f);	// 回転速度の制限
+};
 
 //=====================================================
 // コンストラクタ
@@ -83,23 +89,33 @@ void CDebris::Update(void)
 	// 重力加算
 	m_move.y -= m_fGravity;
 
+	// 移動量の減衰
+	m_move.x *= 0.98f;
+	m_move.z *= 0.98f;
+
 	if (pos.y > 10.0f)
 	{
 		// 回転
 		D3DXVECTOR3 rot = GetRot();
-		rot.x += m_rotVelocity.x * 0.05f;
-		rot.y += m_rotVelocity.y * 0.05f;
-		rot.z += m_rotVelocity.z * 0.05f;
+		rot.x += m_rotVelocity.x * ROT_VELOCITY;
+		rot.y += m_rotVelocity.y * ROT_VELOCITY;
+		rot.z += m_rotVelocity.z * ROT_VELOCITY;
 		SetRot(rot);
 	}
-	if (pos.y <= 10.0f)
+	if (pos.y <= GEOWND)
 	{
-		pos.y = 10.0f;
-		m_move.y += 5.0f;
-	}
+		pos.y = GEOWND;
 
-	m_move.z *= 0.98f;
-	m_move.x *= 0.98f;
+		if (m_move.x < 0.4f && m_move.z < 0.4f) 
+		{
+			m_move.x = 0.0f;
+			m_move.z = 0.0f;
+		}
+		else
+		{
+			m_move.y += BOUNCE;
+		}
+	}
 
 	// 位置更新
 	SetPosition(pos + m_move);
