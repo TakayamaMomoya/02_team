@@ -16,17 +16,11 @@
 #include "debugproc.h"
 #include "billboard.h"
 #include "texture.h"
-#include "effect3D.h"
-#include "universal.h"
 
 //*****************************************************
-// 定数定義
+// マクロ定義
 //*****************************************************
-namespace
-{
-	const int NUM_EDGE = 4;	// 辺の数
-	const int NUM_WALL = 2;	// 壁の数
-}
+#define NUM_EDGE	(4)	// 辺の数
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -41,8 +35,6 @@ CCollision::CCollision()
 {
 	m_pos = { 0.0f,0.0f,0.0f };
 	m_tag = TAG_NONE;
-	m_type = TYPE::TYPE_NONE;
-	m_nID = -1;
 	m_pObjectOwner = nullptr;
 	m_pObjectOther = nullptr;
 
@@ -256,35 +248,23 @@ bool CCollision::ChckObstclBtwn(CObject *pObj, D3DXVECTOR3 vecDiff)
 //=====================================================
 bool CCollision::IsCross(D3DXVECTOR3 posTarget, D3DXVECTOR3 vecSorce, D3DXVECTOR3 vecDest, float *pRate,D3DXVECTOR3 move)
 {
-	// 汎用処理取得
-	CUniversal *pUniversal = CUniversal::GetInstance();
-
 	bool bHit = false;
 
-	// 壁のベクトル
-	D3DXVECTOR3 vecWall = vecDest - vecSorce;
+	D3DXVECTOR3 vec1 = vecDest - vecSorce;
 
-	// 壁と移動ベクトルの外積を計算
-	float fArea = pUniversal->CrossProduct(vecWall, move);
+	if (vec1.z * (posTarget.x - vecSorce.x) - vec1.x * (posTarget.z - vecSorce.z) < 0)
+	{
+		D3DXVECTOR3 vecToPos = posTarget - vecSorce;
 
-	CDebugProc::GetInstance()->Print("fArea：[%f]\n", fArea);
-	//CDebugProc::GetInstance()->Print("move：[%f,%f,%f]\n", &fArea);
-
-	if (fArea > 0.0f)
-	{// 線分の左にある判定
 		if (pRate != nullptr)
-		{// 線分上にあるかのチェック
-			D3DXVECTOR3 vecToPos = posTarget - vecSorce;
-
-			float fArea2 = pUniversal->CrossProduct(vecToPos, move);
-
-			*pRate = fArea2 / fArea;
-
-			if (*pRate <= 1.0f && *pRate >= 0.0f)
-			{
-				bHit = true;
-			}
+		{
+			// 割合を算出
+			float fAreaMax = (vecDest.z * move.x) - (vecDest.x * move.z);
+			float fArea = (vecToPos.z * move.x) - (vecToPos.x * move.z);
+			*pRate = fArea / fAreaMax;
 		}
+
+		bHit = true;
 	}
 
 	return bHit;
@@ -297,13 +277,10 @@ bool CCollision::IsCrossTrigger(D3DXVECTOR3 posTarget, D3DXVECTOR3 posTargetOld,
 {
 	bool bHit = false;
 
-	D3DXVECTOR3 vecLine = vecDest - vecSorce;
+	D3DXVECTOR3 vec = vecDest - vecSorce;
 
-	D3DXVECTOR3 vecToPos = posTarget - vecSorce;
-	D3DXVECTOR3 vecToPosOld = posTargetOld - vecSorce;
-
-	if (vecLine.z * vecToPos.x - vecLine.x * vecToPos.z >= 0 &&
-		vecLine.z * vecToPosOld.x - vecLine.x * vecToPosOld.z < 0)
+	if (vec.z * (posTarget.x - vecSorce.x) - vec.x * (posTarget.z - vecSorce.z) > 0 &&
+		vec.z * (posTargetOld.x - vecSorce.x) - vec.x * (posTargetOld.z - vecSorce.z) < 0)
 	{
 		bHit = true;
 	}
@@ -698,16 +675,33 @@ void CCollisionCube::Update(void)
 //=====================================================
 bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove, CObject **ppObjOther)
 {
-	// 汎用処理の取得
-	CUniversal *pUniversal = CUniversal::GetInstance();
-
 	bool bLand = false;
+	D3DXVECTOR3 pos;
 	CCollision **ppCollision = GetCollision();
-	SWall *apWall[NUM_WALL] = {};
-	int nNumWall = 0;
+
+	// 計算用変数
+	D3DXVECTOR3 posOwn;
+	D3DXVECTOR3 posOwnOld;
+	D3DXVECTOR3 vtxMax;
+	D3DXVECTOR3 vtxMin;
+	D3DXVECTOR3 vtxMaxOwn;
+	D3DXVECTOR3 vtxMinOwn;
+
+	if (GetOwner() != nullptr)
+	{// 自分の設定
+		posOwn = GetOwner()->GetPosition();
+		posOwnOld = GetOwner()->GetPositionOld();
+		vtxMaxOwn = GetVtxMax();
+		vtxMinOwn = GetVtxMin();
+	}
+
+	if (ppObjOther != nullptr)
+	{
+		*ppObjOther = nullptr;
+	}
 
 	for (int nCnt = 0; nCnt < NUM_OBJECT; nCnt++)
-	{// 当たった壁の検出
+	{
 		if (ppCollision[nCnt] != nullptr)
 		{
 			if (ppCollision[nCnt]->GetType() == TYPE_CUBE)
@@ -717,118 +711,116 @@ bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove, CObject **ppObjO
 					continue;
 				}
 
-				// 自身の位置を取得
-				D3DXVECTOR3 posOld = GetOwner()->GetPositionOld();
+				// 相手の位置を取得
+				pos = ppCollision[nCnt]->GetPosition();
 
-				// 相手の位置と最大・最小頂点を取得
-				D3DXVECTOR3 posTarget = ppCollision[nCnt]->GetPosition();
-				D3DXVECTOR3 vtxMax = ppCollision[nCnt]->GetVtxMax();
-				D3DXVECTOR3 vtxMin = ppCollision[nCnt]->GetVtxMin();
+				// 相手の最大頂点を取得
+				vtxMax = ppCollision[nCnt]->GetVtxMax() + ppCollision[nCnt]->GetPosition();
+				vtxMin = ppCollision[nCnt]->GetVtxMin() + ppCollision[nCnt]->GetPosition();
 
-				// ４頂点の設定
-				D3DXVECTOR3 aVector[NUM_EDGE];
+				if (posOwn.y >= vtxMin.y - vtxMaxOwn.y &&
+					posOwn.y <= vtxMax.y)
+				{//上下で当っている場合
+					if (posOwn.z >= vtxMin.z - vtxMaxOwn.z &&
+						posOwn.z <= vtxMax.z + vtxMaxOwn.z)
+					{//横からの当たり判定
+						if (posOwnOld.x >= vtxMax.x - vtxMinOwn.x &&
+							posOwn.x < vtxMax.x - vtxMinOwn.x)
+						{//右から当たった場合
+							//右に戻す
+							posOwn.x = vtxMax.x - vtxMinOwn.x + 0.2f;
 
-				aVector[0] = D3DXVECTOR3(vtxMin.x, 0.0f, vtxMin.z);
-				aVector[1] = D3DXVECTOR3(vtxMin.x, 0.0f, vtxMax.z);
-				aVector[2] = D3DXVECTOR3(vtxMax.x, 0.0f, vtxMax.z);
-				aVector[3] = D3DXVECTOR3(vtxMax.x, 0.0f, vtxMin.z);
+							//移動量をなくす
+							pMove->x = 0;
 
-				// どのベクトルにトリガー判定が入ったのか確認
-				for (int nCntEdge = 0; nCntEdge < NUM_EDGE; nCntEdge++)
-				{
-					D3DXVECTOR3 posCross;	// 交点の保存用
+							if (ppObjOther != nullptr)
+							{
+								*ppObjOther = ppCollision[nCnt]->GetOwner();
+							}
+						}
 
-					// 二つ目の頂点の番号
-					int nIdx = (nCntEdge + 1) % NUM_EDGE;
+						if (posOwnOld.x <= vtxMin.x - vtxMaxOwn.x &&
+							posOwn.x > vtxMin.x - vtxMaxOwn.x)
+						{//左から当たった場合
+							//左に戻す
+							posOwn.x = vtxMin.x - vtxMaxOwn.x - 0.2f;
 
-					D3DXVECTOR3 posTemp = GetPosition();
+							//移動量をなくす
+							pMove->x = 0;
 
-					// 外積の押し出し判定
-					bool bHit = CrossProduct(posOld, &posTemp, aVector[nIdx] + posTarget, aVector[nCntEdge] + posTarget, 0.0f,nullptr,&posCross);
+							if (ppObjOther != nullptr)
+							{
+								*ppObjOther = ppCollision[nCnt]->GetOwner();
+							}
+						}
+					}
 
-					if (bHit)
-					{
-						if (nNumWall < NUM_WALL)
-						{
-							if (apWall[nNumWall] == nullptr)
-							{// 壁情報の保存
-								apWall[nNumWall] = new SWall;
+					if (posOwn.x >= vtxMin.x - vtxMaxOwn.x &&
+						posOwn.x <= vtxMax.x - vtxMinOwn.x)
+					{//奥行きの当たり判定
 
-								if (apWall[nNumWall] != nullptr)
-								{
-									apWall[nNumWall]->posStart = aVector[nIdx] + posTarget;
-									apWall[nNumWall]->posEnd = aVector[nCntEdge] + posTarget;
-									apWall[nNumWall]->posCross = posCross;
+						if (posOwnOld.z <= vtxMin.z - vtxMaxOwn.z &&
+							posOwn.z > vtxMin.z - vtxMaxOwn.z)
+						{//手前から当たった場合
+							//手前に戻す
+							posOwn.z = vtxMin.z - vtxMaxOwn.z - 0.2f;
 
-									nNumWall++;
-								}
+							//移動量をなくす
+							pMove->z = 0;
+
+							if (ppObjOther != nullptr)
+							{
+								*ppObjOther = ppCollision[nCnt]->GetOwner();
+							}
+						}
+
+						if (posOwnOld.z >= vtxMax.z - vtxMinOwn.z &&
+							posOwn.z < vtxMax.z - vtxMinOwn.z)
+						{//手前から当たった場合
+						 //手前に戻す
+							posOwn.z = vtxMax.z - vtxMinOwn.z + 0.2f;
+
+							//移動量をなくす
+							pMove->z = 0;
+
+							if (ppObjOther != nullptr)
+							{
+								*ppObjOther = ppCollision[nCnt]->GetOwner();
+							}
+						}
+					}
+
+					if (posOwn.z >= vtxMin.z - vtxMaxOwn.z &&
+						posOwn.z <= vtxMax.z + vtxMaxOwn.z &&
+						posOwn.x >= vtxMin.x - vtxMaxOwn.x &&
+						posOwn.x <= vtxMax.x - vtxMinOwn.x)
+					{// XZ平面の中にいる場合
+						if (posOwnOld.y <= vtxMin.y - vtxMaxOwn.y)
+						{// 下から当たった場合
+							posOwn.y = vtxMin.y - vtxMaxOwn.y;
+						}
+						else if (posOwnOld.y >= vtxMax.y)
+						{// 上から当たった場合
+							posOwn.y = vtxMax.y;
+
+							// 移動量をなくす
+							pMove->y = 0.0f;
+
+							bLand = true;
+
+							if (ppObjOther != nullptr)
+							{
+								*ppObjOther = ppCollision[nCnt]->GetOwner();
 							}
 						}
 					}
 				}
+
+				GetOwner()->SetPosition(posOwn);
 			}
 		}
 	}
 
-	// 自身の位置を取得
-	D3DXVECTOR3 pos = GetOwner()->GetPosition();
-	D3DXVECTOR3 posOld = GetOwner()->GetPositionOld();
-
-	if (nNumWall > 1)
-	{// 複数壁があった場合、ソートする
-		// 移動角度の取得
-		D3DXVECTOR3 vecMove = pos - posOld;
-
-		float fRotMove = atan2f(vecMove.x, vecMove.z);
-
-		// １つ目の角度の差分をはかる
-		D3DXVECTOR3 vecWall1 = apWall[0]->posEnd - apWall[0]->posStart;
-		float fRot1 = atan2f(vecWall1.x, vecWall1.z);
-
-		float fRotDiff1 = fRotMove - fRot1;
-
-		pUniversal->LimitRot(&fRotDiff1);
-
-		// ２つ目の角度の差分をはかる
-		D3DXVECTOR3 vecWall2 = apWall[1]->posEnd - apWall[1]->posStart;
-		float fRot2 = atan2f(vecWall2.x, vecWall2.z);
-
-		float fRotDiff2 = fRotMove - fRot2;
-
-		pUniversal->LimitRot(&fRotDiff2);
-
-		if (fRot2 * fRot2 < fRot1 * fRot1)
-		{// 壁情報を入れ替える
-			SWall *pWallTemp = nullptr;
-
-			pWallTemp = apWall[0];
-
-			apWall[0] = apWall[1];
-
-			apWall[1] = pWallTemp;
-		}
-	}
-
-	for (int i = 0; i < NUM_WALL; i++)
-	{// 当たった壁との当たり判定
-		if (apWall[i] != nullptr)
-		{
-			// 外積の押し出し判定
-			CrossProduct(posOld, &pos, apWall[i]->posStart, apWall[i]->posEnd, 0.0f, nullptr, nullptr);
-		}
-	}
-
-	GetOwner()->SetPosition(pos);
-
-	for (int i = 0; i < NUM_WALL; i++)
-	{// 壁情報の破棄
-		if (apWall[i] != nullptr)
-		{// 情報の破棄
-			delete apWall[i];
-			apWall[i] = nullptr;
-		}
-	}
-	
 	return bLand;
 }
 
@@ -837,13 +829,8 @@ bool CCollisionCube::CubeCollision(TAG tag, D3DXVECTOR3 *pMove, CObject **ppObjO
 //=====================================================
 void CCollisionCube::SetVtx(D3DXVECTOR3 vtxMax, D3DXVECTOR3 vtxMin)
 {
-	m_vtxMax = vtxMax;
+	m_vtxMax = vtxMax; 
 	m_vtxMin = vtxMin;
-
-	m_aVtx[VTX_LD] = { vtxMin.x,0.0f,0.0f };
-	m_aVtx[VTX_LU] = { 0.0f,0.0f,0.0f };
-	m_aVtx[VTX_RU] = { 0.0f,0.0f,0.0f };
-	m_aVtx[VTX_RD] = { 0.0f,0.0f,0.0f };
 }
 
 //=====================================================
@@ -969,145 +956,4 @@ CCollisionCube *CCollisionCube::Create(TAG tag, CObject *obj)
 	}
 
 	return pCollision;
-}
-
-//=====================================================
-// 外積による壁の押し出し判定
-//=====================================================
-bool CCollisionCube::CrossProduct(D3DXVECTOR3 posOld, D3DXVECTOR3 *pos, D3DXVECTOR3 vtxStart, D3DXVECTOR3 vtxEnd, float width, SWall *pWall, D3DXVECTOR3 *pPosCross)
-{
-	bool bHit = false;
-
-	// 汎用処理取得
-	CUniversal *pUniversal = CUniversal::GetInstance();
-
-	D3DXVECTOR3 vecLine = D3DXVECTOR3
-	(//一旦Y座標は平面
-		vtxEnd.x - vtxStart.x,
-		0.0f,
-		vtxEnd.z - vtxStart.z
-	);
-
-	//一つ目の頂点から現在位置までのベクトル
-	D3DXVECTOR3 vecToPos = D3DXVECTOR3
-	(
-		pos->x - vtxStart.x,
-		0.0f,
-		pos->z - vtxStart.z
-	);
-
-	//移動量ベクトル
-	D3DXVECTOR3 vecMove = D3DXVECTOR3
-	(
-		pos->x - posOld.x,
-		0.0f,
-		pos->z - posOld.z
-	);
-
-	D3DXVECTOR3 vecToPosOld = D3DXVECTOR3
-	(// 前回の位置へのベクトル
-		posOld.x - vtxStart.x,
-		0.0f,
-		posOld.z - vtxStart.z
-	);
-
-	// 壁の向きを取得
-	float fAngle = atan2f(vecLine.x, vecLine.z);
-
-	// 各外積を取得
-	float fAreaMax = pUniversal->CrossProduct(vecLine, vecMove);
-	float fArea = pUniversal->CrossProduct(vecLine, vecToPos);
-	float fArea2 = pUniversal->CrossProduct(vecToPos, vecMove);
-	float fAreaOld = pUniversal->CrossProduct(vecLine, vecToPosOld);
-	float fRate = fArea2 / fAreaMax;
-
-	if (fAreaMax == 0)
-	{
-		return bHit;
-	}
-
-	if ((fRate > 0.0f) && (fRate < 1.0f))
-	{
-		if (fArea <= 0.0f && fAreaOld >= 0.0f)
-		{// 線分の左にあり、前回がめり込んでいない
-			CDebugProc::GetInstance()->Print("\nfRate[%f]", fRate);
-
-			// 壁の長さを計算
-			float fLength = sqrtf(vecLine.x * vecLine.x + vecLine.z * vecLine.z) * fRate;
-
-			D3DXVECTOR3 posCross =
-			{// 交点
-				vtxStart.x + sinf(fAngle) * fLength,
-				pos->y,
-				vtxStart.z + cosf(fAngle) * fLength
-			};
-
-			if (pPosCross != nullptr)
-			{
-				*pPosCross = posCross;
-			}
-
-			// はみ出る差分ベクトルを取得、長さを計算
-			D3DXVECTOR3 diffMove;
-
-			diffMove = *pos - posCross;
-
-			// 交点に位置を設定
-			*pos = posCross;
-
-			// 交点にエフェクトを出す
-			CEffect3D::Create(posCross, 10.0f, 60, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-
-			// 移動の角度取得
-			float fAngleMove = atan2f(vecMove.x, vecMove.z);
-			float fAngleMid = fAngle + D3DX_PI * 0.5f;
-
-			// 直角度を修正
-			if (fAngleMid > D3DX_PI)
-			{
-				fAngleMid -= 6.28f;
-			}
-			if (fAngleMid < -D3DX_PI)
-			{
-				fAngleMid += 6.28f;
-			}
-
-			// 差分の角度を取得
-			float fAngleDiff = fAngleMove - fAngleMid;
-
-			// 差分角度を修正
-			if (fAngleDiff > D3DX_PI)
-			{
-				fAngleDiff -= 6.28f;
-			}
-			if (fAngleDiff < -D3DX_PI)
-			{
-				fAngleDiff += 6.28f;
-			}
-
-			// はみ出た分の長さを取得
-			float fLengthProtrude = D3DXVec3Length(&diffMove);
-
-			// 壁のベクトルを代入
-			if (fAngleDiff <= 0.0f)
-			{// 差分角度がプラスの場合
-				diffMove = vecLine;
-			}
-			else
-			{// 差分角度がマイナスの場合
-				diffMove = -vecLine;
-			}
-
-			// 足す分のベクトルを正規化して、移動量の長さにする
-			D3DXVec3Normalize(&diffMove, &diffMove);
-			diffMove *= fLengthProtrude;
-
-			// ずれる分の位置を足す
-			*pos += diffMove;
-
-			bHit = true;
-		}
-	}
-
-	return bHit;
 }

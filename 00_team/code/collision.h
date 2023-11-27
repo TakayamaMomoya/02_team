@@ -116,21 +116,6 @@ private:
 class CCollisionCube : public CCollision
 {// 立方体の当たり判定
 public:
-	enum VTX
-	{// 頂点の番号
-		VTX_LD = 0,	// 左下
-		VTX_LU,	// 左上
-		VTX_RU,	// 右上
-		VTX_RD,	// 右下
-		VTX_MAX
-	};
-	struct SWall
-	{// 保存用の壁情報
-		D3DXVECTOR3 posStart;
-		D3DXVECTOR3 posEnd;
-		D3DXVECTOR3 posCross;
-	};
-
 	CCollisionCube();	// コンストラクタ
 	~CCollisionCube();	// デストラクタ
 
@@ -143,12 +128,10 @@ public:
 	static CCollisionCube *Create(TAG tag, CObject *obj);
 	void SetVtx(D3DXVECTOR3 vtxMax, D3DXVECTOR3 vtxMin);
 	D3DXVECTOR3 CollisionVector(CObject *pObj);
-	bool CrossProduct(D3DXVECTOR3 posOld, D3DXVECTOR3 *pos, D3DXVECTOR3 vtxStart, D3DXVECTOR3 vtxEnd, float width,SWall *pWall = nullptr,D3DXVECTOR3 *pPosCross = nullptr);
 
 private:
 	D3DXVECTOR3 m_vtxMax;	// 最大頂点
 	D3DXVECTOR3 m_vtxMin;	// 最小頂点
-	D3DXVECTOR3 m_aVtx[VTX_MAX];	// 頂点の配列
 };
 
 

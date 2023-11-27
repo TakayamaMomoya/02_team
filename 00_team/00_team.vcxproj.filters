@@ -156,6 +156,7 @@
     <ClCompile Include="code\debris.cpp">
       <Filter>debris</Filter>
     </ClCompile>
+    <ClCompile Include="code\characterDiv.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -286,5 +287,6 @@
     <ClInclude Include="code\debris.h">
       <Filter>debris</Filter>
     </ClInclude>
+    <ClInclude Include="code\characterDiv.h" />
   </ItemGroup>
 </Project>
