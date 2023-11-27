@@ -76,7 +76,7 @@ HRESULT CGame::Init(void)
 	CUIManager::Create();
 
 	CObject3D *pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\field00.jpg");
+	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood000.jpg");
 	pObject->SetIdxTexture(nIdx);
 
 	CSkybox::Create();
