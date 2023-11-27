@@ -33,6 +33,7 @@
 #include "goal.h"
 #include "block.h"
 #include "gimmickManager.h"
+#include "renderer.h"
 
 //*****************************************************
 // マクロ定義
@@ -96,7 +97,7 @@ HRESULT CGame::Init(void)
 	CWeaponManager::Create();
 
 	// 敵マネージャーの生成
-	CEnemyManager *pEnemyManager = CEnemyManager::Create();
+	//CEnemyManager *pEnemyManager = CEnemyManager::Create();
 
 	// ロケットの生成
 	CRocket::Create();
@@ -108,6 +109,14 @@ HRESULT CGame::Init(void)
 	// エディットの生成
 	CEdit::Create();
 #endif
+
+	// フォグをかける
+	CRenderer *pRenderer = CRenderer::GetInstance();
+
+	if (pRenderer != nullptr)
+	{
+		pRenderer->EnableFog(true);
+	}
 
 	return S_OK;
 }

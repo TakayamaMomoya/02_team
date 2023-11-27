@@ -29,14 +29,22 @@ public:
 	void Draw(void);	// 描画処理
 	void DrawFPS(void);	//FPS表示処理
 	LPDIRECT3DDEVICE9 GetDevice(void) { return m_pD3DDevice; }	// デバイスの取得
-	static bool IsFog(void) { return m_bFog; }
-	static void EnableFog(bool bFog) { m_bFog = bFog; }
+	bool IsFog(void) { return m_fogInfo.bEnable; }
+	void EnableFog(bool bFog) { m_fogInfo.bEnable = bFog; }
 	static CRenderer *GetInstance(void) { return m_pRenderer; }
 
 private:
+	struct SInfoFog
+	{// フォグ情報
+		float fStart;	// 開始距離
+		float fEnd;	// 終了距離
+		bool bEnable;	// 有効かどうか
+		D3DXCOLOR col;	// 色
+	};
+
 	LPDIRECT3D9 m_pD3D;	// オブジェクトの生成
 	LPDIRECT3DDEVICE9 m_pD3DDevice;	// デバイス
-	static bool m_bFog;	// フォグをかけるかどうか
+	SInfoFog m_fogInfo;	// フォグの情報
 
 	static CRenderer *m_pRenderer;	// 自身のポインタ
 };

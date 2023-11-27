@@ -84,7 +84,7 @@ HRESULT CGimmick::Init(void)
 
 		if (m_pCollisionSphere != nullptr)
 		{
-			m_pCollisionSphere->SetRadius(10.0f);
+			m_pCollisionSphere->SetRadius(50.0f);
 		}
 	}
 

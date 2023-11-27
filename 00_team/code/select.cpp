@@ -319,7 +319,7 @@ void CSelect::Update(void)
 		}
 
 		// コンテナの再設置
-		//ReSetContainer();
+		ReSetContainer();
 	}
 	else if(m_state == STATE_OUT)
 	{
