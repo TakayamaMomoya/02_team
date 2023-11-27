@@ -163,6 +163,20 @@ void CGimmickManager::LoadDoor(FILE *pFile, char *pTemp)
 			}
 		}
 
+		//if (strcmp(pTemp, "ROT") == 0)
+		//{// Œü‚«
+		//	(void)fscanf(pFile, "%s", pTemp);
+
+		//	for (int i = 0; i < 3; i++)
+		//	{
+		//		float fAngle;
+
+		//		(void)fscanf(pFile, "%f", &fAngle);
+
+		//		rot[i] = D3DXToRadian(fAngle);
+		//	}
+		//}
+
 		if (strcmp(pTemp, "END_DOORSET") == 0)
 		{// ƒhƒAÝ’èI—¹
 			CDoor *pDoor = CDoor::Create();

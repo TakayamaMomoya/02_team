@@ -34,6 +34,7 @@ public:
 	void Draw(void);
 	void SetPosition(D3DXVECTOR3 pos);
 	void SetOrgRot(float rotY);
+	void SetDestRot(float fRot);
 
 private:
 	enum STATE

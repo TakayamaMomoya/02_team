@@ -234,11 +234,24 @@ void CDoor::SetPosition(D3DXVECTOR3 pos)
 void CDoor::SetOrgRot(float rotY)
 {
 	m_info.orgRotY = rotY;
-	m_info.rotDestY = rotY + D3DX_PI * 0.5f;
 
 	CUniversal::GetInstance()->LimitRot(&m_info.rotDestY);
 
-	if (rotY != 0)
+	if (rotY >= 3.0f || rotY <= -3.0f)
+	{
+		if (m_info.pCollisionCube != nullptr)
+		{
+			D3DXVECTOR3 vtxMax = GetVtxMax();
+			D3DXVECTOR3 vtxMin = GetVtxMin();
+			D3DXVECTOR3 vtxTemp = vtxMin;
+
+			vtxMin = { -vtxMax.x,vtxMin.y,vtxMin.z };
+			vtxMax = { -vtxTemp.x,vtxMax.y,vtxMax.z };
+
+			m_info.pCollisionCube->SetVtx(vtxMax, vtxMin);
+		}
+	}
+	else if (rotY != 0)
 	{
 		if (m_info.pCollisionCube != nullptr)
 		{
@@ -252,6 +265,14 @@ void CDoor::SetOrgRot(float rotY)
 			m_info.pCollisionCube->SetVtx(vtxMax, vtxMin);
 		}
 	}
+}
+
+//=====================================================
+// ñ⁄ïWÇÃäpìxê›íË
+//=====================================================
+void CDoor::SetDestRot(float fRot)
+{
+	m_info.rotDestY = fRot;
 }
 
 //=====================================================
