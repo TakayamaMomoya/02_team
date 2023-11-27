@@ -13,6 +13,7 @@
 #include "player.h"
 #include "manager.h"
 #include "collision.h"
+#include "universal.h"
 
 //*****************************************************
 // ’è”’è‹`
@@ -23,6 +24,8 @@ namespace
 	const float INITIAL_LIFE = 5.0f;	// ‘Ì—Í
 	const float ROLL_SPEED = 0.3f;	// ‰ñ“]‘¬“x
 	const float OPEN_ANGLE = D3DX_PI * 0.5f;	// ‰ñ“]§ŒÀ
+	const float OPEN_LINE = 0.1f;	// ŠJ‚¢‚Ä‚é‚µ‚«‚¢’l
+	const float OPEN_SPEED = 0.05f;	// ŠJ‚­‘¬“x
 }
 
 //=====================================================
@@ -88,6 +91,7 @@ HRESULT CDoor::Init(void)
 	// ’l‚Ì‰Šú‰»
 	m_info.fLife = INITIAL_LIFE;
 	m_info.state = STATE_NORMAL;
+	m_info.rotDestY = D3DX_PI * 0.5f;
 
 	return S_OK;
 }
@@ -126,16 +130,25 @@ void CDoor::Update(void)
 //=====================================================
 void CDoor::Open(void)
 {
+	// ”Ä—pˆ—Žæ“¾
+	CUniversal *pUniversal = CUniversal::GetInstance();
+
+	// ·•ªŠp“x‚ÌŽæ“¾
 	D3DXVECTOR3 rot = GetRot();
 
-	rot.y += ROLL_SPEED;
+	float fRotDiff = (m_info.rotDestY - rot.y);
 
-	if (rot.y >= OPEN_ANGLE)
-	{
-		rot.y = OPEN_ANGLE;
+	pUniversal->LimitRot(&fRotDiff);
 
+	if (fRotDiff * fRotDiff <= OPEN_LINE * OPEN_LINE)
+	{// ŠJ‚«‚«‚Á‚½”»’è
 		m_info.state = STATE_NONE;
 	}
+
+	fRotDiff *= OPEN_SPEED;
+
+	// Šp“x‚Ì”½‰f‚Æ”»’è
+	rot.y += fRotDiff;
 
 	SetRot(rot);
 }
@@ -189,6 +202,7 @@ void CDoor::proceed(void)
 	if (m_info.fLife < 0.0f)
 	{
 		m_info.state = STATE_OPEN;
+		SetEnable(false);
 
 		if (m_info.pCollisionCube != nullptr)
 		{// “–‚½‚è”»’è‚Ìíœ
@@ -211,6 +225,32 @@ void CDoor::SetPosition(D3DXVECTOR3 pos)
 		D3DXVECTOR3 pos = GetPosition();
 
 		m_info.pCollisionCube->SetPosition(pos);
+	}
+}
+
+//=====================================================
+// Œ³‚ÌŠp“xÝ’è
+//=====================================================
+void CDoor::SetOrgRot(float rotY)
+{
+	m_info.orgRotY = rotY;
+	m_info.rotDestY = rotY + D3DX_PI * 0.5f;
+
+	CUniversal::GetInstance()->LimitRot(&m_info.rotDestY);
+
+	if (rotY != 0)
+	{
+		if (m_info.pCollisionCube != nullptr)
+		{
+			D3DXVECTOR3 vtxMax = GetVtxMax();
+			D3DXVECTOR3 vtxMin = GetVtxMin();
+			D3DXVECTOR3 vtxTemp = vtxMin;
+
+			vtxMin = { -vtxMax.z,vtxMin.y,-vtxMax.x };
+			vtxMax = { -vtxTemp.z,vtxMax.y,-vtxTemp.x };
+
+			m_info.pCollisionCube->SetVtx(vtxMax, vtxMin);
+		}
 	}
 }
 
