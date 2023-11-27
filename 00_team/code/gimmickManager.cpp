@@ -134,6 +134,7 @@ void CGimmickManager::LoadDoor(FILE *pFile, char *pTemp)
 {
 	D3DXVECTOR3 pos = { 0.0f,0.0f,0.0f };
 	D3DXVECTOR3 rot = { 0.0f,0.0f,0.0f };
+	float rotDest = 0.0f;
 
 	while (true)
 	{
@@ -163,19 +164,16 @@ void CGimmickManager::LoadDoor(FILE *pFile, char *pTemp)
 			}
 		}
 
-		//if (strcmp(pTemp, "ROT") == 0)
-		//{// 向き
-		//	(void)fscanf(pFile, "%s", pTemp);
+		if (strcmp(pTemp, "ROTDEST") == 0)
+		{// 目標の向き
+			(void)fscanf(pFile, "%s", pTemp);
 
-		//	for (int i = 0; i < 3; i++)
-		//	{
-		//		float fAngle;
+			float fAngle;
 
-		//		(void)fscanf(pFile, "%f", &fAngle);
+			(void)fscanf(pFile, "%f", &fAngle);
 
-		//		rot[i] = D3DXToRadian(fAngle);
-		//	}
-		//}
+			rotDest = D3DXToRadian(fAngle);
+		}
 
 		if (strcmp(pTemp, "END_DOORSET") == 0)
 		{// ドア設定終了
@@ -186,6 +184,7 @@ void CGimmickManager::LoadDoor(FILE *pFile, char *pTemp)
 				pDoor->SetPosition(pos);
 				pDoor->SetRot(rot);
 				pDoor->SetOrgRot(rot.y);
+				pDoor->SetDestRot(rotDest);
 			}
 
 			break;
