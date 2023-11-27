@@ -25,8 +25,15 @@ END_CONTAINERSET
 # 部品の設置
 #====================================================================
 REPAIRSET
-	POS = -400.0 0.0 0.0
-	ROT = 0.0 0.0 0.0
+	POS = -410.0 0.0 350.0
+END_REPAIRSET
+
+REPAIRSET
+	POS = -225.0 0.0 -400.0
+END_REPAIRSET
+
+REPAIRSET
+	POS = 60.0 0.0 -160.0
 END_REPAIRSET
 
 END_SCRIPT

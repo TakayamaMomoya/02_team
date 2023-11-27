@@ -22,6 +22,7 @@
 
 #include "object3D.h"
 #include "objectX.h"
+#include "skybox.h"
 
 //*****************************************************
 // マクロ定義
@@ -158,6 +159,9 @@ HRESULT CTitle::Init(void)
 		m_pStart->SetVtx();
 	}
 
+	// スカイボックスの生成
+	CSkybox* pSkyBox = CSkybox::Create();
+
 	// 地面の生成
 	CObject3D* pField = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	pField->SetSize(FIELD_WIDTH, FIELD_HEIGHT);
@@ -281,7 +285,6 @@ void CTitle::ManageStart(void)
 	m_pStart->SetVtx();
 	m_pLogo->SetCol(colLogo);
 	m_pLogo->SetVtx();
-
 }
 
 //=====================================================
