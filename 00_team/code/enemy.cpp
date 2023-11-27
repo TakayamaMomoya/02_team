@@ -223,6 +223,8 @@ HRESULT CEnemy::Init(void)
 
 	m_nScore = INITIAL_SCORE;
 
+	SetPositionOld(GetPosition());
+
 	return S_OK;
 }
 

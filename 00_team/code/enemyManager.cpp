@@ -21,7 +21,7 @@
 // マクロ定義
 //*****************************************************
 #define FILE_PATH	"data\\MAP\\enemies.txt"	// 配置データのパス
-#define RAND_SPAWN	(3000)	// スポーン範囲
+#define RAND_SPAWN	(1000)	// スポーン範囲
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -220,14 +220,15 @@ void CEnemyManager::Update(void)
 	{
 		CUniversal *pUniversal = CUniversal::GetInstance();
 
-		// 注視点を中心に設定
 		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
 
-		int nPosX = pUniversal->RandRange(1000, 800);
-		int nPosZ = pUniversal->RandRange(1000, 800);
+		// 出現する座標を設定
+		posCenter.x = pUniversal->RandRange(1000, -1000);
+		posCenter.z = pUniversal->RandRange(1000, -1000);
 
-		posCenter.x = (float)nPosX;
-		posCenter.z = (float)nPosZ;
+		// 位置の正規化
+		D3DXVec3Normalize(&posCenter, &posCenter);
+		posCenter *= RAND_SPAWN;
 
 		// 敵スポーン
 		CreateEnemy(posCenter, CEnemy::TYPE_NORMAL);
