@@ -84,6 +84,7 @@ void CDebrisSpawner::Update(void)
 	float fRadius = 0.0f;
 	int nLife = 0;
 	D3DXVECTOR3 move = { 0.0f,0.0f,0.0f };
+	D3DXVECTOR3 rot = { 0.0f,0.0f,0.0f };
 	CObjectX* pObjectX = nullptr;
 
 	for (int nCntEffect = 0; nCntEffect < m_apDebris[m_type]->nNumDebris; nCntEffect++)
@@ -120,8 +121,13 @@ void CDebrisSpawner::Update(void)
 		move.y = cosf(fRot) * fMove;
 		move.z = sinf(fRot) * cosf(fRot2) * fMove;
 
+		rot.x = (float)(rand() % 629 - 314) / 100.0f;
+		rot.y = (float)(rand() % 629 - 314) / 100.0f;
+		rot.z = (float)(rand() % 629 - 314) / 100.0f;
+
 		// エフェクト生成
 		pObjectX = CDebris::Create(m_pos, nLife, move, m_apDebris[m_type]->fGravity);
+		pObjectX->SetRot(rot);
 	}
 
 	m_nLife--;
