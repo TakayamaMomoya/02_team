@@ -171,6 +171,7 @@ void CGimmickManager::LoadDoor(FILE *pFile, char *pTemp)
 			{
 				pDoor->SetPosition(pos);
 				pDoor->SetRot(rot);
+				pDoor->SetOrgRot(rot.y);
 			}
 
 			break;
