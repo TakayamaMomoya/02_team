@@ -251,7 +251,7 @@ void CDoor::SetOrgRot(float rotY)
 			m_info.pCollisionCube->SetVtx(vtxMax, vtxMin);
 		}
 	}
-	else if (rotY != 0)
+	else if (rotY >= 1.0f)
 	{
 		if (m_info.pCollisionCube != nullptr)
 		{
@@ -261,6 +261,20 @@ void CDoor::SetOrgRot(float rotY)
 
 			vtxMin = { -vtxMax.z,vtxMin.y,-vtxMax.x };
 			vtxMax = { -vtxTemp.z,vtxMax.y,-vtxTemp.x };
+
+			m_info.pCollisionCube->SetVtx(vtxMax, vtxMin);
+		}
+	}
+	else if (rotY <= -1.0f)
+	{
+		if (m_info.pCollisionCube != nullptr)
+		{
+			D3DXVECTOR3 vtxMax = GetVtxMax();
+			D3DXVECTOR3 vtxMin = GetVtxMin();
+			D3DXVECTOR3 vtxTemp = vtxMin;
+
+			vtxMin = { -vtxMax.z,vtxMin.y,vtxMin.x };
+			vtxMax = { -vtxTemp.z,vtxMax.y,vtxMax.x };
 
 			m_info.pCollisionCube->SetVtx(vtxMax, vtxMin);
 		}

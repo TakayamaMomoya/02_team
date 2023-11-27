@@ -33,6 +33,7 @@
 #include "goal.h"
 #include "block.h"
 #include "gimmickManager.h"
+#include "renderer.h"
 
 //*****************************************************
 // マクロ定義
@@ -75,10 +76,17 @@ HRESULT CGame::Init(void)
 	// UIマネージャーの追加
 	CUIManager::Create();
 
+	// 床の生成
 	CObject3D *pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood000.jpg");
-	pObject->SetIdxTexture(nIdx);
 
+	if (pObject != nullptr)
+	{
+		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood001.jpg");
+		pObject->SetIdxTexture(nIdx);
+		pObject->SetTex(D3DXVECTOR2(10.0f,10.0f), D3DXVECTOR2(0.0f, 0.0f));
+	}
+
+	// スカイボックスの生成
 	CSkybox::Create();
 
 	// ブロックの読み込み
@@ -108,6 +116,14 @@ HRESULT CGame::Init(void)
 	// エディットの生成
 	CEdit::Create();
 #endif
+
+	// フォグをかける
+	CRenderer *pRenderer = CRenderer::GetInstance();
+
+	if (pRenderer != nullptr)
+	{
+		pRenderer->EnableFog(true);
+	}
 
 	return S_OK;
 }

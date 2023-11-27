@@ -319,7 +319,7 @@ void CSelect::Update(void)
 		}
 
 		// コンテナの再設置
-		//ReSetContainer();
+		ReSetContainer();
 	}
 	else if(m_state == STATE_OUT)
 	{
@@ -337,7 +337,7 @@ void CSelect::Update(void)
 
 	if (pKeyboard->GetTrigger(DIK_RETURN))
 	{
-		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 50.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 100.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 #endif
 }

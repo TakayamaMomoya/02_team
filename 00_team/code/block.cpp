@@ -174,7 +174,7 @@ void CBlock::Hit(float fDamage)
 	if (m_fLife <= 0.0f)
 	{// ”j‰ó”»’è
 		Delete(m_nID);
-		CDebrisSpawner::Create(D3DXVECTOR3(GetPosition().x, GetPosition().y, GetPosition().z), CDebrisSpawner::TYPE::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		CDebrisSpawner::Create(D3DXVECTOR3(GetPosition().x, GetPosition().y + 50.0f, GetPosition().z), CDebrisSpawner::TYPE::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 }
 

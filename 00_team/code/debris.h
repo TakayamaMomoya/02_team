@@ -31,9 +31,10 @@ public:
 	static void Unload(void);
 
 private:
+	D3DXVECTOR3 m_rotVelocity;	// ‰ñ“]‘¬“x
+	D3DXVECTOR3 m_move;	// ˆÚ“®—Ê
 	int m_nLife;	// õ–½
 	float m_fDecreaseAlpha;	// ƒ¿’lŒ¸­—Ê
-	D3DXVECTOR3 m_move;	// ˆÚ“®—Ê
 	float m_fGravity;
 };
 
