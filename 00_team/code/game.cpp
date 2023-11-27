@@ -76,10 +76,17 @@ HRESULT CGame::Init(void)
 	// UIマネージャーの追加
 	CUIManager::Create();
 
+	// 床の生成
 	CObject3D *pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood000.jpg");
-	pObject->SetIdxTexture(nIdx);
 
+	if (pObject != nullptr)
+	{
+		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood001.jpg");
+		pObject->SetIdxTexture(nIdx);
+		pObject->SetTex(D3DXVECTOR2(10.0f,10.0f), D3DXVECTOR2(0.0f, 0.0f));
+	}
+
+	// スカイボックスの生成
 	CSkybox::Create();
 
 	// ブロックの読み込み
@@ -97,7 +104,7 @@ HRESULT CGame::Init(void)
 	CWeaponManager::Create();
 
 	// 敵マネージャーの生成
-	//CEnemyManager *pEnemyManager = CEnemyManager::Create();
+	CEnemyManager *pEnemyManager = CEnemyManager::Create();
 
 	// ロケットの生成
 	CRocket::Create();
