@@ -133,6 +133,7 @@ void CGimmickManager::CreateGimmick(FILE *pFile, char *pTemp)
 void CGimmickManager::LoadDoor(FILE *pFile, char *pTemp)
 {
 	D3DXVECTOR3 pos = { 0.0f,0.0f,0.0f };
+	D3DXVECTOR3 rot = { 0.0f,0.0f,0.0f };
 
 	while (true)
 	{
@@ -148,6 +149,20 @@ void CGimmickManager::LoadDoor(FILE *pFile, char *pTemp)
 			}
 		}
 
+		if (strcmp(pTemp, "ROT") == 0)
+		{// 向き
+			(void)fscanf(pFile, "%s", pTemp);
+
+			for (int i = 0; i < 3; i++)
+			{
+				float fAngle;
+
+				(void)fscanf(pFile, "%f", &fAngle);
+
+				rot[i] = D3DXToRadian(fAngle);
+			}
+		}
+
 		if (strcmp(pTemp, "END_DOORSET") == 0)
 		{// ドア設定終了
 			CDoor *pDoor = CDoor::Create();
@@ -155,6 +170,7 @@ void CGimmickManager::LoadDoor(FILE *pFile, char *pTemp)
 			if (pDoor != nullptr)
 			{
 				pDoor->SetPosition(pos);
+				pDoor->SetRot(rot);
 			}
 
 			break;
@@ -168,6 +184,7 @@ void CGimmickManager::LoadDoor(FILE *pFile, char *pTemp)
 void CGimmickManager::LoadContainer(FILE *pFile, char *pTemp)
 {
 	D3DXVECTOR3 pos = { 0.0f,0.0f,0.0f };
+	D3DXVECTOR3 rot = { 0.0f,0.0f,0.0f };
 
 	while (true)
 	{
@@ -183,6 +200,20 @@ void CGimmickManager::LoadContainer(FILE *pFile, char *pTemp)
 			}
 		}
 
+		if (strcmp(pTemp, "ROT") == 0)
+		{// 向き
+			(void)fscanf(pFile, "%s", pTemp);
+
+			for (int i = 0; i < 3; i++)
+			{
+				float fAngle;
+
+				(void)fscanf(pFile, "%f", &fAngle);
+
+				rot[i] = D3DXToRadian(fAngle);
+			}
+		}
+
 		if (strcmp(pTemp, "END_CONTAINERSET") == 0)
 		{// コンテナ設定終了
 			CContainer *pContainer = CContainer::Create();
@@ -190,6 +221,7 @@ void CGimmickManager::LoadContainer(FILE *pFile, char *pTemp)
 			if (pContainer != nullptr)
 			{
 				pContainer->SetPosition(pos);
+				pContainer->SetRot(rot);
 			}
 
 			break;
@@ -203,6 +235,7 @@ void CGimmickManager::LoadContainer(FILE *pFile, char *pTemp)
 void CGimmickManager::LoadRepair(FILE *pFile, char *pTemp)
 {
 	D3DXVECTOR3 pos = { 0.0f,0.0f,0.0f };
+	D3DXVECTOR3 rot = { 0.0f,0.0f,0.0f };
 
 	while (true)
 	{
@@ -218,6 +251,20 @@ void CGimmickManager::LoadRepair(FILE *pFile, char *pTemp)
 			}
 		}
 
+		if (strcmp(pTemp, "ROT") == 0)
+		{// 向き
+			(void)fscanf(pFile, "%s", pTemp);
+
+			for (int i = 0; i < 3; i++)
+			{
+				float fAngle;
+
+				(void)fscanf(pFile, "%f", &fAngle);
+
+				rot[i] = D3DXToRadian(fAngle);
+			}
+		}
+
 		if (strcmp(pTemp, "END_REPAIRSET") == 0)
 		{// 部品設定終了
 			CItemRepair *pRapair = CItemRepair::Create();
@@ -225,6 +272,7 @@ void CGimmickManager::LoadRepair(FILE *pFile, char *pTemp)
 			if (pRapair != nullptr)
 			{
 				pRapair->SetPosition(pos);
+				pRapair->SetRot(rot);
 			}
 
 			break;
