@@ -26,6 +26,7 @@
     <ClCompile Include="code\bullet.cpp" />
     <ClCompile Include="code\camera.cpp" />
     <ClCompile Include="code\character.cpp" />
+    <ClCompile Include="code\characterDiv.cpp" />
     <ClCompile Include="code\collision.cpp" />
     <ClCompile Include="code\debris.cpp" />
     <ClCompile Include="code\debrisspawner.cpp" />
@@ -96,6 +97,7 @@
     <ClInclude Include="code\bullet.h" />
     <ClInclude Include="code\camera.h" />
     <ClInclude Include="code\character.h" />
+    <ClInclude Include="code\characterDiv.h" />
     <ClInclude Include="code\collision.h" />
     <ClInclude Include="code\debris.h" />
     <ClInclude Include="code\debrisSpawner.h" />
