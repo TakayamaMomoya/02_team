@@ -10,22 +10,50 @@
 #====================================================================
 DOORSET
 	POS = -475.0 0.0 -72.0
-	ROT = 0.0 -90.0 0.0
+	ROT = 0.0 0.0 0.0
+	ROTDEST = -90.0
 END_DOORSET
 
 DOORSET
 	POS = -395.0 0.0 -72.0
 	ROT = 0.0 180.0 0.0
+	ROTDEST = -90.0
 END_DOORSET
 
 DOORSET
-	POS = -27.0 0.0 -225.0
+	POS = -27.0 0.0 -224.0
 	ROT = 0.0 90.0 0.0
+	ROTDEST = 0.0
 END_DOORSET
 
 DOORSET
-	POS = -27.0 0.0 -305.0
+	POS = -27.0 0.0 -306.0
 	ROT = 0.0 -90.0 0.0
+	ROTDEST = 0.0
+END_DOORSET
+
+DOORSET
+	POS = -270.0 0.0 -315.0
+	ROT = 0.0 0.0 0.0
+	ROTDEST = 90.0
+END_DOORSET
+
+DOORSET
+	POS = -185.0 0.0 -315.0
+	ROT = 0.0 180.0 0.0
+	ROTDEST = 90.0
+END_DOORSET
+
+DOORSET
+	POS = 51.0 0.0 -315.0
+	ROT = 0.0 0.0 0.0
+	ROTDEST = -90.0
+END_DOORSET
+
+DOORSET
+	POS = 135.0 0.0 -315.0
+	ROT = 0.0 180.0 0.0
+	ROTDEST = -90.0
 END_DOORSET
 
 #====================================================================
