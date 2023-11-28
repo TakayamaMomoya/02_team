@@ -226,6 +226,9 @@ void CItemRepair::Interact(CObject *pObj)
 					// プレイヤーに修理アイテムのポインタ設定
 					pPlayer->SetItemRepair(this);
 
+					// プレイヤーに修理アイテム入力情報を設定
+					pPlayer->SetItemTrigger(true);
+
 					SetEnable(false);
 				}
 			}
