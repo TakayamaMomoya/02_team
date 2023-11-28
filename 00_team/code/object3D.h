@@ -27,6 +27,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void DrawNormal(D3DXVECTOR3 nor);
 	static CObject3D *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot = { 0.0f,0.0f,0.0f });
 	float GetWidth(void) { return m_width; }	// サイズ取得
 	float GetHeight(void) { return m_heigth; }	// サイズ取得
@@ -39,14 +40,9 @@ public:
 	void SetIdxTexture(int nIdx) { m_nIdxTexture = nIdx; }
 	int GetIdxTexture(void) { return m_nIdxTexture; }
 	void SetColor(D3DXCOLOR col);
-	void SetTex(D3DXVECTOR2 texLeftUp, D3DXVECTOR2 texRightDown);
-	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void) { return m_pVtxBuff; }
-	void EnableAdd(bool bAdd) { m_bAdd = bAdd; }
+	void SetTex(D3DXVECTOR2 rd, D3DXVECTOR2 lu);
 
 private:
-	void DrawNormal(void);
-	void DrawBillboard(void);
-
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
 	D3DXVECTOR3 m_pos;	// 位置
 	D3DXVECTOR3 m_posOld;	// 前回の位置
@@ -56,9 +52,6 @@ private:
 	float m_width;	// 幅
 	float m_heigth;	// 高さ
 	int m_nIdxTexture;	// テクスチャの番号
-	bool m_bBillboard;	// ビルボードにするかどうか
-	bool m_bZTest;	// Zテストを無効化するかどうか
-	bool m_bAdd;	// 加算合成するかどうか
 };
 
 #endif

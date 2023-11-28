@@ -13,6 +13,8 @@
 #include "bullet.h"
 #include "player.h"
 #include "sound.h"
+#include "animEffect3D.h"
+#include "universal.h"
 
 //*****************************************************
 // マクロ定義
@@ -87,11 +89,15 @@ void CMagnum::Attack(void)
 		{// 弾の発射
 			D3DXMATRIX* pMtx = GetMatrix();
 
-			D3DXVECTOR3 pos =
-			{// 取っ手の位置を取得
-				pMtx->_41,
-				pMtx->_42,
-				pMtx->_43,
+			// マズルの位置を設定
+			D3DXMATRIX mtxMuzzle;
+			CUniversal::GetInstance()->SetOffSet(&mtxMuzzle, *pMtx, D3DXVECTOR3(-50.0f, 20.0f, 0.0f));
+
+			D3DXVECTOR3 posMuzzle =
+			{
+				mtxMuzzle._41,
+				mtxMuzzle._42,
+				mtxMuzzle._43,
 			};
 
 			D3DXVECTOR3 move = { 0.0f,0.0f,0.0f };
@@ -101,6 +107,12 @@ void CMagnum::Attack(void)
 			if (pPlayer != nullptr)
 			{// プレイヤーの向きに移動量を設定
 				D3DXVECTOR3 rot = pPlayer->GetRot();
+
+				int nRange = CUniversal::GetInstance()->RandRange(10, -10);
+
+				float fRand = nRange * 0.01f;
+
+				rot.y += fRand;
 
 				move =
 				{
@@ -114,7 +126,7 @@ void CMagnum::Attack(void)
 			float fDamage = GetDamage();
 
 			// 弾を発射
-			CBullet::Create(pos, -move, 100, CBullet::TYPE_PLAYER, false, 2.0f, fDamage);
+			CBullet::Create(posMuzzle, -move, 100, CBullet::TYPE_PLAYER, false, 2.0f, fDamage);
 
 			CSound* pSound = CSound::GetInstance();
 
@@ -132,6 +144,14 @@ void CMagnum::Attack(void)
 			nCntShot = GetRapid();
 
 			SetCntShot(nCntShot);
+
+			// エフェクトの生成
+			CAnimEffect3D *pAnim3D = CAnimEffect3D::GetInstance();
+
+			if (pAnim3D != nullptr)
+			{
+				pAnim3D->CreateEffect(posMuzzle, CAnimEffect3D::TYPE::TYPE_MUZZLEFLUSH);
+			}
 		}
 		else
 		{// 弾切れの場合
