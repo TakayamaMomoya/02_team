@@ -16,6 +16,7 @@
 #include "player.h"
 #include "universal.h"
 #include "debugproc.h"
+#include "sound.h"
 
 #include "motionDiv.h"
 
@@ -41,6 +42,7 @@ CWeapon::~CWeapon()
 CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 {
 	CWeapon *pWeapon = nullptr;
+	CSound* pSound = CSound::GetInstance();
 
 	if (pWeapon == nullptr)
 	{
@@ -49,11 +51,21 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 		case CWeapon::TYPE_MAGNUM:
 			// マグナムの生成
 			pWeapon = new CMagnum;
+			
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+			}
 
 			break;
 		case CWeapon::TYPE_MACHINEGUN:
 			// マシンガンの生成
 			pWeapon = new CMachinegun;
+
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+			}
 
 			break;
 		default:

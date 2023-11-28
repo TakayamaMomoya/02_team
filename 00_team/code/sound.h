@@ -18,6 +18,14 @@ public:
 	typedef enum
 	{
 		LABEL_BGM000 = 0,				// タイトルBGM
+		LABEL_SE_GET_WEAPON,			// 武器取得
+		LABEL_SE_GUNSHOT_00,			// 発砲音00
+		LABEL_SE_GUNSHOT_01,			// 発砲音01
+		LABEL_SE_OPEN_BOX,				// 箱を開く
+		LABEL_SE_APPEARE,				// 登場
+		LABEL_BGM_SELECT,				// 選択画面bgm
+		LABEL_BGM_GAME,					// ゲームbgm
+		LABEL_SE_REPAIR,				// 修繕
 		LABEL_MAX
 	} LABEL;
 
@@ -70,7 +78,15 @@ private:
 	// サウンドの情報
 	SOUNDINFO m_aSoundInfo[LABEL_MAX] =
 	{
-		{ "data/SOUND/BGM/title.wav", -1 },			// タイトル	
+		{ "data/SOUND/BGM/title.wav", -1 },				// タイトル	
+		{ "data/SOUND/SE/get_weapon_00.wav",0 },		// 雑魚武器取得
+		{ "data/SOUND/SE/gunshot_sound_00.wav",0 },		// マグナム発砲
+		{ "data/SOUND/SE/gunshot_sound_01.wav",0 },		// マシンガン発砲
+		{ "data/SOUND/SE/open_weaponbox.wav",0 },		// 武器の箱開く
+		{ "data/SOUND/SE/Appearance.wav",0 },			// 登場
+		{ "data/SOUND/BGM/select.wav",-1 },				// 選択
+		{ "data/SOUND/BGM/game.wav",-1 },				// ゲーム
+		{ "data/SOUND/SE/repair.wav",0}					// 修繕
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ

@@ -13,6 +13,8 @@
 #include "bullet.h"
 #include "player.h"
 #include "universal.h"
+#include "sound.h"
+#include "animEffect3D.h"
 
 //*****************************************************
 // マクロ定義
@@ -123,6 +125,14 @@ void CMachinegun::Attack(void)
 			// 弾を発射
 			CBullet::Create(pos, -move, 100, CBullet::TYPE_PLAYER, false,2.0f, fDamage);
 
+			CSound* pSound = CSound::GetInstance();
+
+			if (pSound != nullptr)
+			{
+				// マグナム発砲音
+				pSound->Play(pSound->LABEL_SE_GUNSHOT_01);
+			}
+
 			// 弾を減らす
 			nBullet--;
 			SetBullet(nBullet);
@@ -131,6 +141,26 @@ void CMachinegun::Attack(void)
 			nCntShot = GetRapid();
 
 			SetCntShot(nCntShot);
+
+			// マズルの位置を設定
+			D3DXMATRIX mtxMuzzle;
+			D3DXMATRIX mtxWorld = *GetMatrix();
+			CUniversal::GetInstance()->SetOffSet(&mtxMuzzle, mtxWorld,D3DXVECTOR3(-18.0f,6.0f,0.0f));
+
+			D3DXVECTOR3 posMuzzle= 
+			{
+				mtxMuzzle._41,
+				mtxMuzzle._42,
+				mtxMuzzle._43,
+			};
+
+			// エフェクトの生成
+			CAnimEffect3D *pAnim3D = CAnimEffect3D::GetInstance();
+
+			if (pAnim3D != nullptr)
+			{
+				pAnim3D->CreateEffect(posMuzzle, CAnimEffect3D::TYPE::TYPE_MUZZLEFLUSH);
+			}
 		}
 		else
 		{// 弾切れの場合

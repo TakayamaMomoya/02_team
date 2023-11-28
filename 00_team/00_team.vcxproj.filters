@@ -158,6 +158,8 @@
     </ClCompile>
     <ClCompile Include="code\characterDiv.cpp" />
     <ClCompile Include="code\motionDiv.cpp" />
+    <ClCompile Include="code\anim3D.cpp" />
+    <ClCompile Include="code\animEffect3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -290,5 +292,7 @@
     </ClInclude>
     <ClInclude Include="code\characterDiv.h" />
     <ClInclude Include="code\motionDiv.h" />
+    <ClInclude Include="code\anim3D.h" />
+    <ClInclude Include="code\animEffect3D.h" />
   </ItemGroup>
 </Project>
