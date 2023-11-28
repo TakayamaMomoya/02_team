@@ -105,6 +105,9 @@ void CItemRepair::Update(void)
 		{// 持ち上げているプレイヤーの検出
 			// 武器を有効化する
 			m_pPlayer->EnableWeapon(true);
+			
+			// プレイヤーの修理アイテムポインタを初期化
+			m_pPlayer->ReleaseItemRepair();
 
 			m_pPlayer = nullptr;
 
@@ -218,6 +221,8 @@ void CItemRepair::Interact(CObject *pObj)
 
 					// 武器を無効化する
 					pPlayer->EnableWeapon(false);
+
+					pPlayer->SetItemRepair(this);
 
 					SetEnable(false);
 				}
