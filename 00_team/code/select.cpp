@@ -28,11 +28,13 @@
 #include "player.h"
 
 #include "debrisSpawner.h"
+#include "debris.h"
+
+#include "startLocation.h"
 
 #include "container.h"
 #include "weaponManager.h"
 
-#include "debris.h"
 #include "edit.h"
 
 #include <stdio.h>
@@ -115,6 +117,8 @@ HRESULT CSelect::Init(void)
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
 
+	CStartLocation::Create(D3DXVECTOR3(0.0f, 10.0f, -300.0f));
+
 	return S_OK;
 }
 
@@ -129,7 +133,7 @@ void CSelect::MenuInit(void)
 		"data\\TEXTURE\\UI\\join.png",
 		"data\\TEXTURE\\UI\\join.png",
 		"data\\TEXTURE\\UI\\join.png",
-	}; 
+	};
 
 	int nIdx = 0;
 
@@ -212,6 +216,7 @@ void CSelect::StartInit(void)
 	m_pStartUI = CObject2D::Create();
 	m_pStartUI->SetPosition(D3DXVECTOR3(1100.0f, 650.0f, 0.0f));
 	m_pStartUI->SetSize(150.0f, 50.0f);
+	m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 
 	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\start.png");
 	m_pStartUI->SetIdxTexture(nIdx);
@@ -275,30 +280,45 @@ void CSelect::Uninit(void)
 void CSelect::Update(void)
 {
 	// 情報取得
-	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
-	CInputMouse *pMouse = CInputMouse::GetInstance();
-	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
+	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
+	CInputMouse* pMouse = CInputMouse::GetInstance();
+	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
+
+	D3DXCOLOR col = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+	int nJoinPlayer = 0;
 
 	// シーンの更新
 	CScene::Update();
-	
-	CFade *pFade = CFade::GetInstance();
+
+	CFade* pFade = CFade::GetInstance();
 
 	if (m_state == STATE_NONE)
 	{
 		if (pKeyboard != nullptr && pMouse != nullptr)
 		{
-			if (/*pKeyboard->GetTrigger(DIK_RETURN) ||*/
+			if (CStartLocation::GetIsIn() == true)
+			{// 参加中の全員が範囲内に入ったという判定を貰ったら
+				if (/*pKeyboard->GetTrigger(DIK_RETURN) ||*/
 				//pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
-				pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
-			{// フェード
+					pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
+				{// フェード
 
-				if (pFade != nullptr && m_abEntry[0] != false)
-				{
-					m_pStartUI->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
-
-					pFade->SetFade(CScene::MODE_GAME);
+					if (pFade != nullptr && m_abEntry[0] != false)
+					{
+						pFade->SetFade(CScene::MODE_GAME);
+					}
 				}
+
+				// StartUIを見えるように
+				m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+				m_pStartUI->SetVtx();
+			}
+			else
+			{
+				// StartのUIを見えないように
+				m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+				m_pStartUI->SetVtx();
 			}
 		}
 
@@ -315,17 +335,22 @@ void CSelect::Update(void)
 			if (m_abEntry[nCntPlayer] == true)
 			{
 				MoveLimit(nCntPlayer);
+
+				nJoinPlayer++;
 			}
 		}
 
 		// コンテナの再設置
 		ReSetContainer();
 	}
-	else if(m_state == STATE_OUT)
+	else if (m_state == STATE_OUT)
 	{
 
 	}
-		
+
+	// 参加人数の設定
+	CStartLocation::SetjoinPlayer(nJoinPlayer);
+
 #ifdef _DEBUG
 	CCamera* pCamera = CManager::GetCamera();
 
@@ -339,6 +364,8 @@ void CSelect::Update(void)
 	{
 		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 100.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
+
+	CDebugProc::GetInstance()->Print("\n参加人数[%d]\n", nJoinPlayer);
 #endif
 }
 
@@ -427,7 +454,7 @@ void CSelect::EntryInput(int nPlayer)
 	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
 	CInputMouse* pMouse = CInputMouse::GetInstance();
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
-	
+
 	if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, nPlayer))
 	{
 		if (m_abEntry[nPlayer] == true || m_apPlayerData[nPlayer].pPlayer != nullptr || m_pPlayerManager == nullptr)
@@ -480,7 +507,7 @@ void CSelect::MoveLimit(int nPlayer)
 		move.y = 0.0f;
 	}
 
-	 //情報の反映
+	//情報の反映
 	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
 	m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 }
