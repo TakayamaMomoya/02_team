@@ -123,9 +123,9 @@ void CShotgun::Attack(void)
 					D3DXVECTOR3 rot = pPlayer->GetRot();
 
 					// ˆÚ“®Šp“x‚ð‚¸‚ç‚·
-					int nRange = CUniversal::GetInstance()->RandRange(10, -10);
+					int nRange = CUniversal::GetInstance()->RandRange((int)(m_fAngleDiffuse * 0.5f), (int)(-m_fAngleDiffuse * 0.5f));
 
-					float fRand = nRange * 0.01f;
+					float fRand = D3DXToRadian((float)nRange);
 
 					rot.y += fRand;
 
