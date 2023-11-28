@@ -127,7 +127,7 @@ void CDebrisSpawner::Update(void)
 
 		// エフェクト生成
 		pObjectX = CDebris::Create(m_pos, nLife, move, m_apDebris[m_type]->fGravity);
-		pObjectX->SetRot(rot);
+		pObjectX->SetRot(D3DXVECTOR3(rot.x, rot.y, rot.z));
 	}
 
 	m_nLife--;

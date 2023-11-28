@@ -157,6 +157,7 @@
       <Filter>debris</Filter>
     </ClCompile>
     <ClCompile Include="code\characterDiv.cpp" />
+    <ClCompile Include="code\motionDiv.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -288,5 +289,6 @@
       <Filter>debris</Filter>
     </ClInclude>
     <ClInclude Include="code\characterDiv.h" />
+    <ClInclude Include="code\motionDiv.h" />
   </ItemGroup>
 </Project>

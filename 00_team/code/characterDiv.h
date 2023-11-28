@@ -16,7 +16,7 @@
 //*****************************************************
 // 前方宣言
 //*****************************************************
-class CMotion;
+class CMotionDiv;
 
 //*****************************************************
 // 定数定義
@@ -29,10 +29,17 @@ class CCharacterDiv : public CObject
 {
 public:
 
+	enum Parts
+	{
+		PARTS_LOWER = 0,	// 下半身
+		PARTS_UPPER,		// 上半身
+		PARTS_MAX
+	};
+
 	CCharacterDiv(int nPriority = 4);	// コンストラクタ
 	~CCharacterDiv();					// デストラクタ
 
-	static CCharacterDiv* Create(char* pPathUpper,char* pPathLower);
+	static CCharacterDiv* Create(char* pPathLower,char* pPathUpper);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
@@ -45,19 +52,12 @@ public:
 	D3DXVECTOR3 GetMove(void) { return m_info.move; }
 	void SetRot(D3DXVECTOR3 rot) { m_info.rot = rot; }
 	D3DXVECTOR3 GetRot(void) { return m_info.rot; }
-	CMotion* GetBody(int nNum) { return m_info.apBody[nNum]; }
-	void Load(char* pPathUpper, char* pPathLower);
+	CMotionDiv* GetBody(void) { return m_info.pBody; }
+	void Load(char* pPathLower, char* pPathUpper);
 	void SetMotion(int nNum,int nMotion);
 	int GetMotion(int nNum);
 
 private:
-
-	enum Parts
-	{
-		PARTS_UPPER = 0,	// 上半身
-		PARTS_LOWER,		// 下半身
-		PARTS_MAX
-	};
 
 	struct SInfo
 	{
@@ -65,7 +65,7 @@ private:
 		D3DXVECTOR3 posOld;	// 前回の位置
 		D3DXVECTOR3 move;	// 移動量
 		D3DXVECTOR3 rot;	// 向き
-		CMotion* apBody[PARTS_MAX];	// 体
+		CMotionDiv* pBody;			// 体
 		char* apPath[PARTS_MAX];	// 体のパス
 	};
 

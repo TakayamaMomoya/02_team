@@ -20,18 +20,29 @@
 #include "game.h"
 #include "manager.h"
 
+#include "motionDiv.h"
+
 //*****************************************************
 // 定数定義
 //*****************************************************
 namespace
 {
-	const char* BODY_PATH[NUM_PLAYER] = 
-	{// 体のパス
-		"data\\MOTION\\motionPotatoman01.txt",
-		"data\\MOTION\\motionPotatoman02.txt",
-		"data\\MOTION\\motionPotatoman03.txt",
-		"data\\MOTION\\motionPotatoman04.txt",
+	const char* BODY_PATH_LOWER[NUM_PLAYER] = 
+	{// 下半身のパス
+		"data\\MOTION\\motionPotatoman01_lower.txt",
+		"data\\MOTION\\motionPotatoman02_lower.txt",
+		"data\\MOTION\\motionPotatoman03_lower.txt",
+		"data\\MOTION\\motionPotatoman04_lower.txt",
 	};
+
+	const char* BODY_PATH_UPPER[NUM_PLAYER] =
+	{// 上半身のパス
+		"data\\MOTION\\motionPotatoman01_upper.txt",
+		"data\\MOTION\\motionPotatoman02_upper.txt",
+		"data\\MOTION\\motionPotatoman03_upper.txt",
+		"data\\MOTION\\motionPotatoman04_upper.txt",
+	};
+
 	const float MOVE_SPEED = 3.0f;	// 移動速度
 	const float ROT_SPEED = 0.1f;	// 回転速度
 	const float INITIAL_LIFE = 30.0f;	// 初期体力
@@ -78,7 +89,7 @@ CPlayer *CPlayer::Create(void)
 HRESULT CPlayer::Init(void)
 {
 	// 継承クラスの初期化
-	CCharacter::Init();
+	CCharacterDiv::Init();
 
 	// 当たり判定の生成
 	if (m_info.pCollisionSphere == nullptr)
@@ -143,7 +154,7 @@ void CPlayer::Uninit(void)
 	}
 	
 	// 継承クラスの終了
-	CCharacter::Uninit();
+	CCharacterDiv::Uninit();
 }
 
 //=====================================================
@@ -152,7 +163,7 @@ void CPlayer::Uninit(void)
 void CPlayer::Update(void)
 {
 	// 継承クラスの更新
-	CCharacter::Update();
+	CCharacterDiv::Update();
 
 	// 入力
 	Input();
@@ -171,7 +182,8 @@ void CPlayer::Update(void)
 	if (m_info.pCollisionSphere != nullptr)
 	{
 		D3DXVECTOR3 pos = GetPosition();
-		D3DXVECTOR3 posWaist = GetBody()->GetMtxPos(0);
+		//D3DXVECTOR3 posWaist = GetBody(CCharacterDiv::PARTS_UPPER)->GetMtxPos(0);
+		D3DXVECTOR3 posWaist = GetBody()->GetMtxPos(CCharacterDiv::PARTS_UPPER,0);
 		
 		// 敵との接触判定
 		m_info.pCollisionSphere->SetPosition(posWaist);
@@ -227,7 +239,8 @@ void CPlayer::Update(void)
 	// 武器の追従
 	if (m_info.pWeapon != nullptr)
 	{
-		CMotion *pBody = GetBody();
+		//CMotion* pBody = GetBody(CCharacterDiv::PARTS_UPPER);
+		CMotionDiv *pBody = GetBody();
 
 		if (pBody != nullptr)
 		{
@@ -481,11 +494,15 @@ void CPlayer::ManageState(void)
 		{
 			m_info.state = STATE_NORMAL;
 
-			CMotion *pBody = GetBody();
-
-			if (pBody != nullptr)
+			for (int nCutPath = 0; nCutPath < CCharacterDiv::PARTS_MAX; nCutPath++)
 			{
-				pBody->ResetAllCol();
+				//CMotion* pBody = GetBody(nCutPath);
+				CMotionDiv* pBody = GetBody();
+
+				if (pBody != nullptr)
+				{
+					pBody->ResetAllCol();
+				}
 			}
 		}
 	}
@@ -509,7 +526,7 @@ void CPlayer::ManageMotion(void)
 
 	float fSpeed = D3DXVec3Length(&move);
 
-	int nMotion = GetMotion();
+	int nMotion = GetMotion(CCharacterDiv::PARTS_LOWER);
 
 	CDebugProc::GetInstance()->Print("\nスピード[%f]",fSpeed);
 
@@ -517,14 +534,16 @@ void CPlayer::ManageMotion(void)
 	{
 		if (nMotion != MOTION_WALK)
 		{
-			SetMotion(MOTION_WALK);
+			SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_WALK);
+			SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK);
 		}
 	}
 	else
 	{
 		if (nMotion != MOTION_NEUTRAL)
 		{
-			SetMotion(MOTION_NEUTRAL);
+			SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_NEUTRAL);
+			SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_NEUTRAL);
 		}
 	}
 }
@@ -535,7 +554,7 @@ void CPlayer::ManageMotion(void)
 void CPlayer::Draw(void)
 {
 	// 継承クラスの描画
-	CCharacter::Draw();
+	CCharacterDiv::Draw();
 
 	// デバッグ表示
 	Debug();
@@ -552,7 +571,7 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 		m_info.pWeapon = nullptr;
 	}
 
-	m_info.pWeapon = CWeapon::Create(type,7);
+	m_info.pWeapon = CWeapon::Create(type,6);
 
 	if (m_info.pWeapon != nullptr)
 	{
@@ -568,15 +587,18 @@ void CPlayer::SetID(int nID)
 	m_info.nID = nID;
 
 	// IDに対応したモデルの設定
-	CCharacter::Load((char*)BODY_PATH[nID]);
+	CCharacterDiv::Load((char*)BODY_PATH_LOWER[nID], (char*)BODY_PATH_UPPER[nID]);
 
 	// 影の有効化
-	CMotion *pBody = GetBody();
-
-	if (pBody != nullptr)
+	for (int nCutPath = 0; nCutPath < CCharacterDiv::PARTS_MAX; nCutPath++)
 	{
-		pBody->SetPosShadow(D3DXVECTOR3(0.0f, 0.5f, 0.0f));
-		pBody->EnableShadow(true);
+		CMotionDiv* pBody = GetBody();
+
+		if (pBody != nullptr)
+		{
+			pBody->SetPosShadow(D3DXVECTOR3(0.0f, 0.5f, 0.0f));
+			pBody->EnableShadow(true);
+		}
 	}
 }
 
@@ -603,11 +625,15 @@ void CPlayer::Hit(float fDamage)
 
 			m_info.fTimerState = DAMAGE_TIME;
 
-			CMotion *pBody = GetBody();
-
-			if (pBody != nullptr)
+			for (int nCutPath = 0; nCutPath < CCharacterDiv::PARTS_MAX; nCutPath++)
 			{
-				pBody->SetAllCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+				//CMotion* pBody = GetBody(nCutPath);
+				CMotionDiv* pBody = GetBody();
+
+				if (pBody != nullptr)
+				{
+					pBody->SetAllCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+				}
 			}
 		}
 	}
@@ -637,8 +663,15 @@ void CPlayer::Debug(void)
 
 	if (GetBody() != nullptr)
 	{
-		int nMotion = GetBody()->GetMotion();
+		int nMotion = GetBody()->GetMotion(CCharacterDiv::PARTS_LOWER);
 
-		pDebugProc->Print("\nモーション[%d]", nMotion);
+		pDebugProc->Print("\n下半身のモーション[%d]", nMotion);
+	}
+
+	if (GetBody() != nullptr)
+	{
+		int nMotion = GetBody()->GetMotion(CCharacterDiv::PARTS_UPPER);
+
+		pDebugProc->Print("\n上半身のモーション[%d]", nMotion);
 	}
 }
