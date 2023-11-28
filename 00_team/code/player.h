@@ -39,11 +39,13 @@ public:
 	void SetWeapon(CWeapon::TYPE type);
 	void SetItemRepair(CItemRepair* itemRepair) { m_info.pItemRepair = itemRepair; }
 	void SetDoorPress(bool bDoorPress) { m_info.motionInfo.bDoorPress = bDoorPress; }
+	void SetItemTrigger(bool bItemTrigger) { m_info.motionInfo.bItemTrigger = bItemTrigger; }
 	void SetID(int nID);
 	void SetIDJoypad(int nID) { m_info.nIDJoypad = nID; }
 	int GetIDJoypad(void) { return m_info.nIDJoypad; }
 	int GetID(void) { return m_info.nID; }
 	bool GetDoorPress(void) { return m_info.motionInfo.bDoorPress; }
+	bool GetItemTrigger(void) { return m_info.motionInfo.bItemTrigger; }
 	void ReleaseWeapon(void) { m_info.pWeapon = nullptr; }
 	void ReleaseItemRepair(void) { m_info.pItemRepair = nullptr; }
 	void Hit(float fDamage);
@@ -104,7 +106,8 @@ private:
 	};
 	struct SMotionInfo
 	{
-		bool bDoorPress;			// ドアへの入力情報
+		bool bDoorPress;	// ドアへの入力情報
+		bool bItemTrigger;	// 物への入力情報
 	};
 	struct SInfo
 	{

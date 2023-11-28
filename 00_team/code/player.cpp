@@ -531,6 +531,14 @@ void CPlayer::ManageMotion(void)
 
 	// 下半身のモーション
 	{
+		// ドア開けるモーション
+		if (m_info.motionInfo.bDoorPress)
+		{
+			if (nMotionUpper != MOTION_OPEN_DOOR)
+			{
+				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_OPEN_DOOR);
+			}
+		}
 		// 修理アイテム
 		if (m_info.pItemRepair != nullptr)
 		{
@@ -617,50 +625,23 @@ void CPlayer::ManageMotion(void)
 
 	// 上半身のモーション
 	{
+		// ドア開けるモーション
 		if (m_info.motionInfo.bDoorPress)
 		{
 			if (nMotionUpper != MOTION_OPEN_DOOR)
 			{
 				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_OPEN_DOOR);
 			}
-
-			// ドアの入力情報の初期化
-			m_info.motionInfo.bDoorPress = false;
 		}
-		//else if ()
-		//{
-		//	// 所有修理アイテム
-		//	if (m_info.pItemRepair != nullptr)
-		//	{
-
-		//	}
-		//	// 所有武器
-		//	else if (m_info.pWeapon != nullptr)
-		//	{
-		//		switch (m_info.pWeapon->GetType())
-		//		{
-		//			// マガジン
-		//		case CWeapon::TYPE_MAGNUM:
-
-		//			if (nMotionUpper != MOTION_MAGNUM_ATTACK)
-		//			{
-		//				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_ATTACK);
-		//			}
-
-		//			break;
-
-		//			// マシンガン
-		//		case CWeapon::TYPE_MACHINEGUN:
-
-		//			if (nMotionUpper != MOTION_RIFLE_ATTACK)
-		//			{
-		//				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_ATTACK);
-		//			}
-
-		//			break;
-		//		}
-		//	}
-		//}
+		// 物拾う
+		else if (m_info.motionInfo.bItemTrigger ||
+				 nMotionUpper == MOTION_ITEM_PICK_UP)
+		{
+			if (nMotionUpper != MOTION_ITEM_PICK_UP)
+			{
+				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_ITEM_PICK_UP);
+			}
+		}
 		// 所有修理アイテム
 		else if (m_info.pItemRepair != nullptr)
 		{
@@ -744,6 +725,10 @@ void CPlayer::ManageMotion(void)
 			}
 		}
 	}
+
+	// ドアの入力情報の初期化
+	m_info.motionInfo.bDoorPress = false;
+	m_info.motionInfo.bItemTrigger = false;
 }
 
 //=====================================================

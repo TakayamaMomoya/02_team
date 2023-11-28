@@ -98,11 +98,13 @@ void CItemRepair::Uninit(void)
 //=====================================================
 void CItemRepair::Update(void)
 {
+	bool bRelease = false;
+
 	if (m_pPlayer != nullptr)
 	{
-		bool bGet = m_pPlayer->InputInteract();
+		bRelease = m_pPlayer->InputInteract();
 
-		if (bGet)
+		if (bRelease)
 		{// 持ち上げているプレイヤーの検出
 			// 武器を有効化する
 			m_pPlayer->EnableWeapon(true);
@@ -114,10 +116,17 @@ void CItemRepair::Update(void)
 
 			SetEnable(true);
 		}
-	}
+		else
+		{
 
-	// 継承クラスの更新
-	CGimmick::Update();
+		}
+	}
+	
+	if (bRelease == false)
+	{
+		// 継承クラスの更新
+		CGimmick::Update();
+	}
 
 	// プレイヤーの生存確認
 	CheckPlayerAlive();
