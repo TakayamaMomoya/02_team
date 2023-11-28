@@ -42,6 +42,7 @@ public:
 	D3DXMATRIX GetMatrix(void) { return m_mtxWorld; }
 	void SetMatrix(void);
 	void SetZTest(bool bZTest) { m_bZTest = bZTest; }
+	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void) { return m_pVtxBuff; }
 
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ

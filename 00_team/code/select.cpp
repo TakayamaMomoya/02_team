@@ -37,6 +37,7 @@
 #include "weaponManager.h"
 
 #include "edit.h"
+#include "animEffect3D.h"
 
 #include <stdio.h>
 
@@ -127,6 +128,9 @@ HRESULT CSelect::Init(void)
 	{
 		pSound->Play(pSound->LABEL_BGM_SELECT);
 	}
+
+	// ３Dアニメーション管理の生成
+	CAnimEffect3D::Create();
 
 	return S_OK;
 }
