@@ -279,7 +279,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\abe\\02_team\\00_team\\data\\TEXTURE\\MATERIAL\\soil.jpg";
+    "data\\TEXTURE\\MATERIAL\\soil.jpg";
    }
   }
   Material {
