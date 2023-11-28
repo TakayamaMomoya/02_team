@@ -14,6 +14,7 @@
 #include "player.h"
 #include "universal.h"
 #include "sound.h"
+#include "animEffect3D.h"
 
 //*****************************************************
 // マクロ定義
@@ -140,6 +141,14 @@ void CMachinegun::Attack(void)
 			nCntShot = GetRapid();
 
 			SetCntShot(nCntShot);
+
+			// エフェクトの生成
+			CAnimEffect3D *pAnim3D = CAnimEffect3D::GetInstance();
+
+			if (pAnim3D != nullptr)
+			{
+				pAnim3D->CreateEffect(pos, CAnimEffect3D::TYPE::TYPE_MUZZLEFLUSH);
+			}
 		}
 		else
 		{// 弾切れの場合
