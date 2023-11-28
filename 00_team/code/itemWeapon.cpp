@@ -28,6 +28,7 @@ namespace
 	{// 武器ごとのエフェクトの色
 		{1.0f, 0.0f, 0.0f, 0.5f},	// マグナム
 		{0.8f, 0.6f, 0.1f, 0.5f},	// マシンガン
+		{0.8f, 0.6f, 0.1f, 0.5f},	// ショットガン
 	};
 }
 
@@ -77,6 +78,7 @@ void CItemWeapon::Load(void)
 	{
 		"data\\MODEL\\weapon\\magnum.x",
 		"data\\MODEL\\weapon\\mac10.x",
+		"data\\MODEL\\weapon\\ak47.x",
 	};
 
 	// モデルの読込
@@ -182,21 +184,7 @@ void CItemWeapon::ApplyEffect(CPlayer* pPlayer)
 		return;
 	}
 
-	switch (m_type)
-	{
-	case CWeapon::TYPE_MAGNUM:
-
-		pPlayer->SetWeapon(CWeapon::TYPE_MAGNUM);
-
-		break;
-	case CWeapon::TYPE_MACHINEGUN:
-
-		pPlayer->SetWeapon(CWeapon::TYPE_MACHINEGUN);
-
-		break;
-	default:
-		break;
-	}
+	pPlayer->SetWeapon(m_type);
 }
 
 //=====================================================

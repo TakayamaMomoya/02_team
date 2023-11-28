@@ -129,7 +129,7 @@ void CWeaponManager::LoadParam(void)
 					(void)fscanf(pFile, "%s", &cTemp[0]);
 
 					// 基底パラメーター読み込み
-					LoadBaseInfo(pFile, &cTemp[0], CWeapon::TYPE_MACHINEGUN);
+					LoadBaseInfo(pFile, &cTemp[0], CWeapon::TYPE_SHOTGUN);
 
 					// ショットガン特殊パラメーター読込
 					LoadShotgunInfo(pFile, &cTemp[0]);
