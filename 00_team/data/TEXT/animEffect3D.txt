@@ -10,7 +10,7 @@ EFFECTSET		#0 マズルフラッシュ
 	PATH = data\TEXTURE\EFFECT\muzzleFlush.png
 	NUM_ANIM = 6
 	SPEED_ANIM = 3
-	SIZE = 100.0
+	SIZE = 70.0
 	COL = 1.0 1.0 1.0 1.0
 	IS_ADD = 0
 END_EFFECTSET
