@@ -13,6 +13,7 @@
 #include "player.h"
 #include "manager.h"
 #include "collision.h"
+#include "universal.h"
 
 //*****************************************************
 // 定数定義
@@ -23,6 +24,8 @@ namespace
 	const float INITIAL_LIFE = 5.0f;	// 体力
 	const float ROLL_SPEED = 0.3f;	// 回転速度
 	const float OPEN_ANGLE = D3DX_PI * 0.5f;	// 回転制限
+	const float OPEN_LINE = 0.1f;	// 開いてるしきい値
+	const float OPEN_SPEED = 0.05f;	// 開く速度
 }
 
 //=====================================================
@@ -88,6 +91,7 @@ HRESULT CDoor::Init(void)
 	// 値の初期化
 	m_info.fLife = INITIAL_LIFE;
 	m_info.state = STATE_NORMAL;
+	m_info.rotDestY = D3DX_PI * 0.5f;
 
 	return S_OK;
 }
@@ -126,16 +130,25 @@ void CDoor::Update(void)
 //=====================================================
 void CDoor::Open(void)
 {
+	// 汎用処理取得
+	CUniversal *pUniversal = CUniversal::GetInstance();
+
+	// 差分角度の取得
 	D3DXVECTOR3 rot = GetRot();
 
-	rot.y += ROLL_SPEED;
+	float fRotDiff = (m_info.rotDestY - rot.y);
 
-	if (rot.y >= OPEN_ANGLE)
-	{
-		rot.y = OPEN_ANGLE;
+	pUniversal->LimitRot(&fRotDiff);
 
+	if (fRotDiff * fRotDiff <= OPEN_LINE * OPEN_LINE)
+	{// 開ききった判定
 		m_info.state = STATE_NONE;
 	}
+
+	fRotDiff *= OPEN_SPEED;
+
+	// 角度の反映と判定
+	rot.y += fRotDiff;
 
 	SetRot(rot);
 }
@@ -189,6 +202,7 @@ void CDoor::proceed(void)
 	if (m_info.fLife < 0.0f)
 	{
 		m_info.state = STATE_OPEN;
+		SetEnable(false);
 
 		if (m_info.pCollisionCube != nullptr)
 		{// 当たり判定の削除
@@ -212,6 +226,67 @@ void CDoor::SetPosition(D3DXVECTOR3 pos)
 
 		m_info.pCollisionCube->SetPosition(pos);
 	}
+}
+
+//=====================================================
+// 元の角度設定
+//=====================================================
+void CDoor::SetOrgRot(float rotY)
+{
+	m_info.orgRotY = rotY;
+
+	CUniversal::GetInstance()->LimitRot(&m_info.rotDestY);
+
+	if (rotY >= 3.0f || rotY <= -3.0f)
+	{
+		if (m_info.pCollisionCube != nullptr)
+		{
+			D3DXVECTOR3 vtxMax = GetVtxMax();
+			D3DXVECTOR3 vtxMin = GetVtxMin();
+			D3DXVECTOR3 vtxTemp = vtxMin;
+
+			vtxMin = { -vtxMax.x,vtxMin.y,vtxMin.z };
+			vtxMax = { -vtxTemp.x,vtxMax.y,vtxMax.z };
+
+			m_info.pCollisionCube->SetVtx(vtxMax, vtxMin);
+		}
+	}
+	else if (rotY >= 1.0f)
+	{
+		if (m_info.pCollisionCube != nullptr)
+		{
+			D3DXVECTOR3 vtxMax = GetVtxMax();
+			D3DXVECTOR3 vtxMin = GetVtxMin();
+			D3DXVECTOR3 vtxTemp = vtxMin;
+
+			vtxMin = { -vtxMax.z,vtxMin.y,-vtxMax.x };
+			vtxMax = { -vtxTemp.z,vtxMax.y,-vtxTemp.x };
+
+			m_info.pCollisionCube->SetVtx(vtxMax, vtxMin);
+		}
+	}
+	else if (rotY <= -1.0f)
+	{
+		if (m_info.pCollisionCube != nullptr)
+		{
+			D3DXVECTOR3 vtxMax = GetVtxMax();
+			D3DXVECTOR3 vtxMin = GetVtxMin();
+			D3DXVECTOR3 vtxTemp = vtxMin;
+
+			vtxMin = { -vtxMax.z,vtxMin.y,vtxMin.x };
+			vtxMax = { -vtxTemp.z,vtxMax.y,vtxMax.x };
+
+			m_info.pCollisionCube->SetVtx(vtxMax, vtxMin);
+		}
+	}
+}
+
+//=====================================================
+// 目標の角度設定
+//=====================================================
+void CDoor::SetDestRot(float fRot)
+{
+	m_info.rotDestY = fRot;
 }
 
 //=====================================================

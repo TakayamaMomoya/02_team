@@ -43,7 +43,6 @@ HRESULT CMachinegun::Init(void)
 	// Œp³ƒNƒ‰ƒX‚Ì‰Šú‰»
 	CWeapon::Init();
 
-
 	return S_OK;
 }
 
@@ -118,8 +117,11 @@ void CMachinegun::Attack(void)
 				};
 			}
 
+			// ˆĞ—Íæ“¾
+			float fDamage = GetDamage();
+
 			// ’e‚ğ”­Ë
-			CBullet::Create(pos, -move, 100, CBullet::TYPE_PLAYER, false);
+			CBullet::Create(pos, -move, 100, CBullet::TYPE_PLAYER, false,2.0f, fDamage);
 
 			// ’e‚ğŒ¸‚ç‚·
 			nBullet--;

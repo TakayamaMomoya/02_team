@@ -33,6 +33,8 @@ public:
 	void Update(void);
 	void Draw(void);
 	void SetPosition(D3DXVECTOR3 pos);
+	void SetOrgRot(float rotY);
+	void SetDestRot(float fRot);
 
 private:
 	enum STATE
@@ -47,6 +49,8 @@ private:
 		float fLife;	// ‘Ì—Í
 		CCollisionCube *pCollisionCube;	// ‰Ÿ‚µo‚µ‚Ì“–‚½‚è”»’è
 		STATE state;	// ó‘Ô
+		float orgRotY;	// Œ³‚ÌŒü‚«
+		float rotDestY;	// –Ú•W‚ÌYŒü‚«
 	};
 	void Interact(CObject* pObj);
 	void proceed(void);

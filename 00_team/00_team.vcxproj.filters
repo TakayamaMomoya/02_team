@@ -150,7 +150,7 @@
     <ClCompile Include="code\gimmickManager.cpp">
       <Filter>gimmick</Filter>
     </ClCompile>
-    <ClCompile Include="code\debrisspawner.cpp">
+    <ClCompile Include="code\debrisSpawner.cpp">
       <Filter>debris</Filter>
     </ClCompile>
     <ClCompile Include="code\debris.cpp">

@@ -1,7 +1,7 @@
 //*****************************************************
 //
-// パーティクル処理[particle.cpp]
-// Author:髙山桃也
+// 破片処理[debris.cpp]
+// Author:小笠原彪
 //
 //*****************************************************
 
@@ -9,31 +9,35 @@
 // インクルード
 //*****************************************************
 #include "debris.h"
-#include "debrisSpawner.h"
-#include <stdio.h>
+#include "manager.h"
+#include "renderer.h"
+#include "texture.h"
 
 //*****************************************************
-// 静的メンバ変数宣言
+// マクロ定義
 //*****************************************************
-CDebris::PARTICLE_INFO* CDebris::m_apDebris[CDebris::TYPE_MAX + 1] = {};
-
-//=====================================================
-// 優先順位を決めるコンストラクタ
-//=====================================================
-CDebris::CDebris(int nPriority) : CObject(nPriority)
+namespace
 {
-	m_pos = { 0.0f,0.0f,0.0f };
-	m_rot = { 0.0f,0.0f,0.0f };
-	m_type = TYPE_NONE;
-	m_pPosOwner = nullptr;
-	m_nPriorityDebris = 0;
-	m_nLife = 0;
+	const float GEOWND(10.0f);	// 床判定の高さ
+	const float BOUNCE(4.0f);	// 跳ね返りの強さ
+	const float SPEED_MOVE(7.0f);	// 移動速度
+	const float ROT_VELOCITY(0.05f);	// 回転速度の制限
+};
 
-	SetType(TYPE_PARTICLE);
+//=====================================================
+// コンストラクタ
+//=====================================================
+CDebris::CDebris(int nPriority)
+{
+	m_rotVelocity = { 0.0f,0.0f,0.0f };
+	m_move = { 0.0f,0.0f,0.0f };
+	m_nLife = 0;
+	m_fDecreaseAlpha = 0.0f;
+	m_fGravity = 0.0f;
 }
 
 //=====================================================
-//	デストラクタ
+// デストラクタ
 //=====================================================
 CDebris::~CDebris()
 {
@@ -41,229 +45,142 @@ CDebris::~CDebris()
 }
 
 //=====================================================
-//	初期化処理
+// 初期化処理
 //=====================================================
 HRESULT CDebris::Init(void)
 {
+	// 継承クラスの初期化
+	CObjectX::Init();
+
+	int nIdx = CModel::Load("data\\MODEL\\sample_debris.x");
+
+	m_rotVelocity.x = (float)(rand() % 629 - 314) / 100.0f;
+	m_rotVelocity.y = (float)(rand() % 629 - 314) / 100.0f;
+	m_rotVelocity.z = (float)(rand() % 629 - 314) / 100.0f;
+
+	// モデル読込
+	BindModel(nIdx);
+
 	return S_OK;
 }
 
 //=====================================================
-//	終了処理
+// 終了処理
 //=====================================================
 void CDebris::Uninit(void)
 {
-	Release();
+	// 継承クラスの終了
+	CObjectX::Uninit();
 }
 
 //=====================================================
-//	破棄処理
-//=====================================================
-void CDebris::Unload(void)
-{
-	for (int nCntDebris = 0; nCntDebris < TYPE_MAX; nCntDebris++)
-	{
-		if (m_apDebris[nCntDebris] != nullptr)
-		{
-			delete m_apDebris[nCntDebris];
-			m_apDebris[nCntDebris] = nullptr;
-		}
-	}
-}
-
-//=====================================================
-//	更新処理
+// 更新処理
 //=====================================================
 void CDebris::Update(void)
 {
-	// 変数宣言
-	float fRot, fRot2;
-	float fMove = 0.0f;
-	float fRadius = 0.0f;
-	int nLife = 0;
-	D3DXVECTOR3 move = { 0.0f,0.0f,0.0f };
-	CObjectX* pEffect3D = nullptr;
+	// 継承クラスの更新
+	CObjectX::Update();
 
-	for (int nCntEffect = 0; nCntEffect < m_apDebris[m_type]->nNumDebris; nCntEffect++)
-	{
-		if (m_apDebris[m_type]->nRot)
-		{// 向きの反映
-			if (m_apDebris[m_type]->fRangeRot > 0.1f)
-			{
-				fRot = m_rot.x + (float)(rand() % (int)(m_apDebris[m_type]->fRangeRot * 100.0f) - m_apDebris[m_type]->fRangeRot * 50.0f) / 100.0f;
-				fRot2 = m_rot.y + (float)(rand() % (int)(m_apDebris[m_type]->fRangeRot * 100.0f) - m_apDebris[m_type]->fRangeRot * 50.0f) / 100.0f * 2;
-			}
-			else
-			{
-				fRot = m_rot.x + (rand() % (int)(0.1f * 100.0f) - 0.1f * 50.0f) / 100.0f;
-				fRot2 = m_rot.y + (rand() % (int)(0.1f * 100.0f) - 0.1f * 50.0f) / 100.0f * 2;
-			}
-		}
-		else
-		{// 全方位
-			fRot = rand() % 628 - 314 / 100.0f;
-			fRot2 = rand() % 628 - 314 / 100.0f;
-		}
+	D3DXVECTOR3 pos = GetPosition();
 
-		if (m_apDebris[m_type]->fSpeed > 0.1f)
-		{
-			fMove = (float)(rand() % (int)(m_apDebris[m_type]->fSpeed * 10)) * 0.1f + m_apDebris[m_type]->fSpeed * 0.5f;
-		}
-		if (m_apDebris[m_type]->nLifeDebris != 0)
-		{
-			nLife = rand() % m_apDebris[m_type]->nLifeDebris + m_apDebris[m_type]->nLifeDebris / 2;
-		}
-
-		move.x = sinf(fRot) * sinf(fRot2) * fMove;
-		move.y = cosf(fRot) * fMove;
-		move.z = sinf(fRot) * cosf(fRot2) * fMove;
-
-			// エフェクト生成
-		pEffect3D = CDebrisSpawner::Create(m_pos, nLife, move, m_apDebris[m_type]->fGravity);
-	}
-
+	// 寿命減衰
 	m_nLife--;
 
-	if (m_nLife < 0)
+	// 重力加算
+	m_move.y -= m_fGravity;
+
+	// 移動量の減衰
+	m_move.x *= 0.98f;
+	m_move.z *= 0.98f;
+
+	if (pos.y > 10.0f)
 	{
-		// 自身の破棄
+		// 回転
+		D3DXVECTOR3 rot = GetRot();
+		rot.x += m_rotVelocity.x * ROT_VELOCITY;
+		rot.y += m_rotVelocity.y * ROT_VELOCITY;
+		rot.z += m_rotVelocity.z * ROT_VELOCITY;
+		SetRot(rot);
+	}
+	if (pos.y <= GEOWND)
+	{
+		pos.y = GEOWND;
+
+		if (m_move.x < 0.4f && m_move.z < 0.4f) 
+		{
+			m_move.x = 0.0f;
+			m_move.z = 0.0f;
+		}
+		else
+		{
+			m_move.y += BOUNCE;
+		}
+	}
+
+	// 位置更新
+	SetPosition(pos + m_move);
+
+	if (m_nLife < 0)
+	{// 自分の削除
 		Uninit();
 	}
 }
 
 //=====================================================
-//	位置設定処理
+// 描画処理
 //=====================================================
-void CDebris::SetPosition(D3DXVECTOR3 pos)
+void CDebris::Draw(void)
 {
-	m_pos = pos;
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
+
+	// 継承クラスの描画
+	CObjectX::Draw();
 }
 
 //=====================================================
-//	生成処理
+// 生成処理
 //=====================================================
-CDebris* CDebris::Create(D3DXVECTOR3 pos, TYPE type, D3DXVECTOR3 rot, D3DXVECTOR3* pPosOwner, int nPriority)
+CDebris* CDebris::Create(D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 move, float fGravity, int nPriority)
 {
-	CDebris* pParticle = nullptr;
+	CDebris* pDebtisSpawner = nullptr;
 
-	if (pParticle == nullptr)
+	if (pDebtisSpawner == nullptr)
 	{// インスタンス生成
-		pParticle = new CDebris;
+		pDebtisSpawner = new CDebris(nPriority);
 
-		pParticle->m_type = type;
+		if (pDebtisSpawner != nullptr)
+		{
+			pDebtisSpawner->SetPosition(pos);
 
-		pParticle->m_pos = pos;
+			// 初期化処理
+			pDebtisSpawner->Init();
 
-		pParticle->m_rot = rot;
+			pDebtisSpawner->m_nLife = nLife;
 
-		pParticle->m_nLife = m_apDebris[type]->nLife;
+			pDebtisSpawner->m_move = move;
 
-		pParticle->m_pPosOwner = pPosOwner;
+			pDebtisSpawner->m_fDecreaseAlpha = 1.0f / nLife;
 
-		pParticle->m_nPriorityDebris = nPriority;
+			pDebtisSpawner->m_fGravity = fGravity;
+		}
 	}
 
-	return pParticle;
+	return pDebtisSpawner;
 }
 
 //=====================================================
-//	読込処理
+// 読込処理
 //=====================================================
-void CDebris::Load(void)
+HRESULT CDebris::Load(void)
 {
-	// 変数宣言
-	char cTemp[256];
-	int nCntDebris = 1;
-	PARTICLE_INFO* pInfo = nullptr;
+	return S_OK;
+}
 
-	// ファイルから読み込む
-	FILE* pFile = fopen("data\\TEXT\\debris.txt", "r");
+//=====================================================
+// テクスチャ破棄
+//=====================================================
+void CDebris::Unload(void)
+{
 
-	if (pFile != nullptr)
-	{// ファイルが開けた場合
-		while (true)
-		{
-			// 文字読み込み
-			(void)fscanf(pFile, "%s", &cTemp[0]);
-
-			if (strcmp(cTemp, "DEBRISSET") == 0)
-			{// 読込開始
-				if (m_apDebris[nCntDebris] == nullptr)
-				{
-					// インスタンス生成
-					m_apDebris[nCntDebris] = new PARTICLE_INFO;
-				}
-
-				pInfo = m_apDebris[nCntDebris];
-
-				while (true)
-				{
-					// 文字読み込み
-					(void)fscanf(pFile, "%s", &cTemp[0]);
-
-					if (strcmp(cTemp, "END_DEBRISSET") == 0)
-					{// パーティクル情報終了条件
-						break;
-					}
-
-					if (strcmp(cTemp, "NUM_DEBRIS") == 0)
-					{// エフェクト数取得
-						(void)fscanf(pFile, "%s", &cTemp[0]);
-
-						(void)fscanf(pFile, "%d", &pInfo->nNumDebris);
-					}
-
-					if (strcmp(cTemp, "LIFE_DEBRIS") == 0)
-					{// エフェクト寿命取得
-						(void)fscanf(pFile, "%s", &cTemp[0]);
-
-						(void)fscanf(pFile, "%d", &pInfo->nLifeDebris);
-					}
-
-					if (strcmp(cTemp, "SPEED_DEBRIS") == 0)
-					{// エフェクト速度取得
-						(void)fscanf(pFile, "%s", &cTemp[0]);
-
-						(void)fscanf(pFile, "%f", &pInfo->fSpeed);
-					}
-
-					if (strcmp(cTemp, "GRAVITY") == 0)
-					{// 重力取得
-						(void)fscanf(pFile, "%s", &cTemp[0]);
-
-						(void)fscanf(pFile, "%f", &pInfo->fGravity);
-					}
-
-					if (strcmp(cTemp, "RANGEROT") == 0)
-					{// 向きのランダム幅取得
-						(void)fscanf(pFile, "%s", &cTemp[0]);
-
-						(void)fscanf(pFile, "%f", &pInfo->fRangeRot);
-					}
-
-					if (strcmp(cTemp, "IS_ROT") == 0)
-					{// 加算合成かどうか取得
-						(void)fscanf(pFile, "%s", &cTemp[0]);
-
-						(void)fscanf(pFile, "%d", &pInfo->nRot);
-					}
-				}
-
-				// パーティクル数加算
-				nCntDebris++;
-			}
-
-			if (strcmp(cTemp, "END_SCRIPT") == 0)
-			{// 終了条件
-				break;
-			}
-		}
-
-		// ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{
-		assert(("パーティクル情報読み込みに失敗", false));
-	}
 }

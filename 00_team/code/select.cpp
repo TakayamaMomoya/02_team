@@ -27,7 +27,7 @@
 #include "playerManager.h"
 #include "player.h"
 
-#include "debris.h"
+#include "debrisSpawner.h"
 
 #include "container.h"
 #include "weaponManager.h"
@@ -114,11 +114,6 @@ HRESULT CSelect::Init(void)
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
-
-
-
-	//CDebris::Load();
-	//CDebris::Create(D3DXVECTOR3(0.0f, 0.0f, -500.0f), CDebris::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f), nullptr);
 
 	return S_OK;
 }
@@ -324,7 +319,7 @@ void CSelect::Update(void)
 		}
 
 		// コンテナの再設置
-		//ReSetContainer();
+		ReSetContainer();
 	}
 	else if(m_state == STATE_OUT)
 	{
@@ -338,6 +333,11 @@ void CSelect::Update(void)
 	{
 		// 操作
 		pCamera->Control();
+	}
+
+	if (pKeyboard->GetTrigger(DIK_RETURN))
+	{
+		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 100.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 #endif
 }

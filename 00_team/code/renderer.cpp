@@ -21,7 +21,6 @@
 //*****************************************************
 // 静的メンバ変数宣言
 //*****************************************************
-bool CRenderer::m_bFog = false;	// フォグをかけるかどうか
 CRenderer *CRenderer::m_pRenderer = nullptr;	// 自身のポインタ
 
 //=====================================================
@@ -32,6 +31,7 @@ CRenderer::CRenderer()
 	// 変数のクリア
 	m_pD3D = nullptr;
 	m_pD3DDevice = nullptr;
+	ZeroMemory(&m_fogInfo, sizeof(SInfoFog));
 }
 
 //=====================================================
@@ -208,14 +208,14 @@ void CRenderer::Draw(void)
 	m_pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 	m_pD3DDevice->SetRenderState(D3DRS_ALPHAREF, 0);
 
-	float fStart = 500;
-	float fEnd = 15000;
+	float fStart = 100;
+	float fEnd = 7000;
 
 	// フォグを有効化
-	m_pD3DDevice->SetRenderState(D3DRS_FOGENABLE, m_bFog);
+	m_pD3DDevice->SetRenderState(D3DRS_FOGENABLE, m_fogInfo.bEnable);
 
 	// フォグの色を設定
-	m_pD3DDevice->SetRenderState(D3DRS_FOGCOLOR, D3DXCOLOR(0.53f, 0.26f, 0.10f, 1.00f));
+	m_pD3DDevice->SetRenderState(D3DRS_FOGCOLOR, D3DXCOLOR(0.2f, 0.0f, 0.2f, 1.0f));
 
 	// フォグの状態を設定
 	m_pD3DDevice->SetRenderState(D3DRS_FOGVERTEXMODE, D3DFOG_NONE);

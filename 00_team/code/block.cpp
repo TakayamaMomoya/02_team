@@ -14,13 +14,14 @@
 #include "manager.h"
 #include "object.h"
 #include "collision.h"
+#include "debrisSpawner.h"
 #include <stdio.h>
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
 #define SPEED_MOVE	(1.0f)	// 移動速度
-#define MAP_FILE	"data\\MAP\\select_map00.bin"	// マップのファイルパス
+#define MAP_FILE	"data\\MAP\\map00.bin"	// マップのファイルパス
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -173,6 +174,7 @@ void CBlock::Hit(float fDamage)
 	if (m_fLife <= 0.0f)
 	{// 破壊判定
 		Delete(m_nID);
+		CDebrisSpawner::Create(D3DXVECTOR3(GetPosition().x, GetPosition().y + 50.0f, GetPosition().z), CDebrisSpawner::TYPE::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 }
 

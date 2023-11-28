@@ -93,7 +93,7 @@ namespace
 	const D3DXVECTOR3 STATE_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.85f, 0.0f);	// ロゴの位置
 	const float START_WIDTH = 200.0f;	// スタート表示の幅
 	const float START_HEIGHT = 50.0f;	// スタート表示の高さ
-	const char* START_PATH = "data\\TEXTURE\\UI\\start.png";	// スタート表示のパス
+	const char* START_PATH = "data\\TEXTURE\\UI\\gamestart.png";	// スタート表示のパス
 
 	const float DEST_WIDTH = 500.0f;	// スタート表示の幅
 
@@ -183,6 +183,14 @@ HRESULT CTitle::Init(void)
 		m_apModelPlayer[nCount]->SetMotion(0);
 	}
 
+	// フォグをかける
+	CRenderer *pRenderer = CRenderer::GetInstance();
+
+	if (pRenderer != nullptr)
+	{
+		pRenderer->EnableFog(true);
+	}
+
 	return S_OK;
 }
 
@@ -193,6 +201,14 @@ void CTitle::Uninit(void)
 {
 	// オブジェクト全破棄
 	CObject::ReleaseAll();
+
+	// フォグをかける
+	CRenderer *pRenderer = CRenderer::GetInstance();
+
+	if (pRenderer != nullptr)
+	{
+		pRenderer->EnableFog(false);
+	}
 }
 
 //=====================================================
