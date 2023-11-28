@@ -112,6 +112,14 @@ HRESULT CGame::Init(void)
 	// ギミックマネージャーの生成
 	CGimmickManager::Create();
 
+	// サウンドインスタンスの取得
+	CSound* pSound = CSound::GetInstance();
+
+	if (pSound != nullptr)
+	{
+		pSound->Play(pSound->LABEL_BGM_GAME);
+	}
+
 #ifdef _DEBUG
 	// エディットの生成
 	CEdit::Create();

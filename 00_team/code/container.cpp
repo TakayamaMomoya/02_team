@@ -17,6 +17,7 @@
 #include "universal.h"
 #include "itemWeapon.h"
 #include "weaponManager.h"
+#include "sound.h"
 
 //*****************************************************
 // 定数定義
@@ -232,6 +233,14 @@ void CContainer::Interact(CObject *pObj)
 				if (bGet)
 				{// 箱を開く
 					Open();
+
+					// サウンドインスタンスの取得
+					CSound* pSound = CSound::GetInstance();
+
+					if (pSound != nullptr)
+					{
+						pSound->Play(pSound->LABEL_SE_OPEN_BOX);
+					}
 				}
 			}
 		}

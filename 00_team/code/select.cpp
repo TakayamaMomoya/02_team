@@ -26,6 +26,7 @@
 #include "object3D.h"
 #include "playerManager.h"
 #include "player.h"
+#include "sound.h"
 
 #include "debrisSpawner.h"
 
@@ -114,6 +115,14 @@ HRESULT CSelect::Init(void)
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
+
+	// サウンドインスタンスの取得
+	CSound* pSound = CSound::GetInstance();
+
+	if (pSound != nullptr)
+	{
+		pSound->Play(pSound->LABEL_BGM_SELECT);
+	}
 
 	return S_OK;
 }
@@ -433,6 +442,14 @@ void CSelect::EntryInput(int nPlayer)
 		if (m_abEntry[nPlayer] == true || m_apPlayerData[nPlayer].pPlayer != nullptr || m_pPlayerManager == nullptr)
 		{
 			return;
+		}
+
+		// サウンドインスタンスの取得
+		CSound* pSound = CSound::GetInstance();
+
+		if (pSound != nullptr)
+		{
+			pSound->Play(pSound->LABEL_SE_APPEARE);
 		}
 
 		// 参加した
