@@ -27,15 +27,23 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static HRESULT Load(void);	// “Ç
-	static void Unload(void);
 
 private:
+	enum STATE
+	{
+		STATE_NONE = 0,	// ‰½‚Å‚à‚È‚¢ó‘Ô
+		STATE_NORMAL,	// ’Êíó‘Ô
+		STATE_SHRINK,	// k‚ñ‚Å‚¢‚éó‘Ô
+		STATE_MAX
+	};
+
+	void Shrink(void);
+
 	D3DXVECTOR3 m_rotVelocity;	// ‰ñ“]‘¬“x
 	D3DXVECTOR3 m_move;	// ˆÚ“®—Ê
 	int m_nLife;	// õ–½
-	float m_fDecreaseAlpha;	// ƒ¿’lŒ¸­—Ê
 	float m_fGravity;
+	STATE m_state;	// ó‘Ô
 };
 
 #endif
