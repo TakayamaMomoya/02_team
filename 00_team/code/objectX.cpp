@@ -199,6 +199,9 @@ void CObjectX::SetMatrix(void)
 	//ワールドマトリックス初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 
+	// スケール反映
+	D3DXMatrixScaling(&m_mtxWorld, m_fScale, m_fScale, m_fScale);
+
 	//向きを反映
 	D3DXMatrixRotationYawPitchRoll(&mtxRot,
 		m_rot.y, m_rot.x, m_rot.z);
@@ -209,10 +212,6 @@ void CObjectX::SetMatrix(void)
 		m_pos.x, m_pos.y, m_pos.z);
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 
-	// スケール反映
-	m_mtxWorld._11 *= m_fScale;
-	m_mtxWorld._22 *= m_fScale;
-	m_mtxWorld._33 *= m_fScale;
 
 	//ワールドマトリックス設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
