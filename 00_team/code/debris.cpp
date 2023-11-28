@@ -18,10 +18,11 @@
 //*****************************************************
 namespace
 {
-	const float GEOWND(10.0f);	// 床判定の高さ
-	const float BOUNCE(4.0f);	// 跳ね返りの強さ
-	const float SPEED_MOVE(7.0f);	// 移動速度
-	const float ROT_VELOCITY(0.05f);	// 回転速度の制限
+	const float GEOWND = 10.0f;	// 床判定の高さ
+	const float BOUNCE = 4.0f;	// 跳ね返りの強さ
+	const float ROT_VELOCITY = 0.05f;	// 回転速度の制限
+	const float SPEED_SHRINK = 0.05f;	// 縮む速度
+	const float LINE_SHRINK = 0.1f;	// 縮む状態になるしきい値
 };
 
 //=====================================================
@@ -32,8 +33,8 @@ CDebris::CDebris(int nPriority)
 	m_rotVelocity = { 0.0f,0.0f,0.0f };
 	m_move = { 0.0f,0.0f,0.0f };
 	m_nLife = 0;
-	m_fDecreaseAlpha = 0.0f;
 	m_fGravity = 0.0f;
+	m_state = STATE_NONE;
 }
 
 //=====================================================
@@ -49,17 +50,19 @@ CDebris::~CDebris()
 //=====================================================
 HRESULT CDebris::Init(void)
 {
-	// 継承クラスの初期化
 	CObjectX::Init();
 
-	int nIdx = CModel::Load("data\\MODEL\\sample_debris.x");
-
+	// 回転速度の設定
 	m_rotVelocity.x = (float)(rand() % 629 - 314) / 100.0f;
 	m_rotVelocity.y = (float)(rand() % 629 - 314) / 100.0f;
 	m_rotVelocity.z = (float)(rand() % 629 - 314) / 100.0f;
 
 	// モデル読込
+	int nIdx = CModel::Load("data\\MODEL\\sample_debris.x");
 	BindModel(nIdx);
+
+	// 値の初期化
+	m_state = STATE_NORMAL;
 
 	return S_OK;
 }
@@ -102,7 +105,7 @@ void CDebris::Update(void)
 		rot.z += m_rotVelocity.z * ROT_VELOCITY;
 		SetRot(rot);
 	}
-	if (pos.y <= GEOWND)
+	else
 	{
 		pos.y = GEOWND;
 
@@ -117,13 +120,42 @@ void CDebris::Update(void)
 		}
 	}
 
+	// 縮ませるかの判定
+	float fSpeed = sqrtf(m_move.x * m_move.x + m_move.z * m_move.z);
+
+	if (fSpeed <= LINE_SHRINK)
+	{
+		m_state = STATE_SHRINK;
+	}
+
 	// 位置更新
 	SetPosition(pos + m_move);
 
-	if (m_nLife < 0)
-	{// 自分の削除
+	if (m_state == STATE_SHRINK)
+	{// 縮む処理
+		Shrink();
+	}
+}
+
+//=====================================================
+// 縮む処理
+//=====================================================
+void CDebris::Shrink(void)
+{
+	float fScale = GetScale();
+
+	// 縮む
+	fScale -= SPEED_SHRINK;
+
+	if (fScale <= 0.0f)
+	{
+		fScale = 0.0f;
+
 		Uninit();
 	}
+
+	// スケール設定
+	SetScale(fScale);
 }
 
 //=====================================================
@@ -131,9 +163,6 @@ void CDebris::Update(void)
 //=====================================================
 void CDebris::Draw(void)
 {
-	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
-
 	// 継承クラスの描画
 	CObjectX::Draw();
 }
@@ -160,27 +189,9 @@ CDebris* CDebris::Create(D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 move, float fGr
 
 			pDebtisSpawner->m_move = move;
 
-			pDebtisSpawner->m_fDecreaseAlpha = 1.0f / nLife;
-
 			pDebtisSpawner->m_fGravity = fGravity;
 		}
 	}
 
 	return pDebtisSpawner;
-}
-
-//=====================================================
-// 読込処理
-//=====================================================
-HRESULT CDebris::Load(void)
-{
-	return S_OK;
-}
-
-//=====================================================
-// テクスチャ破棄
-//=====================================================
-void CDebris::Unload(void)
-{
-
 }
