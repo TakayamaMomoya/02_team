@@ -225,12 +225,6 @@ void CObject3D::DrawBillboard(void)
 		pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	}
 
-	if (CRenderer::IsFog())
-	{
-		// フォグを無効化
-		pDevice->SetRenderState(D3DRS_FOGENABLE, FALSE);
-	}
-
 	//ワールドマトリックス初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 
@@ -272,12 +266,6 @@ void CObject3D::DrawBillboard(void)
 		//Zテストを有効にする
 		pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
 		pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-	}
-
-	if (CRenderer::IsFog())
-	{
-		// フォグを有効化
-		pDevice->SetRenderState(D3DRS_FOGENABLE, TRUE);
 	}
 }
 
