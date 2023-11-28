@@ -25,6 +25,7 @@ public:
 		LABEL_SE_APPEARE,				// 登場
 		LABEL_BGM_SELECT,				// 選択画面bgm
 		LABEL_BGM_GAME,					// ゲームbgm
+		LABEL_SE_REPAIR,				// 修繕
 		LABEL_MAX
 	} LABEL;
 
@@ -85,6 +86,7 @@ private:
 		{ "data/SOUND/SE/Appearance.wav",0 },			// 登場
 		{ "data/SOUND/BGM/select.wav",-1 },				// 選択
 		{ "data/SOUND/BGM/game.wav",-1 },				// ゲーム
+		{ "data/SOUND/SE/repair.wav",0}					// 修繕
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ

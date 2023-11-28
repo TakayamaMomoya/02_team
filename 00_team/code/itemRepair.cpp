@@ -16,6 +16,7 @@
 #include "motion.h"
 #include "collision.h"
 #include "rocket.h"
+#include "sound.h"
 
 #include "motionDiv.h"
 
@@ -244,6 +245,14 @@ void CItemRepair::CollisionRocket(void)
 
 		if (bHit)
 		{
+			//　サウンドインスタンスの取得
+			CSound* pSound = CSound::GetInstance();
+
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_REPAIR);
+			}
+
 			// ロケットの修理状況を加算
 			CRocket *pRocket = CRocket::GetInstance();
 

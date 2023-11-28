@@ -231,7 +231,7 @@ void CSelect::StartInit(void)
 	m_pStartUI->SetSize(150.0f, 50.0f);
 	m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 
-	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\start.png");
+	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\start_game.png");
 	m_pStartUI->SetIdxTexture(nIdx);
 
 	m_pStartUI->SetVtx();
