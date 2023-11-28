@@ -12,6 +12,7 @@
 #include "inputjoypad.h"
 #include "bullet.h"
 #include "player.h"
+#include "sound.h"
 
 //*****************************************************
 // マクロ定義
@@ -114,6 +115,14 @@ void CMagnum::Attack(void)
 
 			// 弾を発射
 			CBullet::Create(pos, -move, 100, CBullet::TYPE_PLAYER, false, 2.0f, fDamage);
+
+			CSound* pSound = CSound::GetInstance();
+
+			if (pSound != nullptr)
+			{
+				// マグナム発砲音
+				pSound->Play(pSound->LABEL_SE_GUNSHOT_00);
+			}
 
 			// 弾を減らす
 			nBullet--;
