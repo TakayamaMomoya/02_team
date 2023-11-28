@@ -51,14 +51,16 @@ namespace
 	const D3DXVECTOR3 UI_POS_3P(D3DXVECTOR3(132.0f, 80.0f, -72.0f));	//UIの位置
 	const D3DXVECTOR3 UI_POS_4P(D3DXVECTOR3(282.0f, 80.0f, -72.0f));	//UIの位置
 
-	const float SPOWN_HEIGHT(20.0f);	//プレイヤー出現高さ
+	const float SPOWN_HEIGHT(-100.0f);	//プレイヤー出現高さ
 
 	const float SPACE(115.0f);	//UI間の広さ
 	const float SIZE_PLUS(20.0f);	//UIの大きさ(+)
 	const D3DXVECTOR2 SIZE_FONT(20.0f, 10.0f);	//UIの大きさ(参加：A)
 	const float BLINKING_SPEED(0.02f);	//UI点滅の速さ(参加：A)
+	const float ADULTWALL_POS_Z(-470.0f);
+	const float GRAVITY(5.0f);	//重力
 
-	const float GRAVITY(1.0f);	//重力
+	const float RESPAWN_TIME(10.0f);	// コンテナ復活の時間
 };
 
 //=====================================================
@@ -66,27 +68,16 @@ namespace
 //=====================================================
 CSelect::CSelect()
 {
-	for (int nCntFirst = 0; nCntFirst < NUM_PLAYER; nCntFirst++)
-	{
-		m_apPlayerData[nCntFirst].pPlayer = nullptr;
-		m_apPlayerData[nCntFirst].state = PLAYER_NONE;
-
-		for (int nCntSecond = 0; nCntSecond < MENU_MAX; nCntSecond++)
-		{
-			m_aMenuData[nCntFirst].pMenu2D[nCntSecond] = nullptr;
-		}
-		m_aMenuData[nCntFirst].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-		m_aMenuData[nCntFirst].state = FADE_OUT;
-		m_abEntry[nCntFirst] = false;
-	}
+	ZeroMemory(&m_apPlayerData[0], sizeof(CSelect::PlayerInfo));
+	ZeroMemory(&m_aContainerData[0], sizeof(CSelect::CContainerInfo));
 	m_pStartUI = nullptr;
 	m_pPlayerManager = nullptr;
 	m_state = STATE_NONE;
 
-	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
+	/*for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
 	{
-		m_apContainer[nCnt] = nullptr;
-	}
+		m_aContainerData[nCnt] = nullptr;
+	}*/
 }
 
 //=====================================================
@@ -114,7 +105,7 @@ HRESULT CSelect::Init(void)
 	ContainerInit();
 
 	// エディットの生成
-	//CEdit::Create();
+	CEdit::Create();
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
@@ -131,6 +122,11 @@ HRESULT CSelect::Init(void)
 
 	// ３Dアニメーション管理の生成
 	CAnimEffect3D::Create();
+
+	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
+	{
+		m_aContainerData[nCnt].fReSpawnTimer = RESPAWN_TIME;
+	}
 
 	return S_OK;
 }
@@ -246,27 +242,27 @@ void CSelect::ContainerInit(void)
 
 	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
 	{
-		m_apContainer[nCnt] = CContainer::Create();
+		m_aContainerData[nCnt].pContainer = CContainer::Create();
 
 		switch (nCnt)
 		{
 		case 0:
-			m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -250.0f));
+			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -250.0f));
 			break;
 		case 1:
-			m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -250.0f));
+			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -250.0f));
 			break;
 		case 2:
-			m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -300.0f));
+			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -300.0f));
 			break;
 		case 3:
-			m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -300.0f));
+			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -300.0f));
 			break;
 		case 4:
-			m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -350.0f));
+			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -350.0f));
 			break;
 		case 5:
-			m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -350.0f));
+			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -350.0f));
 			break;
 		default:
 			assert(("コンテナ設定の失敗(select.cpp)", false));
@@ -297,8 +293,6 @@ void CSelect::Update(void)
 	CInputMouse* pMouse = CInputMouse::GetInstance();
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
 
-	D3DXCOLOR col = { 0.0f, 0.0f, 0.0f, 0.0f };
-
 	int nJoinPlayer = 0;
 
 	// シーンの更新
@@ -312,6 +306,7 @@ void CSelect::Update(void)
 		{
 			if (CStartLocation::GetIsIn() == true)
 			{// 参加中の全員が範囲内に入ったという判定を貰ったら
+
 				if (/*pKeyboard->GetTrigger(DIK_RETURN) ||*/
 				//pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
 					pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
@@ -338,7 +333,7 @@ void CSelect::Update(void)
 		for (int nCntPlayer = 0; nCntPlayer < NUM_PLAYER; nCntPlayer++)
 		{
 			if (m_aMenuData[nCntPlayer].pMenu2D[MENU_CHAR] != nullptr && m_aMenuData[nCntPlayer].pMenu2D[MENU_PLUS] != nullptr)
-			{
+			{	
 				// 色の変更
 				ColorChange(nCntPlayer);
 				// 参加入力
@@ -347,6 +342,10 @@ void CSelect::Update(void)
 
 			if (m_abEntry[nCntPlayer] == true)
 			{
+				// プレイヤー参上の処理
+				PlayerShowUp(nCntPlayer);
+
+				// 行動制限
 				MoveLimit(nCntPlayer);
 
 				nJoinPlayer++;
@@ -387,36 +386,51 @@ void CSelect::Update(void)
 //=====================================================
 void CSelect::ReSetContainer(void)
 {
+
 	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
 	{
-		if (m_apContainer[nCnt]->GetState() == CContainer::STATE_END)
+		if (m_aContainerData[nCnt].pContainer != nullptr)
 		{
-			m_apContainer[nCnt] = nullptr;
+			if (m_aContainerData[nCnt].pContainer->GetState() == CContainer::STATE_END)
+			{
+				m_aContainerData[nCnt].pContainer = nullptr;
+				m_aContainerData[nCnt].fReSpawnTimer = RESPAWN_TIME;
+			}
 		}
 
-		if (m_apContainer[nCnt] == nullptr)
+		if (m_aContainerData[nCnt].pContainer == nullptr)
 		{
-			m_apContainer[nCnt] = CContainer::Create();
+			// 経過時間取得
+			float fTick = CManager::GetTick();
+
+			m_aContainerData[nCnt].fReSpawnTimer -= fTick;
+
+			if (m_aContainerData[nCnt].fReSpawnTimer > 0)
+			{
+				continue;
+			}
+
+			m_aContainerData[nCnt].pContainer = CContainer::Create();
 
 			switch (nCnt)
 			{
 			case 0:
-				m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -250.0f));
+				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -250.0f));
 				break;
 			case 1:
-				m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -250.0f));
+				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -250.0f));
 				break;
 			case 2:
-				m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -300.0f));
+				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -300.0f));
 				break;
 			case 3:
-				m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -300.0f));
+				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -300.0f));
 				break;
 			case 4:
-				m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -350.0f));
+				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -350.0f));
 				break;
 			case 5:
-				m_apContainer[nCnt]->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -350.0f));
+				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -350.0f));
 				break;
 			default:
 				assert(("コンテナ設定の失敗(select.cpp)", false));
@@ -425,7 +439,6 @@ void CSelect::ReSetContainer(void)
 		}
 	}
 }
-
 
 //=====================================================
 // UI点滅
@@ -483,7 +496,7 @@ void CSelect::EntryInput(int nPlayer)
 			pSound->Play(pSound->LABEL_SE_APPEARE);
 		}
 
-		// 参加した
+		// 参加状態へ
 		m_abEntry[nPlayer] = true;
 		m_apPlayerData[nPlayer].state = PLAYER_ENTRY;
 
@@ -511,17 +524,25 @@ void CSelect::MoveLimit(int nPlayer)
 		return;
 	}
 
+	if (m_apPlayerData[nPlayer].state == PLAYER_ENTRY)
+	{
+		return;
+	}
+
 	// 情報の取得
 	D3DXVECTOR3 pos = m_apPlayerData[nPlayer].pPlayer->GetPosition();
 	D3DXVECTOR3 move = m_apPlayerData[nPlayer].pPlayer->GetMove();
 
+	// 重力
 	move.y -= GRAVITY;
 
-	if (pos.z < -470.0f)
+	// 大人の壁判定
+	if (pos.z < ADULTWALL_POS_Z)
 	{
-		pos.z = -470.0f;
+		pos.z = ADULTWALL_POS_Z;
 	}
 
+	// 床判定
 	if (pos.y <= 0.0f)
 	{
 		pos.y = 0.0f;
@@ -531,6 +552,35 @@ void CSelect::MoveLimit(int nPlayer)
 	//情報の反映
 	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
 	m_apPlayerData[nPlayer].pPlayer->SetMove(move);
+}
+
+//=====================================================
+// プレイヤーの登場
+//=====================================================
+void CSelect::PlayerShowUp(int nPlayer)
+{
+	if (m_apPlayerData[nPlayer].pPlayer == nullptr)
+	{
+		return;
+	}
+
+	if (m_apPlayerData[nPlayer].state == PLAYER_FREE)
+	{
+		return;
+	}
+
+	// 情報の取得
+	D3DXVECTOR3 pos = m_apPlayerData[nPlayer].pPlayer->GetPosition();
+	D3DXVECTOR3 move = m_apPlayerData[nPlayer].pPlayer->GetMove();
+
+	if (pos.y >= 100.0f)
+	{
+		m_apPlayerData[nPlayer].state = PLAYER_FREE;
+	}
+
+	pos.y += 10.0f;
+
+	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
 }
 
 //=====================================================

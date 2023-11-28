@@ -123,9 +123,9 @@ void CShotgun::Attack(void)
 					D3DXVECTOR3 rot = pPlayer->GetRot();
 
 					// 移動角度をずらす
-					int nRange = CUniversal::GetInstance()->RandRange(10, -10);
+					int nRange = CUniversal::GetInstance()->RandRange((int)(m_fAngleDiffuse * 0.5f), (int)(-m_fAngleDiffuse * 0.5f));
 
-					float fRand = nRange * 0.01f;
+					float fRand = D3DXToRadian((float)nRange);
 
 					rot.y += fRand;
 
@@ -150,10 +150,6 @@ void CShotgun::Attack(void)
 						pSound->Play(pSound->LABEL_SE_GUNSHOT_00);
 					}
 
-					// 弾を減らす
-					nBullet--;
-					SetBullet(nBullet);
-
 					// 連射カウンターのリセット
 					nCntShot = GetRapid();
 
@@ -168,6 +164,9 @@ void CShotgun::Attack(void)
 					}
 				}
 
+				// 弾を減らす
+				nBullet--;
+				SetBullet(nBullet);
 			}
 		}
 		else

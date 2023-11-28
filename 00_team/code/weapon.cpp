@@ -11,6 +11,7 @@
 #include "weapon.h"
 #include "weaponMagnum.h"
 #include "weaponMachinegun.h"
+#include "weaponShotgun.h"
 #include "weaponManager.h"
 #include "motion.h"
 #include "player.h"
@@ -68,6 +69,16 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			}
 
 			break;
+		case CWeapon::TYPE_SHOTGUN:
+			// ƒVƒ‡ƒbƒgƒKƒ“‚Ì¶¬
+			pWeapon = new CShotgun;
+
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+			}
+
+			break;
 		default:
 			break;
 		}
@@ -85,6 +96,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			{
 				"data\\MODEL\\weapon\\magnum.x",
 				"data\\MODEL\\weapon\\mac10.x",
+				"data\\MODEL\\weapon\\ak47.x",
 			};
 
 			int nIdx = CModel::Load(apPath[type]);
