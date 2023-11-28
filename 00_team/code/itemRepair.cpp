@@ -17,6 +17,8 @@
 #include "collision.h"
 #include "rocket.h"
 
+#include "motionDiv.h"
+
 //=====================================================
 // コンストラクタ
 //=====================================================
@@ -157,11 +159,11 @@ void CItemRepair::FollowPlayerHand(void)
 		return;
 	}
 
-	CMotion *pBody = m_pPlayer->GetBody();
+	CMotionDiv *pBody = m_pPlayer->GetBody();
 
 	if (pBody != nullptr)
 	{
-		CParts *pParts = pBody->GetParts(7)->pParts;
+		CParts *pParts = pBody->GetParts(CMotionDiv::DIV_BODY_UPPER, 6)->pParts;
 
 		if (pParts != nullptr)
 		{

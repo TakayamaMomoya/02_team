@@ -11,7 +11,7 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "character.h"
+#include "characterDiv.h"
 #include "weapon.h"
 
 //*****************************************************
@@ -24,7 +24,7 @@ class CCollisionCube;
 //*****************************************************
 // クラスの定義
 //*****************************************************
-class CPlayer : public CCharacter
+class CPlayer : public CCharacterDiv
 {
 public:
 	CPlayer(int nPriority = 4);	// コンストラクタ
@@ -58,7 +58,7 @@ private:
 	enum MOTION
 	{
 		MOTION_NEUTRAL = 0,	// 待機状態
-		MOTION_WALK,	// 歩きモーション
+		MOTION_WALK,		// 歩きモーション
 		MOTION_MAX
 	};
 	struct SInfo
