@@ -40,6 +40,7 @@ public:
 	void SetIdxTexture(int nIdx) { m_nIdxTexture = nIdx; }
 	int GetIdxTexture(void) { return m_nIdxTexture; }
 	void SetColor(D3DXCOLOR col);
+	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void) { return m_pVtxBuff; }
 	void SetTex(D3DXVECTOR2 rd, D3DXVECTOR2 lu);
 
 private:
