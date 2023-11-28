@@ -160,6 +160,10 @@
     <ClCompile Include="code\motionDiv.cpp" />
     <ClCompile Include="code\anim3D.cpp" />
     <ClCompile Include="code\animEffect3D.cpp" />
+    <ClCompile Include="code\startLocation.cpp" />
+    <ClCompile Include="code\weaponShotgun.cpp">
+      <Filter>weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -294,5 +298,9 @@
     <ClInclude Include="code\motionDiv.h" />
     <ClInclude Include="code\anim3D.h" />
     <ClInclude Include="code\animEffect3D.h" />
+    <ClInclude Include="code\startLocation.h" />
+    <ClInclude Include="code\weaponShotgun.h">
+      <Filter>weapon</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
