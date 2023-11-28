@@ -88,6 +88,12 @@ private:
 		PLAYER_STATE state;	// 状態
 	};
 
+	struct CContainerInfo
+	{
+		CContainer* pContainer;
+		float fReSpawnTimer;
+	};
+
 	void MenuInit(void);
 	void MenuDelete(int nPlayer);
 	void StartInit(void);
@@ -102,7 +108,8 @@ private:
 	CObject2D* m_pStartUI;	// Start文字
 	CPlayerManager* m_pPlayerManager;	// プレイヤー管理
 	PlayerInfo m_apPlayerData[NUM_PLAYER];
-	CContainer* m_apContainer[MAX_CONTAINER];
+	CContainerInfo m_aContainerData[MAX_CONTAINER];
+	//CContainer* m_apContainer[MAX_CONTAINER];
 	STATE m_state;	// 状態
 	bool m_abEntry[NUM_PLAYER];	// 参加したかどうか
 };
