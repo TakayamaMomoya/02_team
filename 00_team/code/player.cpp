@@ -534,13 +534,13 @@ void CPlayer::ManageMotion(void)
 		// ドア開けるモーション
 		if (m_info.motionInfo.bDoorPress)
 		{
-			if (nMotionUpper != MOTION_OPEN_DOOR)
+			if (nMotionLower != MOTION_OPEN_DOOR)
 			{
-				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_OPEN_DOOR);
+				SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_OPEN_DOOR);
 			}
 		}
 		// 修理アイテム
-		if (m_info.pItemRepair != nullptr)
+		else if (m_info.pItemRepair != nullptr)
 		{
 			if (fSpeed > MOVE_LINE)
 			{
@@ -625,6 +625,10 @@ void CPlayer::ManageMotion(void)
 
 	// 上半身のモーション
 	{
+		bool bFinish = GetBody()->IsFinish(CCharacterDiv::PARTS_UPPER);
+		int nKey = GetBody()->GetKey(CCharacterDiv::PARTS_UPPER);
+		int nNumKey = GetBody()->GetMotionInfo(CCharacterDiv::PARTS_UPPER, nMotionUpper).nNumKey;
+
 		// ドア開けるモーション
 		if (m_info.motionInfo.bDoorPress)
 		{
@@ -635,7 +639,7 @@ void CPlayer::ManageMotion(void)
 		}
 		// 物拾う
 		else if (m_info.motionInfo.bItemTrigger ||
-				 nMotionUpper == MOTION_ITEM_PICK_UP)
+				 nMotionUpper == MOTION_ITEM_PICK_UP && bFinish == false && nKey != nNumKey)
 		{
 			if (nMotionUpper != MOTION_ITEM_PICK_UP)
 			{
@@ -670,16 +674,9 @@ void CPlayer::ManageMotion(void)
 
 				if (fSpeed > MOVE_LINE)
 				{
-					if (nMotionUpper != MOTION_MAGNUM_WALK_FRONT)
+					if (nMotionUpper != MOTION_MAGNUM_ATTACK)
 					{
-						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_WALK_FRONT);
-					}
-				}
-				else
-				{
-					if (nMotionUpper != MOTION_MAGNUM_NEUTRAL)
-					{
-						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_NEUTRAL);
+						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_ATTACK);
 					}
 				}
 
@@ -690,16 +687,9 @@ void CPlayer::ManageMotion(void)
 
 				if (fSpeed > MOVE_LINE)
 				{
-					if (nMotionUpper != MOTION_RIFLE_WALK_FRONT)
+					if (nMotionUpper != MOTION_RIFLE_ATTACK)
 					{
-						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_WALK_FRONT);
-					}
-				}
-				else
-				{
-					if (nMotionUpper != MOTION_RIFLE_NEUTRAL)
-					{
-						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_NEUTRAL);
+						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_ATTACK);
 					}
 				}
 

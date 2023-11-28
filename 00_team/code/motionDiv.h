@@ -114,6 +114,7 @@ public:
 	void SetKeyOld(void);
 	static CMotionDiv* Create(char* pPathLower, char* pPathUpper);
 	Parts* GetParts(int nNum,int nIdx) { return m_apParts[nNum][nIdx]; }
+	MOTION_INFO GetMotionInfo(int nNum, int nIdx) { return m_aMotionInfo[nNum][nIdx]; }
 	D3DXMATRIX* GetMatrix(void) { return &m_mtxWorld; }
 	bool IsFinish(int nNum) { return m_aFinish[nNum]; }
 	void SetMatrix(void);

@@ -235,6 +235,9 @@ void CItemRepair::Interact(CObject *pObj)
 					// プレイヤーに修理アイテムのポインタ設定
 					pPlayer->SetItemRepair(this);
 
+					// プレイヤーの修理アイテム入力情報
+					pPlayer->SetItemTrigger(true);
+
 					SetEnable(false);
 				}
 			}
@@ -273,8 +276,11 @@ void CItemRepair::CollisionRocket(void)
 
 			if (m_pPlayer != nullptr)
 			{
-				// 武器を無効化する
+				// 武器を有効化する
 				m_pPlayer->EnableWeapon(true);
+
+				// プレイヤーの修理アイテムポインタを初期化
+				m_pPlayer->ReleaseItemRepair();
 			}
 
 			Uninit();
