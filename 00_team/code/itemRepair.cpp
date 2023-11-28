@@ -223,6 +223,7 @@ void CItemRepair::Interact(CObject *pObj)
 					// 武器を無効化する
 					pPlayer->EnableWeapon(false);
 
+					// プレイヤーに修理アイテムのポインタ設定
 					pPlayer->SetItemRepair(this);
 
 					SetEnable(false);

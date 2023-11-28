@@ -361,7 +361,7 @@ bool CPlayer::InputInteract(void)
 {
 	bool bTrigger = false;
 
-	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	CInputJoypad* pJoyPad = CInputJoypad::GetInstance();
 	int nID = GetIDJoypad();
 
 	if (pJoyPad == nullptr)
@@ -369,7 +369,7 @@ bool CPlayer::InputInteract(void)
 		return bTrigger;
 	}
 
-	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_LB,nID))
+	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_LB, nID))
 	{
 		bTrigger = true;
 	}
@@ -384,7 +384,7 @@ bool CPlayer::InputInteractPress(void)
 {
 	bool bPress = false;
 
-	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	CInputJoypad* pJoyPad = CInputJoypad::GetInstance();
 	int nID = GetIDJoypad();
 
 	if (pJoyPad == nullptr)
@@ -399,6 +399,7 @@ bool CPlayer::InputInteractPress(void)
 
 	return bPress;
 }
+
 
 //=====================================================
 // 武器の有効可
@@ -530,7 +531,7 @@ void CPlayer::ManageMotion(void)
 
 	// 下半身のモーション
 	{
-		// 修理アイテムの有無を判定
+		// 修理アイテム
 		if (m_info.pItemRepair != nullptr)
 		{
 			if (fSpeed > MOVE_LINE)
@@ -548,7 +549,7 @@ void CPlayer::ManageMotion(void)
 				}
 			}
 		}
-		// 所有武器の有無を判定
+		// 所有武器
 		else if (m_info.pWeapon != nullptr)
 		{
 			switch (m_info.pWeapon->GetType())
@@ -616,7 +617,52 @@ void CPlayer::ManageMotion(void)
 
 	// 上半身のモーション
 	{
-		if (m_info.pItemRepair != nullptr)
+		if (m_info.motionInfo.bDoorPress)
+		{
+			if (nMotionUpper != MOTION_OPEN_DOOR)
+			{
+				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_OPEN_DOOR);
+			}
+
+			// ドアの入力情報の初期化
+			m_info.motionInfo.bDoorPress = false;
+		}
+		//else if ()
+		//{
+		//	// 所有修理アイテム
+		//	if (m_info.pItemRepair != nullptr)
+		//	{
+
+		//	}
+		//	// 所有武器
+		//	else if (m_info.pWeapon != nullptr)
+		//	{
+		//		switch (m_info.pWeapon->GetType())
+		//		{
+		//			// マガジン
+		//		case CWeapon::TYPE_MAGNUM:
+
+		//			if (nMotionUpper != MOTION_MAGNUM_ATTACK)
+		//			{
+		//				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_ATTACK);
+		//			}
+
+		//			break;
+
+		//			// マシンガン
+		//		case CWeapon::TYPE_MACHINEGUN:
+
+		//			if (nMotionUpper != MOTION_RIFLE_ATTACK)
+		//			{
+		//				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_ATTACK);
+		//			}
+
+		//			break;
+		//		}
+		//	}
+		//}
+		// 所有修理アイテム
+		else if (m_info.pItemRepair != nullptr)
 		{
 			if (fSpeed > MOVE_LINE)
 			{
@@ -633,7 +679,7 @@ void CPlayer::ManageMotion(void)
 				}
 			}
 		}
-		// 所有武器の有無を判定
+		// 所有武器
 		else if (m_info.pWeapon != nullptr)
 		{
 			switch (m_info.pWeapon->GetType())
