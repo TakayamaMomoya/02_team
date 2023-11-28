@@ -96,6 +96,7 @@ private:
 	void ColorChange(int nPlayer);
 	void EntryInput(int nPlayer);
 	void MoveLimit(int nPlayer);
+	void PlayerShowUp(int nPlayer);
 
 	MenuData m_aMenuData[NUM_PLAYER];	// ‚»‚ê‚¼‚ê‚Ì‘I‘ğƒƒjƒ…[
 	CObject2D* m_pStartUI;	// Start•¶š

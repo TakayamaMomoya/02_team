@@ -51,14 +51,14 @@ namespace
 	const D3DXVECTOR3 UI_POS_3P(D3DXVECTOR3(132.0f, 80.0f, -72.0f));	//UIの位置
 	const D3DXVECTOR3 UI_POS_4P(D3DXVECTOR3(282.0f, 80.0f, -72.0f));	//UIの位置
 
-	const float SPOWN_HEIGHT(20.0f);	//プレイヤー出現高さ
+	const float SPOWN_HEIGHT(-100.0f);	//プレイヤー出現高さ
 
 	const float SPACE(115.0f);	//UI間の広さ
 	const float SIZE_PLUS(20.0f);	//UIの大きさ(+)
 	const D3DXVECTOR2 SIZE_FONT(20.0f, 10.0f);	//UIの大きさ(参加：A)
 	const float BLINKING_SPEED(0.02f);	//UI点滅の速さ(参加：A)
-
-	const float GRAVITY(1.0f);	//重力
+	const float ADULTWALL_POS_Z(-470.0f);
+	const float GRAVITY(5.0f);	//重力
 };
 
 //=====================================================
@@ -297,8 +297,6 @@ void CSelect::Update(void)
 	CInputMouse* pMouse = CInputMouse::GetInstance();
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
 
-	D3DXCOLOR col = { 0.0f, 0.0f, 0.0f, 0.0f };
-
 	int nJoinPlayer = 0;
 
 	// シーンの更新
@@ -312,6 +310,7 @@ void CSelect::Update(void)
 		{
 			if (CStartLocation::GetIsIn() == true)
 			{// 参加中の全員が範囲内に入ったという判定を貰ったら
+
 				if (/*pKeyboard->GetTrigger(DIK_RETURN) ||*/
 				//pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
 					pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
@@ -338,7 +337,7 @@ void CSelect::Update(void)
 		for (int nCntPlayer = 0; nCntPlayer < NUM_PLAYER; nCntPlayer++)
 		{
 			if (m_aMenuData[nCntPlayer].pMenu2D[MENU_CHAR] != nullptr && m_aMenuData[nCntPlayer].pMenu2D[MENU_PLUS] != nullptr)
-			{
+			{	
 				// 色の変更
 				ColorChange(nCntPlayer);
 				// 参加入力
@@ -347,6 +346,10 @@ void CSelect::Update(void)
 
 			if (m_abEntry[nCntPlayer] == true)
 			{
+				// プレイヤー参上の処理
+				PlayerShowUp(nCntPlayer);
+
+				// 行動制限
 				MoveLimit(nCntPlayer);
 
 				nJoinPlayer++;
@@ -425,7 +428,6 @@ void CSelect::ReSetContainer(void)
 		}
 	}
 }
-
 
 //=====================================================
 // UI点滅
@@ -511,17 +513,25 @@ void CSelect::MoveLimit(int nPlayer)
 		return;
 	}
 
+	if (m_apPlayerData[nPlayer].state == PLAYER_ENTRY)
+	{
+		return;
+	}
+
 	// 情報の取得
 	D3DXVECTOR3 pos = m_apPlayerData[nPlayer].pPlayer->GetPosition();
 	D3DXVECTOR3 move = m_apPlayerData[nPlayer].pPlayer->GetMove();
 
+	// 重力
 	move.y -= GRAVITY;
 
-	if (pos.z < -470.0f)
+	// 大人の壁判定
+	if (pos.z < ADULTWALL_POS_Z)
 	{
-		pos.z = -470.0f;
+		pos.z = ADULTWALL_POS_Z;
 	}
 
+	// 床判定
 	if (pos.y <= 0.0f)
 	{
 		pos.y = 0.0f;
@@ -531,6 +541,35 @@ void CSelect::MoveLimit(int nPlayer)
 	//情報の反映
 	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
 	m_apPlayerData[nPlayer].pPlayer->SetMove(move);
+}
+
+//=====================================================
+// プレイヤーの登場
+//=====================================================
+void CSelect::PlayerShowUp(int nPlayer)
+{
+	if (m_apPlayerData[nPlayer].pPlayer == nullptr)
+	{
+		return;
+	}
+
+	if (m_apPlayerData[nPlayer].state == PLAYER_FREE)
+	{
+		return;
+	}
+
+	// 情報の取得
+	D3DXVECTOR3 pos = m_apPlayerData[nPlayer].pPlayer->GetPosition();
+	D3DXVECTOR3 move = m_apPlayerData[nPlayer].pPlayer->GetMove();
+
+	if (pos.y >= 100.0f)
+	{
+		m_apPlayerData[nPlayer].state = PLAYER_FREE;
+	}
+
+	pos.y += 10.0f;
+
+	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
 }
 
 //=====================================================

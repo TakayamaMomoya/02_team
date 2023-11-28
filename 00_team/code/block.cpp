@@ -21,7 +21,7 @@
 // マクロ定義
 //*****************************************************
 #define SPEED_MOVE	(1.0f)	// 移動速度
-#define MAP_FILE	"data\\MAP\\select_map00.bin"	// マップのファイルパス
+#define MAP_FILE	"data\\MAP\\map00.bin"	// マップのファイルパス
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -336,7 +336,7 @@ void CBlock::LoadModel(void)
 		"data\\MODEL\\BLOCK\\concrete_00.x",	// コンクリート壁
 		"data\\MODEL\\BLOCK\\WodenWall_00.x",	// 木製壁
 		"data\\MODEL\\GIMMICK\\door000.x",	// 木製壁
-		"data\\MODEL\\BLOCK\\potato_bed01.x",			// 土
+		"data\\MODEL\\BLOCK\\potato_bed00.x",			// 土
 		"data\\MODEL\\BLOCK\\shelf.x",			// 棚
 	};
 
