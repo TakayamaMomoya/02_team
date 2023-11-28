@@ -142,12 +142,24 @@ void CMachinegun::Attack(void)
 
 			SetCntShot(nCntShot);
 
+			// マズルの位置を設定
+			D3DXMATRIX mtxMuzzle;
+			D3DXMATRIX mtxWorld = *GetMatrix();
+			CUniversal::GetInstance()->SetOffSet(&mtxMuzzle, mtxWorld,D3DXVECTOR3(-18.0f,6.0f,0.0f));
+
+			D3DXVECTOR3 posMuzzle= 
+			{
+				mtxMuzzle._41,
+				mtxMuzzle._42,
+				mtxMuzzle._43,
+			};
+
 			// エフェクトの生成
 			CAnimEffect3D *pAnim3D = CAnimEffect3D::GetInstance();
 
 			if (pAnim3D != nullptr)
 			{
-				pAnim3D->CreateEffect(pos, CAnimEffect3D::TYPE::TYPE_MUZZLEFLUSH);
+				pAnim3D->CreateEffect(posMuzzle, CAnimEffect3D::TYPE::TYPE_MUZZLEFLUSH);
 			}
 		}
 		else

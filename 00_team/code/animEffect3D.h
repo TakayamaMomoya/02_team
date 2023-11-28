@@ -52,6 +52,7 @@ private:
 		char acPath[MAX_STRING];	// パス
 		int nNumAnim;	// アニメーション数
 		int nSpeedAnim;	// アニメーション速度
+		float fSize;	// サイズ
 		D3DXCOLOR col;	// 色
 		bool bAdd;	// 加算合成するかどうか
 	};

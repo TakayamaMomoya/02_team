@@ -117,6 +117,13 @@ void CAnimEffect3D::Load(void)
 						(void)fscanf(pFile, "%d", &m_apAnimEffect[nCntEffect]->nSpeedAnim);
 					}
 
+					if (strcmp(cTemp, "SIZE") == 0)
+					{// サイズ
+						(void)fscanf(pFile, "%s", &cTemp[0]);
+
+						(void)fscanf(pFile, "%f", &m_apAnimEffect[nCntEffect]->fSize);
+					}
+
 					if (strcmp(cTemp, "COL") == 0)
 					{// 色読み込み
 						(void)fscanf(pFile, "%s", &cTemp[0]);
@@ -217,7 +224,7 @@ CAnimEffect3D *CAnimEffect3D::Create(void)
 //=====================================================
 CAnim3D *CAnimEffect3D::CreateEffect(D3DXVECTOR3 pos, TYPE type)
 {
-	if ((type >= TYPE_MAX || type < 0 ) && 
+	if ((type >= TYPE_MAX || type < 0 ) &&
 		m_apAnimEffect[type] != nullptr)
 	{// エラー
 		return nullptr;
@@ -232,6 +239,8 @@ CAnim3D *CAnimEffect3D::CreateEffect(D3DXVECTOR3 pos, TYPE type)
 	{
 		// 色の設定
 		pAnim3D->SetColor(m_apAnimEffect[type]->col);
+
+		pAnim3D->SetSize(m_apAnimEffect[type]->fSize, m_apAnimEffect[type]->fSize);
 
 		CTexture *pTexture = CTexture::GetInstance();
 

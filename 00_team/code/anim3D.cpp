@@ -45,6 +45,8 @@ HRESULT CAnim3D::Init(void)
 
 	SetAnim(m_nPatternAnim, m_nNumAnim);
 
+	SetZTest(true);
+
 	return S_OK;
 }
 
