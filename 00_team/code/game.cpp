@@ -34,6 +34,7 @@
 #include "block.h"
 #include "gimmickManager.h"
 #include "renderer.h"
+#include "animEffect3D.h"
 
 //*****************************************************
 // マクロ定義
@@ -111,6 +112,9 @@ HRESULT CGame::Init(void)
 
 	// ギミックマネージャーの生成
 	CGimmickManager::Create();
+
+	// ３Dアニメーション管理の生成
+	CAnimEffect3D::Create();
 
 	// サウンドインスタンスの取得
 	CSound* pSound = CSound::GetInstance();

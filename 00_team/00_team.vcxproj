@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="code\anim3D.cpp" />
     <ClCompile Include="code\animation2D.cpp" />
+    <ClCompile Include="code\animEffect3D.cpp" />
     <ClCompile Include="code\bg.cpp" />
     <ClCompile Include="code\billboard.cpp" />
     <ClCompile Include="code\block.cpp" />
@@ -92,7 +94,9 @@
     <ClCompile Include="code\weaponManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="code\anim3D.h" />
     <ClInclude Include="code\animation2D.h" />
+    <ClInclude Include="code\animEffect3D.h" />
     <ClInclude Include="code\bg.h" />
     <ClInclude Include="code\billboard.h" />
     <ClInclude Include="code\block.h" />

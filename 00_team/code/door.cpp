@@ -184,6 +184,9 @@ void CDoor::Interact(CObject *pObj)
 				if (bInteract)
 				{// ピッキングを進める
 					proceed();
+
+					// プレイヤーのドア入力情報
+					pPlayer->SetDoorPress(true);
 				}
 			}
 		}

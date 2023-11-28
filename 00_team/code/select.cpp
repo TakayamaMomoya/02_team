@@ -37,6 +37,7 @@
 #include "weaponManager.h"
 
 #include "edit.h"
+#include "animEffect3D.h"
 
 #include <stdio.h>
 
@@ -127,6 +128,9 @@ HRESULT CSelect::Init(void)
 	{
 		pSound->Play(pSound->LABEL_BGM_SELECT);
 	}
+
+	// ３Dアニメーション管理の生成
+	CAnimEffect3D::Create();
 
 	return S_OK;
 }
@@ -227,7 +231,7 @@ void CSelect::StartInit(void)
 	m_pStartUI->SetSize(150.0f, 50.0f);
 	m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 
-	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\start.png");
+	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\start_game.png");
 	m_pStartUI->SetIdxTexture(nIdx);
 
 	m_pStartUI->SetVtx();
