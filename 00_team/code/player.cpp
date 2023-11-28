@@ -182,7 +182,6 @@ void CPlayer::Update(void)
 	if (m_info.pCollisionSphere != nullptr)
 	{
 		D3DXVECTOR3 pos = GetPosition();
-		//D3DXVECTOR3 posWaist = GetBody(CCharacterDiv::PARTS_UPPER)->GetMtxPos(0);
 		D3DXVECTOR3 posWaist = GetBody()->GetMtxPos(CCharacterDiv::PARTS_UPPER,0);
 		
 		// 敵との接触判定
@@ -239,7 +238,6 @@ void CPlayer::Update(void)
 	// 武器の追従
 	if (m_info.pWeapon != nullptr)
 	{
-		//CMotion* pBody = GetBody(CCharacterDiv::PARTS_UPPER);
 		CMotionDiv *pBody = GetBody();
 
 		if (pBody != nullptr)
@@ -496,7 +494,6 @@ void CPlayer::ManageState(void)
 
 			for (int nCutPath = 0; nCutPath < CCharacterDiv::PARTS_MAX; nCutPath++)
 			{
-				//CMotion* pBody = GetBody(nCutPath);
 				CMotionDiv* pBody = GetBody();
 
 				if (pBody != nullptr)
@@ -526,24 +523,179 @@ void CPlayer::ManageMotion(void)
 
 	float fSpeed = D3DXVec3Length(&move);
 
-	int nMotion = GetMotion(CCharacterDiv::PARTS_LOWER);
+	int nMotionLower = GetMotion(CCharacterDiv::PARTS_LOWER);
+	int nMotionUpper = GetMotion(CCharacterDiv::PARTS_UPPER);
 
 	CDebugProc::GetInstance()->Print("\nスピード[%f]",fSpeed);
 
-	if (fSpeed > MOVE_LINE)
+	// 下半身のモーション
 	{
-		if (nMotion != MOTION_WALK)
+		// 修理アイテムの有無を判定
+		if (m_info.pItemRepair != nullptr)
 		{
-			SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_WALK);
-			SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK);
+			if (fSpeed > MOVE_LINE)
+			{
+				if (nMotionLower != MOTION_ITEM_WALK_FRONT)
+				{
+					SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_ITEM_WALK_FRONT);
+				}
+			}
+			else
+			{
+				if (nMotionLower != MOTION_ITEM_NEUTRAL)
+				{
+					SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_ITEM_NEUTRAL);
+				}
+			}
+		}
+		// 所有武器の有無を判定
+		else if (m_info.pWeapon != nullptr)
+		{
+			switch (m_info.pWeapon->GetType())
+			{
+				// マガジン
+			case CWeapon::TYPE_MAGNUM:
+
+				if (fSpeed > MOVE_LINE)
+				{
+					if (nMotionLower != MOTION_MAGNUM_WALK_FRONT)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_FRONT);
+					}
+				}
+				else
+				{
+					if (nMotionLower != MOTION_MAGNUM_NEUTRAL)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_NEUTRAL);
+					}
+				}
+
+				break;
+
+				// マシンガン
+			case CWeapon::TYPE_MACHINEGUN:
+
+				if (fSpeed > MOVE_LINE)
+				{
+					if (nMotionLower != MOTION_RIFLE_WALK_FRONT)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_FRONT);
+					}
+				}
+				else
+				{
+					if (nMotionLower != MOTION_RIFLE_NEUTRAL)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_NEUTRAL);
+					}
+				}
+
+				break;
+			}
+		}
+		// 何もなし
+		else
+		{
+			if (fSpeed > MOVE_LINE)
+			{
+				if (nMotionLower != MOTION_WALK_FRONT)
+				{
+					SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_WALK_FRONT);
+				}
+			}
+			else
+			{
+				if (nMotionLower != MOTION_NEUTRAL)
+				{
+					SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_NEUTRAL);
+				}
+			}
 		}
 	}
-	else
+
+	// 上半身のモーション
 	{
-		if (nMotion != MOTION_NEUTRAL)
+		if (m_info.pItemRepair != nullptr)
 		{
-			SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_NEUTRAL);
-			SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_NEUTRAL);
+			if (fSpeed > MOVE_LINE)
+			{
+				if (nMotionUpper != MOTION_ITEM_WALK_FRONT)
+				{
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_ITEM_WALK_FRONT);
+				}
+			}
+			else
+			{
+				if (nMotionUpper != MOTION_ITEM_NEUTRAL)
+				{
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_ITEM_NEUTRAL);
+				}
+			}
+		}
+		// 所有武器の有無を判定
+		else if (m_info.pWeapon != nullptr)
+		{
+			switch (m_info.pWeapon->GetType())
+			{
+				// マガジン
+			case CWeapon::TYPE_MAGNUM:
+
+				if (fSpeed > MOVE_LINE)
+				{
+					if (nMotionUpper != MOTION_MAGNUM_WALK_FRONT)
+					{
+						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_WALK_FRONT);
+					}
+				}
+				else
+				{
+					if (nMotionUpper != MOTION_MAGNUM_NEUTRAL)
+					{
+						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_NEUTRAL);
+					}
+				}
+
+				break;
+
+				// マシンガン
+			case CWeapon::TYPE_MACHINEGUN:
+
+				if (fSpeed > MOVE_LINE)
+				{
+					if (nMotionUpper != MOTION_RIFLE_WALK_FRONT)
+					{
+						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_WALK_FRONT);
+					}
+				}
+				else
+				{
+					if (nMotionUpper != MOTION_RIFLE_NEUTRAL)
+					{
+						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_NEUTRAL);
+					}
+				}
+
+				break;
+			}
+		}
+		// 何もなし
+		else
+		{
+			if (fSpeed > MOVE_LINE)
+			{
+				if (nMotionUpper != MOTION_WALK_FRONT)
+				{
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_FRONT);
+				}
+			}
+			else
+			{
+				if (nMotionUpper != MOTION_NEUTRAL)
+				{
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_NEUTRAL);
+				}
+			}
 		}
 	}
 }
@@ -627,7 +779,6 @@ void CPlayer::Hit(float fDamage)
 
 			for (int nCutPath = 0; nCutPath < CCharacterDiv::PARTS_MAX; nCutPath++)
 			{
-				//CMotion* pBody = GetBody(nCutPath);
 				CMotionDiv* pBody = GetBody();
 
 				if (pBody != nullptr)
