@@ -57,6 +57,7 @@
     <ClCompile Include="code\manager.cpp" />
     <ClCompile Include="code\model.cpp" />
     <ClCompile Include="code\motion.cpp" />
+    <ClCompile Include="code\motionDiv.cpp" />
     <ClCompile Include="code\number.cpp" />
     <ClCompile Include="code\object.cpp" />
     <ClCompile Include="code\object2D.cpp" />
@@ -77,6 +78,7 @@
     <ClCompile Include="code\select.cpp" />
     <ClCompile Include="code\skybox.cpp" />
     <ClCompile Include="code\sound.cpp" />
+    <ClCompile Include="code\startLocation.cpp" />
     <ClCompile Include="code\texture.cpp" />
     <ClCompile Include="code\timer.cpp" />
     <ClCompile Include="code\title.cpp" />
@@ -128,6 +130,7 @@
     <ClInclude Include="code\manager.h" />
     <ClInclude Include="code\model.h" />
     <ClInclude Include="code\motion.h" />
+    <ClInclude Include="code\motionDiv.h" />
     <ClInclude Include="code\number.h" />
     <ClInclude Include="code\object.h" />
     <ClInclude Include="code\object2D.h" />
@@ -148,6 +151,7 @@
     <ClInclude Include="code\select.h" />
     <ClInclude Include="code\skybox.h" />
     <ClInclude Include="code\sound.h" />
+    <ClInclude Include="code\startLocation.h" />
     <ClInclude Include="code\texture.h" />
     <ClInclude Include="code\timer.h" />
     <ClInclude Include="code\title.h" />

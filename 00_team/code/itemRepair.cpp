@@ -17,6 +17,8 @@
 #include "collision.h"
 #include "rocket.h"
 
+#include "motionDiv.h"
+
 //=====================================================
 // コンストラクタ
 //=====================================================
@@ -103,6 +105,9 @@ void CItemRepair::Update(void)
 		{// 持ち上げているプレイヤーの検出
 			// 武器を有効化する
 			m_pPlayer->EnableWeapon(true);
+			
+			// プレイヤーの修理アイテムポインタを初期化
+			m_pPlayer->ReleaseItemRepair();
 
 			m_pPlayer = nullptr;
 
@@ -157,11 +162,11 @@ void CItemRepair::FollowPlayerHand(void)
 		return;
 	}
 
-	CMotion *pBody = m_pPlayer->GetBody();
+	CMotionDiv *pBody = m_pPlayer->GetBody();
 
 	if (pBody != nullptr)
 	{
-		CParts *pParts = pBody->GetParts(7)->pParts;
+		CParts *pParts = pBody->GetParts(CMotionDiv::DIV_BODY_UPPER, 6)->pParts;
 
 		if (pParts != nullptr)
 		{
@@ -216,6 +221,8 @@ void CItemRepair::Interact(CObject *pObj)
 
 					// 武器を無効化する
 					pPlayer->EnableWeapon(false);
+
+					pPlayer->SetItemRepair(this);
 
 					SetEnable(false);
 				}

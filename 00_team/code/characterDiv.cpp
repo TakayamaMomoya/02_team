@@ -1,7 +1,7 @@
 //*****************************************************
 //
 // 分割キャラクターの処理[character.h]
-// Author:髙山桃也
+// Author:酒井南勝
 //
 //*****************************************************
 
@@ -10,7 +10,9 @@
 //*****************************************************
 #include "main.h"
 #include "characterDiv.h"
-#include "motion.h"
+#include "motionDiv.h"
+
+#include "universal.h"
 
 //*****************************************************
 // マクロ定義
@@ -35,7 +37,7 @@ CCharacterDiv::~CCharacterDiv()
 //=====================================================
 // 生成処理
 //=====================================================
-CCharacterDiv* CCharacterDiv::Create(char* pPathUpper, char* pPathLower)
+CCharacterDiv* CCharacterDiv::Create(char* pPathLower, char* pPathUpper)
 {
 	CCharacterDiv* pCharacter = nullptr;
 
@@ -43,8 +45,8 @@ CCharacterDiv* CCharacterDiv::Create(char* pPathUpper, char* pPathLower)
 
 	if (pCharacter != nullptr)
 	{
-		pCharacter->m_info.apPath[PARTS_UPPER] = pPathUpper;
 		pCharacter->m_info.apPath[PARTS_LOWER] = pPathLower;
+		pCharacter->m_info.apPath[PARTS_UPPER] = pPathUpper;
 		pCharacter->Init();
 	}
 
@@ -54,35 +56,20 @@ CCharacterDiv* CCharacterDiv::Create(char* pPathUpper, char* pPathLower)
 //=====================================================
 // 読込処理
 //=====================================================
-void CCharacterDiv::Load(char* pPathUpper, char* pPathLower)
+void CCharacterDiv::Load(char* pPathLower, char* pPathUpper)
 {
-	if (m_info.apBody[PARTS_UPPER] == nullptr && pPathUpper != nullptr &&
-		m_info.apBody[PARTS_LOWER] == nullptr && pPathLower != nullptr)
+	if (m_info.pBody == nullptr && pPathLower != nullptr && pPathUpper != nullptr)
 	{
-		m_info.apBody[PARTS_UPPER] = CMotion::Create(pPathUpper);
+		m_info.pBody = CMotionDiv::Create(pPathLower, pPathUpper);
 
-		if (m_info.apBody[PARTS_UPPER] != nullptr)
+		if (m_info.pBody != nullptr)
 		{
 			D3DXVECTOR3 pos = GetPosition();
 			D3DXVECTOR3 rot = GetRot();
 
-			m_info.apBody[PARTS_UPPER]->SetPosition(pos);
-			m_info.apBody[PARTS_UPPER]->SetRot(rot);
-
-			m_info.apBody[PARTS_UPPER]->MultiplyMtx();
-		}
-
-		m_info.apBody[PARTS_LOWER] = CMotion::Create(pPathLower);
-
-		if (m_info.apBody[PARTS_LOWER] != nullptr)
-		{
-			D3DXVECTOR3 pos = GetPosition();
-			D3DXVECTOR3 rot = GetRot();
-
-			m_info.apBody[PARTS_LOWER]->SetPosition(pos);
-			m_info.apBody[PARTS_LOWER]->SetRot(rot);
-
-			m_info.apBody[PARTS_LOWER]->MultiplyMtx();
+			m_info.pBody->SetPosition(pos);
+			m_info.pBody->SetRot(rot);
+			m_info.pBody->MultiplyMtx();
 		}
 	}
 }
@@ -92,9 +79,6 @@ void CCharacterDiv::Load(char* pPathUpper, char* pPathLower)
 //=====================================================
 HRESULT CCharacterDiv::Init(void)
 {
-	// 体の読込
-	Load(m_info.apPath[PARTS_UPPER], m_info.apPath[PARTS_LOWER]);
-
 	return S_OK;
 }
 
@@ -103,16 +87,10 @@ HRESULT CCharacterDiv::Init(void)
 //=====================================================
 void CCharacterDiv::Uninit(void)
 {
-	if (m_info.apBody[PARTS_UPPER] != nullptr)
+	if (m_info.pBody != nullptr)
 	{
-		m_info.apBody[PARTS_UPPER]->Uninit();
-		m_info.apBody[PARTS_UPPER] = nullptr;
-	}
-
-	if (m_info.apBody[PARTS_LOWER] != nullptr)
-	{
-		m_info.apBody[PARTS_LOWER]->Uninit();
-		m_info.apBody[PARTS_LOWER] = nullptr;
+		m_info.pBody->Uninit();
+		m_info.pBody = nullptr;
 	}
 
 	// 自身の破棄
@@ -124,17 +102,13 @@ void CCharacterDiv::Uninit(void)
 //=====================================================
 void CCharacterDiv::Update(void)
 {
-	if (m_info.apBody[PARTS_UPPER] != nullptr &&
-		m_info.apBody[PARTS_LOWER] != nullptr)
+	if (m_info.pBody != nullptr)
 	{// 体の追従
 		D3DXVECTOR3 pos = GetPosition();
 		D3DXVECTOR3 rot = GetRot();
 
-		m_info.apBody[PARTS_UPPER]->SetPosition(pos);
-		m_info.apBody[PARTS_UPPER]->SetRot(rot);
-
-		m_info.apBody[PARTS_LOWER]->SetPosition(pos);
-		m_info.apBody[PARTS_LOWER]->SetRot(rot);
+		m_info.pBody->SetPosition(pos);
+		m_info.pBody->SetRot(rot);
 	}
 }
 
@@ -151,9 +125,9 @@ void CCharacterDiv::Draw(void)
 //=====================================================
 void CCharacterDiv::SetMotion(int nNum, int nMotion)
 {
-	if (m_info.apBody[nNum] != nullptr)
+	if (m_info.pBody != nullptr)
 	{
-		m_info.apBody[nNum]->SetMotion(nMotion);
+		m_info.pBody->SetMotion(nNum,nMotion);
 	}
 }
 
@@ -164,9 +138,9 @@ int CCharacterDiv::GetMotion(int nNum)
 {
 	int nMotion = 0;
 
-	if (m_info.apBody[nNum] != nullptr)
+	if (m_info.pBody != nullptr)
 	{
-		nMotion = m_info.apBody[nNum]->GetMotion();
+		nMotion = m_info.pBody->GetMotion(nNum);
 	}
 
 	return nMotion;

@@ -18,6 +18,8 @@
 #include "debugproc.h"
 #include "sound.h"
 
+#include "motionDiv.h"
+
 //=====================================================
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 //=====================================================
@@ -152,13 +154,13 @@ void CWeapon::FollowPlayerHand(void)
 		return;
 	}
 
-	CMotion *pBody = m_info.pPlayer->GetBody();
+	CMotionDiv *pBody = m_info.pPlayer->GetBody();
 
 	if (pBody != nullptr)
 	{
 		if (m_info.bEnable)
 		{// Žè‚É’Ç]
-			CParts *pParts = pBody->GetParts(m_info.nIdxHand)->pParts;
+			CParts *pParts = pBody->GetParts(CCharacterDiv::PARTS_UPPER,m_info.nIdxHand)->pParts;
 
 			if (pParts != nullptr)
 			{
@@ -171,7 +173,7 @@ void CWeapon::FollowPlayerHand(void)
 		}
 		else
 		{// ”w’†‚É’Ç]
-			CParts *pParts = pBody->GetParts(0)->pParts;
+			CParts *pParts = pBody->GetParts(CCharacterDiv::PARTS_UPPER,0)->pParts;
 
 			if (pParts != nullptr)
 			{
