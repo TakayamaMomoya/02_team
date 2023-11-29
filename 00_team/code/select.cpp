@@ -63,7 +63,7 @@ namespace
 	const float RESPAWN_TIME(10.0f);	// コンテナ復活の時間
 
 	const float RIFT_IN(100.0f);	// リフトの範囲
-	const float LIFT_UP(1.0f);	// リフト上昇速度
+	const float LIFT_UP(2.0f);	// リフト上昇速度
 };
 
 //=====================================================
@@ -105,13 +105,13 @@ HRESULT CSelect::Init(void)
 	ContainerInit();
 
 	// エディットの生成
-	CEdit::Create();
+	//CEdit::Create();
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
 
 	// 開始位置
-	m_pStartLocation = CStartLocation::Create(D3DXVECTOR3(30.0f, 0.0f, 100.0f));
+	m_pStartLocation = CStartLocation::Create(D3DXVECTOR3(30.0f, 0.5f, 100.0f));
 
 	// サウンドインスタンスの取得
 	CSound* pSound = CSound::GetInstance();

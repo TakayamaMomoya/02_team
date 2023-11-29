@@ -221,18 +221,19 @@ void CCamera::SetUpLift(void)
 {
 	if (m_camera.posV.y < 200.0f)
 	{
-		m_camera.posV.y += 1.0f;
-		m_camera.posVDest.y += 1.0f;
+		m_camera.posV.y += 2.0f;
+		m_camera.posVDest.y += 2.0f;
 
-		m_camera.posR.y += 1.0f;
-		m_camera.posRDest.y += 1.0f;
+		m_camera.posR.y += 2.0f;
+		m_camera.posRDest.y += 2.0f;
 
 		return;
 	}
 	
-	m_camera.posR.y += 5.0f;
-	m_camera.posRDest.y += 5.0f;
-
+	m_camera.posV.y += 1.5f;
+	m_camera.posVDest.y += 1.5f;
+	m_camera.posR.y += 4.5f;
+	m_camera.posRDest.y += 4.5f;
 }
 
 //====================================================

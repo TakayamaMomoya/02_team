@@ -41,6 +41,7 @@ CStartLocation::CStartLocation(int nPriority)
 {
 	m_pos = { 0.0f,0.0f,0.0f };
 	m_nInCnt = 0;
+	m_state = STATE_NONE;
 }
 
 //=====================================================
@@ -59,7 +60,7 @@ HRESULT CStartLocation::Init(void)
 	// Œp³ƒNƒ‰ƒX‚Ì‰Šú‰»
 	CObjectX::Init();
 
-	int nIdx = CModel::Load("data\\MODEL\\block\\rift.x");
+	int nIdx = CModel::Load("data\\MODEL\\lift.x");
 	// ƒ‚ƒfƒ‹“Çž
 	BindModel(nIdx);
 
@@ -109,6 +110,9 @@ void CStartLocation::Update(void)
 			GetPosition().z + 100.0f >= pPlayer->GetPosition().z &&
 			GetPosition().z - 100.0f <= pPlayer->GetPosition().z)
 		{
+			D3DXVECTOR3 playerPos = pPlayer->GetPosition();
+			//playerPos.y = playerPos.y;
+			pPlayer->SetPosition(playerPos);
 			m_abJoin[nCnt] = true;
 
 			nInPlayer++;
