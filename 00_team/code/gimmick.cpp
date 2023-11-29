@@ -135,7 +135,7 @@ void CGimmick::Update(void)
 
 				pos.y += 50.0f;
 
-				m_pInteract = CBillboard::Create(pos, SIZE_INTERACT, SIZE_INTERACT);
+				//m_pInteract = CBillboard::Create(pos, SIZE_INTERACT, SIZE_INTERACT);
 
 				if (m_pInteract != nullptr)
 				{
