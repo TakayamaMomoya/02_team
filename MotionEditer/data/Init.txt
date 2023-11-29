@@ -1,1 +1,1 @@
-data\\MOTION\\motionEnemy00.txt
+data\\MOTION\\motionEnemy01.txt
