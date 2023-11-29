@@ -78,6 +78,7 @@ CSelect::CSelect()
 	m_pStartLocation = nullptr;
 	m_state = STATE_NONE;
 	m_bRiftCamera = false;
+	m_bOk = false;
 }
 
 //=====================================================
@@ -317,8 +318,12 @@ void CSelect::Update(void)
 
 					for (int nCntPlayer = 0; nCntPlayer < NUM_PLAYER; nCntPlayer++)
 					{
-						m_apPlayerData[nCntPlayer].state = PLAYER_INGAME;
+						if (m_abEntry[nCntPlayer] == true)
+						{
+							m_apPlayerData[nCntPlayer].state = PLAYER_INGAME;
+						}
 					}
+					m_bOk = true;
 					
 					if (pFade != nullptr && m_abEntry[0] != false)
 					{
@@ -360,6 +365,7 @@ void CSelect::Update(void)
 			}
 		}
 
+		rift();
 		// コンテナの再設置
 		ReSetContainer();
 	}
@@ -534,7 +540,6 @@ void CSelect::MoveLimit(int nPlayer)
 
 	// 情報の取得
 	D3DXVECTOR3 pos = m_apPlayerData[nPlayer].pPlayer->GetPosition();
-	D3DXVECTOR3 rift = m_pStartLocation->GetPosition();
 	D3DXVECTOR3 move = m_apPlayerData[nPlayer].pPlayer->GetMove();
 	CCamera* pCamera = CManager::GetCamera();
 
@@ -551,18 +556,7 @@ void CSelect::MoveLimit(int nPlayer)
 	}
 	else
 	{
-		rift.y += LIFT_UP;
-		pos.y += LIFT_UP;
-
-		if (m_bRiftCamera == false)
-		{
-			pCamera->SetLift();
-			m_bRiftCamera = true;
-		}
-		else
-		{
-			pCamera->SetUpLift();
-		}
+		
 		
 
 		/*if (m_pStartLocation->GetPosition().x + RIFT_IN >= pos.x)
@@ -594,7 +588,7 @@ void CSelect::MoveLimit(int nPlayer)
 	}
 
 	//情報の反映
-	m_pStartLocation->SetPosition(rift);
+	
 	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
 	m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 }
@@ -626,6 +620,41 @@ void CSelect::PlayerShowUp(int nPlayer)
 	pos.y += 10.0f;
 
 	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
+}
+
+void CSelect::rift(void)
+{
+	if (m_bOk == true)
+	{
+		CCamera* pCamera = CManager::GetCamera();
+
+		D3DXVECTOR3 rift = m_pStartLocation->GetPosition();
+		rift.y += LIFT_UP;
+		m_pStartLocation->SetPosition(rift);
+
+		if (m_bRiftCamera == false)
+		{
+			pCamera->SetLift();
+			m_bRiftCamera = true;
+		}
+		else
+		{
+			pCamera->SetUpLift();
+		}
+
+		for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
+		{
+			if (m_abEntry[nCnt] == true)
+			{
+				D3DXVECTOR3 pos = m_apPlayerData[nCnt].pPlayer->GetPosition();
+				D3DXVECTOR3 move = m_apPlayerData[nCnt].pPlayer->GetMove();
+
+				pos = m_apPlayerData[nCnt].pPlayer->GetPosition();
+				pos.y += LIFT_UP;
+				m_apPlayerData[nCnt].pPlayer->SetPosition(pos);
+			}
+		}
+	}
 }
 
 //=====================================================
