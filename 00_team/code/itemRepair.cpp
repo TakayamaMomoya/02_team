@@ -165,7 +165,7 @@ void CItemRepair::Update(void)
 //=====================================================
 void CItemRepair::FollowPlayerHand(void)
 {
-	CUniversal *pUniversal = CUniversal::GetInstance();
+	
 
 	if (m_pPlayer == nullptr)
 	{
@@ -185,7 +185,7 @@ void CItemRepair::FollowPlayerHand(void)
 			D3DXMATRIX *pMtxPart = pParts->GetMatrix();
 			D3DXVECTOR3 offset = { -10.0f,0.0f,0.0f };
 
-			pUniversal->SetOffSet(pMtx, *pMtxPart, offset);
+			universal::SetOffSet(pMtx, *pMtxPart, offset);
 
 			// éËÇ…í«è]Ç∑ÇÈ
 			D3DXVECTOR3 posHand =

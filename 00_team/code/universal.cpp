@@ -13,52 +13,12 @@
 #include "universal.h"
 #include <stdio.h>
 
-//*****************************************
-// 静的メンバ変数宣言
-//*****************************************
-CUniversal *CUniversal::m_pUniversal = nullptr;	// 自身のポインタ
-
-//=========================================
-// コンストラクタ
-//=========================================
-CUniversal::CUniversal()
+namespace universal
 {
-
-}
-
-//=========================================
-// デストラクタ
-//=========================================
-CUniversal::~CUniversal()
-{
-
-}
-
-//=========================================
-// 生成処理
-//=========================================
-CUniversal *CUniversal::Create(void)
-{
-	if (m_pUniversal == nullptr)
-	{
-		m_pUniversal = new CUniversal;
-	}
-
-	return m_pUniversal;
-}
-
-//=========================================
-// 終了処理
-//=========================================
-void CUniversal::Uninit(void)
-{
-	delete this;
-}
-
 //=========================================
 //回転制御処理
 //=========================================
-void CUniversal::LimitRot(float *fRot)
+void LimitRot(float *fRot)
 {
 	if (*fRot > D3DX_PI)
 	{
@@ -73,7 +33,7 @@ void CUniversal::LimitRot(float *fRot)
 //========================================
 //オフセット設定処理
 //========================================
-void CUniversal::SetOffSet(D3DXMATRIX *pMtxWorldOffset, D3DXMATRIX mtxWorldOwner, D3DXVECTOR3 posOffset, D3DXVECTOR3 rot)
+void SetOffSet(D3DXMATRIX *pMtxWorldOffset, D3DXMATRIX mtxWorldOwner, D3DXVECTOR3 posOffset, D3DXVECTOR3 rot)
 {
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
@@ -103,7 +63,7 @@ void CUniversal::SetOffSet(D3DXMATRIX *pMtxWorldOffset, D3DXMATRIX mtxWorldOwner
 //========================================
 // 向き補正処理
 //========================================
-void CUniversal::FactingRot(float *pfRot, float fRotDest, float rotateFact)
+void FactingRot(float *pfRot, float fRotDest, float rotateFact)
 {
 	// 引数の角度の補正
 	LimitRot(pfRot);
@@ -124,7 +84,7 @@ void CUniversal::FactingRot(float *pfRot, float fRotDest, float rotateFact)
 //========================================
 // 距離の比較
 //========================================
-bool CUniversal::DistCmp(D3DXVECTOR3 posOwn, D3DXVECTOR3 posTarget, float fLengthMax, float *fDiff)
+bool DistCmp(D3DXVECTOR3 posOwn, D3DXVECTOR3 posTarget, float fLengthMax, float *fDiff)
 {
 	D3DXVECTOR3 vecDiff = posTarget - posOwn;
 	float fLength = D3DXVec3Length(&vecDiff);
@@ -147,7 +107,7 @@ bool CUniversal::DistCmp(D3DXVECTOR3 posOwn, D3DXVECTOR3 posTarget, float fLengt
 //========================================
 // 外積の計算
 //========================================
-float CUniversal::CrossProduct(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2)
+float CrossProduct(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2)
 {
 	return pos1.z * pos2.x - pos1.x * pos2.z;
 }
@@ -155,10 +115,11 @@ float CUniversal::CrossProduct(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2)
 //========================================
 // 範囲内のランダム数値を返す処理
 //========================================
-int CUniversal::RandRange(int nMax, int nMin)
+int RandRange(int nMax, int nMin)
 {
 	int nRange = nMax - nMin;
 	int nRand = rand() % nRange + nMin;
 
 	return nRand;
 }
+}	// namespace universal

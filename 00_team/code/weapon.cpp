@@ -159,7 +159,7 @@ void CWeapon::Update(void)
 //=====================================================
 void CWeapon::FollowPlayerHand(void)
 {
-	CUniversal *pUniversal = CUniversal::GetInstance();
+	
 
 	if (m_info.pPlayer == nullptr)
 	{
@@ -180,7 +180,7 @@ void CWeapon::FollowPlayerHand(void)
 				D3DXMATRIX *pMtxPart = pParts->GetMatrix();
 				D3DXVECTOR3 offset = { -10.0f,0.0f,0.0f };
 
-				pUniversal->SetOffSet(pMtx, *pMtxPart, offset);
+				universal::SetOffSet(pMtx, *pMtxPart, offset);
 			}
 		}
 		else
@@ -194,7 +194,7 @@ void CWeapon::FollowPlayerHand(void)
 				D3DXVECTOR3 offset = { 0.0f,0.0f,20.0f };
 				D3DXVECTOR3 rot = { 0.0f,0.0f,D3DX_PI * 0.3f };
 
-				pUniversal->SetOffSet(pMtx, *pMtxPart, offset, rot);
+				universal::SetOffSet(pMtx, *pMtxPart, offset, rot);
 			}
 		}
 	}

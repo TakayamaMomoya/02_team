@@ -91,7 +91,7 @@ void CMagnum::Attack(void)
 
 			// マズルの位置を設定
 			D3DXMATRIX mtxMuzzle;
-			CUniversal::GetInstance()->SetOffSet(&mtxMuzzle, *pMtx, D3DXVECTOR3(-50.0f, 20.0f, 0.0f));
+			universal::SetOffSet(&mtxMuzzle, *pMtx, D3DXVECTOR3(-50.0f, 20.0f, 0.0f));
 
 			D3DXVECTOR3 posMuzzle =
 			{
@@ -108,7 +108,7 @@ void CMagnum::Attack(void)
 			{// プレイヤーの向きに移動量を設定
 				D3DXVECTOR3 rot = pPlayer->GetRot();
 
-				int nRange = CUniversal::GetInstance()->RandRange(10, -10);
+				int nRange = universal::RandRange(10, -10);
 
 				float fRand = nRange * 0.01f;
 
