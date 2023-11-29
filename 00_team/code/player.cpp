@@ -49,6 +49,7 @@ namespace
 	const float DAMAGE_TIME = 0.5f;		// ダメージ状態の秒数
 	const float MOVE_LINE = 0.2f;		// 動いている判断のしきい値
 
+	const int HAND_PARTS_NUM = 6;		// 手の番号
 }
 
 //=====================================================
@@ -752,7 +753,7 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 		m_info.pWeapon = nullptr;
 	}
 
-	m_info.pWeapon = CWeapon::Create(type,6);
+	m_info.pWeapon = CWeapon::Create(type, HAND_PARTS_NUM);
 
 	if (m_info.pWeapon != nullptr)
 	{
