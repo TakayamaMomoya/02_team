@@ -63,7 +63,7 @@ namespace
 	const float RESPAWN_TIME(10.0f);	// コンテナ復活の時間
 
 	const float RIFT_IN(100.0f);	// リフトの範囲
-	const float RIFT_UP(1.0f);	// リフト上昇速度
+	const float LIFT_UP(1.0f);	// リフト上昇速度
 };
 
 //=====================================================
@@ -77,6 +77,7 @@ CSelect::CSelect()
 	m_pPlayerManager = nullptr;
 	m_pStartLocation = nullptr;
 	m_state = STATE_NONE;
+	m_bRiftCamera = false;
 }
 
 //=====================================================
@@ -535,6 +536,7 @@ void CSelect::MoveLimit(int nPlayer)
 	D3DXVECTOR3 pos = m_apPlayerData[nPlayer].pPlayer->GetPosition();
 	D3DXVECTOR3 rift = m_pStartLocation->GetPosition();
 	D3DXVECTOR3 move = m_apPlayerData[nPlayer].pPlayer->GetMove();
+	CCamera* pCamera = CManager::GetCamera();
 
 	// 大人の壁判定
 	if (m_apPlayerData[nPlayer].state != PLAYER_INGAME)
@@ -549,8 +551,19 @@ void CSelect::MoveLimit(int nPlayer)
 	}
 	else
 	{
-		rift.y += RIFT_UP;
-		pos.y += RIFT_UP;
+		rift.y += LIFT_UP;
+		pos.y += LIFT_UP;
+
+		if (m_bRiftCamera == false)
+		{
+			pCamera->SetLift();
+			m_bRiftCamera = true;
+		}
+		else
+		{
+			pCamera->SetUpLift();
+		}
+		
 
 		/*if (m_pStartLocation->GetPosition().x + RIFT_IN >= pos.x)
 		{

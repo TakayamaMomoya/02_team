@@ -115,6 +115,7 @@ private:
 	CStartLocation* m_pStartLocation;
 	STATE m_state;	// èÛë‘
 	bool m_abEntry[NUM_PLAYER];	// éQâ¡ÇµÇΩÇ©Ç«Ç§Ç©
+	bool m_bRiftCamera;
 };
 
 #endif
