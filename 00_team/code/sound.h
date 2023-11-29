@@ -27,6 +27,8 @@ public:
 		LABEL_BGM_GAME,					// ゲームbgm
 		LABEL_SE_REPAIR,				// 修繕
 		LABEL_SE_GUNSHOT_02,			// 発砲音02
+		LABEL_SE_START_GAME,			// ゲームスタート
+		LABEL_BGM_TITLE,				// タイトル
 		LABEL_MAX
 	} LABEL;
 
@@ -87,8 +89,10 @@ private:
 		{ "data/SOUND/SE/Appearance.wav",0 },			// 登場
 		{ "data/SOUND/BGM/select.wav",-1 },				// 選択
 		{ "data/SOUND/BGM/game.wav",-1 },				// ゲーム
-		{ "data/SOUND/SE/repair.wav",0},				// 修繕
-		{ "data/SOUND/SE/gunshot_sound_03.wav",0}				// ショットガン発砲
+		{ "data/SOUND/SE/repair.wav",0 },				// 修繕
+		{ "data/SOUND/SE/gunshot_sound_03.wav",0 },		// ショットガン発砲
+		{ "data/SOUND/SE/start_game.wav",0 },			// ゲームスタート
+		{ "data/SOUND/BGM/title_BGM.wav",-1 }			// タイトルサウンド	
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ
