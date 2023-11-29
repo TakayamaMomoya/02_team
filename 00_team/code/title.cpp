@@ -191,6 +191,13 @@ HRESULT CTitle::Init(void)
 		pRenderer->EnableFog(true);
 	}
 
+	// サウンドインスタンスの取得
+	CSound* pSound = CSound::GetInstance();
+
+	if (pSound != nullptr)
+	{
+		pSound->Play(pSound->LABEL_BGM_TITLE);
+	}
 	return S_OK;
 }
 
@@ -237,6 +244,14 @@ void CTitle::Update(void)
 				pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
 				pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0))
 			{// フェード開始
+
+				// サウンドインスタンスの取得
+				CSound* pSound = CSound::GetInstance();
+
+				if (pSound != nullptr)
+				{
+					pSound->Play(pSound->LABEL_SE_START_GAME);
+				}
 
 				// フェード設定
 				SetFadeIn();
