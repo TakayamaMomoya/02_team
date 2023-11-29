@@ -59,7 +59,7 @@ HRESULT CStartLocation::Init(void)
 	// Œp³ƒNƒ‰ƒX‚Ì‰Šú‰»
 	CObjectX::Init();
 
-	int nIdx = CModel::Load("data\\MODEL\\sample_debris.x");
+	int nIdx = CModel::Load("data\\MODEL\\block\\rift.x");
 	// ƒ‚ƒfƒ‹“Çž
 	BindModel(nIdx);
 
@@ -85,7 +85,7 @@ void CStartLocation::Update(void)
 
 	CFade* pFade = CFade::GetInstance();
 	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
-	CPlayer* pPlayer;
+	CPlayer* pPlayer = nullptr;
 	int nInPlayer = 0;
 
 	D3DXVECTOR3 pos = GetPosition();
@@ -104,13 +104,16 @@ void CStartLocation::Update(void)
 			(pPlayer->GetPosition().x - GetPosition().x) * (pPlayer->GetPosition().x - GetPosition().x) + 
 			(pPlayer->GetPosition().z - GetPosition().z) * (pPlayer->GetPosition().z - GetPosition().z));
 
-		if (fLength < RANGE)
+		if (GetPosition().x + 100.0f >= pPlayer->GetPosition().x &&
+			GetPosition().x - 100.0f <= pPlayer->GetPosition().x &&
+			GetPosition().z + 100.0f >= pPlayer->GetPosition().z &&
+			GetPosition().z - 100.0f <= pPlayer->GetPosition().z)
 		{
 			m_abJoin[nCnt] = true;
 
 			nInPlayer++;
 		}
-		else if (fLength > RANGE)
+		else
 		{
 			m_abJoin[nCnt] = false;
 		}
