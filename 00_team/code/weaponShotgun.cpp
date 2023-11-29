@@ -142,12 +142,13 @@ void CShotgun::Attack(void)
 					// 弾を発射
 					CBullet::Create(posMuzzle, -move, 100, CBullet::TYPE_PLAYER, false, 2.0f, fDamage);
 
+					// サウンドのインスタンスを取得
 					CSound* pSound = CSound::GetInstance();
 
 					if (pSound != nullptr)
 					{
 						// ショットガン発砲音
-						pSound->Play(pSound->LABEL_SE_GUNSHOT_00);
+						pSound->Play(pSound->LABEL_SE_GUNSHOT_02);
 					}
 
 					// 連射カウンターのリセット

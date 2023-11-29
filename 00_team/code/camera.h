@@ -56,6 +56,8 @@ public:
 	void SetTitle(void);
 	void SetTitleEsc(void);
 	void SetSelect(void);
+	void SetLift(void);
+	void SetUpLift(void);
 
 private:
 	void SetPosV(void);

@@ -42,6 +42,7 @@ private:
 	static int m_nNumJoinPlayer;
 	static int m_nInCnt;
 	static bool m_abJoin[NUM_PLAYER];
+
 };
 
 #endif

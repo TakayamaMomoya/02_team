@@ -46,10 +46,10 @@
 //*****************************************************
 namespace
 {
-	const D3DXVECTOR3 UI_POS_1P(D3DXVECTOR3(-168.0f, 80.0f, -72.0f));	//UIの位置
-	const D3DXVECTOR3 UI_POS_2P(D3DXVECTOR3(-18.0f, 80.0f, -72.0f));	//UIの位置
-	const D3DXVECTOR3 UI_POS_3P(D3DXVECTOR3(132.0f, 80.0f, -72.0f));	//UIの位置
-	const D3DXVECTOR3 UI_POS_4P(D3DXVECTOR3(282.0f, 80.0f, -72.0f));	//UIの位置
+	const D3DXVECTOR3 UI_POS_1P(D3DXVECTOR3(-168.0f, 80.0f, -430.0f));	//UIの位置
+	const D3DXVECTOR3 UI_POS_2P(D3DXVECTOR3(-18.0f, 80.0f, -430.0f));	//UIの位置
+	const D3DXVECTOR3 UI_POS_3P(D3DXVECTOR3(132.0f, 80.0f, -430.0f));	//UIの位置
+	const D3DXVECTOR3 UI_POS_4P(D3DXVECTOR3(282.0f, 80.0f, -430.0f));	//UIの位置
 
 	const float SPOWN_HEIGHT(-100.0f);	//プレイヤー出現高さ
 
@@ -61,6 +61,9 @@ namespace
 	const float GRAVITY(5.0f);	//重力
 
 	const float RESPAWN_TIME(10.0f);	// コンテナ復活の時間
+
+	const float RIFT_IN(100.0f);	// リフトの範囲
+	const float LIFT_UP(1.0f);	// リフト上昇速度
 };
 
 //=====================================================
@@ -72,12 +75,9 @@ CSelect::CSelect()
 	ZeroMemory(&m_aContainerData[0], sizeof(CSelect::CContainerInfo));
 	m_pStartUI = nullptr;
 	m_pPlayerManager = nullptr;
+	m_pStartLocation = nullptr;
 	m_state = STATE_NONE;
-
-	/*for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
-	{
-		m_aContainerData[nCnt] = nullptr;
-	}*/
+	m_bRiftCamera = false;
 }
 
 //=====================================================
@@ -110,14 +110,15 @@ HRESULT CSelect::Init(void)
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
 
-	CStartLocation::Create(D3DXVECTOR3(0.0f, 10.0f, -300.0f));
+	// 開始位置
+	m_pStartLocation = CStartLocation::Create(D3DXVECTOR3(30.0f, 0.0f, 100.0f));
 
 	// サウンドインスタンスの取得
 	CSound* pSound = CSound::GetInstance();
 
 	if (pSound != nullptr)
 	{
-		pSound->Play(pSound->LABEL_BGM_SELECT);
+		//pSound->Play(pSound->LABEL_BGM_SELECT);
 	}
 
 	// ３Dアニメーション管理の生成
@@ -240,6 +241,8 @@ void CSelect::ContainerInit(void)
 {
 	CWeaponManager::Create();
 
+	float fpos = 200.0f;
+
 	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
 	{
 		m_aContainerData[nCnt].pContainer = CContainer::Create();
@@ -247,22 +250,22 @@ void CSelect::ContainerInit(void)
 		switch (nCnt)
 		{
 		case 0:
-			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -250.0f));
+			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(fpos, 0.0f, -250.0f));
 			break;
 		case 1:
-			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -250.0f));
+			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-fpos, 0.0f, -250.0f));
 			break;
 		case 2:
-			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -300.0f));
+			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(fpos, 0.0f, -300.0f));
 			break;
 		case 3:
-			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -300.0f));
+			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-fpos, 0.0f, -300.0f));
 			break;
 		case 4:
-			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -350.0f));
+			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(fpos, 0.0f, -350.0f));
 			break;
 		case 5:
-			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -350.0f));
+			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-fpos, 0.0f, -350.0f));
 			break;
 		default:
 			assert(("コンテナ設定の失敗(select.cpp)", false));
@@ -312,9 +315,14 @@ void CSelect::Update(void)
 					pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
 				{// フェード
 
+					for (int nCntPlayer = 0; nCntPlayer < NUM_PLAYER; nCntPlayer++)
+					{
+						m_apPlayerData[nCntPlayer].state = PLAYER_INGAME;
+					}
+					
 					if (pFade != nullptr && m_abEntry[0] != false)
 					{
-						pFade->SetFade(CScene::MODE_GAME);
+						//pFade->SetFade(CScene::MODE_GAME);
 					}
 				}
 
@@ -524,32 +532,69 @@ void CSelect::MoveLimit(int nPlayer)
 		return;
 	}
 
-	if (m_apPlayerData[nPlayer].state == PLAYER_ENTRY)
-	{
-		return;
-	}
-
 	// 情報の取得
 	D3DXVECTOR3 pos = m_apPlayerData[nPlayer].pPlayer->GetPosition();
+	D3DXVECTOR3 rift = m_pStartLocation->GetPosition();
 	D3DXVECTOR3 move = m_apPlayerData[nPlayer].pPlayer->GetMove();
-
-	// 重力
-	move.y -= GRAVITY;
+	CCamera* pCamera = CManager::GetCamera();
 
 	// 大人の壁判定
-	if (pos.z < ADULTWALL_POS_Z)
+	if (m_apPlayerData[nPlayer].state != PLAYER_INGAME)
 	{
-		pos.z = ADULTWALL_POS_Z;
+		// 重力
+		move.y -= GRAVITY;
+
+		if (pos.z < ADULTWALL_POS_Z)
+		{
+			pos.z = ADULTWALL_POS_Z;
+		}
+	}
+	else
+	{
+		rift.y += LIFT_UP;
+		pos.y += LIFT_UP;
+
+		if (m_bRiftCamera == false)
+		{
+			pCamera->SetLift();
+			m_bRiftCamera = true;
+		}
+		else
+		{
+			pCamera->SetUpLift();
+		}
+		
+
+		/*if (m_pStartLocation->GetPosition().x + RIFT_IN >= pos.x)
+		{
+			pos.x = RIFT_IN - 1.0f;
+		}
+		if (m_pStartLocation->GetPosition().x - RIFT_IN <= pos.x)
+		{
+			pos.x = RIFT_IN;
+		}
+		if (m_pStartLocation->GetPosition().z + RIFT_IN >= pos.z)
+		{
+			pos.z = RIFT_IN;
+		}
+		if (m_pStartLocation->GetPosition().z - RIFT_IN <= pos.z)
+		{
+			pos.z = -RIFT_IN;
+		}*/
 	}
 
-	// 床判定
-	if (pos.y <= 0.0f)
+	if (m_apPlayerData[nPlayer].state != PLAYER_ENTRY)
 	{
-		pos.y = 0.0f;
-		move.y = 0.0f;
+		// 床判定
+		if (pos.y <= 0.0f)
+		{
+			pos.y = 0.0f;
+			move.y = 0.0f;
+		};
 	}
 
 	//情報の反映
+	m_pStartLocation->SetPosition(rift);
 	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
 	m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 }
@@ -564,7 +609,7 @@ void CSelect::PlayerShowUp(int nPlayer)
 		return;
 	}
 
-	if (m_apPlayerData[nPlayer].state == PLAYER_FREE)
+	if (m_apPlayerData[nPlayer].state != PLAYER_ENTRY)
 	{
 		return;
 	}
