@@ -26,6 +26,7 @@ public:
 		LABEL_BGM_SELECT,				// ‘I‘ğ‰æ–Êbgm
 		LABEL_BGM_GAME,					// ƒQ[ƒ€bgm
 		LABEL_SE_REPAIR,				// C‘U
+		LABEL_SE_GUNSHOT_02,			// ”­–C‰¹02
 		LABEL_MAX
 	} LABEL;
 
@@ -86,7 +87,8 @@ private:
 		{ "data/SOUND/SE/Appearance.wav",0 },			// “oê
 		{ "data/SOUND/BGM/select.wav",-1 },				// ‘I‘ğ
 		{ "data/SOUND/BGM/game.wav",-1 },				// ƒQ[ƒ€
-		{ "data/SOUND/SE/repair.wav",0}					// C‘U
+		{ "data/SOUND/SE/repair.wav",0},				// C‘U
+		{ "data/SOUND/SE/gunshot_sound_03.wav",0}				// ƒVƒ‡ƒbƒgƒKƒ“”­–C
 	};
 
 	static CSound *m_pSound;	// ©g‚Ìƒ|ƒCƒ“ƒ^
