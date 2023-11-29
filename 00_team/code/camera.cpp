@@ -200,6 +200,43 @@ void CCamera::SetSelect(void)
 }
 
 //====================================================
+// リフトの初期位置
+//====================================================
+void CCamera::SetLift(void)
+{
+	D3DXVECTOR3 posV = { 25.0f,80.0f,-130.0f };
+	D3DXVECTOR3 posR = { 25.0f,-100.0f,820.0f };
+
+	m_camera.posV = posV;
+	m_camera.posVDest = posV;
+
+	m_camera.posR = posR;
+	m_camera.posRDest = posR;
+}
+
+//====================================================
+// 上昇リフト
+//====================================================
+void CCamera::SetUpLift(void)
+{
+	if (m_camera.posV.y < 200.0f)
+	{
+		m_camera.posV.y += 2.0f;
+		m_camera.posVDest.y += 2.0f;
+
+		m_camera.posR.y += 2.0f;
+		m_camera.posRDest.y += 2.0f;
+
+		return;
+	}
+	
+	m_camera.posV.y += 1.5f;
+	m_camera.posVDest.y += 1.5f;
+	m_camera.posR.y += 4.5f;
+	m_camera.posRDest.y += 4.5f;
+}
+
+//====================================================
 // 追従処理
 //====================================================
 void CCamera::FollowPlayer(void)

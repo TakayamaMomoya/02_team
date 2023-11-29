@@ -421,7 +421,6 @@ void CPlayer::Aim(void)
 {
 	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
 	
-
 	if (pJoyPad == nullptr)
 	{
 		return;
@@ -522,6 +521,11 @@ void CPlayer::ManageState(void)
 //=====================================================
 void CPlayer::ManageMotion(void)
 {
+	if (GetBody() == nullptr)
+	{
+		return;
+	}
+	
 	D3DXVECTOR3 move = GetMove();
 
 	float fSpeed = D3DXVec3Length(&move);
@@ -564,7 +568,7 @@ void CPlayer::ManageMotion(void)
 		{
 			switch (m_info.pWeapon->GetType())
 			{
-				// マガジン
+				// マグナム
 			case CWeapon::TYPE_MAGNUM:
 
 				if (fSpeed > MOVE_LINE)
@@ -630,7 +634,11 @@ void CPlayer::ManageMotion(void)
 		bool bFinish = GetBody()->IsFinish(CCharacterDiv::PARTS_UPPER);
 		int nKey = GetBody()->GetKey(CCharacterDiv::PARTS_UPPER);
 		int nNumKey = GetBody()->GetMotionInfo(CCharacterDiv::PARTS_UPPER, nMotionUpper).nNumKey;
-		D3DXVECTOR3 rotPlayer = GetRot();
+		float fRotPlayer = GetRot().y;
+		float fRotMove = atan2f(-move.x, -move.z);
+		float fRot = fRotPlayer - fRotMove;
+
+		universal::LimitRot(&fRot);
 
 		// ドア開けるモーション
 		if (m_info.motionInfo.bDoorPress)
@@ -704,15 +712,19 @@ void CPlayer::ManageMotion(void)
 		{
 			if (fSpeed > MOVE_LINE)
 			{
-				if (rotPlayer.y <= D3DX_PI * 0.75f &&
-					rotPlayer.y >= D3DX_PI * 0.75f)
+				if (fRot <= D3DX_PI * 0.75f && fRot >= D3DX_PI * -0.75f)
 				{
-					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_FRONT);
+					if (nMotionUpper != MOTION_WALK_FRONT)
+					{
+						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_FRONT);
+					}
 				}
-				
-				if (nMotionUpper != MOTION_WALK_FRONT)
+				else if (fRot >= D3DX_PI * 0.25f && fRot <= D3DX_PI * -0.25f)
 				{
-					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_FRONT);
+					if (nMotionUpper != MOTION_WALK_BACK)
+					{
+						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_BACK);
+					}
 				}
 			}
 			else

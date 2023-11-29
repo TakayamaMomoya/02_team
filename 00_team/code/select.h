@@ -21,6 +21,7 @@ class CObject2D;
 class CPlayerManager;
 class CPlayer;
 class CContainer;
+class CStartLocation;
 
 //*****************************************************
 // マクロ定義
@@ -65,6 +66,7 @@ private:
 		PLAYER_NONE = 0,	// 無し
 		PLAYER_ENTRY,	// 参加状態
 		PLAYER_FREE,	// 自由状態
+		PLAYER_INGAME,	// ゲームへ入る
 		PLAYER_MAX
 	};
 
@@ -104,14 +106,19 @@ private:
 	void MoveLimit(int nPlayer);
 	void PlayerShowUp(int nPlayer);
 
+	void rift(void);
+
 	MenuData m_aMenuData[NUM_PLAYER];	// それぞれの選択メニュー
 	CObject2D* m_pStartUI;	// Start文字
 	CPlayerManager* m_pPlayerManager;	// プレイヤー管理
 	PlayerInfo m_apPlayerData[NUM_PLAYER];
 	CContainerInfo m_aContainerData[MAX_CONTAINER];
 	//CContainer* m_apContainer[MAX_CONTAINER];
+	CStartLocation* m_pStartLocation;
 	STATE m_state;	// 状態
 	bool m_abEntry[NUM_PLAYER];	// 参加したかどうか
+	bool m_bRiftCamera;
+	bool m_bOk;
 };
 
 #endif

@@ -38,10 +38,21 @@ public:
 	static bool GetIsIn(void);
 
 private:
+
+	enum STATE
+	{
+		STATE_NONE = 0,
+		STATE_IN,
+		STATE_END,
+		STATE_MAX
+	};
+
 	D3DXVECTOR3 m_pos;
 	static int m_nNumJoinPlayer;
 	static int m_nInCnt;
 	static bool m_abJoin[NUM_PLAYER];
+	STATE m_state;
+
 };
 
 #endif

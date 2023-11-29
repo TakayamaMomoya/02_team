@@ -338,6 +338,7 @@ void CBlock::LoadModel(void)
 		"data\\MODEL\\GIMMICK\\door000.x",	// ñÿêªï«
 		"data\\MODEL\\BLOCK\\potato_bed00.x",			// ìy
 		"data\\MODEL\\BLOCK\\shelf.x",			// íI
+		"data\\MODEL\\BLOCK\\concrete_01.x",			// íI
 	};
 
 	if (m_pIdxObject == nullptr)
