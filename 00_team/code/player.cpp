@@ -43,11 +43,12 @@ namespace
 		"data\\MOTION\\motionPotatoman04_upper.txt",
 	};
 
-	const float MOVE_SPEED = 3.0f;	// 移動速度
-	const float ROT_SPEED = 0.1f;	// 回転速度
+	const float MOVE_SPEED = 3.0f;		// 移動速度
+	const float ROT_SPEED = 0.1f;		// 回転速度
 	const float INITIAL_LIFE = 30.0f;	// 初期体力
-	const float DAMAGE_TIME = 0.5f;	// ダメージ状態の秒数
-	const float MOVE_LINE = 0.2f;	// 動いている判断のしきい値
+	const float DAMAGE_TIME = 0.5f;		// ダメージ状態の秒数
+	const float MOVE_LINE = 0.2f;		// 動いている判断のしきい値
+
 }
 
 //=====================================================
@@ -628,6 +629,7 @@ void CPlayer::ManageMotion(void)
 		bool bFinish = GetBody()->IsFinish(CCharacterDiv::PARTS_UPPER);
 		int nKey = GetBody()->GetKey(CCharacterDiv::PARTS_UPPER);
 		int nNumKey = GetBody()->GetMotionInfo(CCharacterDiv::PARTS_UPPER, nMotionUpper).nNumKey;
+		D3DXVECTOR3 rotPlayer = GetRot();
 
 		// ドア開けるモーション
 		if (m_info.motionInfo.bDoorPress)
@@ -701,6 +703,12 @@ void CPlayer::ManageMotion(void)
 		{
 			if (fSpeed > MOVE_LINE)
 			{
+				if (rotPlayer.y <= D3DX_PI * 0.75f &&
+					rotPlayer.y >= D3DX_PI * 0.75f)
+				{
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_FRONT);
+				}
+				
 				if (nMotionUpper != MOTION_WALK_FRONT)
 				{
 					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_FRONT);
