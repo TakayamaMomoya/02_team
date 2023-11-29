@@ -21,6 +21,7 @@ class CObject2D;
 class CPlayerManager;
 class CPlayer;
 class CContainer;
+class CStartLocation;
 
 //*****************************************************
 // マクロ定義
@@ -65,6 +66,7 @@ private:
 		PLAYER_NONE = 0,	// 無し
 		PLAYER_ENTRY,	// 参加状態
 		PLAYER_FREE,	// 自由状態
+		PLAYER_INGAME,	// ゲームへ入る
 		PLAYER_MAX
 	};
 
@@ -110,6 +112,7 @@ private:
 	PlayerInfo m_apPlayerData[NUM_PLAYER];
 	CContainerInfo m_aContainerData[MAX_CONTAINER];
 	//CContainer* m_apContainer[MAX_CONTAINER];
+	CStartLocation* m_pStartLocation;
 	STATE m_state;	// 状態
 	bool m_abEntry[NUM_PLAYER];	// 参加したかどうか
 };
