@@ -22,7 +22,6 @@ class CSound;
 class CCamera;
 class CLight;
 class CTexture;
-class CUniversal;
 class CFade;
 class CObjectManager;
 

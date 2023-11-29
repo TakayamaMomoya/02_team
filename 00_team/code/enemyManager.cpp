@@ -218,13 +218,13 @@ void CEnemyManager::Update(void)
 
 	if (m_nCntSpawn >= 60)
 	{
-		CUniversal *pUniversal = CUniversal::GetInstance();
+		
 
 		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
 
 		// oŒ»‚·‚éÀ•W‚ğİ’è
-		posCenter.x = (float)pUniversal->RandRange(1000, -1000);
-		posCenter.z = (float)pUniversal->RandRange(1000, -1000);
+		posCenter.x = (float)universal::RandRange(1000, -1000);
+		posCenter.z = (float)universal::RandRange(1000, -1000);
 
 		// ˆÊ’u‚Ì³‹K‰»
 		D3DXVec3Normalize(&posCenter, &posCenter);

@@ -98,11 +98,13 @@ void CItemRepair::Uninit(void)
 //=====================================================
 void CItemRepair::Update(void)
 {
+	bool bRelease = false;
+
 	if (m_pPlayer != nullptr)
 	{
-		bool bGet = m_pPlayer->InputInteract();
+		bRelease = m_pPlayer->InputInteract();
 
-		if (bGet)
+		if (bRelease)
 		{// 持ち上げているプレイヤーの検出
 			// 武器を有効化する
 			m_pPlayer->EnableWeapon(true);
@@ -114,10 +116,17 @@ void CItemRepair::Update(void)
 
 			SetEnable(true);
 		}
-	}
+		else
+		{
 
-	// 継承クラスの更新
-	CGimmick::Update();
+		}
+	}
+	
+	if (bRelease == false)
+	{
+		// 継承クラスの更新
+		CGimmick::Update();
+	}
 
 	// プレイヤーの生存確認
 	CheckPlayerAlive();
@@ -156,7 +165,7 @@ void CItemRepair::Update(void)
 //=====================================================
 void CItemRepair::FollowPlayerHand(void)
 {
-	CUniversal *pUniversal = CUniversal::GetInstance();
+	
 
 	if (m_pPlayer == nullptr)
 	{
@@ -176,7 +185,7 @@ void CItemRepair::FollowPlayerHand(void)
 			D3DXMATRIX *pMtxPart = pParts->GetMatrix();
 			D3DXVECTOR3 offset = { -10.0f,0.0f,0.0f };
 
-			pUniversal->SetOffSet(pMtx, *pMtxPart, offset);
+			universal::SetOffSet(pMtx, *pMtxPart, offset);
 
 			// 手に追従する
 			D3DXVECTOR3 posHand =
@@ -223,7 +232,11 @@ void CItemRepair::Interact(CObject *pObj)
 					// 武器を無効化する
 					pPlayer->EnableWeapon(false);
 
+					// プレイヤーに修理アイテムのポインタ設定
 					pPlayer->SetItemRepair(this);
+
+					// プレイヤーの修理アイテム入力情報
+					pPlayer->SetItemTrigger(true);
 
 					SetEnable(false);
 				}
@@ -263,8 +276,11 @@ void CItemRepair::CollisionRocket(void)
 
 			if (m_pPlayer != nullptr)
 			{
-				// 武器を無効化する
+				// 武器を有効化する
 				m_pPlayer->EnableWeapon(true);
+
+				// プレイヤーの修理アイテムポインタを初期化
+				m_pPlayer->ReleaseItemRepair();
 			}
 
 			Uninit();

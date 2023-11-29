@@ -121,6 +121,26 @@ void CWeaponManager::LoadParam(void)
 				}
 			}
 
+			if (strcmp(cTemp, "SHOTGUNSET") == 0)
+			{// パラメーター読込開始
+				while (true)
+				{
+					// 文字読み込み
+					(void)fscanf(pFile, "%s", &cTemp[0]);
+
+					// 基底パラメーター読み込み
+					LoadBaseInfo(pFile, &cTemp[0], CWeapon::TYPE_SHOTGUN);
+
+					// ショットガン特殊パラメーター読込
+					LoadShotgunInfo(pFile, &cTemp[0]);
+
+					if (strcmp(cTemp, "END_SHOTGUNSET") == 0)
+					{// パラメーター読込終了
+						break;
+					}
+				}
+			}
+
 			if (strcmp(cTemp, "PROBSET") == 0)
 			{// 確率読込開始
 				int nCntProb = 0;
@@ -163,7 +183,7 @@ void CWeaponManager::LoadParam(void)
 }
 
 //=====================================================
-// パラメーター読込
+// 基底パラメーター読込
 //=====================================================
 void CWeaponManager::LoadBaseInfo(FILE* pFile, char* pTemp, int nCntParam)
 {
@@ -186,6 +206,26 @@ void CWeaponManager::LoadBaseInfo(FILE* pFile, char* pTemp, int nCntParam)
 		(void)fscanf(pFile, "%s", pTemp);
 
 		(void)fscanf(pFile, "%f", &m_aInfo[nCntParam].fDamage);
+	}
+}
+
+//=====================================================
+// ショットガンパラメーター読込
+//=====================================================
+void CWeaponManager::LoadShotgunInfo(FILE *pFile, char* pTemp)
+{
+	if (strcmp(pTemp, "NUM_PELLET") == 0)
+	{// 発射する弾数
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%d", &m_infoShotgun.nNumPellet);
+	}
+
+	if (strcmp(pTemp, "ANGLE_DIFFUSE") == 0)
+	{// 拡散角度
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_infoShotgun.fAngleDiffuse);
 	}
 }
 

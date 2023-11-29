@@ -130,15 +130,12 @@ void CDoor::Update(void)
 //=====================================================
 void CDoor::Open(void)
 {
-	// 汎用処理取得
-	CUniversal *pUniversal = CUniversal::GetInstance();
-
 	// 差分角度の取得
 	D3DXVECTOR3 rot = GetRot();
 
 	float fRotDiff = (m_info.rotDestY - rot.y);
 
-	pUniversal->LimitRot(&fRotDiff);
+	universal::LimitRot(&fRotDiff);
 
 	if (fRotDiff * fRotDiff <= OPEN_LINE * OPEN_LINE)
 	{// 開ききった判定
@@ -184,6 +181,9 @@ void CDoor::Interact(CObject *pObj)
 				if (bInteract)
 				{// ピッキングを進める
 					proceed();
+
+					// プレイヤーのドア入力情報
+					pPlayer->SetDoorPress(true);
 				}
 			}
 		}
@@ -235,7 +235,7 @@ void CDoor::SetOrgRot(float rotY)
 {
 	m_info.orgRotY = rotY;
 
-	CUniversal::GetInstance()->LimitRot(&m_info.rotDestY);
+	universal::LimitRot(&m_info.rotDestY);
 
 	if (rotY >= 3.0f || rotY <= -3.0f)
 	{

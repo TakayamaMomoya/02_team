@@ -11,6 +11,7 @@
 #include "weapon.h"
 #include "weaponMagnum.h"
 #include "weaponMachinegun.h"
+#include "weaponShotgun.h"
 #include "weaponManager.h"
 #include "motion.h"
 #include "player.h"
@@ -68,6 +69,16 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			}
 
 			break;
+		case CWeapon::TYPE_SHOTGUN:
+			// ƒVƒ‡ƒbƒgƒKƒ“‚Ì¶¬
+			pWeapon = new CShotgun;
+
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+			}
+
+			break;
 		default:
 			break;
 		}
@@ -85,6 +96,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			{
 				"data\\MODEL\\weapon\\magnum.x",
 				"data\\MODEL\\weapon\\mac10.x",
+				"data\\MODEL\\weapon\\ak47.x",
 			};
 
 			int nIdx = CModel::Load(apPath[type]);
@@ -147,7 +159,7 @@ void CWeapon::Update(void)
 //=====================================================
 void CWeapon::FollowPlayerHand(void)
 {
-	CUniversal *pUniversal = CUniversal::GetInstance();
+	
 
 	if (m_info.pPlayer == nullptr)
 	{
@@ -168,7 +180,7 @@ void CWeapon::FollowPlayerHand(void)
 				D3DXMATRIX *pMtxPart = pParts->GetMatrix();
 				D3DXVECTOR3 offset = { -10.0f,0.0f,0.0f };
 
-				pUniversal->SetOffSet(pMtx, *pMtxPart, offset);
+				universal::SetOffSet(pMtx, *pMtxPart, offset);
 			}
 		}
 		else
@@ -182,7 +194,7 @@ void CWeapon::FollowPlayerHand(void)
 				D3DXVECTOR3 offset = { 0.0f,0.0f,20.0f };
 				D3DXVECTOR3 rot = { 0.0f,0.0f,D3DX_PI * 0.3f };
 
-				pUniversal->SetOffSet(pMtx, *pMtxPart, offset, rot);
+				universal::SetOffSet(pMtx, *pMtxPart, offset, rot);
 			}
 		}
 	}

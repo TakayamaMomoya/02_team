@@ -70,9 +70,6 @@ CBullet::~CBullet()
 //=====================================================
 HRESULT CBullet::Init(void)
 {
-	// 汎用処理取得
-	CUniversal *pUniversal = CUniversal::GetInstance();
-
 	m_rot.y = atan2f(m_move.x,m_move.z);
 
 	// タイプの設定
@@ -114,9 +111,6 @@ void CBullet::Uninit(void)
 //=====================================================
 void CBullet::Update(void)
 {
-	// 汎用処理取得
-	CUniversal *pUniversal = CUniversal::GetInstance();
-
 	// 変数宣言
 	bool bHit = false;
 

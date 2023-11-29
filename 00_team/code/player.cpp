@@ -43,11 +43,13 @@ namespace
 		"data\\MOTION\\motionPotatoman04_upper.txt",
 	};
 
-	const float MOVE_SPEED = 3.0f;	// 移動速度
-	const float ROT_SPEED = 0.1f;	// 回転速度
+	const float MOVE_SPEED = 3.0f;		// 移動速度
+	const float ROT_SPEED = 0.1f;		// 回転速度
 	const float INITIAL_LIFE = 30.0f;	// 初期体力
-	const float DAMAGE_TIME = 0.5f;	// ダメージ状態の秒数
-	const float MOVE_LINE = 0.2f;	// 動いている判断のしきい値
+	const float DAMAGE_TIME = 0.5f;		// ダメージ状態の秒数
+	const float MOVE_LINE = 0.2f;		// 動いている判断のしきい値
+
+	const int HAND_PARTS_NUM = 6;		// 手の番号
 }
 
 //=====================================================
@@ -361,7 +363,7 @@ bool CPlayer::InputInteract(void)
 {
 	bool bTrigger = false;
 
-	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	CInputJoypad* pJoyPad = CInputJoypad::GetInstance();
 	int nID = GetIDJoypad();
 
 	if (pJoyPad == nullptr)
@@ -369,7 +371,7 @@ bool CPlayer::InputInteract(void)
 		return bTrigger;
 	}
 
-	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_LB,nID))
+	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_LB, nID))
 	{
 		bTrigger = true;
 	}
@@ -384,7 +386,7 @@ bool CPlayer::InputInteractPress(void)
 {
 	bool bPress = false;
 
-	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	CInputJoypad* pJoyPad = CInputJoypad::GetInstance();
 	int nID = GetIDJoypad();
 
 	if (pJoyPad == nullptr)
@@ -399,6 +401,7 @@ bool CPlayer::InputInteractPress(void)
 
 	return bPress;
 }
+
 
 //=====================================================
 // 武器の有効可
@@ -417,7 +420,7 @@ void CPlayer::EnableWeapon(bool bEnable)
 void CPlayer::Aim(void)
 {
 	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
-	CUniversal *pUniversal = CUniversal::GetInstance();
+	
 
 	if (pJoyPad == nullptr)
 	{
@@ -463,9 +466,9 @@ void CPlayer::Aim(void)
 	// 角度補正
 	D3DXVECTOR3 rot = GetRot();
 
-	pUniversal->LimitRot(&fAngleDest);
+	universal::LimitRot(&fAngleDest);
 
-	pUniversal->FactingRot(&rot.y, fAngleDest + D3DX_PI, ROT_SPEED);
+	universal::FactingRot(&rot.y, fAngleDest + D3DX_PI, ROT_SPEED);
 
 	SetRot(rot);
 }
@@ -530,8 +533,16 @@ void CPlayer::ManageMotion(void)
 
 	// 下半身のモーション
 	{
-		// 修理アイテムの有無を判定
-		if (m_info.pItemRepair != nullptr)
+		// ドア開けるモーション
+		if (m_info.motionInfo.bDoorPress)
+		{
+			if (nMotionLower != MOTION_OPEN_DOOR)
+			{
+				SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_OPEN_DOOR);
+			}
+		}
+		// 修理アイテム
+		else if (m_info.pItemRepair != nullptr)
 		{
 			if (fSpeed > MOVE_LINE)
 			{
@@ -548,7 +559,7 @@ void CPlayer::ManageMotion(void)
 				}
 			}
 		}
-		// 所有武器の有無を判定
+		// 所有武器
 		else if (m_info.pWeapon != nullptr)
 		{
 			switch (m_info.pWeapon->GetType())
@@ -616,7 +627,30 @@ void CPlayer::ManageMotion(void)
 
 	// 上半身のモーション
 	{
-		if (m_info.pItemRepair != nullptr)
+		bool bFinish = GetBody()->IsFinish(CCharacterDiv::PARTS_UPPER);
+		int nKey = GetBody()->GetKey(CCharacterDiv::PARTS_UPPER);
+		int nNumKey = GetBody()->GetMotionInfo(CCharacterDiv::PARTS_UPPER, nMotionUpper).nNumKey;
+		D3DXVECTOR3 rotPlayer = GetRot();
+
+		// ドア開けるモーション
+		if (m_info.motionInfo.bDoorPress)
+		{
+			if (nMotionUpper != MOTION_OPEN_DOOR)
+			{
+				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_OPEN_DOOR);
+			}
+		}
+		// 物拾う
+		else if (m_info.motionInfo.bItemTrigger ||
+				 nMotionUpper == MOTION_ITEM_PICK_UP && bFinish == false && nKey != nNumKey)
+		{
+			if (nMotionUpper != MOTION_ITEM_PICK_UP)
+			{
+				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_ITEM_PICK_UP);
+			}
+		}
+		// 所有修理アイテム
+		else if (m_info.pItemRepair != nullptr)
 		{
 			if (fSpeed > MOVE_LINE)
 			{
@@ -633,7 +667,7 @@ void CPlayer::ManageMotion(void)
 				}
 			}
 		}
-		// 所有武器の有無を判定
+		// 所有武器
 		else if (m_info.pWeapon != nullptr)
 		{
 			switch (m_info.pWeapon->GetType())
@@ -643,16 +677,9 @@ void CPlayer::ManageMotion(void)
 
 				if (fSpeed > MOVE_LINE)
 				{
-					if (nMotionUpper != MOTION_MAGNUM_WALK_FRONT)
+					if (nMotionUpper != MOTION_MAGNUM_ATTACK)
 					{
-						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_WALK_FRONT);
-					}
-				}
-				else
-				{
-					if (nMotionUpper != MOTION_MAGNUM_NEUTRAL)
-					{
-						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_NEUTRAL);
+						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_ATTACK);
 					}
 				}
 
@@ -663,16 +690,9 @@ void CPlayer::ManageMotion(void)
 
 				if (fSpeed > MOVE_LINE)
 				{
-					if (nMotionUpper != MOTION_RIFLE_WALK_FRONT)
+					if (nMotionUpper != MOTION_RIFLE_ATTACK)
 					{
-						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_WALK_FRONT);
-					}
-				}
-				else
-				{
-					if (nMotionUpper != MOTION_RIFLE_NEUTRAL)
-					{
-						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_NEUTRAL);
+						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_ATTACK);
 					}
 				}
 
@@ -684,6 +704,12 @@ void CPlayer::ManageMotion(void)
 		{
 			if (fSpeed > MOVE_LINE)
 			{
+				if (rotPlayer.y <= D3DX_PI * 0.75f &&
+					rotPlayer.y >= D3DX_PI * 0.75f)
+				{
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_FRONT);
+				}
+				
 				if (nMotionUpper != MOTION_WALK_FRONT)
 				{
 					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_FRONT);
@@ -698,6 +724,10 @@ void CPlayer::ManageMotion(void)
 			}
 		}
 	}
+
+	// ドアの入力情報の初期化
+	m_info.motionInfo.bDoorPress = false;
+	m_info.motionInfo.bItemTrigger = false;
 }
 
 //=====================================================
@@ -723,7 +753,7 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 		m_info.pWeapon = nullptr;
 	}
 
-	m_info.pWeapon = CWeapon::Create(type,6);
+	m_info.pWeapon = CWeapon::Create(type, HAND_PARTS_NUM);
 
 	if (m_info.pWeapon != nullptr)
 	{

@@ -88,7 +88,7 @@ MOTIONSET
 		FRAME = 40
 
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 0.00 0.00
+			POS = 0.00 2.20 0.00
 			ROT = -0.03 0.00 0.00
 		END_KEY
 
@@ -128,7 +128,7 @@ MOTIONSET
 		FRAME = 40
 		
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 0.00 0.00
+			POS = 0.00 -0.10 0.00
 			ROT = 0.06 0.00 0.00
 		END_KEY
 
@@ -175,7 +175,7 @@ MOTIONSET
 		FRAME = 10
 
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 0.00 0.00
+			POS = 0.00 10.00 0.00
 			ROT = 0.00 0.09 0.00
 		END_KEY
 
@@ -254,7 +254,7 @@ MOTIONSET
 	KEYSET
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 0.00 0.00
+			POS = 0.00 10.00 0.00
 			ROT = 0.00 -0.09 0.00
 		END_KEY
 
