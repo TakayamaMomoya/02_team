@@ -564,7 +564,7 @@ void CPlayer::ManageMotion(void)
 		{
 			switch (m_info.pWeapon->GetType())
 			{
-				// マガジン
+				// マグナム
 			case CWeapon::TYPE_MAGNUM:
 
 				if (fSpeed > MOVE_LINE)
