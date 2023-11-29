@@ -72,7 +72,7 @@ void CMachinegun::Update(void)
 void CMachinegun::Attack(void)
 {
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
-	CUniversal *pUniversal = CUniversal::GetInstance();
+	
 
 	if (pJoypad == nullptr)
 	{
@@ -92,7 +92,7 @@ void CMachinegun::Attack(void)
 
 			// マズルの位置を設定
 			D3DXMATRIX mtxMuzzle;
-			CUniversal::GetInstance()->SetOffSet(&mtxMuzzle, *pMtx, D3DXVECTOR3(-18.0f, 6.0f, 0.0f));
+			universal::SetOffSet(&mtxMuzzle, *pMtx, D3DXVECTOR3(-18.0f, 6.0f, 0.0f));
 
 			D3DXVECTOR3 posMuzzle =
 			{
@@ -109,7 +109,7 @@ void CMachinegun::Attack(void)
 			{// プレイヤーの向きに移動量を設定
 				D3DXVECTOR3 rot = pPlayer->GetRot();
 
-				int nRange = pUniversal->RandRange(10, -10);
+				int nRange = universal::RandRange(10, -10);
 
 				float fRand = nRange * 0.01f;
 

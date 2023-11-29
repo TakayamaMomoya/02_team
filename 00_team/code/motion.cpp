@@ -96,7 +96,7 @@ void CMotion::Update(void)
 	}
 
 	// 汎用処理取得
-	CUniversal *pUniversal = CUniversal::GetInstance();
+	
 
 	// 現在の位置を保存
 	m_posOld = m_pos;
@@ -162,9 +162,9 @@ void CMotion::Update(void)
 		float DiffRotZ = m_aMotionInfo[m_motionType].aKeyInfo[nNextKey].aKey[nCntParts].fRotZ -
 			m_aKeyOld[nCntParts].fRotZ;
 
-		pUniversal->LimitRot(&DiffRotX);
-		pUniversal->LimitRot(&DiffRotY);
-		pUniversal->LimitRot(&DiffRotZ);
+		universal::LimitRot(&DiffRotX);
+		universal::LimitRot(&DiffRotY);
+		universal::LimitRot(&DiffRotZ);
 
 		//目的の値=======================================================================================================
 		float DestPosX = pos.x + m_aKeyOld[nCntParts].fPosX +
@@ -188,9 +188,9 @@ void CMotion::Update(void)
 		//パーツの向き・位置設定
 		m_apParts[nCntParts]->pParts->SetPosition(D3DXVECTOR3(DestPosX, DestPosY, DestPosZ));
 
-		pUniversal->LimitRot(&DestRotX);
-		pUniversal->LimitRot(&DestRotY);
-		pUniversal->LimitRot(&DestRotZ);
+		universal::LimitRot(&DestRotX);
+		universal::LimitRot(&DestRotY);
+		universal::LimitRot(&DestRotZ);
 
 		rot = D3DXVECTOR3(DestRotX, DestRotY, DestRotZ);
 

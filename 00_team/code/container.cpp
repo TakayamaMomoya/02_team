@@ -171,7 +171,7 @@ void CContainer::UpdateOpen(void)
 		if (m_info.pWeapon == nullptr)
 		{
 			// 武器の種類をランダムで設定
-			CUniversal *pUniversal = CUniversal::GetInstance();
+			
 
 			CWeapon::TYPE type = (CWeapon::TYPE)WeaponRand();
 
@@ -284,8 +284,8 @@ int CContainer::WeaponRand(void)
 	}
 
 	// 乱数の設定
-	CUniversal *pUniversal = CUniversal::GetInstance();
-	int nProb = pUniversal->RandRange(nMax,1);	// 期待値の合計を最大値として乱数を振る
+	
+	int nProb = universal::RandRange(nMax,1);	// 期待値の合計を最大値として乱数を振る
 	int nIdxWeapon = -1;
 
 	for (int i = 0; i < CWeapon::TYPE::TYPE_MAX; i++)

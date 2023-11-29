@@ -114,9 +114,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	// フェードの生成
 	CFade::Create();
 
-	// 汎用処理生成
-	CUniversal::Create();
-
 	// パーティクルの読込
 	CParticle::Load();
 
@@ -152,14 +149,6 @@ void CManager::Uninit(void)
 	if (pRenderer != nullptr)
 	{
 		pRenderer->Uninit();
-	}
-
-	// 汎用処理終了
-	CUniversal *pUniversal = CUniversal::GetInstance();
-
-	if (pUniversal != nullptr)
-	{
-		pUniversal->Uninit();
 	}
 
 	// 入力マネージャー終了

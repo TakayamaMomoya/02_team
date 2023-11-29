@@ -378,8 +378,6 @@ void CEnemy::ChaseTarget(void)
 		}
 	}
 
-	CUniversal *pUniversal = CUniversal::GetInstance();
-
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 
 	if (pPlayerManager == nullptr)
@@ -402,7 +400,7 @@ void CEnemy::ChaseTarget(void)
 			D3DXVECTOR3 posPlayer = pPlayer->GetPosition();
 
 			// ‹——£‚Ì”äŠr
-			bool bNear = pUniversal->DistCmp(pos, posPlayer, fLengthMax, &fLengthMax);
+			bool bNear = universal::DistCmp(pos, posPlayer, fLengthMax, &fLengthMax);
 
 			if (bNear)
 			{
@@ -430,7 +428,7 @@ void CEnemy::ChaseTarget(void)
 
 	fAngleDist += D3DX_PI;
 
-	pUniversal->FactingRot(&rot.y, fAngleDist, 0.1f);
+	universal::FactingRot(&rot.y, fAngleDist, 0.1f);
 
 	SetRot(rot);
 }

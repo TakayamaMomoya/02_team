@@ -130,15 +130,12 @@ void CDoor::Update(void)
 //=====================================================
 void CDoor::Open(void)
 {
-	// ”Ä—pˆ—Žæ“¾
-	CUniversal *pUniversal = CUniversal::GetInstance();
-
 	// ·•ªŠp“x‚ÌŽæ“¾
 	D3DXVECTOR3 rot = GetRot();
 
 	float fRotDiff = (m_info.rotDestY - rot.y);
 
-	pUniversal->LimitRot(&fRotDiff);
+	universal::LimitRot(&fRotDiff);
 
 	if (fRotDiff * fRotDiff <= OPEN_LINE * OPEN_LINE)
 	{// ŠJ‚«‚«‚Á‚½”»’è
@@ -238,7 +235,7 @@ void CDoor::SetOrgRot(float rotY)
 {
 	m_info.orgRotY = rotY;
 
-	CUniversal::GetInstance()->LimitRot(&m_info.rotDestY);
+	universal::LimitRot(&m_info.rotDestY);
 
 	if (rotY >= 3.0f || rotY <= -3.0f)
 	{

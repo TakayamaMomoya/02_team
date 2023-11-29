@@ -418,7 +418,7 @@ void CPlayer::EnableWeapon(bool bEnable)
 void CPlayer::Aim(void)
 {
 	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
-	CUniversal *pUniversal = CUniversal::GetInstance();
+	
 
 	if (pJoyPad == nullptr)
 	{
@@ -464,9 +464,9 @@ void CPlayer::Aim(void)
 	// Šp“x•â³
 	D3DXVECTOR3 rot = GetRot();
 
-	pUniversal->LimitRot(&fAngleDest);
+	universal::LimitRot(&fAngleDest);
 
-	pUniversal->FactingRot(&rot.y, fAngleDest + D3DX_PI, ROT_SPEED);
+	universal::FactingRot(&rot.y, fAngleDest + D3DX_PI, ROT_SPEED);
 
 	SetRot(rot);
 }
