@@ -105,7 +105,7 @@ HRESULT CGame::Init(void)
 	CWeaponManager::Create();
 
 	// 敵マネージャーの生成
-	//CEnemyManager *pEnemyManager = CEnemyManager::Create();
+	CEnemyManager *pEnemyManager = CEnemyManager::Create();
 
 	// ロケットの生成
 	CRocket::Create();
@@ -126,7 +126,7 @@ HRESULT CGame::Init(void)
 
 #ifdef _DEBUG
 	// エディットの生成
-	CEdit::Create();
+	//CEdit::Create();
 #endif
 
 	// フォグをかける
@@ -179,7 +179,11 @@ void CGame::Update(void)
 	{
 		// エディットの更新
 		CEdit* pEdit = CEdit::GetInstatnce();
-		pEdit->Update();
+
+		if (pEdit != nullptr)
+		{
+			pEdit->Update();
+		}
 	}
 
 	// カメラ更新
@@ -188,9 +192,9 @@ void CGame::Update(void)
 	// 状態管理
 	ManageState();
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	Debug();
-#endif
+//#endif
 }
 
 //=====================================================
