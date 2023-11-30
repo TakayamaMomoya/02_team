@@ -61,6 +61,7 @@
     <ClCompile Include="code\motion.cpp" />
     <ClCompile Include="code\motionDiv.cpp" />
     <ClCompile Include="code\number.cpp" />
+    <ClCompile Include="code\number3D.cpp" />
     <ClCompile Include="code\object.cpp" />
     <ClCompile Include="code\object2D.cpp" />
     <ClCompile Include="code\object3D.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="code\motion.h" />
     <ClInclude Include="code\motionDiv.h" />
     <ClInclude Include="code\number.h" />
+    <ClInclude Include="code\number3D.h" />
     <ClInclude Include="code\object.h" />
     <ClInclude Include="code\object2D.h" />
     <ClInclude Include="code\object3D.h" />
