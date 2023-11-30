@@ -530,6 +530,11 @@ void CPlayer::ManageMotion(void)
 
 	float fSpeed = D3DXVec3Length(&move);
 
+	float fRotPlayer = GetRot().y;
+	float fRotMove = atan2f(-move.x, -move.z);
+	float fRot = fRotMove - fRotPlayer;
+	universal::LimitRot(&fRot);
+
 	int nMotionLower = GetMotion(CCharacterDiv::PARTS_LOWER);
 	int nMotionUpper = GetMotion(CCharacterDiv::PARTS_UPPER);
 
@@ -550,9 +555,35 @@ void CPlayer::ManageMotion(void)
 		{
 			if (fSpeed > MOVE_LINE)
 			{
-				if (nMotionLower != MOTION_ITEM_WALK_FRONT)
+				if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
+					fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
 				{
-					SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_ITEM_WALK_FRONT);
+					if (nMotionLower != MOTION_ITEM_WALK_FRONT)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_ITEM_WALK_FRONT);
+					}
+				}
+				else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
+					fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
+				{
+					if (nMotionLower != MOTION_ITEM_WALK_BACK)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_ITEM_WALK_BACK);
+					}
+				}
+				else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
+				{
+					if (nMotionLower != MOTION_ITEM_WALK_RIGHT)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_ITEM_WALK_RIGHT);
+					}
+				}
+				else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
+				{
+					if (nMotionLower != MOTION_ITEM_WALK_LEFT)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_ITEM_WALK_LEFT);
+					}
 				}
 			}
 			else
@@ -573,9 +604,35 @@ void CPlayer::ManageMotion(void)
 
 				if (fSpeed > MOVE_LINE)
 				{
-					if (nMotionLower != MOTION_MAGNUM_WALK_FRONT)
+					if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
+						fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
 					{
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_FRONT);
+						if (nMotionLower != MOTION_MAGNUM_WALK_FRONT)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_FRONT);
+						}
+					}
+					else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
+						fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
+					{
+						if (nMotionLower != MOTION_MAGNUM_WALK_BACK)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_BACK);
+						}
+					}
+					else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
+					{
+						if (nMotionLower != MOTION_MAGNUM_WALK_RIGHT)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_RIGHT);
+						}
+					}
+					else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
+					{
+						if (nMotionLower != MOTION_MAGNUM_WALK_LEFT)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_LEFT);
+						}
 					}
 				}
 				else
@@ -593,9 +650,35 @@ void CPlayer::ManageMotion(void)
 
 				if (fSpeed > MOVE_LINE)
 				{
-					if (nMotionLower != MOTION_RIFLE_WALK_FRONT)
+					if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
+						fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
 					{
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_FRONT);
+						if (nMotionLower != MOTION_RIFLE_WALK_FRONT)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_FRONT);
+						}
+					}
+					else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
+						fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
+					{
+						if (nMotionLower != MOTION_RIFLE_WALK_BACK)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_BACK);
+						}
+					}
+					else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
+					{
+						if (nMotionLower != MOTION_RIFLE_WALK_RIGHT)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_RIGHT);
+						}
+					}
+					else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
+					{
+						if (nMotionLower != MOTION_RIFLE_WALK_LEFT)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_LEFT);
+						}
 					}
 				}
 				else
@@ -614,9 +697,35 @@ void CPlayer::ManageMotion(void)
 		{
 			if (fSpeed > MOVE_LINE)
 			{
-				if (nMotionLower != MOTION_WALK_FRONT)
+				if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
+					fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
 				{
-					SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_WALK_FRONT);
+					if (nMotionLower != MOTION_WALK_FRONT)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_WALK_FRONT);
+					}
+				}
+				else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
+					fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
+				{
+					if (nMotionLower != MOTION_WALK_BACK)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_WALK_BACK);
+					}
+				}
+				else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
+				{
+					if (nMotionLower != MOTION_WALK_RIGHT)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_WALK_RIGHT);
+					}
+				}
+				else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
+				{
+					if (nMotionLower != MOTION_WALK_LEFT)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_WALK_LEFT);
+					}
 				}
 			}
 			else
@@ -634,11 +743,6 @@ void CPlayer::ManageMotion(void)
 		bool bFinish = GetBody()->IsFinish(CCharacterDiv::PARTS_UPPER);
 		int nKey = GetBody()->GetKey(CCharacterDiv::PARTS_UPPER);
 		int nNumKey = GetBody()->GetMotionInfo(CCharacterDiv::PARTS_UPPER, nMotionUpper).nNumKey;
-		float fRotPlayer = GetRot().y;
-		float fRotMove = atan2f(-move.x, -move.z);
-		float fRot = fRotPlayer - fRotMove;
-
-		universal::LimitRot(&fRot);
 
 		// ドア開けるモーション
 		if (m_info.motionInfo.bDoorPress)
@@ -712,18 +816,35 @@ void CPlayer::ManageMotion(void)
 		{
 			if (fSpeed > MOVE_LINE)
 			{
-				if (fRot <= D3DX_PI * 0.75f && fRot >= D3DX_PI * -0.75f)
+
+				if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
+					fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
 				{
 					if (nMotionUpper != MOTION_WALK_FRONT)
 					{
 						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_FRONT);
 					}
 				}
-				else if (fRot >= D3DX_PI * 0.25f && fRot <= D3DX_PI * -0.25f)
+				else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
+						 fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
 				{
 					if (nMotionUpper != MOTION_WALK_BACK)
 					{
 						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_BACK);
+					}
+				}
+				else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
+				{
+					if (nMotionUpper != MOTION_WALK_RIGHT)
+					{
+						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_RIGHT);
+					}
+				}
+				else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
+				{
+					if (nMotionUpper != MOTION_WALK_LEFT)
+					{
+						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_WALK_LEFT);
 					}
 				}
 			}

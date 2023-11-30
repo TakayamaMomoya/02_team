@@ -103,13 +103,13 @@ CHARACTERSET
     PARTSSET
         INDEX = 11
         PARENT = 10
-        POS = 0.0 -10.7 0.5
+        POS = 0.0 -10.7 0.0
         ROT = 0.0 0.0 0.0
     END_PARTSSET
     PARTSSET
         INDEX = 12
         PARENT = 11
-        POS = 0.0 -17.5 0.5
+        POS = 0.0 -17.5 0.0
         ROT = 0.0 0.0 0.0
     END_PARTSSET
 END_CHARACTERSET
