@@ -29,6 +29,7 @@ public:
 		LABEL_SE_GUNSHOT_02,			// 発砲音02
 		LABEL_SE_START_GAME,			// ゲームスタート
 		LABEL_BGM_TITLE,				// タイトル
+		LABEL_SE_LUNCH,					// ロケット発射
 		LABEL_MAX
 	} LABEL;
 
@@ -92,7 +93,8 @@ private:
 		{ "data/SOUND/SE/repair.wav",0 },				// 修繕
 		{ "data/SOUND/SE/gunshot_sound_03.wav",0 },		// ショットガン発砲
 		{ "data/SOUND/SE/start_game.wav",0 },			// ゲームスタート
-		{ "data/SOUND/BGM/title_BGM.wav",-1 }			// タイトルサウンド	
+		{ "data/SOUND/BGM/title_BGM.wav",-1 },			// タイトルサウンド	
+		{ "data/SOUND/SE/rocket_lunch.wav",0 },			// ロケット発射
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ

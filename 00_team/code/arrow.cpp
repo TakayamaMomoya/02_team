@@ -49,8 +49,6 @@ HRESULT CArrow::Init(void)
 	// Œp³ƒNƒ‰ƒX‚Ì‰Šú‰»
 	CObject3D::Init();
 
-	EnableZtest(true);
-
 	return S_OK;
 }
 
