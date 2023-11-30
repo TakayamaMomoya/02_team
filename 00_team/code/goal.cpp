@@ -19,6 +19,7 @@
 #include "result.h"
 #include "rocket.h"
 #include "game.h"
+#include "sound.h"
 
 //*****************************************************
 // マクロ定義
@@ -269,6 +270,14 @@ void CGoal::DeadLine(void)
 	if (pRocket != nullptr)
 	{
 		pRocket->SetState(CRocket::STATE::STATE_ESCAPE);
+	}
+
+	// サウンドインスタンスの取得
+	CSound* pSound = CSound::GetInstance();
+
+	if (pSound != nullptr)
+	{
+		pSound->Play(pSound->LABEL_SE_LUNCH);
 	}
 
 	// ゲームを脱出状態にする
