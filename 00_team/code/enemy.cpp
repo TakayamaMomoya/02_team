@@ -451,7 +451,7 @@ void CEnemy::SetLife(float fLife)
 //=====================================================
 void CEnemy::Hit(float fDamage)
 {
-	if (m_state == STATE_NORMAL)
+	if (m_state != STATE_DEATH)
 	{
 		m_fLife -= fDamage;
 
