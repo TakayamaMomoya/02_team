@@ -69,7 +69,7 @@ public:
 	bool IsEnable(void) { return m_info.bEnable; }
 	void SetDamage(float fDamage) { m_info.fDamage = fDamage; }
 	float GetDamage(void) { return m_info.fDamage; }
-
+	TYPE GetType(void) { return m_info.type; }
 private:
 
 	SInfo m_info;

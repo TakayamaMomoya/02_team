@@ -1617,7 +1617,7 @@ MOTIONSET
 	KEYSET
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 10.00 0.00
+			POS = 0.00 0.00 0.00
 			ROT = 0.25 -0.06 0.00
 		END_KEY
 
@@ -1703,7 +1703,7 @@ MOTIONSET
 	KEYSET
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 10.00 0.00
+			POS = 0.00 0.00 0.00
 			ROT = 0.25 0.06 0.00
 		END_KEY
 
@@ -1796,7 +1796,7 @@ MOTIONSET
 	KEYSET
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 10.00 0.00
+			POS = 0.00 0.00 0.00
 			ROT = 0.00 -0.06 0.22
 		END_KEY
 
@@ -1882,7 +1882,7 @@ MOTIONSET
 	KEYSET
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 10.00 0.00
+			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.06 0.22
 		END_KEY
 
@@ -1925,7 +1925,7 @@ MOTIONSET
 	KEYSET
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 3.00 0.00
+			POS = 0.00 0.00 0.00
 			ROT = 0.00 -0.04 0.22
 		END_KEY
 
@@ -1975,7 +1975,7 @@ MOTIONSET
 	KEYSET
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 10.00 0.00
+			POS = 0.00 0.00 0.00
 			ROT = 0.00 -0.06 -0.22
 		END_KEY
 
@@ -2018,7 +2018,7 @@ MOTIONSET
 	KEYSET
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 -3.20 0.10
+			POS = 0.00 0.00 0.00
 			ROT = 0.00 -0.09 -0.22
 		END_KEY
 
@@ -2061,7 +2061,7 @@ MOTIONSET
 	KEYSET
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 10.00 0.00
+			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.06 -0.22
 		END_KEY
 
@@ -2104,7 +2104,7 @@ MOTIONSET
 	KEYSET
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 1.80 0.00
+			POS = 0.00 0.00 0.00
 			ROT = 0.00 -0.04 -0.22
 		END_KEY
 
