@@ -106,6 +106,8 @@ private:
 	void MoveLimit(int nPlayer);
 	void PlayerShowUp(int nPlayer);
 
+	void rift(void);
+
 	MenuData m_aMenuData[NUM_PLAYER];	// それぞれの選択メニュー
 	CObject2D* m_pStartUI;	// Start文字
 	CPlayerManager* m_pPlayerManager;	// プレイヤー管理
@@ -116,6 +118,7 @@ private:
 	STATE m_state;	// 状態
 	bool m_abEntry[NUM_PLAYER];	// 参加したかどうか
 	bool m_bRiftCamera;
+	bool m_bOk;
 };
 
 #endif
