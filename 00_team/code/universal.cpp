@@ -148,6 +148,34 @@ bool IsCross(D3DXVECTOR3 posTarget, D3DXVECTOR3 vecSorce, D3DXVECTOR3 vecDest, f
 bool CubeCrossProduct(D3DXVECTOR3 vtx1, D3DXVECTOR3 vtx2, D3DXVECTOR3 vtx3, D3DXVECTOR3 vtx4, D3DXVECTOR3 pos)
 {
 	bool bHit = false;
+	int nHit = 0;
+
+	D3DXVECTOR3 aVec[4] =
+	{// ”z—ñ‚ÉŠi”[
+		vtx1,
+		vtx2,
+		vtx3,
+		vtx4,
+	};
+
+	// ‚S•Ó‚Ì‚È‚©‚É‚¢‚é‚©‚Ìƒ`ƒFƒbƒN
+	for (int i = 0; i < 4; i++)
+	{
+		int nNext = (i + 1) % 4;
+
+		// ü•ª‚ÌŒü‚±‚¤‚É‚¢‚é‚©‚Ì”»’è
+		bool bCross = IsCross(pos, aVec[i], aVec[nNext], nullptr);
+
+		if (bCross)
+		{
+			nHit++;
+		}
+	}
+
+	if (nHit >= 4)
+	{
+		bHit = true;
+	}
 
 	return bHit;
 }
