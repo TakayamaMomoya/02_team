@@ -64,6 +64,7 @@ HRESULT CTexture::Load(void)
 	// ÉtÉ@ÉCÉãñºÇÃê›íË
 	char *apFileName[MAX_TEX] = 
 	{
+		"data\\TEXTURE\\EFFECT\\muzzleFlush.png",
 	};
 
 	for ( int nCntTex = 0;nCntTex < MAX_TEX;nCntTex++)

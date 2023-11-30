@@ -164,6 +164,7 @@
     <ClCompile Include="code\weaponShotgun.cpp">
       <Filter>weapon</Filter>
     </ClCompile>
+    <ClCompile Include="code\number3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -302,5 +303,6 @@
     <ClInclude Include="code\weaponShotgun.h">
       <Filter>weapon</Filter>
     </ClInclude>
+    <ClInclude Include="code\number3D.h" />
   </ItemGroup>
 </Project>

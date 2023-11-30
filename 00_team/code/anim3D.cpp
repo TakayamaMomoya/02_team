@@ -107,10 +107,6 @@ void CAnim3D::Draw(void)
 
 	// ライティングを戻す
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-
-#ifdef _DEBUG
-	CDebugProc::GetInstance()->Print("\nパス：[%d]", GetIdxTexture());
-#endif
 }
 
 //=====================================================

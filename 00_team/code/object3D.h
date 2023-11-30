@@ -41,6 +41,7 @@ public:
 	int GetIdxTexture(void) { return m_nIdxTexture; }
 	void SetColor(D3DXCOLOR col);
 	void SetTex(D3DXVECTOR2 rd, D3DXVECTOR2 lu);
+	void SetVtx(void);
 
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ

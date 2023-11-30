@@ -115,6 +115,32 @@ void CObject3D::Update(void)
 }
 
 //=====================================================
+// 頂点設定
+//=====================================================
+void CObject3D::SetVtx(void)
+{
+	if (m_pVtxBuff == nullptr)
+	{
+		return;
+	}
+
+	//頂点情報のポインタ
+	VERTEX_3D *pVtx;
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//頂点座標の設定
+	pVtx[0].pos = D3DXVECTOR3(-m_width, 0.0f, m_heigth);
+	pVtx[1].pos = D3DXVECTOR3(m_width, 0.0f, m_heigth);
+	pVtx[2].pos = D3DXVECTOR3(-m_width, 0.0f, -m_heigth);
+	pVtx[3].pos = D3DXVECTOR3(m_width, 0.0f, -m_heigth);
+
+	//頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
+}
+
+//=====================================================
 // 描画処理
 //=====================================================
 void CObject3D::Draw(void)

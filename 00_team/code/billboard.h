@@ -43,6 +43,7 @@ public:
 	void SetMatrix(void);
 	void SetZTest(bool bZTest) { m_bZTest = bZTest; }
 	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void) { return m_pVtxBuff; }
+	void SetVtx(void);
 
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
