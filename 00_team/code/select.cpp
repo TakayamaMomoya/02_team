@@ -224,15 +224,15 @@ void CSelect::MenuInit(void)
 //=====================================================
 void CSelect::StartInit(void)
 {
-	m_pStartUI = CObject2D::Create();
-	m_pStartUI->SetPosition(D3DXVECTOR3(1100.0f, 650.0f, 0.0f));
-	m_pStartUI->SetSize(150.0f, 50.0f);
-	m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+	//m_pStartUI = CObject2D::Create();
+	//m_pStartUI->SetPosition(D3DXVECTOR3(1100.0f, 650.0f, 0.0f));
+	//m_pStartUI->SetSize(150.0f, 50.0f);
+	//m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 
-	int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\start_game.png");
-	m_pStartUI->SetIdxTexture(nIdx);
+	//int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\start_game.png");
+	//m_pStartUI->SetIdxTexture(nIdx);
 
-	m_pStartUI->SetVtx();
+	//m_pStartUI->SetVtx();
 }
 
 //=====================================================
@@ -311,8 +311,8 @@ void CSelect::Update(void)
 			if (CStartLocation::GetIsIn() == true)
 			{// 参加中の全員が範囲内に入ったという判定を貰ったら
 
-				if (/*pKeyboard->GetTrigger(DIK_RETURN) ||*/
-				//pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
+				if (pKeyboard->GetTrigger(DIK_RETURN) ||
+				pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
 					pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
 				{// フェード
 
@@ -327,19 +327,19 @@ void CSelect::Update(void)
 					
 					if (pFade != nullptr && m_abEntry[0] != false)
 					{
-						//pFade->SetFade(CScene::MODE_GAME);
+						pFade->SetFade(CScene::MODE_GAME);
 					}
 				}
 
 				// StartUIを見えるように
-				m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-				m_pStartUI->SetVtx();
+				/*m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+				m_pStartUI->SetVtx();*/
 			}
 			else
 			{
 				// StartのUIを見えないように
-				m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
-				m_pStartUI->SetVtx();
+				/*m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+				m_pStartUI->SetVtx();*/
 			}
 		}
 
