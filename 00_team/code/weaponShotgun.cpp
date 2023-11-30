@@ -155,14 +155,14 @@ void CShotgun::Attack(void)
 					nCntShot = GetRapid();
 
 					SetCntShot(nCntShot);
+				}
 
-					// エフェクトの生成
-					CAnimEffect3D *pAnim3D = CAnimEffect3D::GetInstance();
+				// エフェクトの生成
+				CAnimEffect3D *pAnim3D = CAnimEffect3D::GetInstance();
 
-					if (pAnim3D != nullptr)
-					{
-						pAnim3D->CreateEffect(posMuzzle, CAnimEffect3D::TYPE::TYPE_MUZZLEFLUSH);
-					}
+				if (pAnim3D != nullptr)
+				{
+					pAnim3D->CreateEffect(posMuzzle, CAnimEffect3D::TYPE::TYPE_MUZZLEFLUSH);
 				}
 
 				// 弾を減らす
