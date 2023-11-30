@@ -653,6 +653,52 @@ void CPlayer::ManageMotion(void)
 					if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
 						fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
 					{
+						if (nMotionLower != MOTION_MAGNUM_WALK_FRONT)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_FRONT);
+						}
+					}
+					else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
+						fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
+					{
+						if (nMotionLower != MOTION_MAGNUM_WALK_BACK)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_BACK);
+						}
+					}
+					else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
+					{
+						if (nMotionLower != MOTION_MAGNUM_WALK_RIGHT)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_RIGHT);
+						}
+					}
+					else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
+					{
+						if (nMotionLower != MOTION_MAGNUM_WALK_LEFT)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_LEFT);
+						}
+					}
+				}
+				else
+				{
+					if (nMotionLower != MOTION_MAGNUM_NEUTRAL)
+					{
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_NEUTRAL);
+					}
+				}
+
+				break;
+
+				// ショットガン
+			case CWeapon::TYPE_SHOTGUN:
+
+				if (fSpeed > MOVE_LINE)
+				{
+					if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
+						fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
+					{
 						if (nMotionLower != MOTION_RIFLE_WALK_FRONT)
 						{
 							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_FRONT);
@@ -787,12 +833,9 @@ void CPlayer::ManageMotion(void)
 				// マガジン
 			case CWeapon::TYPE_MAGNUM:
 
-				if (fSpeed > MOVE_LINE)
+				if (nMotionUpper != MOTION_MAGNUM_ATTACK)
 				{
-					if (nMotionUpper != MOTION_MAGNUM_ATTACK)
-					{
-						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_ATTACK);
-					}
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_ATTACK);
 				}
 
 				break;
@@ -800,12 +843,19 @@ void CPlayer::ManageMotion(void)
 				// マシンガン
 			case CWeapon::TYPE_MACHINEGUN:
 
-				if (fSpeed > MOVE_LINE)
+				if (nMotionUpper != MOTION_MAGNUM_ATTACK)
 				{
-					if (nMotionUpper != MOTION_RIFLE_ATTACK)
-					{
-						SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_ATTACK);
-					}
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_MAGNUM_ATTACK);
+				}
+
+				break;
+
+				// マシンガン
+			case CWeapon::TYPE_SHOTGUN:
+
+				if (nMotionUpper != MOTION_RIFLE_ATTACK)
+				{
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_ATTACK);
 				}
 
 				break;
