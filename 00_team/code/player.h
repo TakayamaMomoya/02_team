@@ -21,6 +21,7 @@
 class CMotion;
 class CCollisionSphere;
 class CCollisionCube;
+class CArrow;
 
 //*****************************************************
 // クラスの定義
@@ -121,6 +122,7 @@ private:
 		CCollisionCube *pCollisionCube;	// 立方体の当たり判定
 		CWeapon* pWeapon;			// 武器
 		CItemRepair* pItemRepair;	// 修理アイテム
+		CArrow *pArrow;	// 矢印のポインタ
 	};
 
 	void Input(void);

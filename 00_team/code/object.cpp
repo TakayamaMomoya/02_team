@@ -33,6 +33,7 @@ CObject::CObject(int nPriority)
 	m_pNext = nullptr;
 	m_bDeath = false;
 	m_bWire = false;
+	m_bZtest = false;
 
 	if (nPriority == 7)
 	{
@@ -245,8 +246,14 @@ void CObject::DrawAll(void)
 			CObject *pObjectNext = pObject->m_pNext;
 
 			if (pObject->m_bWire)
-			{
+			{// ワイヤーフレームの設定
 				pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+			}
+
+			if (pObject->m_bZtest)
+			{// Zテストの設定
+				pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
+				pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 			}
 
 			// 描画処理
@@ -255,6 +262,12 @@ void CObject::DrawAll(void)
 			if (pObject->m_bWire)
 			{
 				pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+			}
+
+			if (pObject->m_bZtest)
+			{// Zテストの設定
+				pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+				pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 			}
 
 			// 次のアドレスを代入

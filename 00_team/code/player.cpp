@@ -19,6 +19,7 @@
 #include "collision.h"
 #include "game.h"
 #include "manager.h"
+#include "arrow.h"
 
 #include "motionDiv.h"
 
@@ -48,6 +49,9 @@ namespace
 	const float INITIAL_LIFE = 30.0f;	// ‰Šú‘Ì—Í
 	const float DAMAGE_TIME = 0.5f;		// ƒ_ƒ[ƒWó‘Ô‚Ì•b”
 	const float MOVE_LINE = 0.2f;		// “®‚¢‚Ä‚¢‚é”»’f‚Ì‚µ‚«‚¢’l
+	const float ARROW_POSY = 5.0f;	// –îˆó‚ÌˆÊ’u‚Ì‚‚³
+	const float ARROW_WIDTH = 30.0f;	// –îˆó‚Ì•
+	const float ARROW_HEIGHT = 50.0f;	// –îˆó‚Ì‚‚³
 
 	const int HAND_PARTS_NUM = 6;		// Žè‚Ì”Ô†
 }
@@ -119,6 +123,11 @@ HRESULT CPlayer::Init(void)
 		}
 	}
 
+	if (m_info.pArrow == nullptr)
+	{// –îˆó‚Ì¶¬
+		m_info.pArrow = CArrow::Create(GetPosition(), ARROW_WIDTH, ARROW_HEIGHT);
+	}
+
 	m_info.fLife = INITIAL_LIFE;
 	m_info.state = STATE_NORMAL;
 
@@ -155,6 +164,12 @@ void CPlayer::Uninit(void)
 		m_info.pWeapon = nullptr;
 	}
 	
+	if (m_info.pArrow != nullptr)
+	{
+		m_info.pArrow->Uninit();
+		m_info.pArrow = nullptr;
+	}
+
 	// Œp³ƒNƒ‰ƒX‚ÌI—¹
 	CCharacterDiv::Uninit();
 }
@@ -248,6 +263,17 @@ void CPlayer::Update(void)
 		}
 
 		m_info.pWeapon->FollowPlayerHand();
+	}
+
+	if (m_info.pArrow != nullptr)
+	{// –îˆó‚Ì’Ç]
+		D3DXVECTOR3 rot = GetRot();
+		D3DXVECTOR3 posArrow = pos;
+
+		posArrow.y = ARROW_POSY;
+
+		m_info.pArrow->SetPosition(posArrow);
+		m_info.pArrow->SetRot(rot);
 	}
 }
 

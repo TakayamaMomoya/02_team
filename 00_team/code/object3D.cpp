@@ -252,6 +252,11 @@ CObject3D *CObject3D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 //=====================================================
 void CObject3D::SetSize(float width, float height)
 {
+	if (m_pVtxBuff == nullptr)
+	{
+		return;
+	}
+
 	m_width = width;
 	m_heigth = height;
 

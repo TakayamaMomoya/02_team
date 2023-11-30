@@ -165,6 +165,7 @@
       <Filter>weapon</Filter>
     </ClCompile>
     <ClCompile Include="code\number3D.cpp" />
+    <ClCompile Include="code\arrow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -304,5 +305,6 @@
       <Filter>weapon</Filter>
     </ClInclude>
     <ClInclude Include="code\number3D.h" />
+    <ClInclude Include="code\arrow.h" />
   </ItemGroup>
 </Project>
