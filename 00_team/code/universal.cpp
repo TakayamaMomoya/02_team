@@ -112,6 +112,46 @@ float CrossProduct(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2)
 	return pos1.z * pos2.x - pos1.x * pos2.z;
 }
 
+//=====================================================
+// 外積の当たり判定計算
+//=====================================================
+bool IsCross(D3DXVECTOR3 posTarget, D3DXVECTOR3 vecSorce, D3DXVECTOR3 vecDest, float *pRate, D3DXVECTOR3 move)
+{
+	bool bHit = false;
+
+	D3DXVECTOR3 vecLine = vecDest - vecSorce;
+	D3DXVECTOR3 vecToPos = posTarget - vecSorce;
+	float fArea = CrossProduct(vecLine, vecToPos);
+
+	if (fArea < 0)
+	{
+		D3DXVECTOR3 vecToPos = posTarget - vecSorce;
+
+		if (pRate != nullptr)
+		{
+			// 割合を算出
+			float fAreaMax = (vecDest.z * move.x) - (vecDest.x * move.z);
+			float fArea = (vecToPos.z * move.x) - (vecToPos.x * move.z);
+
+			*pRate = fArea / fAreaMax;
+		}
+
+		bHit = true;
+	}
+
+	return bHit;
+}
+
+//========================================
+// 矩形の中にいるかどうかの計算
+//========================================
+bool CubeCrossProduct(D3DXVECTOR3 vtx1, D3DXVECTOR3 vtx2, D3DXVECTOR3 vtx3, D3DXVECTOR3 vtx4, D3DXVECTOR3 pos)
+{
+	bool bHit = false;
+
+	return bHit;
+}
+
 //========================================
 // 範囲内のランダム数値を返す処理
 //========================================
