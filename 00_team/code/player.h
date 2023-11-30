@@ -109,7 +109,7 @@ private:
 	{
 		bool bDoorPress;		// ƒhƒA‚Ö‚Ì“ü—Íî•ñ
 		bool bItemTrigger;		// •¨‚Ö‚Ì“ü—Íî•ñ
-		float bRunawayProtect;	// –\‘––h~
+		float bRunawayProtect;	// –\‘–“ü—Í–h~
 	};
 	struct SInfo
 	{
