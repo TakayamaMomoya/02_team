@@ -582,6 +582,13 @@ void CPlayer::ManageMotion(void)
 		return;
 	}
 	
+	CInputJoypad* pJoyPad = CInputJoypad::GetInstance();
+
+	if (pJoyPad == nullptr)
+	{
+		return;
+	}
+
 	D3DXVECTOR3 move = GetMove();
 
 	float fSpeed = D3DXVec3Length(&move);
@@ -590,6 +597,23 @@ void CPlayer::ManageMotion(void)
 	float fRotMove = atan2f(-move.x, -move.z);
 	float fRot = fRotMove - fRotPlayer;
 	universal::LimitRot(&fRot);
+
+	// プレイヤーID取得
+	int nId = m_info.nIDJoypad;
+
+	D3DXVECTOR3 vecStickL =
+	{// スティックのベクトル取得
+		pJoyPad->GetJoyStickLX(nId),
+		pJoyPad->GetJoyStickLY(nId),
+		0.0f,
+	};
+
+	float fLength = D3DXVec3Length(&vecStickL);
+
+	if (fLength >= 0.1f)
+	{
+		m_info.motionInfo.bRunawayProtect = true;
+	}
 
 	int nMotionLower = GetMotion(CCharacterDiv::PARTS_LOWER);
 	int nMotionUpper = GetMotion(CCharacterDiv::PARTS_UPPER);
@@ -669,7 +693,7 @@ void CPlayer::ManageMotion(void)
 						}
 					}
 					else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
-						fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
+							 fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
 					{
 						if (nMotionLower != MOTION_MAGNUM_WALK_BACK)
 						{
@@ -715,7 +739,7 @@ void CPlayer::ManageMotion(void)
 						}
 					}
 					else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
-						fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
+							 fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
 					{
 						if (nMotionLower != MOTION_MAGNUM_WALK_BACK)
 						{
@@ -800,7 +824,8 @@ void CPlayer::ManageMotion(void)
 			if (fSpeed > MOVE_LINE)
 			{
 				if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
-					fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
+					fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f) || 
+					m_info.motionInfo.bRunawayProtect)
 				{
 					if (nMotionLower != MOTION_WALK_FRONT)
 					{
@@ -967,6 +992,7 @@ void CPlayer::ManageMotion(void)
 	// ドアの入力情報の初期化
 	m_info.motionInfo.bDoorPress = false;
 	m_info.motionInfo.bItemTrigger = false;
+	m_info.motionInfo.bRunawayProtect = false;
 }
 
 //=====================================================
