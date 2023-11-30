@@ -32,7 +32,7 @@ public:
 	CPlayer(int nPriority = 4);	// コンストラクタ
 	~CPlayer();	// デストラクタ
 
-	static CPlayer *Create(void);
+	static CPlayer *Create(int nID);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
@@ -41,7 +41,7 @@ public:
 	void SetItemRepair(CItemRepair* itemRepair) { m_info.pItemRepair = itemRepair; }
 	void SetDoorPress(bool bDoorPress) { m_info.motionInfo.bDoorPress = bDoorPress; }
 	void SetItemTrigger(bool bItemTrigger) { m_info.motionInfo.bItemTrigger = bItemTrigger; }
-	void SetID(int nID);
+	void SetID(int nID) { m_info.nID = nID; }
 	void SetIDJoypad(int nID) { m_info.nIDJoypad = nID; }
 	int GetIDJoypad(void) { return m_info.nIDJoypad; }
 	int GetID(void) { return m_info.nID; }

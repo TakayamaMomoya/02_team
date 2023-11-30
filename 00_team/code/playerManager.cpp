@@ -61,11 +61,10 @@ void CPlayerManager::CreatePlayer(void)
 		{
 			CPlayer* pPlayer = nullptr;
 
-			pPlayer = CPlayer::Create();
+			pPlayer = CPlayer::Create(m_nNumPlayer);
 
 			if (pPlayer != nullptr)
 			{
-				pPlayer->SetID(m_nNumPlayer);
 				pPlayer->SetIDJoypad(m_anIDJoypad[i]);
 
 				pPlayer->SetPosition(D3DXVECTOR3(50.0f * m_nNumPlayer, 0.0f, 0.0f));
@@ -90,11 +89,10 @@ CPlayer *CPlayerManager::BindPlayer(int nIdxJoypad)
 
 	CPlayer* pPlayer = nullptr;
 
-	pPlayer = CPlayer::Create();
+	pPlayer = CPlayer::Create(m_nNumPlayer);
 
 	if (pPlayer != nullptr)
 	{
-		pPlayer->SetID(m_nNumPlayer);
 		pPlayer->SetIDJoypad(nIdxJoypad);
 
 		m_apPlayer[m_nNumPlayer] = pPlayer;

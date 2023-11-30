@@ -44,6 +44,14 @@ namespace
 		"data\\MOTION\\motionPotatoman04_upper.txt",
 	};
 
+	const D3DXCOLOR COL_ARROW[NUM_PLAYER] =
+	{// 矢印の色
+		D3DXCOLOR(1.0f,1.0f,1.0f,1.0f),
+		D3DXCOLOR(0.0f,1.0f,1.0f,1.0f),
+		D3DXCOLOR(1.0f,0.0f,1.0f,1.0f),
+		D3DXCOLOR(1.0f,1.0f,0.0f,1.0f),
+	};	// 矢印の色
+
 	const float MOVE_SPEED = 3.0f;		// 移動速度
 	const float ROT_SPEED = 0.1f;		// 回転速度
 	const float INITIAL_LIFE = 30.0f;	// 初期体力
@@ -75,7 +83,7 @@ CPlayer::~CPlayer()
 //=====================================================
 // 生成処理
 //=====================================================
-CPlayer *CPlayer::Create(void)
+CPlayer *CPlayer::Create(int nID)
 {
 	CPlayer *pPlayer = nullptr;
 
@@ -83,6 +91,8 @@ CPlayer *CPlayer::Create(void)
 
 	if (pPlayer != nullptr)
 	{
+		pPlayer->m_info.nID = nID;
+
 		pPlayer->Init();
 	}
 
@@ -126,10 +136,30 @@ HRESULT CPlayer::Init(void)
 	if (m_info.pArrow == nullptr)
 	{// 矢印の生成
 		m_info.pArrow = CArrow::Create(GetPosition(), ARROW_WIDTH, ARROW_HEIGHT);
+
+		if (m_info.pArrow != nullptr)
+		{
+			m_info.pArrow->SetColor(COL_ARROW[m_info.nID]);
+		}
 	}
 
 	m_info.fLife = INITIAL_LIFE;
 	m_info.state = STATE_NORMAL;
+
+	// IDに対応したモデルの設定
+	CCharacterDiv::Load((char*)BODY_PATH_LOWER[m_info.nID], (char*)BODY_PATH_UPPER[m_info.nID]);
+
+	// 影の有効化
+	for (int nCutPath = 0; nCutPath < CCharacterDiv::PARTS_MAX; nCutPath++)
+	{
+		CMotionDiv* pBody = GetBody();
+
+		if (pBody != nullptr)
+		{
+			pBody->SetPosShadow(D3DXVECTOR3(0.0f, 0.5f, 0.0f));
+			pBody->EnableShadow(true);
+		}
+	}
 
 	return S_OK;
 }
@@ -967,29 +997,6 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 	if (m_info.pWeapon != nullptr)
 	{
 		m_info.pWeapon->SetPlayer(this);
-	}
-}
-
-//=====================================================
-// ID設定
-//=====================================================
-void CPlayer::SetID(int nID)
-{
-	m_info.nID = nID;
-
-	// IDに対応したモデルの設定
-	CCharacterDiv::Load((char*)BODY_PATH_LOWER[nID], (char*)BODY_PATH_UPPER[nID]);
-
-	// 影の有効化
-	for (int nCutPath = 0; nCutPath < CCharacterDiv::PARTS_MAX; nCutPath++)
-	{
-		CMotionDiv* pBody = GetBody();
-
-		if (pBody != nullptr)
-		{
-			pBody->SetPosShadow(D3DXVECTOR3(0.0f, 0.5f, 0.0f));
-			pBody->EnableShadow(true);
-		}
 	}
 }
 
