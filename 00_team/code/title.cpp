@@ -134,17 +134,31 @@ HRESULT CTitle::Init(void)
 	// 情報取得
 	CCamera* pCamera = CManager::GetCamera();
 
-	// カメラの設定
-	pCamera->SetTitle();
+	if (pCamera != nullptr)
+	{
+		// カメラの設定
+		pCamera->SetTitle();
+	}
+	else if (pCamera == nullptr)
+	{
+		return E_FAIL;
+	}
 
 	// ロゴの生成
 	m_pLogo = CObject2D::Create(7);
-	m_pLogo->SetSize(LOGO_WIDTH, LOGO_HEIGHT);
-	m_pLogo->SetPosition(LOGO_POS);
 
-	int nIdx = CTexture::GetInstance()->Regist(LOGO_PATH);
-	m_pLogo->SetIdxTexture(nIdx);
-	m_pLogo->SetVtx();
+	if (m_pLogo != nullptr)
+	{
+		m_pLogo->SetSize(LOGO_WIDTH, LOGO_HEIGHT);
+		m_pLogo->SetPosition(LOGO_POS);
+		int nIdx = CTexture::GetInstance()->Regist(LOGO_PATH);
+		m_pLogo->SetIdxTexture(nIdx);
+		m_pLogo->SetVtx();
+	}
+	if (m_pLogo == nullptr)
+	{
+		return E_FAIL;
+	}
 
 	// スタート表示の生成
 	m_pStart = CObject2D::Create(7);
@@ -153,34 +167,66 @@ HRESULT CTitle::Init(void)
 	{
 		m_pStart->SetSize(START_WIDTH, START_HEIGHT);
 		m_pStart->SetPosition(STATE_POS);
-
 		int nIdx = CTexture::GetInstance()->Regist(START_PATH);
 		m_pStart->SetIdxTexture(nIdx);
 		m_pStart->SetVtx();
 	}
+	else if (m_pStart == nullptr)
+	{
+		return E_FAIL;
+	}
+
 
 	// スカイボックスの生成
 	CSkybox* pSkyBox = CSkybox::Create();
 
+	if (pSkyBox == nullptr)
+	{
+		return E_FAIL;
+	}
+
 	// 地面の生成
 	CObject3D* pField = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	pField->SetSize(FIELD_WIDTH, FIELD_HEIGHT);
-	nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\field00.jpg");
-	pField->SetIdxTexture(nIdx);
+
+	if (pField != nullptr)
+	{
+		pField->SetSize(FIELD_WIDTH, FIELD_HEIGHT);
+		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\field00.jpg");
+		pField->SetIdxTexture(nIdx);
+	}
+	else if (pField == nullptr)
+	{
+		return E_FAIL;
+	}
 
 	// タイトルモデルの生成
 	CObjectX* pTitleModel = CObjectX::Create();
-	nIdx = CModel::Load("data\\MODEL\\title\\title_model.x");
-	pTitleModel->BindModel(nIdx);
+
+	if (pTitleModel != nullptr)
+	{
+		int nIdx = CModel::Load("data\\MODEL\\title\\title_model.x");
+		pTitleModel->BindModel(nIdx);
+	}
+	else if (pTitleModel == nullptr)
+	{
+		return E_FAIL;
+	}
 
 	// キャラクターの生成処理
 	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
 	{
 		m_apModelPlayer[nCount] = CMotion::Create((char*)PLAYER_BODY_PATH[nCount]);
 
-		m_apModelPlayer[nCount]->SetPosition(PLAYER_POS[nCount]);
-		m_apModelPlayer[nCount]->SetRot(PLAYER_ROT[nCount]);
-		m_apModelPlayer[nCount]->SetMotion(0);
+		if (m_apModelPlayer[nCount] != nullptr)
+		{
+			m_apModelPlayer[nCount]->SetPosition(PLAYER_POS[nCount]);
+			m_apModelPlayer[nCount]->SetRot(PLAYER_ROT[nCount]);
+			m_apModelPlayer[nCount]->SetMotion(0);
+		}
+		else if (m_apModelPlayer[nCount] == nullptr)
+		{
+			return E_FAIL;
+		}
 	}
 
 	// フォグをかける
@@ -190,6 +236,10 @@ HRESULT CTitle::Init(void)
 	{
 		pRenderer->EnableFog(true);
 	}
+	else if (pRenderer == nullptr)
+	{
+		return E_FAIL;
+	}
 
 	// サウンドインスタンスの取得
 	CSound* pSound = CSound::GetInstance();
@@ -198,6 +248,12 @@ HRESULT CTitle::Init(void)
 	{
 		pSound->Play(pSound->LABEL_BGM_TITLE);
 	}
+	else if (pSound == nullptr)
+	{
+		return E_FAIL;
+
+	}
+
 	return S_OK;
 }
 
@@ -233,12 +289,15 @@ void CTitle::Update(void)
 	// シーンの更新
 	CScene::Update();
 
-	// カメラの更新
-	UpdateCamera();
+	if (pCamera != nullptr)
+	{
+		// カメラの更新
+		UpdateCamera();
+	}
 
 	if (m_state == STATE_NONE)
 	{
-		if (pKeyboard != nullptr && pMouse != nullptr)
+		if (pKeyboard != nullptr && pMouse != nullptr && pJoypad != nullptr)
 		{
 			if (pKeyboard->GetTrigger(DIK_RETURN) ||
 				pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
@@ -278,44 +337,42 @@ void CTitle::Draw(void)
 //=====================================================
 void CTitle::ManageStart(void)
 {
-	if (m_pStart == nullptr)
-	{
-		return;
-	}
-
 	// 色の情報取得
 	D3DXCOLOR colStart = m_pStart->GetCol();
 	D3DXCOLOR colLogo = m_pLogo->GetCol();
 
-	if (m_bIsAlphaChange == false)
+	if (m_pStart != nullptr && m_pLogo != nullptr)
 	{
-		colStart.a -= ALPHA_CHANGE;
-	}
-	else if (m_bIsAlphaChange == true)
-	{
-		colStart.a += ALPHA_CHANGE;
-	}
+		if (m_bIsAlphaChange == false)
+		{
+			colStart.a -= ALPHA_CHANGE;
+		}
+		else if (m_bIsAlphaChange == true)
+		{
+			colStart.a += ALPHA_CHANGE;
+		}
 
-	if (colStart.a <= ALPHA_LOWER)
-	{
-		m_bIsAlphaChange = true;
-	}
-	else if (colStart.a >= ALPHA_UPPER)
-	{
-		m_bIsAlphaChange = false;
-	}
+		if (colStart.a <= ALPHA_LOWER)
+		{
+			m_bIsAlphaChange = true;
+		}
+		else if (colStart.a >= ALPHA_UPPER)
+		{
+			m_bIsAlphaChange = false;
+		}
 
-	if (colLogo.a >= 0.0f)
-	{
-		// ロゴのα値を減少
-		colLogo.a -= ALPHA_CHANGE_LOGO;
-	}
+		if (colLogo.a >= 0.0f)
+		{
+			// ロゴのα値を減少
+			colLogo.a -= ALPHA_CHANGE_LOGO;
+		}
 
-	// 設定処理
-	m_pStart->SetCol(colStart);
-	m_pStart->SetVtx();
-	m_pLogo->SetCol(colLogo);
-	m_pLogo->SetVtx();
+		// 設定処理
+		m_pStart->SetCol(colStart);
+		m_pStart->SetVtx();
+		m_pLogo->SetCol(colLogo);
+		m_pLogo->SetVtx();
+	}
 }
 
 //=====================================================
@@ -323,9 +380,6 @@ void CTitle::ManageStart(void)
 //=====================================================
 void CTitle::UpdateFade(void)
 {
-	// 情報取得
-	CFade* pFade = CFade::GetInstance();
-
 	// スタート表示の管理
 	ManageStart();
 
@@ -335,20 +389,29 @@ void CTitle::UpdateFade(void)
 	// プレイヤーの設定処理
 	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
 	{
-		D3DXVECTOR3 posPlayer = m_apModelPlayer[nCount]->GetPosition();
-		m_apModelPlayer[nCount]->SetPosition(posPlayer + PLAYER_ESC_MOVE);
-		m_apModelPlayer[nCount]->SetRot(PLAYER_ESC_ROT);
+		if (m_apModelPlayer[nCount] != nullptr)
+		{
+			D3DXVECTOR3 posPlayer = m_apModelPlayer[nCount]->GetPosition();
+			m_apModelPlayer[nCount]->SetPosition(posPlayer + PLAYER_ESC_MOVE);
+			m_apModelPlayer[nCount]->SetRot(PLAYER_ESC_ROT);
+		}
 	}
 
 	// 敵の設定処理
 	for (int nCount = 0; nCount < ENEMY::NUM_ENEMY; nCount++)
 	{
-		D3DXVECTOR3 posEnemy = m_apModelEnemy[nCount]->GetPosition();
-		m_apModelEnemy[nCount]->SetPosition(posEnemy + ENEMY_MOVE);
+		if (m_apModelEnemy[nCount] != nullptr)
+		{
+			D3DXVECTOR3 posEnemy = m_apModelEnemy[nCount]->GetPosition();
+			m_apModelEnemy[nCount]->SetPosition(posEnemy + ENEMY_MOVE);
+		}
 	}
 
 	if (m_nFadeCnt == FADE_COUNT)
 	{
+		// フェードの取得
+		CFade* pFade = CFade::GetInstance();
+
 		if (pFade != nullptr)
 		{
 			pFade->SetFade(CScene::MODE_SELECT);
@@ -363,20 +426,22 @@ void CTitle::UpdateCamera(void)
 {
 	CCamera* pCamera = CManager::GetCamera();
 
-	if (pCamera == nullptr)
-	{
-		return;
-	}
-
 	if (m_state == STATE_NONE)
 	{
-		// タイトルのカメラ更新
-		pCamera->UpdateTitle();
+		if (pCamera != nullptr)
+		{
+			// タイトルのカメラ更新
+			pCamera->UpdateTitle();
+		}
+
 	}
 	else if (m_state == STATE_OUT)
 	{
-		// タイトルの逃げるときのカメラ更新
-		pCamera->UpdateTitleEsc();
+		if (pCamera != nullptr)
+		{
+			// タイトルの逃げるときのカメラ更新
+			pCamera->UpdateTitleEsc();
+		}
 	}
 }
 
@@ -388,16 +453,22 @@ void CTitle::SetFadeIn(void)
 	// 情報取得
 	CCamera* pCamera = CManager::GetCamera();
 
+	if (pCamera != nullptr)
+	{
+		// カメラの逃げるとき設定
+		pCamera->SetTitleEsc();
+	}
+
 	// フェードアウトに設定
 	m_state = STATE_OUT;
-
-	// カメラの逃げるとき設定
-	pCamera->SetTitleEsc();
 
 	// プレイヤーのモーション設定処理（移動）
 	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
 	{
-		m_apModelPlayer[nCount]->SetMotion(1);
+		if (m_apModelPlayer[nCount] != nullptr)
+		{
+			m_apModelPlayer[nCount]->SetMotion(1);
+		}
 	}
 
 	// 敵の生成処理
@@ -405,8 +476,11 @@ void CTitle::SetFadeIn(void)
 	{
 		m_apModelEnemy[nCount] = CMotion::Create((char*)ENEMY_BODY_PATH[nCount]);
 
-		m_apModelEnemy[nCount]->SetPosition(ENEMY_POS[nCount]);
-		m_apModelEnemy[nCount]->SetRot(ENEMY_ROT);
-		m_apModelEnemy[nCount]->SetMotion(1);
+		if (m_apModelEnemy[nCount] != nullptr)
+		{
+			m_apModelEnemy[nCount]->SetPosition(ENEMY_POS[nCount]);
+			m_apModelEnemy[nCount]->SetRot(ENEMY_ROT);
+			m_apModelEnemy[nCount]->SetMotion(1);
+		}
 	}
 }
