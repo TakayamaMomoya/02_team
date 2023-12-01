@@ -110,6 +110,21 @@ CEnemy::~CEnemy()
 
 	m_nNumAll--;
 
+	if (pTail != this && pHead != this)
+	{// 真ん中のアドレスの破棄
+		if (m_pPrev != nullptr)
+		{
+			// 前のアドレスから次のアドレスをつなぐ
+			m_pPrev->m_pNext = m_pNext;
+		}
+
+		if (m_pNext != nullptr)
+		{
+			// 次のアドレスから前のアドレスをつなぐ
+			m_pNext->m_pPrev = m_pPrev;
+		}
+	}
+
 	if (pHead == this)
 	{// 先頭アドレスの破棄
 		//if (m_pNext != nullptr)
@@ -122,27 +137,14 @@ CEnemy::~CEnemy()
 			}
 		}
 	}
-	else if (pTail == this)
+	
+	if (pTail == this)
 	{// 最後尾アドレスの破棄
 		if (m_pPrev != nullptr)
 		{// 最後尾アドレスを前のアドレスに引き継ぐ
 			pManager->SetTail(m_pPrev);
 
 			m_pPrev->m_pNext = nullptr;
-		}
-	}
-	else
-	{// 真ん中のアドレスの破棄
-		if (m_pPrev != nullptr)
-		{
-			// 前のアドレスから次のアドレスをつなぐ
-			m_pPrev->m_pNext = m_pNext;
-		}
-
-		if (m_pNext != nullptr)
-		{
-			// 次のアドレスから前のアドレスをつなぐ
-			m_pNext->m_pPrev = m_pPrev;
 		}
 	}
 }
