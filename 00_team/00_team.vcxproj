@@ -55,6 +55,7 @@
     <ClCompile Include="code\container.cpp" />
     <ClCompile Include="code\itemRepair.cpp" />
     <ClCompile Include="code\itemWeapon.cpp" />
+    <ClCompile Include="code\life.cpp" />
     <ClCompile Include="code\light.cpp" />
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\manager.cpp" />
@@ -132,6 +133,7 @@
     <ClInclude Include="code\container.h" />
     <ClInclude Include="code\itemRepair.h" />
     <ClInclude Include="code\itemWeapon.h" />
+    <ClInclude Include="code\life.h" />
     <ClInclude Include="code\light.h" />
     <ClInclude Include="code\main.h" />
     <ClInclude Include="code\manager.h" />
