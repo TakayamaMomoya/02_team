@@ -11,7 +11,6 @@
 #include "main.h"
 #include "inputkeyboard.h"
 #include "UIManager.h"
-#include "score.h"
 #include "game.h"
 
 //*****************************************************

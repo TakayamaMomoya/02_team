@@ -144,7 +144,6 @@ void CGimmick::Update(void)
 					m_pInteract->SetZTest(true);
 				}
 			}
-
 			// 当たったオブジェクトの取得
 			CObject *pObj = m_pCollisionSphere->GetOther();
 
@@ -159,6 +158,12 @@ void CGimmick::Update(void)
 				m_pInteract = nullptr;
 			}
 		}
+	}
+
+	if (m_pInteract != nullptr && m_bEnable == false)
+	{// インタラクト削除
+		m_pInteract->Uninit();
+		m_pInteract = nullptr;
 	}
 }
 

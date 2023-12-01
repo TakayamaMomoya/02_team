@@ -11,7 +11,6 @@
 #include "main.h"
 #include "enemyNormal.h"
 #include "manager.h"
-#include "score.h"
 #include "collision.h"
 #include "debugproc.h"
 #include "particle.h"

@@ -11,7 +11,6 @@
 #include "main.h"
 #include "enemy.h"
 #include "manager.h"
-#include "score.h"
 #include "collision.h"
 #include "debugproc.h"
 #include "particle.h"
@@ -515,14 +514,7 @@ void CEnemy::DeleteCollision(void)
 //=====================================================
 void CEnemy::ManageScore(void)
 {
-	CScore *pScore = CScore::GetInstance();
 
-	if (pScore != nullptr)
-	{
-		int nScore = GetScore();
-
-		pScore->AddScore(nScore);
-	}
 }
 
 //=====================================================
