@@ -30,6 +30,12 @@ public:
 		LABEL_SE_START_GAME,			// ゲームスタート
 		LABEL_BGM_TITLE,				// タイトル
 		LABEL_SE_LUNCH,					// ロケット発射
+		LABEL_SE_GUNSHOT_03,			// 発砲音03
+
+		LABEL_SE_GET_MAGNUM,			// マグナム取得時
+		LABEL_SE_GET_MACHINEGUN,		// マシンガン取得時
+		LABEL_SE_GET_SHOTGUN,			// ショットガン取得時
+		LABEL_SE_GET_RAILGUN,			// レールガン取得時
 		LABEL_MAX
 	} LABEL;
 
@@ -95,6 +101,12 @@ private:
 		{ "data/SOUND/SE/start_game.wav",0 },			// ゲームスタート
 		{ "data/SOUND/BGM/title_BGM.wav",-1 },			// タイトルサウンド	
 		{ "data/SOUND/SE/rocket_lunch.wav",0 },			// ロケット発射
+		{ "data/SOUND/SE/gunshot_sound_04.wav",0 },		// レールガン発砲
+
+		{ "data/SOUND/SE/get_magnum.wav",0 },			// マグナムボイス
+		{ "data/SOUND/SE/get_submachinegun.wav",0 },	// マシンガンボイス
+		{ "data/SOUND/SE/get_shotgun.wav",0 },			// ショットガンボイス
+		{ "data/SOUND/SE/get_railgun.wav",0 },			// レールガンボイス
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ
