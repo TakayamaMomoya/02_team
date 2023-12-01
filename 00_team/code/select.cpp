@@ -117,10 +117,20 @@ HRESULT CSelect::Init(void)
 	CPlayerManager::Create();
 
 	// エディットの生成
-	CEdit::Create();
+	//CEdit::Create();
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
+
+	// 床の生成
+	CObject3D* pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	if (pObject != nullptr)
+	{
+		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood001.jpg");
+		pObject->SetIdxTexture(nIdx);
+		pObject->SetTex(D3DXVECTOR2(10.0f, 10.0f), D3DXVECTOR2(0.0f, 0.0f));
+	}
 
 	// ポテトの寝床の生成
 	CObjectX* pObjectX = CObjectX::Create({ 58.0f, 0.5f, -430.5f });
@@ -133,10 +143,19 @@ HRESULT CSelect::Init(void)
 	for (int nCnt = 0; nCnt < 2; nCnt++)
 	{
 		m_apNumber[nCnt] = CNumber3D::Create(1, 0);
+
 		if (m_apNumber[nCnt] != nullptr)
 		{
-			m_apNumber[nCnt]->SetPosition({ 0.0f, 0.0f, -200.0f });
+			m_apNumber[nCnt]->SetPosition({ 15.0f + (nCnt * 30), 20.0f, 140.0f });
+			m_apNumber[nCnt]->SetSizeAll(10.0f, 20.0f);
 		}
+	}
+
+	CBillboard* pBill = CBillboard::Create({ m_apNumber[0]->GetPosition().x + 15.0f, m_apNumber[0]->GetPosition().y, m_apNumber[0]->GetPosition().z }, 10.0f, 20.0f);
+	if (pBill != nullptr)
+	{
+		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\slash.png");
+		pBill->SetIdxTexture(nIdx);
 	}
 
 	// 開始位置
@@ -345,6 +364,14 @@ void CSelect::Update(void)
 	}
 	else
 	{
+		for (int nCnt = 0; nCnt < 2; nCnt++)
+		{
+			if (m_apNumber[nCnt] != nullptr)
+			{
+				m_apNumber[nCnt]->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
+			}
+		}
+
 		Rift();
 	}
 
@@ -374,6 +401,9 @@ void CSelect::Update(void)
 
 	// 参加人数の設定
 	CLift::SetjoinPlayer(nJoinPlayer);
+
+	// リフト内人数のUI
+	LiftInNumberUi(nJoinPlayer);
 	
 	// コンテナの再設置
 	ReSetContainer();
@@ -656,6 +686,25 @@ void CSelect::Rift(void)
 			{
 				pFade->SetFade(CScene::MODE_GAME);
 			}
+		}
+	}
+}
+
+//=====================================================
+// リフト内に入った人数のUI
+//=====================================================
+void CSelect::LiftInNumberUi(int nPlayer)
+{
+	//for (int nCnt = 0; nCnt < 2; nCnt++)
+	{
+		if (m_apNumber[0] != nullptr)
+		{
+			m_apNumber[0]->SetValue(CLift::GetInPlayer(), 1);
+		}
+
+		if (m_apNumber[1] != nullptr)
+		{
+			m_apNumber[1]->SetValue(nPlayer, 1);
 		}
 	}
 }
