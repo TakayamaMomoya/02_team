@@ -42,17 +42,17 @@ namespace
 	};
 	const D3DXVECTOR3 PLAYER_POS[NUM_PLAYER] =
 	{// プレイヤーの位置
-		D3DXVECTOR3(-100.0f, 0.0f, -200.0f),
-		D3DXVECTOR3( -50.0f, 0.0f, -150.0f),
-		D3DXVECTOR3(  50.0f, 0.0f, -150.0f),
-		D3DXVECTOR3( 100.0f, 0.0f, -200.0f),
+		D3DXVECTOR3(   0.0f, 0.0f, -150.0f),
+		D3DXVECTOR3(-125.0f, 0.0f, -100.0f),
+		D3DXVECTOR3( 100.0f, 0.0f,  -50.0f),
+		D3DXVECTOR3(-75.0f, 0.0f,  100.0f),
 	};
 	const D3DXVECTOR3 PLAYER_ROT[NUM_PLAYER] =
 	{// プレイヤーの向き
+		D3DXVECTOR3(0.0f, D3DX_PI *  0.0f, 0.0f),
 		D3DXVECTOR3(0.0f, D3DX_PI * -0.25f, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI * -0.10f, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI *  0.10f, 0.0f),
 		D3DXVECTOR3(0.0f, D3DX_PI *  0.25f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * -0.10f, 0.0f),
 	};
 	const D3DXVECTOR3 PLAYER_ESC_MOVE = D3DXVECTOR3(0.0f, 0.0f, 8.0f);	// プレイヤーの逃げるときの移動量 
 	const D3DXVECTOR3 PLAYER_ESC_ROT = D3DXVECTOR3(0.0f, D3DX_PI, 0.0f);	// プレイヤーの逃げるときの向き
@@ -221,7 +221,7 @@ HRESULT CTitle::Init(void)
 		{
 			m_apModelPlayer[nCount]->SetPosition(PLAYER_POS[nCount]);
 			m_apModelPlayer[nCount]->SetRot(PLAYER_ROT[nCount]);
-			m_apModelPlayer[nCount]->SetMotion(0);
+			m_apModelPlayer[nCount]->SetMotion(TITLE_MOTION_PLAYER_NEUTRAL);
 		}
 		else if (m_apModelPlayer[nCount] == nullptr)
 		{
