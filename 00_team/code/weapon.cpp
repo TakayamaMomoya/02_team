@@ -126,6 +126,7 @@ HRESULT CWeapon::Init(void)
 		SetMaxBullet(info.nMaxBullet);
 		SetRapid(info.nRapid);
 		SetDamage(info.fDamage);
+		SetBulletLife(info.fLifeBullet);
 	}
 
 	return S_OK;

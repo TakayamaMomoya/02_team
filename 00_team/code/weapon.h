@@ -70,7 +70,11 @@ public:
 	bool IsEnable(void) { return m_info.bEnable; }
 	void SetDamage(float fDamage) { m_info.fDamage = fDamage; }
 	float GetDamage(void) { return m_info.fDamage; }
+	void SetBulletLife(float fBulletLife) { m_info.fLifeBullet = fBulletLife; }
 	TYPE GetType(void) { return m_info.type; }
+	SInfo GetInfo(void) { return m_info; }
+	void SetInfo(SInfo info) { m_info = info; }
+
 private:
 
 	SInfo m_info;

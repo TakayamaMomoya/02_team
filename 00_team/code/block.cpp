@@ -21,7 +21,7 @@
 // マクロ定義
 //*****************************************************
 #define SPEED_MOVE	(1.0f)	// 移動速度
-#define MAP_FILE	"data\\MAP\\map00.bin"	// マップのファイルパス
+#define MAP_FILE	"data\\MAP\\select_map00.bin"	// マップのファイルパス
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -125,7 +125,7 @@ HRESULT CBlock::Init(void)
 	// タイプの設定
 	SetType(TYPE_BLOCK);
 
-	m_fLife = 100.0f;
+	m_fLife = 900.0f;
 
 	return S_OK;
 }
@@ -174,7 +174,7 @@ void CBlock::Hit(float fDamage)
 	if (m_fLife <= 0.0f)
 	{// 破壊判定
 		Delete(m_nID);
-		CDebrisSpawner::Create(D3DXVECTOR3(GetPosition().x, GetPosition().y + 50.0f, GetPosition().z), CDebrisSpawner::TYPE::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		CDebrisSpawner::Create(D3DXVECTOR3(GetPosition().x, GetPosition().y + 50.0f, GetPosition().z), CDebrisSpawner::TYPE::TYPE_WALL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 }
 

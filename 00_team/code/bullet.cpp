@@ -18,15 +18,12 @@
 #include "collision.h"
 #include "orbit.h"
 #include "universal.h"
-#include "game.h"
 
 //*****************************************************
 // ’è”’è‹`
 //*****************************************************
 namespace
 {
-	const float SPEED_MOVE = 7.0f;	// ˆÚ“®‘¬“x
-	const float ROLL_MOVE = 0.1f;	// ‰ñ“]‘¬“x
 	const int EDGE_ORBIT = 20;	// ‹OÕ‚Ì•Ó‚Ì”
 }
 
@@ -40,7 +37,7 @@ int CBullet::m_nNumAll = 0;	// ‘”
 //=====================================================
 CBullet::CBullet(int nPriority) : CObject(nPriority)
 {
-	m_nLife = 0;
+	m_fLife = 0.0f;
 	m_fDamage = 0.0f;
 	m_fSize = 0.0f;
 	m_type = TYPE_NONE;
@@ -99,7 +96,6 @@ void CBullet::Uninit(void)
 
 	if (m_pOrbit != nullptr)
 	{// ‹OÕ‚ÌI—¹
-		m_pOrbit->Uninit();
 		m_pOrbit = nullptr;
 	}
 
@@ -115,7 +111,9 @@ void CBullet::Update(void)
 	bool bHit = false;
 
 	// Žõ–½Œ¸Š
-	m_nLife--;
+	float fTIck = CManager::GetTick();
+
+	m_fLife -= fTIck;
 
 	m_posOld = m_pos;
 
@@ -148,14 +146,26 @@ void CBullet::Update(void)
 
 		if (m_pCollisionSphere->TriggerCube(CCollision::TAG_BLOCK))
 		{// ƒuƒƒbƒN‚Æ‚Ì“–‚½‚è”»’è
+			if (m_pOrbit != nullptr)
+			{
+				m_pOrbit->SetEnd(true);
+				m_pOrbit = nullptr;
+			}
+
 			Death();
 		}
 	}
 
 	if (bHit == false)
 	{
-		if (m_nLife < 0)
+		if (m_fLife < 0)
 		{// Ž©•ª‚Ìíœ
+			if (m_pOrbit != nullptr)
+			{
+				m_pOrbit->SetEnd(true);
+				m_pOrbit = nullptr;
+			}
+
 			Death();
 		}
 	}
@@ -163,6 +173,12 @@ void CBullet::Update(void)
 	{
 		if (m_bPierce == false)
 		{// ŠÑ’Ê‚µ‚È‚¢’e‚ÍÁ‚¦‚é
+			if (m_pOrbit != nullptr)
+			{
+				m_pOrbit->SetEnd(true);
+				m_pOrbit = nullptr;
+			}
+
 			Death();
 		}
 	}
@@ -235,7 +251,7 @@ void CBullet::Draw(void)
 //=====================================================
 // ¶¬ˆ—
 //=====================================================
-CBullet *CBullet::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move, int nLife,TYPE type, bool bPierce, float fRadius, float fDamage, D3DXCOLOR col)
+CBullet *CBullet::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move, float fLife,TYPE type, bool bPierce, float fRadius, float fDamage, D3DXCOLOR col)
 {
 	CBullet *pBullet = nullptr;
 
@@ -248,7 +264,7 @@ CBullet *CBullet::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move, int nLife,TYPE type, 
 			pBullet->m_move = move;
 			pBullet->m_pos = pos;
 			pBullet->m_posOld = pos;
-			pBullet->m_nLife = nLife;
+			pBullet->m_fLife = fLife;
 			pBullet->m_type = type;
 			pBullet->m_bPierce = bPierce;
 			pBullet->m_fDamage = fDamage;

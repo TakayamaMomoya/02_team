@@ -8,7 +8,7 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "startLocation.h"
+#include "lift.h"
 #include "manager.h"
 #include "renderer.h"
 #include "texture.h"
@@ -30,14 +30,14 @@ namespace
 //=====================================================
 //	静的メンバ変数宣言
 //=====================================================
-int CStartLocation::m_nNumJoinPlayer = 0;
-int CStartLocation::m_nInCnt = 0;
-bool CStartLocation::m_abJoin[NUM_PLAYER] = {};
+int CLift::m_nNumJoinPlayer = 0;
+int CLift::m_nInCnt = 0;
+bool CLift::m_abJoin[NUM_PLAYER] = {};
 
 //=====================================================
 // コンストラクタ
 //=====================================================
-CStartLocation::CStartLocation(int nPriority)
+CLift::CLift(int nPriority)
 {
 	m_pos = { 0.0f,0.0f,0.0f };
 	m_nInCnt = 0;
@@ -47,7 +47,7 @@ CStartLocation::CStartLocation(int nPriority)
 //=====================================================
 // デストラクタ
 //=====================================================
-CStartLocation::~CStartLocation()
+CLift::~CLift()
 {
 
 }
@@ -55,12 +55,12 @@ CStartLocation::~CStartLocation()
 //=====================================================
 // 初期化処理
 //=====================================================
-HRESULT CStartLocation::Init(void)
+HRESULT CLift::Init(void)
 {
 	// 継承クラスの初期化
 	CObjectX::Init();
 
-	int nIdx = CModel::Load("data\\MODEL\\lift.x");
+	int nIdx = CModel::Load("data\\MODEL\\select\\lift.x");
 	// モデル読込
 	BindModel(nIdx);
 
@@ -70,7 +70,7 @@ HRESULT CStartLocation::Init(void)
 //=====================================================
 // 終了処理
 //=====================================================
-void CStartLocation::Uninit(void)
+void CLift::Uninit(void)
 {
 	// 継承クラスの終了
 	CObjectX::Uninit();
@@ -79,7 +79,7 @@ void CStartLocation::Uninit(void)
 //=====================================================
 // 更新処理
 //=====================================================
-void CStartLocation::Update(void)
+void CLift::Update(void)
 {
 	// 継承クラスの更新
 	CObjectX::Update();
@@ -132,7 +132,7 @@ void CStartLocation::Update(void)
 //=====================================================
 // 描画処理
 //=====================================================
-void CStartLocation::Draw(void)
+void CLift::Draw(void)
 {
 	// 継承クラスの描画
 	CObjectX::Draw();
@@ -141,13 +141,13 @@ void CStartLocation::Draw(void)
 //=====================================================
 // 生成処理
 //=====================================================
-CStartLocation* CStartLocation::Create(D3DXVECTOR3 pos,int nPriority)
+CLift* CLift::Create(D3DXVECTOR3 pos,int nPriority)
 {
-	CStartLocation* pMeetingPlace = nullptr;
+	CLift* pMeetingPlace = nullptr;
 
 	if (pMeetingPlace == nullptr)
 	{// インスタンス生成
-		pMeetingPlace = new CStartLocation(nPriority);
+		pMeetingPlace = new CLift(nPriority);
 
 		if (pMeetingPlace != nullptr)
 		{
@@ -164,7 +164,7 @@ CStartLocation* CStartLocation::Create(D3DXVECTOR3 pos,int nPriority)
 //=====================================================
 // 読込処理
 //=====================================================
-HRESULT CStartLocation::Load(void)
+HRESULT CLift::Load(void)
 {
 	return S_OK;
 }
@@ -172,7 +172,7 @@ HRESULT CStartLocation::Load(void)
 //=====================================================
 // 範囲内に入った人数の判定
 //=====================================================
-bool CStartLocation::GetIsIn(void)
+bool CLift::GetIsIn(void)
 {
 	if (m_nNumJoinPlayer <= 0 && m_nInCnt <= 0)
 	{
