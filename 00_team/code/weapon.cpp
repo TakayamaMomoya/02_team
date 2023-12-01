@@ -57,6 +57,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			if (pSound != nullptr)
 			{
 				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+				pSound->Play(pSound->LABEL_SE_GET_MAGNUM);
 			}
 
 			break;
@@ -67,6 +68,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			if (pSound != nullptr)
 			{
 				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+				pSound->Play(pSound->LABEL_SE_GET_MACHINEGUN);
 			}
 
 			break;
@@ -77,6 +79,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			if (pSound != nullptr)
 			{
 				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+				pSound->Play(pSound->LABEL_SE_GET_SHOTGUN);
 			}
 
 			break;
@@ -87,6 +90,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			if (pSound != nullptr)
 			{
 				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+				pSound->Play(pSound->LABEL_SE_GET_RAILGUN);
 			}
 
 			break;
