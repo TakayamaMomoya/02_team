@@ -114,7 +114,6 @@ private:
 
 	SJoinUi_info m_aJoinUiData[NUM_PLAYER];	// それぞれの選択メニュー
 	CObject2D* m_pStartUI;	// Start文字
-	CPlayerManager* m_pPlayerManager;	// プレイヤー管理
 	PlayerInfo m_apPlayerData[NUM_PLAYER];	// プレイヤー情報
 	CContainerInfo m_aContainerData[MAX_CONTAINER];	// コンテナ
 	CLift* m_pLift;	// リフト

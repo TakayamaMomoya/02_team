@@ -35,6 +35,17 @@ namespace ENEMY
 class CTitle : public CScene
 {
 public:
+
+	enum CAMERA
+	{
+		CAMERA_PLAYER_ALL = 0,	// 全員が映る状態
+		CAMERA_PLAYER_ONE,		// プレイヤー1が映る状態
+		CAMERA_PLAYER_TWO,		// プレイヤー2が映る状態
+		CAMERA_PLAYER_THREE,	// プレイヤー3が映る状態
+		CAMERA_PLAYER_FOUR,		// プレイヤー4が映る状態
+		CAMERA_MAX
+	};
+
 	CTitle();	// コンストラクタ
 	~CTitle();	// デストラクタ
 
@@ -47,7 +58,7 @@ private:
 	enum STATE
 	{
 		STATE_NONE = 0,	// 何もしてない状態
-		STATE_OUT,	// フェードアウト状態
+		STATE_OUT,		// フェードアウト状態
 		START_MAX
 	};
 
@@ -58,12 +69,19 @@ private:
 		TITLE_MOTION_PLAYER_MAX
 	};
 
+	struct SCameraInfo
+	{
+		CAMERA num;		// カメラ番号
+		int nCount;		// カウント
+	};
+
 	void ManageStart(void);
 	void UpdateFade(void);
 	void UpdateCamera(void);
 	void SetFadeIn(void);
 
-	STATE m_state;	// 状態
+	STATE m_state;				// 状態
+	SCameraInfo m_cameraInfo;	// カメラ情報
 
 	CObject2D* m_pLogo;		// タイトルロゴのポインタ
 	CObject2D *m_pStart;	// スタート表示のポインタ

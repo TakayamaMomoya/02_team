@@ -21,6 +21,7 @@
 #include "enemyManager.h"
 #include "weaponManager.h"
 #include "object3D.h"
+#include "motion.h"
 
 //*****************************************************
 // 定数定義
@@ -186,33 +187,49 @@ void CRailgun::Shot(void)
 		{
 			D3DXVECTOR3 posEnemy = pEnemy->GetPosition();
 
-			if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB, nID))
-			{// 射撃
-				int nCntShot = GetCntShot();
+			bool bHit = universal::CubeCrossProduct(aPosVtx[0], aPosVtx[1], aPosVtx[2], aPosVtx[3], posEnemy);
 
-				if (nBullet > 0 && nCntShot == 0)
-				{// 弾の発射
-					// 弾を減らす
-					nBullet--;
-					SetBullet(nBullet);
+			CWeapon::SInfo info = GetInfo();
 
-					// 連射カウンターのリセット
-					nCntShot = GetRapid();
+			if (bHit)
+			{
+				if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB, nID))
+				{// 射撃
+					int nCntShot = GetCntShot();
 
-					SetCntShot(nCntShot);
+					if (nBullet > 0 && nCntShot == 0)
+					{// 弾の発射
+						// 弾を減らす
+						nBullet--;
+						SetBullet(nBullet);
 
-					bool bHit = universal::CubeCrossProduct(aPosVtx[0], aPosVtx[1], aPosVtx[2], aPosVtx[3], posEnemy);
+						// 連射カウンターのリセット
+						nCntShot = GetRapid();
 
-					CWeapon::SInfo info = GetInfo();
+						SetCntShot(nCntShot);
 
-					if (bHit)
-					{
 						pEnemy->Hit(info.fDamage);
 					}
-				}
-				else
-				{// 弾切れの場合
+					else
+					{// 弾切れの場合
 
+					}
+				}
+
+				CMotion *pBody = pEnemy->GetBody();
+
+				if (pBody != nullptr)
+				{
+					pBody->SetAllCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+				}
+			}
+			else
+			{
+				CMotion *pBody = pEnemy->GetBody();
+
+				if (pBody != nullptr)
+				{
+					pBody->ResetAllCol();
 				}
 			}
 

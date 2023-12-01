@@ -33,6 +33,7 @@
 #define POSR_BOSS	(D3DXVECTOR3(2742.27f,240.53f,-81.36f))	// ボス戦の注視点位置
 #define POSV_BOSS	(D3DXVECTOR3(2741.14f,280.15f,-261.20f))	// ボス戦の視点位置
 
+#define MOVE_FACT_TITLE_ESC	(0.025f)	// タイトルの逃げるときの補正
 //====================================================
 // 初期化処理
 //====================================================
@@ -160,11 +161,8 @@ void CCamera::Control(void)
 //====================================================
 // タイトルの設定
 //====================================================
-void CCamera::SetTitle(void)
+void CCamera::SetTitle(D3DXVECTOR3 posV, D3DXVECTOR3 posR)
 {
-	D3DXVECTOR3 posV = { 0.0f,75.0f,-400.0f };
-	D3DXVECTOR3 posR = { 0.0f,25.0f,0.0f };
-
 	m_camera.posV = posV;
 	m_camera.posVDest = posV;
 
@@ -173,15 +171,12 @@ void CCamera::SetTitle(void)
 }
 
 //====================================================
-// 逃げるタイトルの設定
+// タイトルの目的地設定
 //====================================================
-void CCamera::SetTitleEsc(void)
+void CCamera::SetTitleDest(D3DXVECTOR3 posVDest, D3DXVECTOR3 posRDest)
 {
-	D3DXVECTOR3 posV = { 0.0f,200.0f,-800.0f };
-	D3DXVECTOR3 posR = { 0.0f,100.0f,0.0f };
-
-	m_camera.posVDest = posV;
-	m_camera.posRDest = posR;
+	m_camera.posVDest = posVDest;
+	m_camera.posRDest = posRDest;
 }
 
 //====================================================
@@ -280,23 +275,28 @@ void CCamera::FollowPlayer(void)
 //====================================================
 // タイトルのカメラ挙動
 //====================================================
-void CCamera::UpdateTitle(void)
+void CCamera::UpdateTitle(D3DXVECTOR3 move)
 {
-	
+	// カメラの移動処理
+	m_camera.posVDest = m_camera.posVDest + move;
+
+	// 目的座標に補正
+	m_camera.posV += (m_camera.posVDest - m_camera.posV) * MOVE_FACT_TITLE_ESC;
+	m_camera.posR += (m_camera.posRDest - m_camera.posR) * MOVE_FACT_TITLE_ESC;
 }
 
 //====================================================
 // タイトルの逃げるときのカメラ挙動
 //====================================================
-void CCamera::UpdateTitleEsc(void)
+void CCamera::UpdateTitleEsc(D3DXVECTOR3 move)
 {
 	// カメラの移動処理
-	m_camera.posVDest = m_camera.posVDest + D3DXVECTOR3(0.0f, 0.0f, 7.0f);
-	m_camera.posRDest = m_camera.posRDest + D3DXVECTOR3(0.0f, 0.0f, 7.0f);
+	m_camera.posVDest = m_camera.posVDest + move;
+	m_camera.posRDest = m_camera.posRDest + move;
 
 	// 目的座標に補正
-	m_camera.posV += (m_camera.posVDest - m_camera.posV) * 0.025f;
-	m_camera.posR += (m_camera.posRDest - m_camera.posR) * 0.025f;
+	m_camera.posV += (m_camera.posVDest - m_camera.posV) * MOVE_FACT_TITLE_ESC;
+	m_camera.posR += (m_camera.posRDest - m_camera.posR) * MOVE_FACT_TITLE_ESC;
 }
 
 //====================================================
