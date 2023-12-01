@@ -103,7 +103,7 @@ void CShotgun::Attack(void)
 
 			// É}ÉYÉãÇÃà íuÇê›íË
 			D3DXMATRIX mtxMuzzle;
-			universal::SetOffSet(&mtxMuzzle, *pMtx, D3DXVECTOR3(-50.0f, 20.0f, 0.0f));
+			universal::SetOffSet(&mtxMuzzle, *pMtx, D3DXVECTOR3(-60.0f, 5.0f, 0.0f));
 
 			D3DXVECTOR3 posMuzzle =
 			{

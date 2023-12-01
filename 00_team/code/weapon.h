@@ -37,6 +37,7 @@ public:
 		int nMaxBullet;	// 最大弾数
 		int nRapid;	// 連射
 		float fDamage;	// 威力
+		float fLifeBullet;	// 弾の寿命
 		int nCntShot;	// 連射カウンタ
 		int nIdxHand;	// 手の番号
 		int nIdxJoypad;	// コントローラー番号

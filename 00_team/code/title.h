@@ -51,6 +51,13 @@ private:
 		START_MAX
 	};
 
+	enum TITLE_MOTION_PLAYER
+	{
+		TITLE_MOTION_PLAYER_NEUTRAL = 0,	// ë“ã@èÛë‘
+		TITLE_MOTION_PLAYER_MOVE,			// à⁄ìÆèÛë‘
+		TITLE_MOTION_PLAYER_MAX
+	};
+
 	void ManageStart(void);
 	void UpdateFade(void);
 	void UpdateCamera(void);
