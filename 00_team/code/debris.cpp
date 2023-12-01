@@ -58,7 +58,7 @@ HRESULT CDebris::Init(void)
 	m_rotVelocity.z = (float)(rand() % 629 - 314) / 100.0f;
 
 	// ƒ‚ƒfƒ‹“Ç
-	int nIdx = CModel::Load("data\\MODEL\\sample_debris.x");
+	int nIdx = CModel::Load("data\\MODEL\\debris\\soil00.x");
 	BindModel(nIdx);
 
 	// ’l‚Ì‰Šú‰»

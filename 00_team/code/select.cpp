@@ -348,7 +348,7 @@ void CSelect::Update(void)
 		}
 	}
 
-		rift();
+		Rift();
 		// コンテナの再設置
 		ReSetContainer();
 	
@@ -367,7 +367,7 @@ void CSelect::Update(void)
 
 	if (pKeyboard->GetTrigger(DIK_RETURN))
 	{
-		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 100.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_EXPLOSION, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 100.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_WALL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 
 	CDebugProc::GetInstance()->Print("\n参加人数[%d]\n", nJoinPlayer);
@@ -379,6 +379,7 @@ void CSelect::Update(void)
 //=====================================================
 void CSelect::ReSetContainer(void)
 {
+	int nTemp = 0;
 
 	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
 	{
@@ -405,29 +406,26 @@ void CSelect::ReSetContainer(void)
 
 			m_aContainerData[nCnt].pContainer = CContainer::Create();
 
-			switch (nCnt)
+			// 位置設定
+			if (nCnt % 2 == 0)
 			{
-			case 0:
-				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -250.0f));
-				break;
-			case 1:
-				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -250.0f));
-				break;
-			case 2:
-				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -300.0f));
-				break;
-			case 3:
-				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -300.0f));
-				break;
-			case 4:
-				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(130.0f, 0.0f, -350.0f));
-				break;
-			case 5:
-				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3(-130.0f, 0.0f, -350.0f));
-				break;
-			default:
-				assert(("コンテナ設定の失敗(select.cpp)", false));
-				break;
+				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3
+				(
+					CONTAINER_POS.x,
+					0.0f,
+					CONTAINER_POS.z + (nCnt * CONTAINER_SPACE.z))
+				);
+			}
+			else
+			{
+				nTemp = nCnt - 1;
+
+				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3
+				(
+					m_aContainerData[nTemp].pContainer->GetPosition().x + CONTAINER_SPACE.x,
+					0.0f + +CONTAINER_SPACE.y,
+					m_aContainerData[nTemp].pContainer->GetPosition().z + CONTAINER_SPACE.z)
+				);
 			}
 		}
 	}
@@ -598,7 +596,10 @@ void CSelect::PlayerShowUp(int nPlayer)
 	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
 }
 
-void CSelect::rift(void)
+//=====================================================
+// リフト
+//=====================================================
+void CSelect::Rift(void)
 {
 	if (m_bOk == true)
 	{

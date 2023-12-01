@@ -112,7 +112,7 @@ private:
 	void MoveLimit(int nPlayer);	// 行動制限
 	void PlayerShowUp(int nPlayer);	// プレイヤーの登場
 
-	void rift(void);	// リフトの設定
+	void Rift(void);	// リフトの設定
 
 	SJoinUi_info m_aJoinUiData[NUM_PLAYER];	// それぞれの選択メニュー
 	CObject2D* m_pStartUI;	// Start文字
