@@ -19,6 +19,7 @@
 #include "playerManager.h"
 #include "effect3D.h"
 #include "enemyManager.h"
+#include "weaponManager.h"
 
 //*****************************************************
 // íËêîíËã`
@@ -33,7 +34,7 @@ const int NUM_VTX = 4;	// ìñÇΩÇËîªíËÇÃí∏ì_êî
 //=====================================================
 CRailgun::CRailgun(int nPriority) : CWeapon(nPriority)
 {
-
+	ZeroMemory(&m_info, sizeof(SInfoRailgun));
 }
 
 //=====================================================
@@ -51,6 +52,17 @@ HRESULT CRailgun::Init(void)
 {
 	// åpè≥ÉNÉâÉXÇÃèâä˙âª
 	CWeapon::Init();
+
+	// å≈óLèÓïÒì¸éË
+	CWeaponManager *pWeaponManager = CWeaponManager::GetInstance();
+
+	if (pWeaponManager != nullptr)
+	{
+		CWeaponManager::SInfoRailgun info = pWeaponManager->GetRailgunInfo();
+
+		m_info.fWidth = info.fWidth;
+		m_info.fLength = info.fLength;
+	}
 
 	return S_OK;
 }
@@ -94,9 +106,8 @@ void CRailgun::Attack(void)
 
 		if (nBullet > 0 && nCntShot == 0)
 		{// íeÇÃî≠éÀ
-			
-
 			// ìñÇΩÇËîªíËÇÃî≠ê∂
+			Shot();
 
 			// íeÇå∏ÇÁÇ∑
 			nBullet--;
@@ -136,22 +147,26 @@ void CRailgun::Shot(void)
 	D3DXMATRIX aMtxVtx[NUM_VTX];
 	D3DXVECTOR3 aOffset[NUM_VTX] =
 	{
-		{ 0.0f,0.0f,0.0f },
-		{ 0.0f,0.0f,0.0f },
-		{ 0.0f,0.0f,0.0f },
-		{ 0.0f,0.0f,0.0f },
+		{ -m_info.fLength,0.0f,m_info.fWidth },
+		{ 0.0f,0.0f,m_info.fWidth },
+		{ 0.0f,0.0f,-m_info.fWidth },
+		{ -m_info.fLength,0.0f,-m_info.fWidth },
 	};
 
 	for (int i = 0; i < NUM_VTX; i++)
 	{
 		universal::SetOffSet(&aMtxVtx[i], mtxMuzzle, aOffset[i]);
 
-		D3DXVECTOR3 aPosVtx =
+		aPosVtx[i] =
 		{
 			aMtxVtx[i]._41,
-			aMtxVtx[i]._42,
+			0.0f,
 			aMtxVtx[i]._43,
 		};
+
+#ifdef _DEBUG
+		CEffect3D::Create(aPosVtx[i], 10.0f, 60, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+#endif
 	}
 
 	// ìGÇ∆ÇÃê⁄êGÇîªíËÇ∑ÇÈ
@@ -176,9 +191,11 @@ void CRailgun::Shot(void)
 
 			bool bHit = universal::CubeCrossProduct(aPosVtx[0], aPosVtx[1], aPosVtx[2], aPosVtx[3], posEnemy);
 
+			CWeapon::SInfo info = GetInfo();
+
 			if (bHit)
 			{
-				pEnemy->Hit(5.0f);
+				pEnemy->Hit(info.fDamage);
 			}
 		}
 
