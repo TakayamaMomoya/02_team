@@ -201,6 +201,8 @@ void CDoor::proceed(void)
 
 	if (m_info.fLife < 0.0f)
 	{
+		SetEnable(false);
+
 		m_info.state = STATE_OPEN;
 		SetEnable(false);
 
