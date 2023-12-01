@@ -9,23 +9,23 @@
 # 武器のパラメーター
 #====================================================================
 MAGNUMSET
-	BULLET = 13	# 弾数
+	BULLET = 21	# 弾数
 	DAMAGE = 10.0	# 威力
 	RAPID = 12	# 発射頻度(左のフレーム数ごとに発射できる)
 END_MAGNUMSET
 
 MACHINEGUNSET
-	BULLET = 120	# 弾数
-	DAMAGE = 2.0	# 威力
-	RAPID = 5	# 発射頻度(左のフレーム数ごとに発射できる)
+	BULLET = 150	# 弾数
+	DAMAGE = 0.9	# 威力
+	RAPID = 3		# 発射頻度(左のフレーム数ごとに発射できる)
 END_MACHINEGUNSET
 
 SHOTGUNSET
-	BULLET = 20	# 弾数
-	DAMAGE = 3.0	# 威力
-	NUM_PELLET = 10	# 一度に発射する弾の数
-	ANGLE_DIFFUSE = 45	# 弾の拡散角度
-	RAPID = 50	# 発射頻度(左のフレーム数ごとに発射できる)
+	BULLET = 15	# 弾数
+	DAMAGE = 1.5	# 威力
+	NUM_PELLET = 18	# 一度に発射する弾の数
+	ANGLE_DIFFUSE = 40	# 弾の拡散角度
+	RAPID = 70	# 発射頻度(左のフレーム数ごとに発射できる)
 END_SHOTGUNSET
 
 #====================================================================
