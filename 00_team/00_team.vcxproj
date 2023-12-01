@@ -84,7 +84,6 @@
     <ClCompile Include="code\sound.cpp" />
     <ClCompile Include="code\lift.cpp" />
     <ClCompile Include="code\texture.cpp" />
-    <ClCompile Include="code\timer.cpp" />
     <ClCompile Include="code\title.cpp" />
     <ClCompile Include="code\tutorial.cpp" />
     <ClCompile Include="code\UI.cpp" />
@@ -163,7 +162,6 @@
     <ClInclude Include="code\sound.h" />
     <ClInclude Include="code\lift.h" />
     <ClInclude Include="code\texture.h" />
-    <ClInclude Include="code\timer.h" />
     <ClInclude Include="code\title.h" />
     <ClInclude Include="code\tutorial.h" />
     <ClInclude Include="code\UI.h" />

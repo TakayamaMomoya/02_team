@@ -90,9 +90,6 @@
     <ClCompile Include="code\UIManager.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="code\timer.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="code\score.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -231,9 +228,6 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="code\UIManager.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="code\timer.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="code\score.h">

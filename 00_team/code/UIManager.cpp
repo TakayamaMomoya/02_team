@@ -12,7 +12,6 @@
 #include "inputkeyboard.h"
 #include "UIManager.h"
 #include "score.h"
-#include "timer.h"
 #include "game.h"
 
 //*****************************************************
@@ -31,6 +30,7 @@ CUIManager *CUIManager::m_pUIManager = nullptr;	// 自身のポインタ
 CUIManager::CUIManager()
 {
 	m_bDisp = false;
+	ZeroMemory(&m_info, sizeof(SInfo));
 }
 
 //=====================================================
@@ -91,6 +91,16 @@ void CUIManager::Update(void)
 			m_bDisp = m_bDisp ? false : true;
 		}
 	}
+}
+
+//=====================================================
+// ライフの生成処理
+//=====================================================
+CLife *CUIManager::CreateLife(int nIdx)
+{
+	CLife *pLife = nullptr;
+
+	return pLife;
 }
 
 //=====================================================

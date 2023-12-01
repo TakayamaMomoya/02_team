@@ -9,7 +9,6 @@
 // インクルード
 //*****************************************************
 #include "score.h"
-#include "timer.h"
 #include "manager.h"
 #include "renderer.h"
 #include "game.h"
@@ -144,22 +143,5 @@ CScore *CScore::Create(void)
 //=====================================================
 void CScore::SetResultScore(void)
 {
-	CTimer *pTimer = CTimer::GetInstance();
-	int nTime = 0;
-	int nScore = GetScore();
 
-	if (pTimer != nullptr)
-	{// 時間の取得
-		nTime = pTimer->GetSecond();
-	}
-
-	int nBonus = 0;
-
-	// ボーナスの計算
-	nBonus = (MAX_TIME - nTime) * TIME_BONUS;
-
-	// ボーナスを加算
-	nScore += nBonus;
-
-	CManager::SetScore(nScore);
 }
