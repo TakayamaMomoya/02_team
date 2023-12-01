@@ -29,6 +29,7 @@ public:
 	CNumber3D(int nPriority = 7);	// コンストラクタ
 	~CNumber3D();	// デストラクタ
 
+	static CNumber3D *Create(int nNumPlace, int nValue);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
@@ -37,7 +38,6 @@ public:
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }
 	D3DXVECTOR3 GetPositionOld(void) { return D3DXVECTOR3(); }	// 取得処理
 	void SetValue(int nValue, int nNumPlace);
-	static CNumber3D *Create(int nNumPlace, int nValue);
 	void SetSizeAll(float width,float height);
 	float GetWidth(void) { return 0.0f; }	// サイズ取得
 	float GetHeight(void) { return 0.0f; }	// サイズ取得

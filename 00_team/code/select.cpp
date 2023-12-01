@@ -43,6 +43,8 @@
 
 #include <stdio.h>
 
+#include "number3D.h"
+
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
 //*****************************************************
@@ -147,6 +149,9 @@ HRESULT CSelect::Init(void)
 	{
 		m_aContainerData[nCnt].fReSpawnTimer = RESPAWN_TIME;
 	}
+
+	CNumber3D *pNumber = CNumber3D::Create(1, 0);
+	pNumber->SetPosition({ 0.0f, 0.0f, 0.0f });
 
 	return S_OK;
 }
