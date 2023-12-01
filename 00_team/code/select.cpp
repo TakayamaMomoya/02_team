@@ -117,7 +117,7 @@ HRESULT CSelect::Init(void)
 	CPlayerManager::Create();
 
 	// エディットの生成
-	CEdit::Create();
+	//CEdit::Create();
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
@@ -146,7 +146,7 @@ HRESULT CSelect::Init(void)
 
 		if (m_apNumber[nCnt] != nullptr)
 		{
-			m_apNumber[nCnt]->SetPosition({ -60.0f + (nCnt * 30), 100.0f, 200.0f });
+			m_apNumber[nCnt]->SetPosition({ 15.0f + (nCnt * 30), 20.0f, 140.0f });
 			m_apNumber[nCnt]->SetSizeAll(10.0f, 20.0f);
 		}
 	}
@@ -364,6 +364,14 @@ void CSelect::Update(void)
 	}
 	else
 	{
+		for (int nCnt = 0; nCnt < 2; nCnt++)
+		{
+			if (m_apNumber[nCnt] != nullptr)
+			{
+				m_apNumber[nCnt]->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
+			}
+		}
+
 		Rift();
 	}
 
