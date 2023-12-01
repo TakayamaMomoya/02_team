@@ -408,6 +408,7 @@ void CSelect::ReSetContainer(void)
 
 			// ˆÊ’uÝ’è
 			if (nCnt % 2 == 0)
+
 			{
 				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3
 				(
