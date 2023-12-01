@@ -123,11 +123,11 @@ void CMachinegun::Attack(void)
 				};
 			}
 
-			// 威力取得
-			float fDamage = GetDamage();
+			// パラメーター取得
+			CWeapon::SInfo info = GetInfo();
 
 			// 弾を発射
-			CBullet::Create(posMuzzle, -move, 100, CBullet::TYPE_PLAYER, false,2.0f, fDamage);
+			CBullet::Create(posMuzzle, -move, info.fLifeBullet, CBullet::TYPE_PLAYER, false,2.0f, info.fDamage);
 
 			CSound* pSound = CSound::GetInstance();
 

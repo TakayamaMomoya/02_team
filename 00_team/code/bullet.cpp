@@ -40,7 +40,7 @@ int CBullet::m_nNumAll = 0;	// ëçêî
 //=====================================================
 CBullet::CBullet(int nPriority) : CObject(nPriority)
 {
-	m_nLife = 0;
+	m_fLife = 0.0f;
 	m_fDamage = 0.0f;
 	m_fSize = 0.0f;
 	m_type = TYPE_NONE;
@@ -115,7 +115,9 @@ void CBullet::Update(void)
 	bool bHit = false;
 
 	// éıñΩå∏êä
-	m_nLife--;
+	float fTIck = CManager::GetTick();
+
+	m_fLife -= fTIck;
 
 	m_posOld = m_pos;
 
@@ -154,7 +156,7 @@ void CBullet::Update(void)
 
 	if (bHit == false)
 	{
-		if (m_nLife < 0)
+		if (m_fLife < 0)
 		{// é©ï™ÇÃçÌèú
 			Death();
 		}
@@ -235,7 +237,7 @@ void CBullet::Draw(void)
 //=====================================================
 // ê∂ê¨èàóù
 //=====================================================
-CBullet *CBullet::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move, int nLife,TYPE type, bool bPierce, float fRadius, float fDamage, D3DXCOLOR col)
+CBullet *CBullet::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move, float fLife,TYPE type, bool bPierce, float fRadius, float fDamage, D3DXCOLOR col)
 {
 	CBullet *pBullet = nullptr;
 
@@ -248,7 +250,7 @@ CBullet *CBullet::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move, int nLife,TYPE type, 
 			pBullet->m_move = move;
 			pBullet->m_pos = pos;
 			pBullet->m_posOld = pos;
-			pBullet->m_nLife = nLife;
+			pBullet->m_fLife = fLife;
 			pBullet->m_type = type;
 			pBullet->m_bPierce = bPierce;
 			pBullet->m_fDamage = fDamage;
