@@ -35,10 +35,10 @@ namespace
 {
 	const char* PLAYER_BODY_PATH[NUM_PLAYER] =
 	{// 敵の体のパス
-		"data\\MOTION\\motionPotatoman01.txt",
-		"data\\MOTION\\motionPotatoman02.txt",
-		"data\\MOTION\\motionPotatoman03.txt",
-		"data\\MOTION\\motionPotatoman04.txt",
+		"data\\MOTION\\motionTitle01.txt",
+		"data\\MOTION\\motionTitle02.txt",
+		"data\\MOTION\\motionTitle03.txt",
+		"data\\MOTION\\motionTitle04.txt",
 	};
 	const D3DXVECTOR3 PLAYER_POS[NUM_PLAYER] =
 	{// プレイヤーの位置
@@ -246,6 +246,7 @@ HRESULT CTitle::Init(void)
 
 	if (pSound != nullptr)
 	{
+		// BGMの再生
 		pSound->Play(pSound->LABEL_BGM_TITLE);
 	}
 	else if (pSound == nullptr)

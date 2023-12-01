@@ -20,13 +20,13 @@
 //*****************************************************
 // クラスの定義
 //*****************************************************
-class CStartLocation : public CObjectX
+class CLift : public CObjectX
 {
 public:
-	CStartLocation(int nPriority = 6);	// コンストラクタ
-	~CStartLocation();	// デストラクタ
+	CLift(int nPriority = 6);	// コンストラクタ
+	~CLift();	// デストラクタ
 
-	static CStartLocation* Create(D3DXVECTOR3 pos, int nPriority = 3);
+	static CLift* Create(D3DXVECTOR3 pos, int nPriority = 3);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);

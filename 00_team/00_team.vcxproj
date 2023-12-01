@@ -82,7 +82,7 @@
     <ClCompile Include="code\select.cpp" />
     <ClCompile Include="code\skybox.cpp" />
     <ClCompile Include="code\sound.cpp" />
-    <ClCompile Include="code\startLocation.cpp" />
+    <ClCompile Include="code\lift.cpp" />
     <ClCompile Include="code\texture.cpp" />
     <ClCompile Include="code\timer.cpp" />
     <ClCompile Include="code\title.cpp" />
@@ -161,7 +161,7 @@
     <ClInclude Include="code\select.h" />
     <ClInclude Include="code\skybox.h" />
     <ClInclude Include="code\sound.h" />
-    <ClInclude Include="code\startLocation.h" />
+    <ClInclude Include="code\lift.h" />
     <ClInclude Include="code\texture.h" />
     <ClInclude Include="code\timer.h" />
     <ClInclude Include="code\title.h" />
