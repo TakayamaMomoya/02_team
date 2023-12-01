@@ -17,7 +17,7 @@
 //******************************************
 // マクロ定義
 //******************************************
-#define DELETE_LENGTH	(0.5f)	// 削除する長さ
+#define DELETE_LENGTH	(4.0f)	// 削除する長さ
 
 //==========================================
 // コンストラクタ
@@ -161,18 +161,6 @@ void COrbit::UpdatePolygon(void)
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	if (m_bEnd)
-	{// 切り離しからの自動削除
-		D3DXVECTOR3 vecDiff;
-
-		vecDiff = pVtx[0].pos - pVtx[m_nNumEdge * NUM_OFFSET].pos;
-
-		if (D3DXVec3Length(&vecDiff) < DELETE_LENGTH)
-		{
-			Uninit();
-		}
-	}
-
 	for (int nCntVtx = 0; nCntVtx < m_nNumEdge; nCntVtx++)
 	{//辺ごとの頂点座標設定
 
@@ -188,6 +176,20 @@ void COrbit::UpdatePolygon(void)
 
 		//ポインタを進める
 		pVtx += NUM_OFFSET;
+	}
+
+	if (m_bEnd)
+	{// 切り離しからの自動削除
+		D3DXVECTOR3 vecDiff;
+
+		vecDiff = pVtx[0].pos - pVtx[m_nNumEdge * NUM_OFFSET - 1].pos;
+
+		float fLength = D3DXVec3Length(&vecDiff);
+
+		if (fLength < DELETE_LENGTH)
+		{
+			Uninit();
+		}
 	}
 }
 
