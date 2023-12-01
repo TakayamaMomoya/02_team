@@ -176,8 +176,6 @@ void CWeapon::Update(void)
 //=====================================================
 void CWeapon::FollowPlayerHand(void)
 {
-	
-
 	if (m_info.pPlayer == nullptr)
 	{
 		return;

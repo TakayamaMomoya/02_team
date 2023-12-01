@@ -166,6 +166,7 @@ void CRailgun::Shot(void)
 
 	int nBullet = GetBullet();
 	int nID = GetID();
+	int nCntShot = GetCntShot();
 
 	// 敵との接触を判定する
 	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
@@ -195,19 +196,8 @@ void CRailgun::Shot(void)
 			{
 				if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB, nID))
 				{// 射撃
-					int nCntShot = GetCntShot();
-
 					if (nBullet > 0 && nCntShot == 0)
 					{// 弾の発射
-						// 弾を減らす
-						nBullet--;
-						SetBullet(nBullet);
-
-						// 連射カウンターのリセット
-						nCntShot = GetRapid();
-
-						SetCntShot(nCntShot);
-
 						pEnemy->Hit(info.fDamage);
 					}
 					else
@@ -232,11 +222,22 @@ void CRailgun::Shot(void)
 					pBody->ResetAllCol();
 				}
 			}
-
 		}
 
 		// 次のアドレスを代入
 		pEnemy = pEnemyNext;
+	}
+
+	if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB, nID))
+	{// 弾を減らす
+		// 弾を減らす
+		nBullet--;
+		SetBullet(nBullet);
+
+		// 連射カウンターのリセット
+		nCntShot = GetRapid();
+
+		SetCntShot(nCntShot);
 	}
 }
 
