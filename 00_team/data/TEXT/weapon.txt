@@ -19,16 +19,16 @@ MACHINEGUNSET
 	BULLET = 150	# 弾数
 	DAMAGE = 0.9	# 威力
 	RAPID = 3		# 発射頻度(左のフレーム数ごとに発射できる)
-	BULLET_LIFE = 10.0	# 弾の寿命（秒数）
+	BULLET_LIFE = 0.65	# 弾の寿命（秒数）
 END_MACHINEGUNSET
 
 SHOTGUNSET
 	BULLET = 15	# 弾数
 	DAMAGE = 1.5	# 威力
-	NUM_PELLET = 18	# 一度に発射する弾の数
-	ANGLE_DIFFUSE = 40	# 弾の拡散角度
+	NUM_PELLET = 20	# 一度に発射する弾の数
+	ANGLE_DIFFUSE = 50	# 弾の拡散角度
 	RAPID = 70	# 発射頻度(左のフレーム数ごとに発射できる)
-	BULLET_LIFE = 10.0	# 弾の寿命（秒数）
+	BULLET_LIFE = 0.3	# 弾の寿命（秒数）
 END_SHOTGUNSET
 
 #====================================================================
