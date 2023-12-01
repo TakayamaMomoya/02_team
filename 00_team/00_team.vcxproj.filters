@@ -160,7 +160,7 @@
     <ClCompile Include="code\motionDiv.cpp" />
     <ClCompile Include="code\anim3D.cpp" />
     <ClCompile Include="code\animEffect3D.cpp" />
-    <ClCompile Include="code\startLocation.cpp" />
+    <ClCompile Include="code\lift.cpp" />
     <ClCompile Include="code\weaponShotgun.cpp">
       <Filter>weapon</Filter>
     </ClCompile>
@@ -298,7 +298,7 @@
     <ClInclude Include="code\motionDiv.h" />
     <ClInclude Include="code\anim3D.h" />
     <ClInclude Include="code\animEffect3D.h" />
-    <ClInclude Include="code\startLocation.h" />
+    <ClInclude Include="code\lift.h" />
     <ClInclude Include="code\weaponShotgun.h">
       <Filter>weapon</Filter>
     </ClInclude>
