@@ -109,6 +109,10 @@ HRESULT CSelect::Init(void)
 		pCamera->SetSelect();
 	}
 
+	MenuInit();
+	StartInit();
+	ContainerInit();
+
 	// プレイヤーマネージャーの生成
 	CPlayerManager::Create();
 
