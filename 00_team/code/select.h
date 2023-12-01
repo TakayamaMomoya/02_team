@@ -21,14 +21,14 @@ class CObject2D;
 class CPlayerManager;
 class CPlayer;
 class CContainer;
-class CStartLocation;
+class CLift;
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
 namespace
 {
-	const int MAX_CONTAINER(6);
+	const int MAX_CONTAINER(4);
 };
 
 //*****************************************************
@@ -36,23 +36,26 @@ namespace
 //*****************************************************
 class CSelect : public CScene
 {
+private:
+
+
 public:
 	CSelect();	// コンストラクタ
 	~CSelect();	// デストラクタ
 
-	virtual HRESULT Init(void);
-	virtual void Uninit(void);
-	virtual void Update();
-	virtual void Draw();
+	HRESULT Init(void);
+	void Uninit(void);
+	void Update();
+	void Draw();
 
 private:
-	enum STATE
+	enum SELECT_STATE
 	{
-		STATE_NONE = 0,	// 何もしてない状態
-		STATE_OUT,	// フェードアウト状態
-		START_MAX
+		STATE_BEFORE = 0,
+		STATE_GO,
+		STATE_MAX
 	};
-
+	// フェードの種類(UI点滅用)
 	enum FADE_STATE
 	{
 		FADE_NONE = 0,	// 無し
@@ -60,7 +63,7 @@ private:
 		FADE_OUT,	// フェードアウト
 		FADE_MAX
 	};
-
+	// プレイヤー状態の種類
 	enum PLAYER_STATE
 	{
 		PLAYER_NONE = 0,	// 無し
@@ -69,53 +72,55 @@ private:
 		PLAYER_INGAME,	// ゲームへ入る
 		PLAYER_MAX
 	};
-
-	enum MENU
+	// メニューの種類
+	enum JOIN_UI
 	{
 		MENU_PLUS = 0,	// プラス
 		MENU_CHAR,	// 文字
 		MENU_MAX
 	};
-
-	struct MenuData
+	// メニューの構造体
+	struct SJoinUi_info
 	{
-		CBillboard* pMenu2D[MENU_MAX];	//メニュー
+		CBillboard* pUi2D[MENU_MAX];	//メニュー
 		D3DXCOLOR col;	// 色
 		FADE_STATE state;	// 状態
 	};
-
+	// プレイヤー情報の構造体
 	struct PlayerInfo
 	{
 		CPlayer* pPlayer;	// プライヤー
 		PLAYER_STATE state;	// 状態
 	};
-
+	// コンテナ情報の構造体
 	struct CContainerInfo
 	{
 		CContainer* pContainer;
 		float fReSpawnTimer;
 	};
 
-	void MenuInit(void);
-	void MenuDelete(int nPlayer);
-	void StartInit(void);
-	void ContainerInit(void);
-	void ReSetContainer(void);
-	void ColorChange(int nPlayer);
-	void EntryInput(int nPlayer);
-	void MoveLimit(int nPlayer);
-	void PlayerShowUp(int nPlayer);
+	void MenuInit(void);	// メニューの初期設定
+	void MenuDelete(int nPlayer);	// メニューの削除
+	void MenuColorChange(int nPlayer);	// メニュー色の変更
 
-	void rift(void);
+	void StartInit(void);	// スタートの初期設定
 
-	MenuData m_aMenuData[NUM_PLAYER];	// それぞれの選択メニュー
+	void ContainerInit(void);	// コンテナの初期設定
+	void ReSetContainer(void);	// コンテナの再設置
+
+	void EntryInput(int nPlayer);	// 参加の入力
+	void MoveLimit(int nPlayer);	// 行動制限
+	void PlayerShowUp(int nPlayer);	// プレイヤーの登場
+
+	void rift(void);	// リフトの設定
+
+	SJoinUi_info m_aJoinUiData[NUM_PLAYER];	// それぞれの選択メニュー
 	CObject2D* m_pStartUI;	// Start文字
 	CPlayerManager* m_pPlayerManager;	// プレイヤー管理
-	PlayerInfo m_apPlayerData[NUM_PLAYER];
-	CContainerInfo m_aContainerData[MAX_CONTAINER];
-	//CContainer* m_apContainer[MAX_CONTAINER];
-	CStartLocation* m_pStartLocation;
-	STATE m_state;	// 状態
+	PlayerInfo m_apPlayerData[NUM_PLAYER];	// プレイヤー情報
+	CContainerInfo m_aContainerData[MAX_CONTAINER];	// コンテナ
+	CLift* m_pLift;	// リフトの位置
+	SELECT_STATE m_selectState;	// 人数選択の状態
 	bool m_abEntry[NUM_PLAYER];	// 参加したかどうか
 	bool m_bRiftCamera;
 	bool m_bOk;
