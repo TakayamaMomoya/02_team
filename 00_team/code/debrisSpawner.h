@@ -19,10 +19,12 @@
 class CDebrisSpawner : public CObject
 {
 public:
+	// ”j•Ð‚ÌŽí—Þ
 	typedef enum
 	{
 		TYPE_NONE = 0,	// ‰½‚Å‚à‚È‚¢
-		TYPE_EXPLOSION,	// ”š”­
+		TYPE_WALL,	// •Ç
+		TYPE_SOIL,	// “y
 		TYPE_MAX
 	}TYPE;
 
