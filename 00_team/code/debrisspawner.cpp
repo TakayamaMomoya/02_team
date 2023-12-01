@@ -24,6 +24,7 @@ CDebrisSpawner::PARTICLE_INFO* CDebrisSpawner::m_apDebris[CDebrisSpawner::TYPE_M
 CDebrisSpawner::CDebrisSpawner(int nPriority) : CObject(nPriority)
 {
 	m_pos = { 0.0f,0.0f,0.0f };
+	m_pPosOwner = nullptr;
 	m_rot = { 0.0f,0.0f,0.0f };
 	m_type = TYPE_NONE;
 	m_nPriorityDebris = 0;
@@ -46,6 +47,11 @@ CDebrisSpawner::~CDebrisSpawner()
 HRESULT CDebrisSpawner::Init(void)
 {
 	Load();
+
+	//if (m_type == CDebrisSpawner::TYPE_WALL)
+	//{
+	//	m_apDebris[m_type]->
+	//}
 
 	return S_OK;
 }
@@ -71,6 +77,13 @@ void CDebrisSpawner::Unload(void)
 			m_apDebris[nCntDebris] = nullptr;
 		}
 	}
+}
+
+//=====================================================
+//	壁の破片
+//=====================================================
+void CDebrisSpawner::DebrisWall(void)
+{
 }
 
 //=====================================================
@@ -126,7 +139,7 @@ void CDebrisSpawner::Update(void)
 		rot.z = (float)(rand() % 629 - 314) / 100.0f;
 
 		// エフェクト生成
-		pObjectX = CDebris::Create(m_pos, nLife, move, m_apDebris[m_type]->fGravity);
+		pObjectX = CDebris::Create(m_pos, nLife, move, m_apDebris[m_type]->fGravity, m_apDebris[m_type]->bBounce);
 		pObjectX->SetRot(D3DXVECTOR3(rot.x, rot.y, rot.z));
 	}
 
@@ -276,6 +289,21 @@ void CDebrisSpawner::Load(void)
 						else
 						{
 							pInfo->bTurn = false;
+						}
+					}
+					if (strcmp(cTemp, "IS_BAUNCE") == 0)
+					{// 加算合成かどうか取得
+						(void)fscanf(pFile, "%s", &cTemp[0]);
+
+						(void)fscanf(pFile, "%s", &cTemp[0]);
+
+						if (strcmp(cTemp, "1") == 0)
+						{
+							pInfo->bBounce = true;
+						}
+						else
+						{
+							pInfo->bBounce = false;
 						}
 					}
 				}

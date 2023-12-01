@@ -52,8 +52,13 @@ private:
 		float fRangeRot;	// 向きのランダム範囲
 		int nRot;	// 向きを反映するかどうか
 		bool bTurn;	// 反転するかどうか
+		bool bBounce;	// バウンドするかどうか
 	}PARTICLE_INFO;
 
+	// メンバ関数
+	void DebrisWall(void);
+
+	// メンバ変数
 	D3DXVECTOR3 m_pos;	// 位置
 	D3DXVECTOR3* m_pPosOwner;	// 持ち主の位置
 	D3DXVECTOR3 m_rot;	// 向き

@@ -18,7 +18,7 @@
 //*****************************************************
 namespace
 {
-	const float GEOWND = 10.0f;	// °”»’è‚Ì‚‚³
+	const float GEOWND = 0.0f;	// °”»’è‚Ì‚‚³
 	const float BOUNCE = 4.0f;	// ’µ‚Ë•Ô‚è‚Ì‹­‚³
 	const float ROT_VELOCITY = 0.05f;	// ‰ñ“]‘¬“x‚Ì§ŒÀ
 	const float SPEED_SHRINK = 0.05f;	// k‚Þ‘¬“x
@@ -35,6 +35,7 @@ CDebris::CDebris(int nPriority)
 	m_nLife = 0;
 	m_fGravity = 0.0f;
 	m_state = STATE_NONE;
+	m_bBounce = false;
 }
 
 //=====================================================
@@ -58,7 +59,7 @@ HRESULT CDebris::Init(void)
 	m_rotVelocity.z = (float)(rand() % 629 - 314) / 100.0f;
 
 	// ƒ‚ƒfƒ‹“Çž
-	int nIdx = CModel::Load("data\\MODEL\\debris\\soil00.x");
+	int nIdx = CModel::Load("data\\MODEL\\debris\\wood00.x");
 	BindModel(nIdx);
 
 	// ’l‚Ì‰Šú‰»
@@ -96,27 +97,42 @@ void CDebris::Update(void)
 	m_move.x *= 0.98f;
 	m_move.z *= 0.98f;
 
-	if (pos.y > 10.0f)
-	{
-		// ‰ñ“]
-		D3DXVECTOR3 rot = GetRot();
-		rot.x += m_rotVelocity.x * ROT_VELOCITY;
-		rot.y += m_rotVelocity.y * ROT_VELOCITY;
-		rot.z += m_rotVelocity.z * ROT_VELOCITY;
-		SetRot(rot);
-	}
-	else
-	{
-		pos.y = GEOWND;
 
-		if (m_move.x < 0.4f && m_move.z < 0.4f) 
+	if (m_bBounce == true)
+	{
+		if (pos.y > GEOWND)
 		{
-			m_move.x = 0.0f;
-			m_move.z = 0.0f;
+			// ‰ñ“]
+			D3DXVECTOR3 rot = GetRot();
+			rot.x += m_rotVelocity.x * ROT_VELOCITY;
+			rot.y += m_rotVelocity.y * ROT_VELOCITY;
+			rot.z += m_rotVelocity.z * ROT_VELOCITY;
+			SetRot(rot);
 		}
 		else
 		{
-			m_move.y += BOUNCE;
+			pos.y = GEOWND;
+
+			if (m_move.x < 0.4f && m_move.z < 0.4f)
+			{
+				m_move.x = 0.0f;
+				m_move.z = 0.0f;
+			}
+			else
+			{
+				m_move.y += BOUNCE;
+			}
+		}
+	}
+	else
+	{
+		if (m_move.x < 0.4f && m_move.z < 0.4f || pos.y < GEOWND)
+		{
+			m_move.x = 0.0f;
+			m_move.y = 0.0f;
+			m_move.z = 0.0f;
+
+			pos.y = GEOWND;
 		}
 	}
 
@@ -170,28 +186,30 @@ void CDebris::Draw(void)
 //=====================================================
 // ¶¬ˆ—
 //=====================================================
-CDebris* CDebris::Create(D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 move, float fGravity, int nPriority)
+CDebris* CDebris::Create(D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 move, float fGravity, bool bBounce, int nPriority)
 {
-	CDebris* pDebtisSpawner = nullptr;
+	CDebris* pDebrisSpawner = nullptr;
 
-	if (pDebtisSpawner == nullptr)
+	if (pDebrisSpawner == nullptr)
 	{// ƒCƒ“ƒXƒ^ƒ“ƒX¶¬
-		pDebtisSpawner = new CDebris(nPriority);
+		pDebrisSpawner = new CDebris(nPriority);
 
-		if (pDebtisSpawner != nullptr)
+		if (pDebrisSpawner != nullptr)
 		{
-			pDebtisSpawner->SetPosition(pos);
+			pDebrisSpawner->SetPosition(pos);
 
 			// ‰Šú‰»ˆ—
-			pDebtisSpawner->Init();
+			pDebrisSpawner->Init();
 
-			pDebtisSpawner->m_nLife = nLife;
+			pDebrisSpawner->m_nLife = nLife;
 
-			pDebtisSpawner->m_move = move;
+			pDebrisSpawner->m_move = move;
 
-			pDebtisSpawner->m_fGravity = fGravity;
+			pDebrisSpawner->m_fGravity = fGravity;
+
+			pDebrisSpawner->m_bBounce = bBounce;
 		}
 	}
 
-	return pDebtisSpawner;
+	return pDebrisSpawner;
 }

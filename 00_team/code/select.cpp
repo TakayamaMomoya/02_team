@@ -51,7 +51,7 @@ namespace
 	const D3DXVECTOR3 UI_POS_1P({ -150.0f, 80.0f, -430.0f });	// UIの位置
 	const D3DXVECTOR3 UI_SPACE({ 140.0f, 0.0f, 0.0f });	// UI間の間隔
 
-	const float SPOWN_HEIGHT(-100.0f);	//プレイヤー出現高さ
+	const float SPOWN_HEIGHT(-80.0f);	//プレイヤー出現高さ
 
 	const float SPACE(-50.0f);	//UI間の広さ
 	const float SIZE_PLUS(20.0f);	//UIの大きさ(+)
@@ -66,6 +66,8 @@ namespace
 
 	const float RIFT_IN(100.0f);	// リフトの範囲
 	const float LIFT_UP(2.0f);	// リフト上昇速度
+
+	const float GO_GAME_POSy(250.0f);	// 遷移する高さ
 };
 
 //=====================================================
@@ -206,15 +208,19 @@ void CSelect::MenuInit(void)
 //=====================================================
 void CSelect::StartInit(void)
 {
-	//m_pStartUI = CObject2D::Create();
-	//m_pStartUI->SetPosition(D3DXVECTOR3(1100.0f, 650.0f, 0.0f));
-	//m_pStartUI->SetSize(150.0f, 50.0f);
-	//m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+	m_pStartUI = CObject2D::Create();
 
-	//int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\start_game.png");
-	//m_pStartUI->SetIdxTexture(nIdx);
+	if (m_pStartUI != nullptr)
+	{
+		m_pStartUI->SetPosition(D3DXVECTOR3(1100.0f, 650.0f, 0.0f));
+		m_pStartUI->SetSize(150.0f, 50.0f);
+		m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 
-	//m_pStartUI->SetVtx();
+		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\start_game.png");
+		m_pStartUI->SetIdxTexture(nIdx);
+
+		m_pStartUI->SetVtx();
+	}
 }
 
 //=====================================================
@@ -279,7 +285,7 @@ void CSelect::Update(void)
 	// シーンの更新
 	CScene::Update();
 
-	CFade* pFade = CFade::GetInstance();
+	//CFade* pFade = CFade::GetInstance();
 
 	if (m_selectState == SELECT_STATE::STATE_BEFORE)
 	{
@@ -293,38 +299,44 @@ void CSelect::Update(void)
 					pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
 				{// フェード
 
-					for (int nCntPlayer = 0; nCntPlayer < NUM_PLAYER; nCntPlayer++)
-					{
-						if (m_abEntry[nCntPlayer] == true)
-						{
-							m_apPlayerData[nCntPlayer].state = PLAYER_INGAME;
-						}
-					}
+					m_selectState = STATE_GO;
 					m_bOk = true;
 
-					if (pFade != nullptr && m_abEntry[0] != false)
+					/*if (pFade != nullptr && m_abEntry[0] != false)
 					{
 						pFade->SetFade(CScene::MODE_GAME);
-					}
+					}*/
 				}
 
 				// StartUIを見えるように
-				/*m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-				m_pStartUI->SetVtx();*/
+				if (m_pStartUI != nullptr)
+				{
+					m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+					m_pStartUI->SetVtx();
+				}
 			}
 			else
 			{
 				// StartのUIを見えないように
-				/*m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
-				m_pStartUI->SetVtx();*/
+				if (m_pStartUI != nullptr)
+				{
+					m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+					m_pStartUI->SetVtx();
+				}
 			}
 		}
+	}
+	else
+	{
+		Rift();
 	}
 
 	for (int nCntPlayer = 0; nCntPlayer < NUM_PLAYER; nCntPlayer++)
 	{
-		if (m_aJoinUiData[nCntPlayer].pUi2D[MENU_CHAR] != nullptr && m_aJoinUiData[nCntPlayer].pUi2D[MENU_PLUS] != nullptr)
-		{	
+		if (m_aJoinUiData[nCntPlayer].pUi2D[MENU_CHAR] != nullptr && 
+			m_aJoinUiData[nCntPlayer].pUi2D[MENU_PLUS] != nullptr &&
+			m_selectState == SELECT_STATE::STATE_BEFORE)
+		{
 			// 色の変更
 			MenuColorChange(nCntPlayer);
 			// 参加入力
@@ -343,13 +355,12 @@ void CSelect::Update(void)
 		}
 	}
 
-		Rift();
-		// コンテナの再設置
-		ReSetContainer();
-	
-
 	// 参加人数の設定
 	CLift::SetjoinPlayer(nJoinPlayer);
+	
+	// コンテナの再設置
+	ReSetContainer();
+	
 
 #ifdef _DEBUG
 	CCamera* pCamera = CManager::GetCamera();
@@ -362,7 +373,7 @@ void CSelect::Update(void)
 
 	if (pKeyboard->GetTrigger(DIK_RETURN))
 	{
-		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 100.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_WALL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 
 	CDebugProc::GetInstance()->Print("\n参加人数[%d]\n", nJoinPlayer);
@@ -498,6 +509,11 @@ void CSelect::EntryInput(int nPlayer)
 			SPOWN_HEIGHT,
 			m_aJoinUiData[nPlayer].pUi2D[MENU_PLUS]->GetPosition().z));
 
+		CDebrisSpawner::Create(D3DXVECTOR3(
+			m_aJoinUiData[nPlayer].pUi2D[MENU_PLUS]->GetPosition().x,
+			50.0f,
+			m_aJoinUiData[nPlayer].pUi2D[MENU_PLUS]->GetPosition().z), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
 		// UI削除
 		MenuDelete(nPlayer);
 	}
@@ -519,7 +535,7 @@ void CSelect::MoveLimit(int nPlayer)
 	CCamera* pCamera = CManager::GetCamera();
 
 	// 大人の壁判定
-	if (m_apPlayerData[nPlayer].state != PLAYER_INGAME)
+	if (m_selectState == STATE_BEFORE)
 	{
 		// 重力
 		move.y -= GRAVITY;
@@ -528,29 +544,7 @@ void CSelect::MoveLimit(int nPlayer)
 		{
 			pos.z = ADULTWALL_POS_Z;
 		}
-	}
-	else
-	{
-		/*if (m_pLift->GetPosition().x + RIFT_IN >= pos.x)
-		{
-			pos.x = RIFT_IN - 1.0f;
-		}
-		if (m_pLift->GetPosition().x - RIFT_IN <= pos.x)
-		{
-			pos.x = RIFT_IN;
-		}
-		if (m_pLift->GetPosition().z + RIFT_IN >= pos.z)
-		{
-			pos.z = RIFT_IN;
-		}
-		if (m_pLift->GetPosition().z - RIFT_IN <= pos.z)
-		{
-			pos.z = -RIFT_IN;
-		}*/
-	}
 
-	if (m_apPlayerData[nPlayer].state != PLAYER_ENTRY)
-	{
 		// 床判定
 		if (pos.y <= 0.0f)
 		{
@@ -558,9 +552,15 @@ void CSelect::MoveLimit(int nPlayer)
 			move.y = 0.0f;
 		};
 	}
+	else
+	{
+		if (pos.z < 20.0f)
+		{
+			pos.z = 20.0f;
+		}
+	}
 
 	//情報の反映
-	
 	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
 	m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 }
@@ -627,6 +627,16 @@ void CSelect::Rift(void)
 				pos = m_apPlayerData[nCnt].pPlayer->GetPosition();
 				pos.y += LIFT_UP;
 				m_apPlayerData[nCnt].pPlayer->SetPosition(pos);
+			}
+		}
+
+		CFade* pFade = CFade::GetInstance();
+
+		if (rift.y > GO_GAME_POSy)
+		{
+			if (pFade != nullptr && m_abEntry[0] != false)
+			{
+				pFade->SetFade(CScene::MODE_GAME);
 			}
 		}
 	}
