@@ -29,17 +29,14 @@
 #include "playerManager.h"
 #include "player.h"
 #include "sound.h"
-
 #include "debrisSpawner.h"
 #include "debris.h"
-
 #include "lift.h"
-
 #include "container.h"
 #include "weaponManager.h"
-
 #include "edit.h"
 #include "animEffect3D.h"
+#include "number3D.h"
 
 #include <stdio.h>
 
@@ -70,6 +67,11 @@ namespace
 	const float GO_GAME_POSy(250.0f);	// 遷移する高さ
 };
 
+//*****************************************************
+// 静的メンバ変数宣言
+//*****************************************************
+CNumber3D *CSelect::m_apNumber[2] = {};
+
 //=====================================================
 // コンストラクタ
 //=====================================================
@@ -77,6 +79,8 @@ CSelect::CSelect()
 {
 	ZeroMemory(&m_apPlayerData[0], sizeof(CSelect::PlayerInfo));
 	ZeroMemory(&m_aContainerData[0], sizeof(CSelect::CContainerInfo));
+	ZeroMemory(&m_apNumber[0], sizeof(CNumber3D));
+	
 	m_pStartUI = nullptr;
 	m_pPlayerManager = nullptr;
 	m_pLift = nullptr;
@@ -105,48 +109,55 @@ HRESULT CSelect::Init(void)
 	int nIdx = 0;
 
 	// プレイヤーマネージャーの生成
-	m_pPlayerManager = CPlayerManager::Create();
+	//m_pPlayerManager = CPlayerManager::Create();
 
-	MenuInit();
+	/*MenuInit();
 	StartInit();
-	ContainerInit();
+	ContainerInit();*/
 
 	// エディットの生成
-	CEdit::Create();
+	//CEdit::Create();
 
 	// ブロックの読み込み
-	CBlock::Load("data\\MAP\\select_map00.bin");
+	//CBlock::Load("data\\MAP\\select_map00.bin");
 
 	// ポテトの寝床の生成
-	CObjectX* pObjectX = CObjectX::Create({ 58.0f, 0.5f, -430.5f });
-	pObjectX->BindModel(CModel::Load("data\\MODEL\\select\\potato_bed.x"));
+	/*CObjectX* pObjectX = CObjectX::Create({ 58.0f, 0.5f, -430.5f });
+	pObjectX->BindModel(CModel::Load("data\\MODEL\\select\\potato_bed.x"));*/
 
 	//地面の生成
-	CObject3D* pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	/*CObject3D* pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood001.jpg");
 	pObject->SetIdxTexture(nIdx);
 	pObject->SetPosition(D3DXVECTOR3(55.0f, 0.0f, -280.0f));
-	pObject->SetSize(300.0f, 300.0f);
+	pObject->SetSize(300.0f, 300.0f);*/
+
+	// 参加人数の表示
+	for (int nCnt = 0; nCnt < 2; nCnt)
+	{
+		m_apNumber[nCnt] = CNumber3D::Create(1, 0);
+		m_apNumber[nCnt]->SetPosition({ 0.0f, 0.0f, -200.0f });
+	}
 
 	// 開始位置
-	m_pLift = CLift::Create(D3DXVECTOR3(30.0f, 0.5f, 100.0f));
+	//m_pLift = CLift::Create(D3DXVECTOR3(30.0f, 0.5f, 100.0f));
 	
 	// サウンドインスタンスの取得
-	CSound* pSound = CSound::GetInstance();
+	//CSound* pSound = CSound::GetInstance();
 
-	if (pSound != nullptr)
+	/*if (pSound != nullptr)
 	{
 		pSound->Play(pSound->LABEL_BGM_SELECT);
-	}
+	}*/
 
 	// ３Dアニメーション管理の生成
-	CAnimEffect3D::Create();
+	//CAnimEffect3D::Create();
 
 	// コンテナのリスポーン時間を設定
-	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
-	{
-		m_aContainerData[nCnt].fReSpawnTimer = RESPAWN_TIME;
-	}
+	//for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
+	//{
+	//	m_aContainerData[nCnt].fReSpawnTimer = RESPAWN_TIME;
+	//}
 
 	return S_OK;
 }
@@ -275,109 +286,109 @@ void CSelect::Uninit(void)
 //=====================================================
 void CSelect::Update(void)
 {
-	// 情報取得
-	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
-	CInputMouse* pMouse = CInputMouse::GetInstance();
-	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
-
-	int nJoinPlayer = 0;
-
-	// シーンの更新
-	CScene::Update();
-
-	//CFade* pFade = CFade::GetInstance();
-
-	if (m_selectState == SELECT_STATE::STATE_BEFORE)
-	{
-		if (pKeyboard != nullptr && pMouse != nullptr)
-		{
-			if (CLift::GetIsIn() == true)
-			{// 参加中の全員が範囲内に入ったという判定を貰ったら
-
-				if (pKeyboard->GetTrigger(DIK_RETURN) ||
-					pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
-					pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
-				{// フェード
-
-					m_selectState = STATE_GO;
-					m_bOk = true;
-
-					/*if (pFade != nullptr && m_abEntry[0] != false)
-					{
-						pFade->SetFade(CScene::MODE_GAME);
-					}*/
-				}
-
-				// StartUIを見えるように
-				if (m_pStartUI != nullptr)
-				{
-					m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-					m_pStartUI->SetVtx();
-				}
-			}
-			else
-			{
-				// StartのUIを見えないように
-				if (m_pStartUI != nullptr)
-				{
-					m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
-					m_pStartUI->SetVtx();
-				}
-			}
-		}
-	}
-	else
-	{
-		Rift();
-	}
-
-	for (int nCntPlayer = 0; nCntPlayer < NUM_PLAYER; nCntPlayer++)
-	{
-		if (m_aJoinUiData[nCntPlayer].pUi2D[MENU_CHAR] != nullptr && 
-			m_aJoinUiData[nCntPlayer].pUi2D[MENU_PLUS] != nullptr &&
-			m_selectState == SELECT_STATE::STATE_BEFORE)
-		{
-			// 色の変更
-			MenuColorChange(nCntPlayer);
-			// 参加入力
-			EntryInput(nCntPlayer);
-		}
-
-		if (m_abEntry[nCntPlayer] == true)
-		{
-			// プレイヤー参上の処理
-			PlayerShowUp(nCntPlayer);
-
-			// 行動制限
-			MoveLimit(nCntPlayer);
-
-			nJoinPlayer++;
-		}
-	}
-
-	// 参加人数の設定
-	CLift::SetjoinPlayer(nJoinPlayer);
-	
-	// コンテナの再設置
-	ReSetContainer();
-	
-
-#ifdef _DEBUG
-	CCamera* pCamera = CManager::GetCamera();
-
-	if (pCamera != nullptr)
-	{
-		// 操作
-		pCamera->Control();
-	}
-
-	if (pKeyboard->GetTrigger(DIK_RETURN))
-	{
-		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	}
-
-	CDebugProc::GetInstance()->Print("\n参加人数[%d]\n", nJoinPlayer);
-#endif
+//	// 情報取得
+//	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
+//	CInputMouse* pMouse = CInputMouse::GetInstance();
+//	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
+//
+//	int nJoinPlayer = 0;
+//
+//	// シーンの更新
+//	CScene::Update();
+//
+//	//CFade* pFade = CFade::GetInstance();
+//
+//	if (m_selectState == SELECT_STATE::STATE_BEFORE)
+//	{
+//		if (pKeyboard != nullptr && pMouse != nullptr)
+//		{
+//			if (CLift::GetIsIn() == true)
+//			{// 参加中の全員が範囲内に入ったという判定を貰ったら
+//
+//				if (pKeyboard->GetTrigger(DIK_RETURN) ||
+//					pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
+//					pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
+//				{// フェード
+//
+//					m_selectState = STATE_GO;
+//					m_bOk = true;
+//
+//					/*if (pFade != nullptr && m_abEntry[0] != false)
+//					{
+//						pFade->SetFade(CScene::MODE_GAME);
+//					}*/
+//				}
+//
+//				// StartUIを見えるように
+//				if (m_pStartUI != nullptr)
+//				{
+//					m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+//					m_pStartUI->SetVtx();
+//				}
+//			}
+//			else
+//			{
+//				// StartのUIを見えないように
+//				if (m_pStartUI != nullptr)
+//				{
+//					m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+//					m_pStartUI->SetVtx();
+//				}
+//			}
+//		}
+//	}
+//	else
+//	{
+//		Rift();
+//	}
+//
+//	for (int nCntPlayer = 0; nCntPlayer < NUM_PLAYER; nCntPlayer++)
+//	{
+//		if (m_aJoinUiData[nCntPlayer].pUi2D[MENU_CHAR] != nullptr && 
+//			m_aJoinUiData[nCntPlayer].pUi2D[MENU_PLUS] != nullptr &&
+//			m_selectState == SELECT_STATE::STATE_BEFORE)
+//		{
+//			// 色の変更
+//			MenuColorChange(nCntPlayer);
+//			// 参加入力
+//			EntryInput(nCntPlayer);
+//		}
+//
+//		if (m_abEntry[nCntPlayer] == true)
+//		{
+//			// プレイヤー参上の処理
+//			PlayerShowUp(nCntPlayer);
+//
+//			// 行動制限
+//			MoveLimit(nCntPlayer);
+//
+//			nJoinPlayer++;
+//		}
+//	}
+//
+//	// 参加人数の設定
+//	CLift::SetjoinPlayer(nJoinPlayer);
+//	
+//	// コンテナの再設置
+//	ReSetContainer();
+//	
+//
+//#ifdef _DEBUG
+//	CCamera* pCamera = CManager::GetCamera();
+//
+//	if (pCamera != nullptr)
+//	{
+//		// 操作
+//		pCamera->Control();
+//	}
+//
+//	if (pKeyboard->GetTrigger(DIK_RETURN))
+//	{
+//		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+//	}
+//
+//	CDebugProc::GetInstance()->Print("\n参加人数[%d]\n", nJoinPlayer);
+//#endif
 }
 
 //=====================================================

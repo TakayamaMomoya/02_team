@@ -22,6 +22,7 @@ class CPlayerManager;
 class CPlayer;
 class CContainer;
 class CLift;
+class CNumber3D;
 
 //*****************************************************
 // 定数定義
@@ -116,7 +117,8 @@ private:
 	CPlayerManager* m_pPlayerManager;	// プレイヤー管理
 	PlayerInfo m_apPlayerData[NUM_PLAYER];	// プレイヤー情報
 	CContainerInfo m_aContainerData[MAX_CONTAINER];	// コンテナ
-	CLift* m_pLift;	// リフトの位置
+	CLift* m_pLift;	// リフト
+	static CNumber3D* m_apNumber[2];
 	SELECT_STATE m_selectState;	// 人数選択の状態
 	bool m_abEntry[NUM_PLAYER];	// 参加したかどうか
 	bool m_bRiftCamera;
