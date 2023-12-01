@@ -12,12 +12,14 @@ MAGNUMSET
 	BULLET = 13	# 弾数
 	DAMAGE = 10.0	# 威力
 	RAPID = 12	# 発射頻度(左のフレーム数ごとに発射できる)
+	BULLET_LIFE = 1.0	# 弾の寿命（秒数）
 END_MAGNUMSET
 
 MACHINEGUNSET
 	BULLET = 120	# 弾数
 	DAMAGE = 2.0	# 威力
 	RAPID = 5	# 発射頻度(左のフレーム数ごとに発射できる)
+	BULLET_LIFE = 10.0	# 弾の寿命（秒数）
 END_MACHINEGUNSET
 
 SHOTGUNSET
@@ -26,6 +28,7 @@ SHOTGUNSET
 	NUM_PELLET = 10	# 一度に発射する弾の数
 	ANGLE_DIFFUSE = 45	# 弾の拡散角度
 	RAPID = 50	# 発射頻度(左のフレーム数ごとに発射できる)
+	BULLET_LIFE = 10.0	# 弾の寿命（秒数）
 END_SHOTGUNSET
 
 #====================================================================

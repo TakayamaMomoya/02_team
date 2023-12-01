@@ -207,6 +207,13 @@ void CWeaponManager::LoadBaseInfo(FILE* pFile, char* pTemp, int nCntParam)
 
 		(void)fscanf(pFile, "%f", &m_aInfo[nCntParam].fDamage);
 	}
+
+	if (strcmp(pTemp, "BULLET_LIFE") == 0)
+	{// ’e‚ÌŽõ–½
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_aInfo[nCntParam].fLifeBullet);
+	}
 }
 
 //=====================================================

@@ -42,7 +42,7 @@ public:
 	CBullet(int nPriority = 6);	// コンストラクタ
 	~CBullet();	// デストラクタ
 
-	static CBullet *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nLife, TYPE type, bool bPierce = false, float fRadius = 2.0f, float fDamage = 5.0f, D3DXCOLOR col = { 1.0f,1.0f,1.0f,1.0f });
+	static CBullet *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fLife, TYPE type, bool bPierce = false, float fRadius = 2.0f, float fDamage = 5.0f, D3DXCOLOR col = { 1.0f,1.0f,1.0f,1.0f });
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
@@ -60,7 +60,7 @@ private:
 	D3DXVECTOR3 m_rot;	// 向き
 	D3DXVECTOR3 m_pos;	// 位置
 	D3DXVECTOR3 m_posOld;	// 前回の位置
-	int m_nLife;	// 寿命
+	float m_fLife;	// 寿命
 	TYPE m_type;	// 種類
 	static int m_nNumAll;	// 総数
 	bool m_bPierce;	// 貫通するかどうか
