@@ -18,15 +18,12 @@
 #include "collision.h"
 #include "orbit.h"
 #include "universal.h"
-#include "game.h"
 
 //*****************************************************
 // ’è”’è‹`
 //*****************************************************
 namespace
 {
-	const float SPEED_MOVE = 7.0f;	// ˆÚ“®‘¬“x
-	const float ROLL_MOVE = 0.1f;	// ‰ñ“]‘¬“x
 	const int EDGE_ORBIT = 20;	// ‹OÕ‚Ì•Ó‚Ì”
 }
 
@@ -99,7 +96,7 @@ void CBullet::Uninit(void)
 
 	if (m_pOrbit != nullptr)
 	{// ‹OÕ‚ÌI—¹
-		m_pOrbit->Uninit();
+		m_pOrbit->SetEnd(true);
 		m_pOrbit = nullptr;
 	}
 
