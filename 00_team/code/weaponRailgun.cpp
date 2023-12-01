@@ -20,6 +20,7 @@
 #include "effect3D.h"
 #include "enemyManager.h"
 #include "weaponManager.h"
+#include "object3D.h"
 
 //*****************************************************
 // 定数定義
@@ -35,6 +36,7 @@ const int NUM_VTX = 4;	// 当たり判定の頂点数
 CRailgun::CRailgun(int nPriority) : CWeapon(nPriority)
 {
 	ZeroMemory(&m_info, sizeof(SInfoRailgun));
+	m_pRange = nullptr;
 }
 
 //=====================================================
@@ -64,6 +66,12 @@ HRESULT CRailgun::Init(void)
 		m_info.fLength = info.fLength;
 	}
 
+	// 範囲表示の生成
+	if (m_pRange == nullptr)
+	{
+		m_pRange = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	}
+
 	return S_OK;
 }
 
@@ -72,6 +80,12 @@ HRESULT CRailgun::Init(void)
 //=====================================================
 void CRailgun::Uninit(void)
 {
+	if (m_pRange != nullptr)
+	{
+		m_pRange->Uninit();
+		m_pRange = nullptr;
+	}
+
 	// 継承クラスの終了
 	CWeapon::Uninit();
 }
@@ -90,39 +104,8 @@ void CRailgun::Update(void)
 //=====================================================
 void CRailgun::Attack(void)
 {
-	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
-
-	if (pJoypad == nullptr)
-	{
-		return;
-	}
-
-	int nBullet = GetBullet();
-	int nID = GetID();
-
-	if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB,nID))
-	{// 射撃
-		int nCntShot = GetCntShot();
-
-		if (nBullet > 0 && nCntShot == 0)
-		{// 弾の発射
-			// 当たり判定の発生
-			Shot();
-
-			// 弾を減らす
-			nBullet--;
-			SetBullet(nBullet);
-
-			// 連射カウンターのリセット
-			nCntShot = GetRapid();
-
-			SetCntShot(nCntShot);
-		}
-		else
-		{// 弾切れの場合
-
-		}
-	}
+	// 当たり判定の発生
+	Shot();
 }
 
 //=====================================================
@@ -169,6 +152,20 @@ void CRailgun::Shot(void)
 #endif
 	}
 
+	// 頂点情報設定
+	SetVtx(aPosVtx[0], aPosVtx[1], aPosVtx[2], aPosVtx[3]);
+
+	// 入力
+	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
+
+	if (pJoypad == nullptr)
+	{
+		return;
+	}
+
+	int nBullet = GetBullet();
+	int nID = GetID();
+
 	// 敵との接触を判定する
 	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
 
@@ -189,19 +186,79 @@ void CRailgun::Shot(void)
 		{
 			D3DXVECTOR3 posEnemy = pEnemy->GetPosition();
 
-			bool bHit = universal::CubeCrossProduct(aPosVtx[0], aPosVtx[1], aPosVtx[2], aPosVtx[3], posEnemy);
+			if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB, nID))
+			{// 射撃
+				int nCntShot = GetCntShot();
 
-			CWeapon::SInfo info = GetInfo();
+				if (nBullet > 0 && nCntShot == 0)
+				{// 弾の発射
+					// 弾を減らす
+					nBullet--;
+					SetBullet(nBullet);
 
-			if (bHit)
-			{
-				pEnemy->Hit(info.fDamage);
+					// 連射カウンターのリセット
+					nCntShot = GetRapid();
+
+					SetCntShot(nCntShot);
+
+					bool bHit = universal::CubeCrossProduct(aPosVtx[0], aPosVtx[1], aPosVtx[2], aPosVtx[3], posEnemy);
+
+					CWeapon::SInfo info = GetInfo();
+
+					if (bHit)
+					{
+						pEnemy->Hit(info.fDamage);
+					}
+				}
+				else
+				{// 弾切れの場合
+
+				}
 			}
+
 		}
 
 		// 次のアドレスを代入
 		pEnemy = pEnemyNext;
 	}
+}
+
+//=====================================================
+// ポリゴンの頂点設定
+//=====================================================
+void CRailgun::SetVtx(D3DXVECTOR3 vtx1, D3DXVECTOR3 vtx2, D3DXVECTOR3 vtx3, D3DXVECTOR3 vtx4)
+{
+	if (m_pRange == nullptr)
+	{
+		return;
+	}
+
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff = m_pRange->GetVtxBuff();
+
+	if (pVtxBuff == nullptr)
+	{
+		return;
+	}
+
+	//頂点情報のポインタ
+	VERTEX_3D* pVtx;
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//頂点座標の設定
+	pVtx[0].pos = vtx1;
+	pVtx[1].pos = vtx2;
+	pVtx[2].pos = vtx4;
+	pVtx[3].pos = vtx3;
+
+	pVtx[0].pos.y = 2.0f;
+	pVtx[1].pos.y = 2.0f;
+	pVtx[2].pos.y = 2.0f;
+	pVtx[3].pos.y = 2.0f;
+
+	//頂点バッファをアンロック
+	pVtxBuff->Unlock();
 }
 
 //=====================================================

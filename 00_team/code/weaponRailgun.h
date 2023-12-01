@@ -14,6 +14,11 @@
 #include "weapon.h"
 
 //*****************************************************
+// 前方定義
+//*****************************************************
+class CObject3D;
+
+//*****************************************************
 // クラスの定義
 //*****************************************************
 class CRailgun : public CWeapon
@@ -36,8 +41,10 @@ public:
 
 private:
 	void Shot(void);
+	void SetVtx(D3DXVECTOR3 vtx1, D3DXVECTOR3 vtx2, D3DXVECTOR3 vtx3, D3DXVECTOR3 vtx4);
 
 	SInfoRailgun m_info;
+	CObject3D *m_pRange;	// 範囲表示のポリゴン
 };
 
 #endif

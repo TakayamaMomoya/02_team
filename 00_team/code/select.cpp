@@ -37,8 +37,9 @@
 #include "edit.h"
 #include "animEffect3D.h"
 #include "number3D.h"
-
 #include <stdio.h>
+
+#include "number3D.h"
 
 //*****************************************************
 // マクロ定義
@@ -77,8 +78,9 @@ CNumber3D *CSelect::m_apNumber[2] = {};
 //=====================================================
 CSelect::CSelect()
 {
-	ZeroMemory(&m_apPlayerData[0], sizeof(CSelect::PlayerInfo));
-	ZeroMemory(&m_aContainerData[0], sizeof(CSelect::CContainerInfo));
+	ZeroMemory(&m_apPlayerData[0], sizeof(m_apPlayerData));
+	ZeroMemory(&m_aContainerData[0], sizeof(m_aContainerData));
+
 	ZeroMemory(&m_apNumber[0], sizeof(CNumber3D));
 	
 	m_pStartUI = nullptr;
@@ -111,9 +113,6 @@ HRESULT CSelect::Init(void)
 	// プレイヤーマネージャーの生成
 	//m_pPlayerManager = CPlayerManager::Create();
 
-	/*MenuInit();
-	StartInit();
-	ContainerInit();*/
 
 	// エディットの生成
 	//CEdit::Create();
@@ -126,11 +125,7 @@ HRESULT CSelect::Init(void)
 	pObjectX->BindModel(CModel::Load("data\\MODEL\\select\\potato_bed.x"));*/
 
 	//地面の生成
-	/*CObject3D* pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood001.jpg");
-	pObject->SetIdxTexture(nIdx);
-	pObject->SetPosition(D3DXVECTOR3(55.0f, 0.0f, -280.0f));
-	pObject->SetSize(300.0f, 300.0f);*/
+
 
 	// 参加人数の表示
 	for (int nCnt = 0; nCnt < 2; nCnt)
@@ -158,6 +153,11 @@ HRESULT CSelect::Init(void)
 	//{
 	//	m_aContainerData[nCnt].fReSpawnTimer = RESPAWN_TIME;
 	//}
+
+	CNumber3D::Create(1, 0);
+
+	CNumber3D *pNumber = CNumber3D::Create(1, 0);
+	pNumber->SetPosition({ 0.0f, 0.0f, 0.0f });
 
 	return S_OK;
 }
@@ -189,8 +189,11 @@ void CSelect::MenuInit(void)
 			SIZE_PLUS, SIZE_PLUS
 		);
 
-		m_aJoinUiData[nCnt].pUi2D[MENU_PLUS]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		m_aJoinUiData[nCnt].pUi2D[MENU_PLUS]->SetIdxTexture(CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\plus.png"));
+		if (m_aJoinUiData[nCnt].pUi2D[MENU_PLUS] != nullptr)
+		{
+			m_aJoinUiData[nCnt].pUi2D[MENU_PLUS]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			m_aJoinUiData[nCnt].pUi2D[MENU_PLUS]->SetIdxTexture(CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\plus.png"));
+		}
 
 		// 文字の生成
 		m_aJoinUiData[nCnt].pUi2D[MENU_CHAR] = CBillboard::Create
@@ -205,8 +208,11 @@ void CSelect::MenuInit(void)
 		);
 
 		// 文字
-		m_aJoinUiData[nCnt].pUi2D[MENU_CHAR]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		m_aJoinUiData[nCnt].pUi2D[MENU_CHAR]->SetIdxTexture(CTexture::GetInstance()->Regist(apPath[nCnt]));
+		if (m_aJoinUiData[nCnt].pUi2D[MENU_CHAR] != nullptr)
+		{
+			m_aJoinUiData[nCnt].pUi2D[MENU_CHAR]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			m_aJoinUiData[nCnt].pUi2D[MENU_CHAR]->SetIdxTexture(CTexture::GetInstance()->Regist(apPath[nCnt]));
+		}
 
 		// 
 		m_aJoinUiData[nCnt].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
