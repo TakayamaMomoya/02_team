@@ -48,20 +48,20 @@
 //*****************************************************
 namespace
 {
-	const D3DXVECTOR3 UI_POS_1P({ -168.0f, 80.0f, -430.0f });	// UIの位置
+	const D3DXVECTOR3 UI_POS_1P({ -150.0f, 80.0f, -430.0f });	// UIの位置
 	const D3DXVECTOR3 UI_SPACE({ 140.0f, 0.0f, 0.0f });	// UI間の間隔
 
 	const float SPOWN_HEIGHT(-100.0f);	//プレイヤー出現高さ
 
-	const float SPACE(115.0f);	//UI間の広さ
+	const float SPACE(-50.0f);	//UI間の広さ
 	const float SIZE_PLUS(20.0f);	//UIの大きさ(+)
-	const D3DXVECTOR2 SIZE_FONT(50.0f, 10.0f);	//UIの大きさ(参加：A)
+	const D3DXVECTOR2 SIZE_FONT(30.0f, 10.0f);	//UIの大きさ(参加：A)
 	const float BLINKING_SPEED(0.02f);	//UI点滅の速さ(参加：A)
 	const float ADULTWALL_POS_Z(-470.0f);
 	const float GRAVITY(5.0f);	//重力
 
 	const D3DXVECTOR3 CONTAINER_POS({ -150.0, 0.0, -130.0f });	// コンテナの位置
-	const D3DXVECTOR3 CONTAINER_SPACE({ 400.0, 0.0, -70.0f });	// コンテナ間の広さ
+	const D3DXVECTOR3 CONTAINER_SPACE({ 400.0, 0.0, -50.0f });	// コンテナ間の広さ
 	const float RESPAWN_TIME(10.0f);	// コンテナ復活の時間
 
 	const float RIFT_IN(100.0f);	// リフトの範囲
@@ -121,12 +121,14 @@ HRESULT CSelect::Init(void)
 
 	//地面の生成
 	CObject3D* pObject = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\MATERIAL\\concrete_02.jpg");
+	nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood001.jpg");
 	pObject->SetIdxTexture(nIdx);
+	pObject->SetPosition(D3DXVECTOR3(55.0f, 0.0f, -280.0f));
+	pObject->SetSize(300.0f, 300.0f);
 
 	// 開始位置
 	m_pLift = CLift::Create(D3DXVECTOR3(30.0f, 0.5f, 100.0f));
-
+	
 	// サウンドインスタンスの取得
 	CSound* pSound = CSound::GetInstance();
 
@@ -162,6 +164,7 @@ void CSelect::MenuInit(void)
 
 	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 	{
+		// 文字の生成
 		m_aJoinUiData[nCnt].pUi2D[MENU_PLUS] = CBillboard::Create
 		(
 			{ // 位置
@@ -176,6 +179,7 @@ void CSelect::MenuInit(void)
 		m_aJoinUiData[nCnt].pUi2D[MENU_PLUS]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		m_aJoinUiData[nCnt].pUi2D[MENU_PLUS]->SetIdxTexture(CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\plus.png"));
 
+		// 文字の生成
 		m_aJoinUiData[nCnt].pUi2D[MENU_CHAR] = CBillboard::Create
 		(
 			{ // 位置
@@ -246,8 +250,8 @@ void CSelect::ContainerInit(void)
 			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3
 			(
 				m_aContainerData[nCount].pContainer->GetPosition().x + CONTAINER_SPACE.x,
-				0.0f,
-				m_aContainerData[nCount].pContainer->GetPosition().z)
+				0.0f + +CONTAINER_SPACE.y,
+				m_aContainerData[nCount].pContainer->GetPosition().z + CONTAINER_SPACE.z)
 			);
 		}
 	}
