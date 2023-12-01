@@ -35,6 +35,7 @@ public:
 	void ReleasePlayer(int nIdx);
 	CPlayer *GetPlayer(int nIdx) { return m_apPlayer[nIdx]; }
 	static CPlayerManager *GetInstance(void) { return m_pPlayerManager; }
+	int GetNumPlayer(void) { return m_nNumPlayer; }
 
 private:
 	int m_nNumPlayer;	// ƒvƒŒƒCƒ„[‚Ì”

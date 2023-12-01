@@ -192,6 +192,23 @@ void CGame::Update(void)
 	// ó‘ÔŠÇ—
 	ManageState();
 
+	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
+
+	if (pPlayerManager != nullptr)
+	{
+		int nNumPlayer = pPlayerManager->GetNumPlayer();
+
+		if (nNumPlayer <= 0)
+		{
+			CFade *pFade = CFade::GetInstance();
+
+			if (pFade != nullptr)
+			{
+				pFade->SetFade(CScene::MODE_RANKING);
+			}
+		}
+	}
+
 //#ifdef _DEBUG
 	Debug();
 //#endif
