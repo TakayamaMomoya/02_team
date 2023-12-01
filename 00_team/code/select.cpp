@@ -225,9 +225,6 @@ void CSelect::ContainerInit(void)
 	// 武器マネージャの生成
 	CWeaponManager::Create();
 
-	// 変数宣言
-	int nCount = 0;
-
 	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
 	{
 		// コンテナの生成
@@ -245,13 +242,11 @@ void CSelect::ContainerInit(void)
 		}
 		else
 		{
-			nCount = nCnt - 1;
-
 			m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3
 			(
-				m_aContainerData[nCount].pContainer->GetPosition().x + CONTAINER_SPACE.x,
+				CONTAINER_POS.x + CONTAINER_SPACE.x,
 				0.0f + +CONTAINER_SPACE.y,
-				m_aContainerData[nCount].pContainer->GetPosition().z + CONTAINER_SPACE.z)
+				CONTAINER_POS.z + (nCnt * CONTAINER_SPACE.z))
 			);
 		}
 	}
@@ -379,8 +374,6 @@ void CSelect::Update(void)
 //=====================================================
 void CSelect::ReSetContainer(void)
 {
-	int nTemp = 0;
-
 	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
 	{
 		if (m_aContainerData[nCnt].pContainer != nullptr)
@@ -404,10 +397,17 @@ void CSelect::ReSetContainer(void)
 				continue;
 			}
 
+			// コンテナ生成
 			m_aContainerData[nCnt].pContainer = CContainer::Create();
+
+			if (m_aContainerData[nCnt].pContainer == nullptr)
+			{
+				continue;
+			}
 
 			// 位置設定
 			if (nCnt % 2 == 0)
+
 			{
 				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3
 				(
@@ -418,13 +418,11 @@ void CSelect::ReSetContainer(void)
 			}
 			else
 			{
-				nTemp = nCnt - 1;
-
 				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3
 				(
-					m_aContainerData[nTemp].pContainer->GetPosition().x + CONTAINER_SPACE.x,
+					CONTAINER_POS.x + CONTAINER_SPACE.x,
 					0.0f + +CONTAINER_SPACE.y,
-					m_aContainerData[nTemp].pContainer->GetPosition().z + CONTAINER_SPACE.z)
+					CONTAINER_POS.z + (nCnt * CONTAINER_SPACE.z))
 				);
 			}
 		}
