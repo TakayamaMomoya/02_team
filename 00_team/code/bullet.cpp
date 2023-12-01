@@ -96,7 +96,6 @@ void CBullet::Uninit(void)
 
 	if (m_pOrbit != nullptr)
 	{// ‹OÕ‚ÌI—¹
-		m_pOrbit->SetEnd(true);
 		m_pOrbit = nullptr;
 	}
 
@@ -147,6 +146,12 @@ void CBullet::Update(void)
 
 		if (m_pCollisionSphere->TriggerCube(CCollision::TAG_BLOCK))
 		{// ƒuƒƒbƒN‚Æ‚Ì“–‚½‚è”»’è
+			if (m_pOrbit != nullptr)
+			{
+				m_pOrbit->SetEnd(true);
+				m_pOrbit = nullptr;
+			}
+
 			Death();
 		}
 	}
@@ -155,6 +160,12 @@ void CBullet::Update(void)
 	{
 		if (m_fLife < 0)
 		{// Ž©•ª‚Ìíœ
+			if (m_pOrbit != nullptr)
+			{
+				m_pOrbit->SetEnd(true);
+				m_pOrbit = nullptr;
+			}
+
 			Death();
 		}
 	}
@@ -162,6 +173,12 @@ void CBullet::Update(void)
 	{
 		if (m_bPierce == false)
 		{// ŠÑ’Ê‚µ‚È‚¢’e‚ÍÁ‚¦‚é
+			if (m_pOrbit != nullptr)
+			{
+				m_pOrbit->SetEnd(true);
+				m_pOrbit = nullptr;
+			}
+
 			Death();
 		}
 	}
