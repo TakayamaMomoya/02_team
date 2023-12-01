@@ -50,11 +50,11 @@ public:
 	void FollowPlayer(void);
 	void SetQuake(float fQuakeSizeH, float fQuakeSizeV, int nTime);
 	void Quake(void);
-	void UpdateTitle(void);
-	void UpdateTitleEsc(void);
+	void UpdateTitle(D3DXVECTOR3 move);
+	void UpdateTitleEsc(D3DXVECTOR3 move);
 	void UpdateResult(void);
-	void SetTitle(void);
-	void SetTitleEsc(void);
+	void SetTitle(D3DXVECTOR3 posV, D3DXVECTOR3 posR);
+	void SetTitleDest(D3DXVECTOR3 posVDest, D3DXVECTOR3 posRDest);
 	void SetSelect(void);
 	void SetLift(void);
 	void SetUpLift(void);
