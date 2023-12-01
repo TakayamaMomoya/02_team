@@ -36,9 +36,6 @@ namespace
 //*****************************************************
 class CSelect : public CScene
 {
-private:
-
-
 public:
 	CSelect();	// コンストラクタ
 	~CSelect();	// デストラクタ
