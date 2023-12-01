@@ -114,6 +114,32 @@ void CBillboard::Update(void)
 }
 
 //=====================================================
+// 頂点設定
+//=====================================================
+void CBillboard::SetVtx(void)
+{
+	if (m_pVtxBuff == nullptr)
+	{
+		return;
+	}
+
+	//頂点情報のポインタ
+	VERTEX_3D *pVtx;
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//頂点座標の設定
+	pVtx[0].pos = D3DXVECTOR3(-m_width, m_heigth, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(m_width, m_heigth, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(-m_width, -m_heigth, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(m_width, -m_heigth, 0.0f);
+
+	//頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
+}
+
+//=====================================================
 // テクスチャ座標設定処理
 //=====================================================
 void CBillboard::SetTex(D3DXVECTOR2 texLeftUp, D3DXVECTOR2 texRightDown)

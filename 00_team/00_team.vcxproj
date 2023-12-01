@@ -22,6 +22,7 @@
     <ClCompile Include="code\anim3D.cpp" />
     <ClCompile Include="code\animation2D.cpp" />
     <ClCompile Include="code\animEffect3D.cpp" />
+    <ClCompile Include="code\arrow.cpp" />
     <ClCompile Include="code\bg.cpp" />
     <ClCompile Include="code\billboard.cpp" />
     <ClCompile Include="code\block.cpp" />
@@ -61,6 +62,7 @@
     <ClCompile Include="code\motion.cpp" />
     <ClCompile Include="code\motionDiv.cpp" />
     <ClCompile Include="code\number.cpp" />
+    <ClCompile Include="code\number3D.cpp" />
     <ClCompile Include="code\object.cpp" />
     <ClCompile Include="code\object2D.cpp" />
     <ClCompile Include="code\object3D.cpp" />
@@ -92,12 +94,14 @@
     <ClCompile Include="code\weaponMachinegun.cpp" />
     <ClCompile Include="code\weaponMagnum.cpp" />
     <ClCompile Include="code\weaponManager.cpp" />
+    <ClCompile Include="code\weaponRailgun.cpp" />
     <ClCompile Include="code\weaponShotgun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\anim3D.h" />
     <ClInclude Include="code\animation2D.h" />
     <ClInclude Include="code\animEffect3D.h" />
+    <ClInclude Include="code\arrow.h" />
     <ClInclude Include="code\bg.h" />
     <ClInclude Include="code\billboard.h" />
     <ClInclude Include="code\block.h" />
@@ -137,6 +141,7 @@
     <ClInclude Include="code\motion.h" />
     <ClInclude Include="code\motionDiv.h" />
     <ClInclude Include="code\number.h" />
+    <ClInclude Include="code\number3D.h" />
     <ClInclude Include="code\object.h" />
     <ClInclude Include="code\object2D.h" />
     <ClInclude Include="code\object3D.h" />
@@ -168,6 +173,7 @@
     <ClInclude Include="code\weaponMachinegun.h" />
     <ClInclude Include="code\weaponMagnum.h" />
     <ClInclude Include="code\weaponManager.h" />
+    <ClInclude Include="code\weaponRailgun.h" />
     <ClInclude Include="code\weaponShotgun.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

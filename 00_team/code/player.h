@@ -21,6 +21,7 @@
 class CMotion;
 class CCollisionSphere;
 class CCollisionCube;
+class CArrow;
 
 //*****************************************************
 // クラスの定義
@@ -31,7 +32,7 @@ public:
 	CPlayer(int nPriority = 4);	// コンストラクタ
 	~CPlayer();	// デストラクタ
 
-	static CPlayer *Create(void);
+	static CPlayer *Create(int nID);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
@@ -40,7 +41,7 @@ public:
 	void SetItemRepair(CItemRepair* itemRepair) { m_info.pItemRepair = itemRepair; }
 	void SetDoorPress(bool bDoorPress) { m_info.motionInfo.bDoorPress = bDoorPress; }
 	void SetItemTrigger(bool bItemTrigger) { m_info.motionInfo.bItemTrigger = bItemTrigger; }
-	void SetID(int nID);
+	void SetID(int nID) { m_info.nID = nID; }
 	void SetIDJoypad(int nID) { m_info.nIDJoypad = nID; }
 	int GetIDJoypad(void) { return m_info.nIDJoypad; }
 	int GetID(void) { return m_info.nID; }
@@ -106,8 +107,9 @@ private:
 	};
 	struct SMotionInfo
 	{
-		bool bDoorPress;	// ドアへの入力情報
-		bool bItemTrigger;	// 物への入力情報
+		bool bDoorPress;		// ドアへの入力情報
+		bool bItemTrigger;		// 物への入力情報
+		float bRunawayProtect;	// 暴走入力防止
 	};
 	struct SInfo
 	{
@@ -121,6 +123,7 @@ private:
 		CCollisionCube *pCollisionCube;	// 立方体の当たり判定
 		CWeapon* pWeapon;			// 武器
 		CItemRepair* pItemRepair;	// 修理アイテム
+		CArrow *pArrow;	// 矢印のポインタ
 	};
 
 	void Input(void);

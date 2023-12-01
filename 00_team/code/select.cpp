@@ -132,7 +132,7 @@ HRESULT CSelect::Init(void)
 
 	if (pSound != nullptr)
 	{
-		//pSound->Play(pSound->LABEL_BGM_SELECT);
+		pSound->Play(pSound->LABEL_BGM_SELECT);
 	}
 
 	// ３Dアニメーション管理の生成
