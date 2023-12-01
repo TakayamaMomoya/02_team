@@ -30,6 +30,8 @@ CWeaponManager *CWeaponManager::m_pWeaponManager = nullptr;	// 自身のポインタ
 CWeaponManager::CWeaponManager()
 {
 	ZeroMemory(&m_aInfo[0], sizeof(m_aInfo));
+	ZeroMemory(&m_infoShotgun, sizeof(SInfoShotgun));
+	ZeroMemory(&m_infoRailgun, sizeof(SInfoRailgun));
 	ZeroMemory(&m_anProb[0], sizeof(m_anProb));
 }
 
@@ -141,6 +143,26 @@ void CWeaponManager::LoadParam(void)
 				}
 			}
 
+			if (strcmp(cTemp, "RAILGUNSET") == 0)
+			{// パラメーター読込開始
+				while (true)
+				{
+					// 文字読み込み
+					(void)fscanf(pFile, "%s", &cTemp[0]);
+
+					// 基底パラメーター読み込み
+					LoadBaseInfo(pFile, &cTemp[0], CWeapon::TYPE_RAILGUN);
+
+					// 固有パラメーター読込
+					LoadRailgunInfo(pFile, &cTemp[0]);
+
+					if (strcmp(cTemp, "END_RAILGUNSET") == 0)
+					{// パラメーター読込終了
+						break;
+					}
+				}
+			}
+
 			if (strcmp(cTemp, "PROBSET") == 0)
 			{// 確率読込開始
 				int nCntProb = 0;
@@ -233,6 +255,26 @@ void CWeaponManager::LoadShotgunInfo(FILE *pFile, char* pTemp)
 		(void)fscanf(pFile, "%s", pTemp);
 
 		(void)fscanf(pFile, "%f", &m_infoShotgun.fAngleDiffuse);
+	}
+}
+
+//=====================================================
+// レールガンパラメーター読込
+//=====================================================
+void CWeaponManager::LoadRailgunInfo(FILE *pFile, char* pTemp)
+{
+	if (strcmp(pTemp, "WIDTH") == 0)
+	{// 幅
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_infoRailgun.fWidth);
+	}
+
+	if (strcmp(pTemp, "LENGTH") == 0)
+	{// 長さ
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_infoRailgun.fLength);
 	}
 }
 

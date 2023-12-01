@@ -19,6 +19,12 @@
 class CRailgun : public CWeapon
 {
 public:
+	struct SInfoRailgun
+	{
+		float fWidth;	// 判定の幅
+		float fLength;	// 判定の長さ
+	};
+
 	CRailgun(int nPriority = 3);	// コンストラクタ
 	~CRailgun();	// デストラクタ
 
@@ -30,6 +36,8 @@ public:
 
 private:
 	void Shot(void);
+
+	SInfoRailgun m_info;
 };
 
 #endif

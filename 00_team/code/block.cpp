@@ -125,7 +125,7 @@ HRESULT CBlock::Init(void)
 	// É^ÉCÉvÇÃê›íË
 	SetType(TYPE_BLOCK);
 
-	m_fLife = 100.0f;
+	m_fLife = 900.0f;
 
 	return S_OK;
 }

@@ -12,6 +12,7 @@
 #include "weaponMagnum.h"
 #include "weaponMachinegun.h"
 #include "weaponShotgun.h"
+#include "weaponRailgun.h"
 #include "weaponManager.h"
 #include "motion.h"
 #include "player.h"
@@ -56,6 +57,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			if (pSound != nullptr)
 			{
 				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+				pSound->Play(pSound->LABEL_SE_GET_MAGNUM);
 			}
 
 			break;
@@ -66,6 +68,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			if (pSound != nullptr)
 			{
 				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+				pSound->Play(pSound->LABEL_SE_GET_MACHINEGUN);
 			}
 
 			break;
@@ -76,6 +79,18 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			if (pSound != nullptr)
 			{
 				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+				pSound->Play(pSound->LABEL_SE_GET_SHOTGUN);
+			}
+
+			break;
+		case CWeapon::TYPE_RAILGUN:
+			// ƒŒ[ƒ‹ƒKƒ“‚Ì¶¬
+			pWeapon = new CRailgun;
+
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+				pSound->Play(pSound->LABEL_SE_GET_RAILGUN);
 			}
 
 			break;
@@ -97,6 +112,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 				"data\\MODEL\\weapon\\magnum.x",
 				"data\\MODEL\\weapon\\mac10.x",
 				"data\\MODEL\\weapon\\shotgun.x",
+				"data\\MODEL\\weapon\\railgun.x",
 			};
 
 			int nIdx = CModel::Load(apPath[type]);
