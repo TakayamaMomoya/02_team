@@ -30,8 +30,6 @@ CUIManager *CUIManager::m_pUIManager = nullptr;	// 自身のポインタ
 //=====================================================
 CUIManager::CUIManager()
 {
-	m_pLife = nullptr;
-	m_pScore = nullptr;
 	m_bDisp = false;
 }
 
@@ -66,12 +64,6 @@ HRESULT CUIManager::Init(void)
 {
 	m_bDisp = true;
 
-	// スコアの生成
-	m_pScore = CScore::Create();
-
-	// タイマーの生成
-	//m_pTimer = CTimer::Create();
-
 	return S_OK;
 }
 
@@ -81,18 +73,6 @@ HRESULT CUIManager::Init(void)
 void CUIManager::Uninit(void)
 {
 	m_pUIManager = nullptr;
-
-	if (m_pScore != nullptr)
-	{
-		m_pScore->Uninit();
-		m_pScore = nullptr;
-	}
-
-	if (m_pTimer != nullptr)
-	{
-		m_pTimer->Uninit();
-		m_pTimer = nullptr;
-	}
 
 	Release();
 }

@@ -52,10 +52,6 @@ namespace
 		D3DXCOLOR(1.0f,1.0f,0.0f,1.0f),
 	};	// 矢印の色
 
-	const float MOVE_SPEED = 3.0f;		// 移動速度
-	const float ROT_SPEED = 0.1f;		// 回転速度
-	const float INITIAL_LIFE = 30.0f;	// 初期体力
-	const float DAMAGE_TIME = 0.5f;		// ダメージ状態の秒数
 	const float MOVE_LINE = 0.2f;		// 動いている判断のしきい値
 	const float ARROW_POSY = 5.0f;	// 矢印の位置の高さ
 	const float ARROW_WIDTH = 30.0f;	// 矢印の幅
@@ -71,6 +67,7 @@ namespace
 CPlayer::CPlayer(int nPriority)
 {
 	ZeroMemory(&m_info, sizeof(CPlayer::SInfo));
+	ZeroMemory(&m_param, sizeof(CPlayer::SParam));
 }
 
 //=====================================================
@@ -108,6 +105,20 @@ HRESULT CPlayer::Init(void)
 	// 継承クラスの初期化
 	CCharacterDiv::Init();
 
+	// パラメーターの受け取り
+	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
+
+	if (pPlayerManager != nullptr)
+	{
+		SParam param = pPlayerManager->GetPlayerParam();
+
+		m_param = param;
+	}
+	else
+	{
+		assert(("プレイヤーパラメーターの取得に失敗",false));
+	}
+
 	// 当たり判定の生成
 	if (m_info.pCollisionSphere == nullptr)
 	{
@@ -144,7 +155,7 @@ HRESULT CPlayer::Init(void)
 		}
 	}
 
-	m_info.fLife = INITIAL_LIFE;
+	m_info.fLife = m_param.fInitialLife;
 	m_info.state = STATE_NORMAL;
 
 	// IDに対応したモデルの設定
@@ -360,19 +371,19 @@ void CPlayer::InputMove(void)
 
 	if (pKeyboard->GetPress(DIK_W))
 	{
-		vecStickL.y += MOVE_SPEED;
+		vecStickL.y += m_param.fSpeedMove;
 	}
 	if (pKeyboard->GetPress(DIK_S))
 	{
-		vecStickL.y -= MOVE_SPEED;
+		vecStickL.y -= m_param.fSpeedMove;
 	}
 	if (pKeyboard->GetPress(DIK_A))
 	{
-		vecStickL.x -= MOVE_SPEED;
+		vecStickL.x -= m_param.fSpeedMove;
 	}
 	if (pKeyboard->GetPress(DIK_D))
 	{
-		vecStickL.x += MOVE_SPEED;
+		vecStickL.x += m_param.fSpeedMove;
 	}
 
 	D3DXVECTOR3 vecMove =
@@ -386,7 +397,7 @@ void CPlayer::InputMove(void)
 	D3DXVECTOR3 move = GetMove();
 
 	D3DXVec3Normalize(&vecMove, &vecMove);
-	vecMove *= MOVE_SPEED;
+	vecMove *= m_param.fSpeedMove;
 
 	move += vecMove;
 
@@ -524,7 +535,7 @@ void CPlayer::Aim(void)
 
 	universal::LimitRot(&fAngleDest);
 
-	universal::FactingRot(&rot.y, fAngleDest + D3DX_PI, ROT_SPEED);
+	universal::FactingRot(&rot.y, fAngleDest + D3DX_PI, m_param.fSpeedRot);
 
 	SetRot(rot);
 }
@@ -1139,7 +1150,7 @@ void CPlayer::Hit(float fDamage)
 		{// ダメージ判定
 			m_info.state = STATE_DAMAGE;
 
-			m_info.fTimerState = DAMAGE_TIME;
+			m_info.fTimerState = m_param.fTimeDamage;
 
 			for (int nCutPath = 0; nCutPath < CCharacterDiv::PARTS_MAX; nCutPath++)
 			{
@@ -1173,6 +1184,7 @@ void CPlayer::Debug(void)
 	}
 
 	pDebugProc->Print("\nプレイヤー番号[%d]", m_info.nID);
+	pDebugProc->Print("\nプレイヤー状態カウンタ[%f]", m_info.fTimerState);
 	pDebugProc->Print("\nプレイヤーの位置[%f,%f,%f]", GetPosition().x, GetPosition().y, GetPosition().z);
 	pDebugProc->Print("\nプレイヤーの向き[%f,%f,%f]", GetRot().x, GetRot().y, GetRot().z);
 

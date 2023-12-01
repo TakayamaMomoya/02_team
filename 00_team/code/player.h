@@ -29,6 +29,14 @@ class CArrow;
 class CPlayer : public CCharacterDiv
 {
 public:
+	struct SParam
+	{
+		float fSpeedMove;		// 移動速度
+		float fSpeedRot;		// 回転速度
+		float fInitialLife;	// 初期体力
+		float fTimeDamage;	// ダメージ状態の秒数
+	};
+
 	CPlayer(int nPriority = 4);	// コンストラクタ
 	~CPlayer();	// デストラクタ
 
@@ -135,6 +143,7 @@ private:
 	void Debug(void);
 
 	SInfo m_info;	// 自身の情報
+	SParam m_param;	// パラメーター情報
 };
 
 #endif
