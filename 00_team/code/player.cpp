@@ -822,6 +822,52 @@ void CPlayer::ManageMotion(void)
 				}
 
 				break;
+				// レールガン
+			case CWeapon::TYPE_RAILGUN:
+
+				// 各方向指定移動
+				if (fSpeed > MOVE_LINE)
+				{
+					if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
+						fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
+					{// 上
+						if (nMotionLower != MOTION_RIFLE_WALK_FRONT)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_FRONT);
+						}
+					}
+					else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
+						fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
+					{// 下
+						if (nMotionLower != MOTION_RIFLE_WALK_BACK)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_BACK);
+						}
+					}
+					else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
+					{// 右
+						if (nMotionLower != MOTION_RIFLE_WALK_RIGHT)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_RIGHT);
+						}
+					}
+					else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
+					{// 左
+						if (nMotionLower != MOTION_RIFLE_WALK_LEFT)
+						{
+							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_LEFT);
+						}
+					}
+				}
+				else
+				{
+					if (nMotionLower != MOTION_RIFLE_NEUTRAL)
+					{// 待機
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_NEUTRAL);
+					}
+				}
+
+				break;
 			}
 		}
 		// 何もなし
@@ -969,6 +1015,15 @@ void CPlayer::ManageMotion(void)
 
 				// ショットガン
 			case CWeapon::TYPE_SHOTGUN:
+
+				if (nMotionUpper != MOTION_RIFLE_ATTACK)
+				{
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_ATTACK);
+				}
+
+				break;
+				// レールガン
+			case CWeapon::TYPE_RAILGUN:
 
 				if (nMotionUpper != MOTION_RIFLE_ATTACK)
 				{
