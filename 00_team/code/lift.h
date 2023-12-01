@@ -35,6 +35,7 @@ public:
 
 	static void SetjoinPlayer(int nPlayer) { m_nNumJoinPlayer = nPlayer; }
 
+	static int GetInPlayer(void);
 	static bool GetIsIn(void);
 
 private:

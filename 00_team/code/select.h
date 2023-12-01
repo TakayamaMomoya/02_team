@@ -112,6 +112,8 @@ private:
 
 	void Rift(void);	// リフトの設定
 
+	void LiftInNumberUi(int nPlayer);
+
 	SJoinUi_info m_aJoinUiData[NUM_PLAYER];	// それぞれの選択メニュー
 	CObject2D* m_pStartUI;	// Start文字
 	PlayerInfo m_apPlayerData[NUM_PLAYER];	// プレイヤー情報
