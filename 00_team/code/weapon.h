@@ -29,6 +29,7 @@ public:
 		TYPE_MAGNUM = 0,	// マグナム
 		TYPE_MACHINEGUN,	// マシンガン
 		TYPE_SHOTGUN,	// ショットガン
+		TYPE_RAILGUN,	// レールガン
 		TYPE_MAX
 	};
 	struct SInfo

@@ -79,6 +79,7 @@ void CItemWeapon::Load(void)
 		"data\\MODEL\\weapon\\magnum.x",
 		"data\\MODEL\\weapon\\mac10.x",
 		"data\\MODEL\\weapon\\shotgun.x",
+		"data\\MODEL\\weapon\\railgun.x",
 	};
 
 	// ƒ‚ƒfƒ‹‚Ì“Ç

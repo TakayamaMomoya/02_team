@@ -42,6 +42,7 @@ public:
 	void SetColor(D3DXCOLOR col);
 	void SetTex(D3DXVECTOR2 rd, D3DXVECTOR2 lu);
 	void SetVtx(void);
+	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void) { return m_pVtxBuff; }
 
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ

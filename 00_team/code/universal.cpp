@@ -123,7 +123,7 @@ bool IsCross(D3DXVECTOR3 posTarget, D3DXVECTOR3 vecSorce, D3DXVECTOR3 vecDest, f
 	D3DXVECTOR3 vecToPos = posTarget - vecSorce;
 	float fArea = CrossProduct(vecLine, vecToPos);
 
-	if (fArea < 0)
+	if (fArea > 0)
 	{
 		D3DXVECTOR3 vecToPos = posTarget - vecSorce;
 
