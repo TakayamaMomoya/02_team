@@ -27,13 +27,19 @@ public:
 	CLife(int nPriority = 7);	// コンストラクタ
 	~CLife();	// デストラクタ
 
-	CLife *Create(void);
+	CLife *Create(int nIdx);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
 
 private:
+	struct Sinfo
+	{
+		int nIdxPlayer;	// 参照するプレイヤーの番号
+	};
+
+	Sinfo m_info;	// 自身の情報
 };
 
 #endif

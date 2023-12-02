@@ -23,6 +23,7 @@
 #include "object3D.h"
 #include "objectX.h"
 #include "skybox.h"
+#include "fan2D.h"
 
 //*****************************************************
 // É}ÉNÉçíËã`

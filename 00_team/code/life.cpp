@@ -15,7 +15,7 @@
 //=====================================================
 CLife::CLife(int nPriority) : CObject(nPriority)
 {
-
+	ZeroMemory(&m_info, sizeof(Sinfo));
 }
 
 //=====================================================
@@ -29,7 +29,7 @@ CLife::~CLife()
 //=====================================================
 // ¶¬ˆ—
 //=====================================================
-CLife *CLife::Create(void)
+CLife *CLife::Create(int nIdx)
 {
 	CLife *pLife = nullptr;
 
@@ -37,6 +37,8 @@ CLife *CLife::Create(void)
 
 	if (pLife != nullptr)
 	{
+		pLife->m_info.nIdxPlayer = nIdx;
+
 		pLife->Init();
 	}
 
