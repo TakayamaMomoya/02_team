@@ -14,6 +14,7 @@
 #include "bg.h"
 #include "texture.h"
 #include "universal.h"
+#include "debugproc.h"
 
 //*****************************************************
 // 定数定義
@@ -21,6 +22,7 @@
 namespace
 {
 	const float INITIAL_RADIUS = 50.0f;	// 初期の半径
+	const char* TEX_PATH = "data\\TEXTURE\\UI\\gauge.png";	// テクスチャのパス
 }
 
 //=====================================================
@@ -90,6 +92,10 @@ HRESULT CFan2D::Init(void)
 		}
 	}
 
+	// テクスチャ読み込み
+	int nIdx = CTexture::GetInstance()->Regist(TEX_PATH);
+	SetIdxTexture(nIdx);
+
 	m_fRadius = INITIAL_RADIUS;
 	m_pos = D3DXVECTOR3{ SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.5f,0.0f };
 
@@ -142,6 +148,7 @@ void CFan2D::SetVtx(void)
 		
 		// 中心の頂点の設定
 		pVtx[0].pos = pos;
+		pVtx[0].tex = D3DXVECTOR2{ 0.5f,0.5f };
 
 		for (int i = 1;i < m_nNumVtx + 2;i++)
 		{// 円周の頂点の設定
@@ -155,6 +162,14 @@ void CFan2D::SetVtx(void)
 				pos.y - cosf(fAngle) * m_fRadius,
 				0.0f,
 			};
+
+			D3DXVECTOR2 tex =
+			{
+				0.5f + sinf(fAngle) * 0.5f,
+				0.5f - cosf(fAngle) * 0.5f,
+			};
+
+			pVtx[i].tex = tex;
 		}
 
 		// 頂点バッファのアンロック
@@ -224,8 +239,6 @@ void CFan2D::SetCol(D3DXCOLOR col)
 			pVtx[nCnt].col = (D3DCOLOR)m_col;
 
 			pVtx[nCnt].rhw = 1.0;
-
-			pVtx[nCnt].tex = D3DXVECTOR2(0.0f, 0.0f);
 		}
 
 		// 頂点バッファのアンロック
