@@ -12,11 +12,7 @@
 // インクルード
 //*****************************************************
 #include "object.h"
-
-//*****************************************************
-// 前方宣言
-//*****************************************************
-class CPlayer;
+#include "player.h"
 
 //*****************************************************
 // クラスの定義
@@ -36,12 +32,16 @@ public:
 	CPlayer *GetPlayer(int nIdx) { return m_apPlayer[nIdx]; }
 	static CPlayerManager *GetInstance(void) { return m_pPlayerManager; }
 	int GetNumPlayer(void) { return m_nNumPlayer; }
+	CPlayer::SParam GetPlayerParam(void) { return m_paramPlayer; }
 
 private:
+	void LoadParamPlayer(void);
+
 	int m_nNumPlayer;	// プレイヤーの数
 	int m_anIDJoypad[NUM_PLAYER];	// プレイヤーのコントローラー番号
 	CPlayer *m_apPlayer[NUM_PLAYER];	// プレイヤーの配列
 	static CPlayerManager *m_pPlayerManager;	// 自身のポインタ
+	CPlayer::SParam m_paramPlayer;	// 保存用プレイヤーパラメーター
 };
 
 #endif

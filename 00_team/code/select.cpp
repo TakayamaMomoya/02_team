@@ -244,7 +244,7 @@ void CSelect::MenuInit(void)
 //=====================================================
 void CSelect::StartInit(void)
 {
-	m_pStartUI = CObject2D::Create();
+	m_pStartUI = CObject2D::Create(6);
 
 	if (m_pStartUI != nullptr)
 	{

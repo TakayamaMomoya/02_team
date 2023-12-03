@@ -11,8 +11,6 @@
 #include "main.h"
 #include "inputkeyboard.h"
 #include "UIManager.h"
-#include "score.h"
-#include "timer.h"
 #include "game.h"
 
 //*****************************************************
@@ -30,9 +28,8 @@ CUIManager *CUIManager::m_pUIManager = nullptr;	// 自身のポインタ
 //=====================================================
 CUIManager::CUIManager()
 {
-	m_pLife = nullptr;
-	m_pScore = nullptr;
 	m_bDisp = false;
+	ZeroMemory(&m_info, sizeof(SInfo));
 }
 
 //=====================================================
@@ -66,12 +63,6 @@ HRESULT CUIManager::Init(void)
 {
 	m_bDisp = true;
 
-	// スコアの生成
-	m_pScore = CScore::Create();
-
-	// タイマーの生成
-	//m_pTimer = CTimer::Create();
-
 	return S_OK;
 }
 
@@ -81,18 +72,6 @@ HRESULT CUIManager::Init(void)
 void CUIManager::Uninit(void)
 {
 	m_pUIManager = nullptr;
-
-	if (m_pScore != nullptr)
-	{
-		m_pScore->Uninit();
-		m_pScore = nullptr;
-	}
-
-	if (m_pTimer != nullptr)
-	{
-		m_pTimer->Uninit();
-		m_pTimer = nullptr;
-	}
 
 	Release();
 }
@@ -111,6 +90,16 @@ void CUIManager::Update(void)
 			m_bDisp = m_bDisp ? false : true;
 		}
 	}
+}
+
+//=====================================================
+// ライフの生成処理
+//=====================================================
+CLife *CUIManager::CreateLife(int nIdx)
+{
+	CLife *pLife = nullptr;
+
+	return pLife;
 }
 
 //=====================================================

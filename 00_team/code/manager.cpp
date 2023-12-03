@@ -18,8 +18,6 @@
 #include "effect2D.h"
 #include "effect3D.h"
 #include "sound.h"
-#include "score.h"
-#include "timer.h"
 #include "object.h"
 #include "camera.h"
 #include "light.h"

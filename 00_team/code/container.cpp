@@ -241,6 +241,8 @@ void CContainer::Interact(CObject *pObj)
 					{
 						pSound->Play(pSound->LABEL_SE_OPEN_BOX);
 					}
+
+					SetEnable(false);
 				}
 			}
 		}

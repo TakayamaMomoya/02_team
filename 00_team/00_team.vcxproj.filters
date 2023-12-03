@@ -90,12 +90,6 @@
     <ClCompile Include="code\UIManager.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="code\timer.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="code\score.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="code\number.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -169,6 +163,11 @@
     <ClCompile Include="code\weaponRailgun.cpp">
       <Filter>weapon</Filter>
     </ClCompile>
+    <ClCompile Include="code\life.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="code\fan2D.cpp" />
+    <ClCompile Include="code\fan3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -231,12 +230,6 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="code\UIManager.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="code\timer.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="code\score.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="code\number.h">
@@ -312,5 +305,10 @@
     <ClInclude Include="code\weaponRailgun.h">
       <Filter>weapon</Filter>
     </ClInclude>
+    <ClInclude Include="code\life.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="code\fan2D.h" />
+    <ClInclude Include="code\fan3D.h" />
   </ItemGroup>
 </Project>

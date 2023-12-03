@@ -411,9 +411,6 @@ void CMotion::Draw(void)
 
 	// マトリックスをかけ合わせる処理
 	MultiplyMtx();
-
-	CDebugProc::GetInstance()->Print("\nフレーム[%d]", m_nFrame);
-	CDebugProc::GetInstance()->Print("\nキー[%d]", m_nKey);
 }
 
 //=====================================================

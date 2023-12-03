@@ -42,6 +42,8 @@
     <ClCompile Include="code\enemyManager.cpp" />
     <ClCompile Include="code\enemyNormal.cpp" />
     <ClCompile Include="code\fade.cpp" />
+    <ClCompile Include="code\fan2D.cpp" />
+    <ClCompile Include="code\fan3D.cpp" />
     <ClCompile Include="code\game.cpp" />
     <ClCompile Include="code\gimmickManager.cpp" />
     <ClCompile Include="code\goal.cpp" />
@@ -55,6 +57,7 @@
     <ClCompile Include="code\container.cpp" />
     <ClCompile Include="code\itemRepair.cpp" />
     <ClCompile Include="code\itemWeapon.cpp" />
+    <ClCompile Include="code\life.cpp" />
     <ClCompile Include="code\light.cpp" />
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\manager.cpp" />
@@ -78,13 +81,11 @@
     <ClCompile Include="code\result.cpp" />
     <ClCompile Include="code\rocket.cpp" />
     <ClCompile Include="code\scene.cpp" />
-    <ClCompile Include="code\score.cpp" />
     <ClCompile Include="code\select.cpp" />
     <ClCompile Include="code\skybox.cpp" />
     <ClCompile Include="code\sound.cpp" />
     <ClCompile Include="code\lift.cpp" />
     <ClCompile Include="code\texture.cpp" />
-    <ClCompile Include="code\timer.cpp" />
     <ClCompile Include="code\title.cpp" />
     <ClCompile Include="code\tutorial.cpp" />
     <ClCompile Include="code\UI.cpp" />
@@ -121,6 +122,8 @@
     <ClInclude Include="code\enemyManager.h" />
     <ClInclude Include="code\enemyNormal.h" />
     <ClInclude Include="code\fade.h" />
+    <ClInclude Include="code\fan2D.h" />
+    <ClInclude Include="code\fan3D.h" />
     <ClInclude Include="code\game.h" />
     <ClInclude Include="code\gimmickManager.h" />
     <ClInclude Include="code\goal.h" />
@@ -134,6 +137,7 @@
     <ClInclude Include="code\container.h" />
     <ClInclude Include="code\itemRepair.h" />
     <ClInclude Include="code\itemWeapon.h" />
+    <ClInclude Include="code\life.h" />
     <ClInclude Include="code\light.h" />
     <ClInclude Include="code\main.h" />
     <ClInclude Include="code\manager.h" />
@@ -157,13 +161,11 @@
     <ClInclude Include="code\result.h" />
     <ClInclude Include="code\rocket.h" />
     <ClInclude Include="code\scene.h" />
-    <ClInclude Include="code\score.h" />
     <ClInclude Include="code\select.h" />
     <ClInclude Include="code\skybox.h" />
     <ClInclude Include="code\sound.h" />
     <ClInclude Include="code\lift.h" />
     <ClInclude Include="code\texture.h" />
-    <ClInclude Include="code\timer.h" />
     <ClInclude Include="code\title.h" />
     <ClInclude Include="code\tutorial.h" />
     <ClInclude Include="code\UI.h" />

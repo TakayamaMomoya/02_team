@@ -1,6 +1,6 @@
 //*****************************************************
 //
-// 通常敵の処理[enemyNormal.cpp]
+// ライフ表示の処理[life.cpp]
 // Author:髙山桃也
 //
 //*****************************************************
@@ -8,76 +8,71 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "main.h"
-#include "enemyNormal.h"
-#include "manager.h"
-#include "collision.h"
-#include "debugproc.h"
-#include "particle.h"
-#include <stdio.h>
-#include "player.h"
-#include "game.h"
-#include "enemyManager.h"
-#include "debrisSpawner.h"
-#include "block.h"
+#include "life.h"
 
 //=====================================================
 // コンストラクタ
 //=====================================================
-CEnemyNormal::CEnemyNormal()
+CLife::CLife(int nPriority) : CObject(nPriority)
 {
-
+	ZeroMemory(&m_info, sizeof(Sinfo));
 }
 
 //=====================================================
 // デストラクタ
 //=====================================================
-CEnemyNormal::~CEnemyNormal()
+CLife::~CLife()
 {
 
 }
 
 //=====================================================
+// 生成処理
+//=====================================================
+CLife *CLife::Create(int nIdx)
+{
+	CLife *pLife = nullptr;
+
+	pLife = new CLife;
+
+	if (pLife != nullptr)
+	{
+		pLife->m_info.nIdxPlayer = nIdx;
+
+		pLife->Init();
+	}
+
+	return pLife;
+}
+
+//=====================================================
 // 初期化処理
 //=====================================================
-HRESULT CEnemyNormal::Init(void)
+HRESULT CLife::Init(void)
 {
-	// 継承クラスの初期化
-	CEnemy::Init();
-
 	return S_OK;
 }
 
 //=====================================================
 // 終了処理
 //=====================================================
-void CEnemyNormal::Uninit(void)
+void CLife::Uninit(void)
 {
-	// 継承クラスの終了
-	CEnemy::Uninit();
+	Release();
 }
 
 //=====================================================
 // 更新処理
 //=====================================================
-void CEnemyNormal::Update(void)
+void CLife::Update(void)
 {
-	// 継承クラスの更新
-	CEnemy::Update();
 
-	CBlock *pBlock = GetTouchBlock();
-
-	if (pBlock != nullptr)
-	{
-		pBlock->Hit(5.0f);
-	}
 }
 
 //=====================================================
 // 描画処理
 //=====================================================
-void CEnemyNormal::Draw(void)
+void CLife::Draw(void)
 {
-	// 継承クラスの描画
-	CEnemy::Draw();
+
 }

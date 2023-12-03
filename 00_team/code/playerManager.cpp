@@ -10,6 +10,7 @@
 //*****************************************************
 #include "playerManager.h"
 #include "player.h"
+#include <stdio.h>
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -118,7 +119,71 @@ HRESULT CPlayerManager::Init(void)
 		m_anIDJoypad[i] = -1;
 	}
 
+	// プレイヤーパラメーターの読み込み
+	LoadParamPlayer();
+
 	return S_OK;
+}
+
+//=====================================================
+// プレイヤーパラメーター読み込み
+//=====================================================
+void CPlayerManager::LoadParamPlayer(void)
+{
+	// 変数宣言
+	char cTemp[256];
+
+	// ファイルから読み込む
+	FILE *pFile = fopen("data\\TEXT\\playerParam.txt", "r");
+
+	if (pFile != nullptr)
+	{// ファイルが開けた場合
+		while (true)
+		{
+			// 文字読み込み
+			(void)fscanf(pFile, "%s", &cTemp[0]);
+
+			if (strcmp(cTemp, "LIFE") == 0)
+			{// 初期体力
+				(void)fscanf(pFile, "%s", &cTemp[0]);
+
+				(void)fscanf(pFile, "%f", &m_paramPlayer.fInitialLife);
+			}
+
+			if (strcmp(cTemp, "SPEED_MOVE") == 0)
+			{// 移動速度
+				(void)fscanf(pFile, "%s", &cTemp[0]);
+
+				(void)fscanf(pFile, "%f", &m_paramPlayer.fSpeedMove);
+			}
+
+			if (strcmp(cTemp, "SPEED_ROT") == 0)
+			{// 回転速度
+				(void)fscanf(pFile, "%s", &cTemp[0]);
+
+				(void)fscanf(pFile, "%f", &m_paramPlayer.fSpeedRot);
+			}
+
+			if (strcmp(cTemp, "TIME_DAMAGE") == 0)
+			{// 無敵時間
+				(void)fscanf(pFile, "%s", &cTemp[0]);
+
+				(void)fscanf(pFile, "%f", &m_paramPlayer.fTimeDamage);
+			}
+
+			if (strcmp(cTemp, "END_SCRIPT") == 0)
+			{// 終了条件
+				break;
+			}
+		}
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		assert(("プレイヤーパラメーター読み込みに失敗", false));
+	}
 }
 
 //=====================================================
