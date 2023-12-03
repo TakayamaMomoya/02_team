@@ -167,6 +167,7 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="code\fan2D.cpp" />
+    <ClCompile Include="code\fan3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -308,5 +309,6 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="code\fan2D.h" />
+    <ClInclude Include="code\fan3D.h" />
   </ItemGroup>
 </Project>

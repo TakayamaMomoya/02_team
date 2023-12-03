@@ -43,6 +43,7 @@
     <ClCompile Include="code\enemyNormal.cpp" />
     <ClCompile Include="code\fade.cpp" />
     <ClCompile Include="code\fan2D.cpp" />
+    <ClCompile Include="code\fan3D.cpp" />
     <ClCompile Include="code\game.cpp" />
     <ClCompile Include="code\gimmickManager.cpp" />
     <ClCompile Include="code\goal.cpp" />
@@ -122,6 +123,7 @@
     <ClInclude Include="code\enemyNormal.h" />
     <ClInclude Include="code\fade.h" />
     <ClInclude Include="code\fan2D.h" />
+    <ClInclude Include="code\fan3D.h" />
     <ClInclude Include="code\game.h" />
     <ClInclude Include="code\gimmickManager.h" />
     <ClInclude Include="code\goal.h" />
