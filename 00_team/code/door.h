@@ -17,6 +17,7 @@
 // 前方宣言
 //*****************************************************
 class CCollisionCube;
+class CFan3D;
 
 //*****************************************************
 // クラスの定義
@@ -48,6 +49,7 @@ private:
 	{// 情報
 		float fLife;	// 体力
 		CCollisionCube *pCollisionCube;	// 押し出しの当たり判定
+		CFan3D *pGauge;	// 進行ゲージ
 		STATE state;	// 状態
 		float orgRotY;	// 元の向き
 		float rotDestY;	// 目標のY向き

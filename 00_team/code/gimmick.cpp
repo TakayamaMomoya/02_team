@@ -19,12 +19,6 @@
 #include "texture.h"
 
 //*****************************************************
-// 静的メンバ変数宣言
-//*****************************************************
-CGimmick *CGimmick::m_pHead = nullptr;	// 先頭のポインタ
-CGimmick *CGimmick::m_pTail = nullptr;	// 最後尾のポインタ
-
-//*****************************************************
 // マクロ定義
 //*****************************************************
 #define SIZE_INTERACT	(30.0f)	// インタラクト表示のサイズ
@@ -37,8 +31,6 @@ CGimmick::CGimmick(int nPriority) : CObjectX(nPriority)
 	m_pCollisionSphere = nullptr;
 	m_pInteract = nullptr;
 	m_bEnable = true;
-	m_pNext = nullptr;
-	m_pPrev = nullptr;
 }
 
 //=====================================================

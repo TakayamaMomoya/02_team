@@ -14,6 +14,7 @@
 #include "manager.h"
 #include "collision.h"
 #include "universal.h"
+#include "fan3D.h"
 
 //*****************************************************
 // 定数定義
@@ -123,6 +124,15 @@ void CDoor::Update(void)
 	{// 開く処理
 		Open();
 	}
+
+	if (GetGuide() == nullptr)
+	{// プレイヤーが離れたらゲージを消す
+		if (m_info.pGauge != nullptr)
+		{
+			m_info.pGauge->Uninit();
+			m_info.pGauge = nullptr;
+		}
+	}
 }
 
 //=====================================================
@@ -195,6 +205,25 @@ void CDoor::Interact(CObject *pObj)
 //=====================================================
 void CDoor::proceed(void)
 {
+	if (m_info.pGauge == nullptr)
+	{// ゲージの生成
+		D3DXVECTOR3 pos = GetPosition();
+
+		pos.y += 150.0f;
+
+		m_info.pGauge = CFan3D::Create();
+		m_info.pGauge->SetPosition(pos);
+		m_info.pGauge->SetRadius(30.0f);
+		m_info.pGauge->EnableBillboard(true);
+		m_info.pGauge->EnableZtest(true);
+	}
+
+	if (m_info.pGauge != nullptr)
+	{// ゲージの角度設定
+		float fRate = m_info.fLife / INITIAL_LIFE;
+		m_info.pGauge->SetAngleMax(fRate);
+	}
+
 	float fTick = CManager::GetTick();
 
 	m_info.fLife -= fTick;

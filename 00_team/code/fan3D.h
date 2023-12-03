@@ -43,6 +43,10 @@ public:
 	void SetMaxAngle(float fAngle) { m_fAngleMax = fAngle; }
 	float GetMaxAngle(void) { return m_fAngleMax; }
 	void EnableBillboard(bool bEnable) { m_bBillboard = bEnable; }
+	void SetAngleMax(float fAngle) { m_fAngleMax = fAngle; }
+	float GetAngleMax(void) { return m_fAngleMax; }
+	void SetRadius(float fRadius) { m_fRadius = fRadius; }
+	float GetRadius(void) { return m_fRadius; }
 
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	// 頂点バッファ
