@@ -117,7 +117,7 @@ HRESULT CSelect::Init(void)
 	CPlayerManager::Create();
 
 	// エディットの生成
-	CEdit::Create();
+	//CEdit::Create();
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
@@ -127,7 +127,7 @@ HRESULT CSelect::Init(void)
 
 	if (pObject != nullptr)
 	{
-		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\MATERIAL\\DirtyConcrete_00.jpg");
+		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood001.jpg");
 		pObject->SetIdxTexture(nIdx);
 		pObject->SetTex(D3DXVECTOR2(10.0f, 10.0f), D3DXVECTOR2(0.0f, 0.0f));
 	}
