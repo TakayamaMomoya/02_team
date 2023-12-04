@@ -147,11 +147,15 @@ CTitle::CTitle()
 {
 	m_state = STATE_NONE;
 	ZeroMemory(&m_cameraInfo, sizeof(m_cameraInfo));
+	m_pLogo = nullptr;
+	m_pLogoLate = nullptr;
 	m_pStart = nullptr;
 	ZeroMemory(&m_apModelPlayer[0], sizeof(m_apModelPlayer));
 	ZeroMemory(&m_apModelEnemy[0], sizeof(m_apModelEnemy));
 	m_nFadeCnt = 0;
 	m_bIsAlphaChange = false;
+	m_fSizeX = LOGO_WIDTH;
+	m_fSizeY = LOGO_HEIGHT;
 }
 
 //=====================================================
@@ -213,7 +217,6 @@ HRESULT CTitle::Init(void)
 	{
 		return E_FAIL;
 	}
-
 
 	// スカイボックスの生成
 	CSkybox* pSkyBox = CSkybox::Create();
@@ -379,6 +382,7 @@ void CTitle::ManageStart(void)
 	// 色の情報取得
 	D3DXCOLOR colStart = m_pStart->GetCol();
 	D3DXCOLOR colLogo = m_pLogo->GetCol();
+	D3DXCOLOR colLogoLate = m_pLogoLate->GetCol();
 
 	if (m_pStart != nullptr && m_pLogo != nullptr)
 	{
@@ -406,11 +410,24 @@ void CTitle::ManageStart(void)
 			colLogo.a -= ALPHA_CHANGE_LOGO;
 		}
 
+		if (colLogoLate.a >= 0.0f)
+		{
+			// ロゴのα値を減少
+			colLogoLate.a -= 0.06f;
+		}
+
+		// サイズの肥大化
+		m_fSizeX += 16.0f;
+		m_fSizeY += 10.0f;
+
 		// 設定処理
 		m_pStart->SetCol(colStart);
 		m_pStart->SetVtx();
 		m_pLogo->SetCol(colLogo);
 		m_pLogo->SetVtx();
+		m_pLogoLate->SetSize(m_fSizeX, m_fSizeY);
+		m_pLogoLate->SetCol(colLogoLate);
+		m_pLogoLate->SetVtx();
 	}
 }
 
@@ -533,6 +550,20 @@ void CTitle::SetFadeIn(void)
 {
 	// 情報取得
 	CCamera* pCamera = CManager::GetCamera();
+	
+	if (m_pLogoLate == nullptr)
+	{
+		m_pLogoLate = CObject2D::Create(7);
+
+		if (m_pLogoLate != nullptr)
+		{
+			m_pLogoLate->SetSize(LOGO_WIDTH, LOGO_HEIGHT);
+			m_pLogoLate->SetPosition(LOGO_POS);
+			int nIdx = CTexture::GetInstance()->Regist(LOGO_PATH);
+			m_pLogoLate->SetIdxTexture(nIdx);
+			m_pLogoLate->SetVtx();
+		}
+	}
 
 	if (pCamera != nullptr)
 	{
