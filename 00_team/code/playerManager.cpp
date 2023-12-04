@@ -174,6 +174,20 @@ void CPlayerManager::LoadParamPlayer(void)
 				(void)fscanf(pFile, "%f", &m_paramPlayer.fTimeDamage);
 			}
 
+			if (strcmp(cTemp, "POW_BLOW") == 0)
+			{// ‚«”ò‚Î‚·—Í
+				(void)fscanf(pFile, "%s", &cTemp[0]);
+
+				(void)fscanf(pFile, "%f", &m_paramPlayer.fPowBlow);
+			}
+
+			if (strcmp(cTemp, "DAMAGE_PUNCH") == 0)
+			{// ‚«”ò‚Î‚·—Í
+				(void)fscanf(pFile, "%s", &cTemp[0]);
+
+				(void)fscanf(pFile, "%f", &m_paramPlayer.fDamagePunch);
+			}
+
 			if (strcmp(cTemp, "END_SCRIPT") == 0)
 			{// I—¹ğŒ
 				break;

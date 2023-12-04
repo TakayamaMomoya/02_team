@@ -22,6 +22,7 @@
 #include "arrow.h"
 #include "effect3D.h"
 #include "motionDiv.h"
+#include "enemyManager.h"
 
 //*****************************************************
 // 定数定義
@@ -1194,15 +1195,16 @@ void CPlayer::ManageAttack(void)
 				// 敵との判定
 				bHit = m_info.pClsnAttack->SphereCollision(CCollision::TAG_ENEMY);
 
-				// 木箱との判定
-				bHit = m_info.pClsnAttack->SphereCollision(CCollision::TAG_BOX);
-
 				// 命中したオブジェクトの取得
 				CObject *pObj = m_info.pClsnAttack->GetOther();
 
 				if (bHit == true && pObj != nullptr)
 				{// 敵のヒット処理
-					pObj->Hit(5.0f);
+					// 敵をノックバックさせる
+					BlowEnemy(pObj);
+
+					// ヒット処理
+					pObj->Hit(m_param.fDamagePunch);
 				}
 
 				// 木箱との判定
@@ -1212,10 +1214,53 @@ void CPlayer::ManageAttack(void)
 
 				if (bHit == true && pObj != nullptr)
 				{// 木箱のヒット処理
-					pObj->Hit(5.0f);
+					pObj->Hit(0.0f);
 				}
 			}
 		}
+	}
+}
+
+//=====================================================
+// 敵を吹き飛ばす処理
+//=====================================================
+void CPlayer::BlowEnemy(CObject *pObj)
+{
+	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
+
+	if (pEnemyManager == nullptr || pObj == nullptr)
+	{
+		return;
+	}
+
+	CEnemy *pEnemy = pEnemyManager->GetHead();
+
+	while (pEnemy != nullptr)
+	{
+		CEnemy *pEnemyNext = pEnemy->GetNext();
+
+		if ((CObject*)pEnemy == pObj)
+		{
+			// 敵とプレイヤーの位置の差分を取得
+			D3DXVECTOR3 posEnemy = pEnemy->GetPosition();
+			D3DXVECTOR3 moveEnemy = pEnemy->GetMove();
+			D3DXVECTOR3 posPlayer = GetPosition();
+			D3DXVECTOR3 vecDiff = posEnemy - posPlayer;
+
+			// 差分ベクトルをふきとばす力に変換
+			D3DXVECTOR3 vecBlow;
+
+			D3DXVec3Normalize(&vecBlow, &vecDiff);
+
+			vecBlow *= m_param.fPowBlow;
+
+			// 吹き飛ばしベクトルを移動量に加算
+			moveEnemy += vecBlow;
+
+			pEnemy->SetMove(moveEnemy);
+		}
+
+		pEnemy = pEnemyNext;
 	}
 }
 

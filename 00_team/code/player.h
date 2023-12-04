@@ -35,6 +35,8 @@ public:
 		float fSpeedRot;		// 回転速度
 		float fInitialLife;	// 初期体力
 		float fTimeDamage;	// ダメージ状態の秒数
+		float fPowBlow;	// 敵を吹き飛ばす力
+		float fDamagePunch;	// パンチの威力
 	};
 	struct AttackInfo
 	{// 攻撃の情報
@@ -154,6 +156,7 @@ private:
 	void ManageState(void);
 	void ManageMotion(void);
 	void ManageAttack(void);
+	void BlowEnemy(CObject *pObj);
 	void Debug(void);
 
 	SInfo m_info;	// 自身の情報
