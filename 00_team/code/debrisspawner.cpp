@@ -29,6 +29,7 @@ CDebrisSpawner::CDebrisSpawner(int nPriority) : CObject(nPriority)
 	m_type = TYPE_NONE;
 	m_nPriorityDebris = 0;
 	m_nLife = 0;
+	m_ModelIdx = 0;
 
 	SetType(TYPE_PARTICLE);
 }
@@ -91,6 +92,7 @@ void CDebrisSpawner::Update(void)
 	float fMove = 0.0f;
 	float fRadius = 0.0f;
 	int nLife = 0;
+	int nModelIdx = 0;
 	D3DXVECTOR3 move = { 0.0f,0.0f,0.0f };
 	D3DXVECTOR3 rot = { 0.0f,0.0f,0.0f };
 	CObjectX* pObjectX = nullptr;
@@ -134,7 +136,7 @@ void CDebrisSpawner::Update(void)
 		rot.z = (float)(rand() % 629 - 314) / 100.0f;
 
 		// エフェクト生成
-		pObjectX = CDebris::Create(m_pos, nLife, move, m_apDebris[m_type]->fGravity, m_apDebris[m_type]->bBounce);
+		pObjectX = CDebris::Create(m_pos, nLife, m_apDebris[m_type]->nModelIdx , move, m_apDebris[m_type]->fGravity, m_apDebris[m_type]->bBounce);
 		pObjectX->SetRot(D3DXVECTOR3(rot.x, rot.y, rot.z));
 	}
 
@@ -222,11 +224,11 @@ void CDebrisSpawner::Load(void)
 						break;
 					}
 
-					if (strcmp(cTemp, "OBJ_TYPE") == 0)
+					if (strcmp(cTemp, "MODEL_TYPE") == 0)
 					{// パーティクル寿命取得
 						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						(void)fscanf(pFile, "%d", &pInfo->nObjType);
+						(void)fscanf(pFile, "%d", &pInfo->nModelIdx);
 					}
 
 					if (strcmp(cTemp, "LIFE_DEBRISSPAWNER") == 0)
