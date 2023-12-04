@@ -23,14 +23,7 @@ class CPlayer;
 class CContainer;
 class CLift;
 class CNumber3D;
-
-//*****************************************************
-// 定数定義
-//*****************************************************
-namespace
-{
-	const int MAX_CONTAINER(2);
-};
+class CObjectX;
 
 //*****************************************************
 // クラスの定義
@@ -70,17 +63,10 @@ private:
 		PLAYER_INGAME,	// ゲームへ入る
 		PLAYER_MAX
 	};
-	// メニューの種類
-	enum JOIN_UI
-	{
-		MENU_PLUS = 0,	// プラス
-		MENU_CHAR,	// 文字
-		MENU_MAX
-	};
 	// メニューの構造体
 	struct SJoinUi_info
 	{
-		CBillboard* pUi2D[MENU_MAX];	//メニュー
+		CBillboard* pUi2D;	//メニュー
 		D3DXCOLOR col;	// 色
 		FADE_STATE state;	// 状態
 	};
@@ -88,6 +74,7 @@ private:
 	struct PlayerInfo
 	{
 		CPlayer* pPlayer;	// プライヤー
+		CObjectX* pLeaf;	// 葉っぱ
 		PLAYER_STATE state;	// 状態
 	};
 	// コンテナ情報の構造体
@@ -98,14 +85,12 @@ private:
 	};
 
 	void MenuInit(void);	// メニューの初期設定
-	void MenuDelete(int nPlayer);	// メニューの削除
+	void ObjDelete(int nPlayer);	// 削除
 	void MenuColorChange(int nPlayer);	// メニュー色の変更
-
 	void StartInit(void);	// スタートの初期設定
-
+	void PotatoLeafInit(void);
 	void ContainerInit(void);	// コンテナの初期設定
 	void ReSetContainer(void);	// コンテナの再設置
-
 	void EntryInput(int nPlayer);	// 参加の入力
 	void MoveLimit(int nPlayer);	// 行動制限
 	void PlayerShowUp(int nPlayer);	// プレイヤーの登場
@@ -117,7 +102,7 @@ private:
 	SJoinUi_info m_aJoinUiData[NUM_PLAYER];	// それぞれの選択メニュー
 	CObject2D* m_pStartUI;	// Start文字
 	PlayerInfo m_apPlayerData[NUM_PLAYER];	// プレイヤー情報
-	CContainerInfo m_aContainerData[MAX_CONTAINER];	// コンテナ
+	CContainerInfo m_aContainerData[NUM_PLAYER];	// コンテナ
 	CLift* m_pLift;	// リフト
 	static CNumber3D* m_apNumber[2];
 	SELECT_STATE m_selectState;	// 人数選択の状態

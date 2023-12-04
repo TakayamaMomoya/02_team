@@ -35,6 +35,7 @@ CDebris::CDebris(int nPriority)
 	m_nLife = 0;
 	m_fGravity = 0.0f;
 	m_state = STATE_NONE;
+	m_type = TYPE_WALL;
 	m_bBounce = false;
 }
 
@@ -58,8 +59,18 @@ HRESULT CDebris::Init(void)
 	m_rotVelocity.y = (float)(rand() % 629 - 314) / 100.0f;
 	m_rotVelocity.z = (float)(rand() % 629 - 314) / 100.0f;
 
+	int nIdx = 0;
+
 	// ÉÇÉfÉãì«çû
-	int nIdx = CModel::Load("data\\MODEL\\debris\\wood00.x");
+	if (m_type == TYPE_WALL)
+	{
+		nIdx = CModel::Load("data\\MODEL\\debris\\wood00.x");
+	}
+	else if (m_type == TYPE_SOIL)
+	{
+		nIdx = CModel::Load("data\\MODEL\\debris\\soil00.x");
+	}
+
 	BindModel(nIdx);
 
 	// ílÇÃèâä˙âª
