@@ -36,6 +36,7 @@ public:
 		TAG_ITEM,	// アイテム
 		TAG_GOAL,	// ゴール
 		TAG_ROCKET,	// ロケット
+		TAG_BOX,	// 箱
 		TAG_MAX
 	}TAG;
 
