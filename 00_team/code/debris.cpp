@@ -35,7 +35,7 @@ CDebris::CDebris(int nPriority)
 	m_nLife = 0;
 	m_fGravity = 0.0f;
 	m_state = STATE_NONE;
-	m_type = TYPE_WALL;
+	m_nModelType = 0;
 	m_bBounce = false;
 }
 
@@ -62,11 +62,11 @@ HRESULT CDebris::Init(void)
 	int nIdx = 0;
 
 	// ƒ‚ƒfƒ‹“Çž
-	if (m_type == TYPE_WALL)
+	if (m_nModelType == TYPE_WALL)
 	{
 		nIdx = CModel::Load("data\\MODEL\\debris\\wood00.x");
 	}
-	else if (m_type == TYPE_SOIL)
+	else if (m_nModelType == TYPE_SOIL)
 	{
 		nIdx = CModel::Load("data\\MODEL\\debris\\soil00.x");
 	}
@@ -197,7 +197,7 @@ void CDebris::Draw(void)
 //=====================================================
 // ¶¬ˆ—
 //=====================================================
-CDebris* CDebris::Create(D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 move, float fGravity, bool bBounce, int nPriority)
+CDebris* CDebris::Create(D3DXVECTOR3 pos, int nLife, int nModelType, D3DXVECTOR3 move, float fGravity, bool bBounce, int nPriority)
 {
 	CDebris* pDebrisSpawner = nullptr;
 
@@ -208,6 +208,8 @@ CDebris* CDebris::Create(D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 move, float fGr
 		if (pDebrisSpawner != nullptr)
 		{
 			pDebrisSpawner->SetPosition(pos);
+
+			pDebrisSpawner->m_nModelType = nModelType;
 
 			// ‰Šú‰»ˆ—
 			pDebrisSpawner->Init();
