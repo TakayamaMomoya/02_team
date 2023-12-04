@@ -17,6 +17,7 @@
 #include "player.h"
 #include "result.h"
 #include "goal.h"
+#include "inputkeyboard.h"
 
 //*****************************************************
 // 定数定義
@@ -247,6 +248,20 @@ void CRocket::Update(void)
 	{// 脱出状態の更新
 		UpdateEscape();
 	}
+
+#ifdef _DEBUG
+	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
+
+	if (pKeyboard == nullptr)
+	{
+		return;
+	}
+
+	if (pKeyboard->GetTrigger(DIK_R))
+	{// 修理進行
+		AddProgress(1);
+	}
+#endif
 }
 
 //=====================================================

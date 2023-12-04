@@ -14,6 +14,7 @@
 #include "game.h"
 #include "debugproc.h"
 #include "goal.h"
+#include "UI.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
@@ -91,6 +92,12 @@ void CGoalTimer::Uninit(void)
 	{
 		m_pObjDecimal->Uninit();
 		m_pObjDecimal = nullptr;
+	}
+
+	if (m_pPoint != nullptr)
+	{
+		m_pPoint->Uninit();
+		m_pPoint = nullptr;
 	}
 
 	m_pGoalTimer = nullptr;
