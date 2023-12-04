@@ -409,6 +409,16 @@ void CPlayer::InputMove(void)
 //=====================================================
 void CPlayer::InputAttack(void)
 {
+	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+
+	if (pJoyPad == nullptr)
+	{
+		return;
+	}
+
+	// ƒpƒ“ƒ`‚Ì“ü—Í
+	m_info.motionInfo.bPunch = pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_LB, GetIDJoypad());
+
 	if (m_info.pWeapon != nullptr)
 	{// •Ší‚ÌUŒ‚
 		bool bEnable = m_info.pWeapon->IsEnable();
@@ -420,7 +430,7 @@ void CPlayer::InputAttack(void)
 	}
 	else
 	{// ‘fè‚Ìê‡‚Ìˆ—
-
+		
 	}
 }
 
@@ -469,7 +479,6 @@ bool CPlayer::InputInteractPress(void)
 
 	return bPress;
 }
-
 
 //=====================================================
 // •Ší‚Ì—LŒø‰Â
@@ -1042,6 +1051,13 @@ void CPlayer::ManageMotion(void)
 				}
 
 				break;
+			}
+		}
+		else if ((m_info.motionInfo.bPunch || nMotionUpper == MOTION_PUNCH) && bFinish == false)
+		{
+			if (nMotionUpper != MOTION_PUNCH)
+			{
+				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_PUNCH);
 			}
 		}
 		// ‰½‚à‚È‚µ

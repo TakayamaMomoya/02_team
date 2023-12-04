@@ -117,6 +117,7 @@ private:
 	{
 		bool bDoorPress;		// ドアへの入力情報
 		bool bItemTrigger;		// 物への入力情報
+		bool bPunch;	// パンチの入力情報
 		float bRunawayProtect;	// 暴走入力防止
 	};
 	struct SInfo
