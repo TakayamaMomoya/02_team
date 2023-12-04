@@ -35,9 +35,12 @@ public:
 	static CUIManager *GetInstance(void) { return m_pUIManager; }
 	bool IsDisp(void) { return m_bDisp; }
 	void EnableDisp(bool bDisp) { m_bDisp = bDisp; }
-	CLife *CreateLife(int nIdx);
+	void SetPlayer(int nIdx);
 
 private:
+
+	CLife* CreateLife(int nIdx);
+
 	struct SInfo
 	{
 		CLife *m_apLife[NUM_PLAYER];	// ƒ‰ƒCƒtUI
