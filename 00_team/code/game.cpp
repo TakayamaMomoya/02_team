@@ -127,7 +127,7 @@ HRESULT CGame::Init(void)
 
 #ifdef _DEBUG
 	// エディットの生成
-	//CEdit::Create();
+	CEdit::Create();
 #endif
 
 	// フォグをかける
@@ -225,9 +225,9 @@ void CGame::Update(void)
 		}
 	}
 
-//#ifdef _DEBUG
+#ifdef _DEBUG
 	Debug();
-//#endif
+#endif
 }
 
 //=====================================================

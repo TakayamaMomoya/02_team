@@ -2,10 +2,10 @@ Metasequoia Document
 Format Text Ver 1.0
 
 Scene {
-	pos -119.8579 -491.5258 6144.0000
+	pos -144.5482 -572.3303 6144.0010
 	lookat 0.0000 0.0000 0.0000
-	head -7.9636
-	pich 0.6308
+	head -6.5936
+	pich 0.2708
 	bank 0.0000
 	ortho 0
 	zoom2 1.2206
@@ -18,7 +18,7 @@ Scene {
 	}
 }
 Material 1 {
-	"initialShadingGroup" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\metal_00005.jpg")
+	"initialShadingGroup" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Documents\Visual Studio 2015\Projects\00_team\02_team\00_team\data\TEXTURE\MATERIAL\metal_00005.jpg")
 }
 Object "obj2" {
 	visible 15

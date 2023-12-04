@@ -169,6 +169,11 @@ void CBlock::Draw(void)
 //=====================================================
 void CBlock::Hit(float fDamage)
 {
+	if (m_type == TYPE_IRONWALL)
+	{
+		return;
+	}
+
 	m_fLife -= fDamage;
 
 	if (m_fLife <= 0.0f)
@@ -335,10 +340,11 @@ void CBlock::LoadModel(void)
 		"data\\MODEL\\BLOCK\\desk00.x",			// 机
 		"data\\MODEL\\BLOCK\\concrete_00.x",	// コンクリート壁
 		"data\\MODEL\\BLOCK\\WodenWall_00.x",	// 木製壁
-		"data\\MODEL\\GIMMICK\\door000.x",	// 木製壁
+		"data\\MODEL\\GIMMICK\\door000.x",	// ドア
 		"data\\MODEL\\BLOCK\\potato_bed00.x",			// 土
 		"data\\MODEL\\BLOCK\\shelf.x",			// 棚
-		"data\\MODEL\\BLOCK\\concrete_01.x",			// 棚
+		"data\\MODEL\\BLOCK\\concrete_01.x",	// 高いコンクリート壁
+		"data\\MODEL\\BLOCK\\unbreakable_wall.x",	// 鉄の壁
 	};
 
 	if (m_pIdxObject == nullptr)
