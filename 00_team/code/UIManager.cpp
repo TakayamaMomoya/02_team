@@ -13,6 +13,8 @@
 #include "UIManager.h"
 #include "game.h"
 
+#include "life.h"
+
 //*****************************************************
 // マクロ定義
 //*****************************************************
@@ -93,12 +95,33 @@ void CUIManager::Update(void)
 }
 
 //=====================================================
+// プレイヤーUIの生成処理
+//=====================================================
+void CUIManager::SetPlayer(int nNumPlayer)
+{
+	for (int nIdx = 0; nIdx < nNumPlayer; nIdx++)
+	{
+		// ライフの生成処理
+		CLife* pLife = CreateLife(nIdx);
+
+		if (pLife != NULL &&
+			m_info.m_apLife[nIdx] == NULL)
+		{
+			// ライフを代入
+			m_info.m_apLife[nIdx] = pLife;
+		}
+	}
+}
+
+//=====================================================
 // ライフの生成処理
 //=====================================================
 CLife *CUIManager::CreateLife(int nIdx)
 {
 	CLife *pLife = nullptr;
 
+	pLife = CLife::Create(nIdx);
+	
 	return pLife;
 }
 

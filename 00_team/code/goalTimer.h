@@ -5,8 +5,8 @@
 //
 //*****************************************************
 
-#ifndef _GOALGoalTimer_H_
-#define _GOALGoalTimer_H_
+#ifndef _GOALTIMER_H_
+#define _GOALTIMER_H_
 
 //*****************************************************
 // インクルード
@@ -18,6 +18,7 @@
 // 前方宣言
 //*****************************************************
 class CNumber;
+class CUI;
 
 //*****************************************************
 // クラスの定義
@@ -43,8 +44,8 @@ public:
 private:
 	CNumber *m_pObjSecond;	// 秒表示のポインタ
 	CNumber *m_pObjDecimal;	// 小数点以下表示のポインタ
+	CUI *m_pPoint;	// 小数点
 	float m_fSecond;	// 現在の時間(秒)
-	int m_nIdxTexture;	// テクスチャ番号
 	static CGoalTimer *m_pGoalTimer;	// 自身のポインタ
 	bool m_bStop;	// 止めるかどうか
 };

@@ -227,6 +227,13 @@ void CGoal::Update(void)
 
 	// プレイヤーの検出
 	DetectPlayer();
+
+	if (m_pCollisionGoal != nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+
+		m_pCollisionGoal->SetPosition(pos);
+	}
 }
 
 //=====================================================

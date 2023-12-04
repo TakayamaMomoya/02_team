@@ -118,7 +118,6 @@
       <Filter>enemy</Filter>
     </ClCompile>
     <ClCompile Include="code\goal.cpp" />
-    <ClCompile Include="code\goalTimer.cpp" />
     <ClCompile Include="code\result.cpp" />
     <ClCompile Include="code\edit.cpp" />
     <ClCompile Include="code\block.cpp" />
@@ -169,6 +168,10 @@
     <ClCompile Include="code\fan2D.cpp" />
     <ClCompile Include="code\fan3D.cpp" />
     <ClCompile Include="code\pause.cpp" />
+    <ClCompile Include="code\box.cpp" />
+    <ClCompile Include="code\goalTimer.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -261,7 +264,6 @@
       <Filter>enemy</Filter>
     </ClInclude>
     <ClInclude Include="code\goal.h" />
-    <ClInclude Include="code\goalTimer.h" />
     <ClInclude Include="code\result.h" />
     <ClInclude Include="code\edit.h" />
     <ClInclude Include="code\block.h" />
@@ -312,5 +314,9 @@
     <ClInclude Include="code\fan2D.h" />
     <ClInclude Include="code\fan3D.h" />
     <ClInclude Include="code\pause.h" />
+    <ClInclude Include="code\box.h" />
+    <ClInclude Include="code\goalTimer.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

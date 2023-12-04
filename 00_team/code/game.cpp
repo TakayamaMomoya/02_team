@@ -36,6 +36,7 @@
 #include "renderer.h"
 #include "animEffect3D.h"
 #include "pause.h"
+#include "box.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`

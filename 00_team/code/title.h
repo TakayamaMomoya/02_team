@@ -84,6 +84,7 @@ private:
 	SCameraInfo m_cameraInfo;	// カメラ情報
 
 	CObject2D* m_pLogo;		// タイトルロゴのポインタ
+	CObject2D* m_pLogoLate; // 遅れてくるロゴのポインタ
 	CObject2D *m_pStart;	// スタート表示のポインタ
 
 	CMotion* m_apModelPlayer[NUM_PLAYER];		// プレイヤーモデルのポインタ
@@ -91,6 +92,9 @@ private:
 
 	int m_nFadeCnt;			// フェードまでのカウント
 	bool m_bIsAlphaChange;	// α値の変化
+
+	float m_fSizeX;			// ロゴのサイズ用
+	float m_fSizeY;			// ロゴのサイズ用
 };
 
 #endif

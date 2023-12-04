@@ -20,8 +20,9 @@
 #include "game.h"
 #include "manager.h"
 #include "arrow.h"
-
+#include "effect3D.h"
 #include "motionDiv.h"
+#include "enemyManager.h"
 
 //*****************************************************
 // 定数定義
@@ -113,6 +114,14 @@ HRESULT CPlayer::Init(void)
 		SParam param = pPlayerManager->GetPlayerParam();
 
 		m_param = param;
+
+		int nNumAttack = pPlayerManager->GetNumAttack();
+
+		m_info.nNumAttack = nNumAttack;
+
+		AttackInfo *pAttackInfo = pPlayerManager->GetAttackInfo();
+
+		m_info.pAttackInfo = pAttackInfo;
 	}
 	else
 	{
@@ -127,6 +136,17 @@ HRESULT CPlayer::Init(void)
 		if (m_info.pCollisionSphere != nullptr)
 		{
 			m_info.pCollisionSphere->SetRadius(5.0f);
+		}
+	}
+
+	if (m_info.pClsnAttack == nullptr)
+	{// 球の当たり判定生成
+		m_info.pClsnAttack = CCollisionSphere::Create(CCollision::TAG_NONE, CCollision::TYPE_SPHERE, this);
+
+		if (m_info.pClsnAttack != nullptr)
+		{// 情報の設定
+			m_info.pClsnAttack->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_info.pClsnAttack->SetRadius(0.0f);
 		}
 	}
 
@@ -210,6 +230,12 @@ void CPlayer::Uninit(void)
 	{
 		m_info.pArrow->Uninit();
 		m_info.pArrow = nullptr;
+	}
+
+	if (m_info.pClsnAttack != nullptr)
+	{
+		m_info.pClsnAttack->Uninit();
+		m_info.pClsnAttack = nullptr;
 	}
 
 	// 継承クラスの終了
@@ -317,6 +343,9 @@ void CPlayer::Update(void)
 		m_info.pArrow->SetPosition(posArrow);
 		m_info.pArrow->SetRot(rot);
 	}
+
+	// 攻撃判定管理
+	ManageAttack();
 }
 
 //=====================================================
@@ -1112,6 +1141,127 @@ void CPlayer::ManageMotion(void)
 	m_info.motionInfo.bDoorPress = false;			// ドアへの入力情報
 	m_info.motionInfo.bItemTrigger = false;			// 物への入力情報
 	m_info.motionInfo.bRunawayProtect = false;		// 暴走入力情報
+}
+
+//=====================================================
+// 攻撃判定の管理
+//=====================================================
+void CPlayer::ManageAttack(void)
+{
+	if (m_info.pClsnAttack == nullptr)
+	{// 判定のエラー
+		return;
+	}
+
+	CMotionDiv *pBody = GetBody();
+
+	if (pBody == nullptr)
+	{// 判定のエラー
+		return;
+	}
+
+	for (int i = 0; i < m_info.nNumAttack; i++)
+	{
+		if (pBody->GetMotion(CCharacterDiv::PARTS_UPPER) == m_info.pAttackInfo[i].nIdxMotion)
+		{// 攻撃モーション中の判定
+			int nFrame = pBody->GetFrame(CCharacterDiv::PARTS_UPPER);
+			int nKey = pBody->GetKey(CCharacterDiv::PARTS_UPPER);
+			D3DXVECTOR3 pos;
+
+			if (nFrame == m_info.pAttackInfo[i].nFrame && nKey == m_info.pAttackInfo[i].nKey)
+			{// 当たり判定の設定
+				bool bHit = false;
+				D3DXMATRIX mtx;
+				D3DXMATRIX mtxPart = *pBody->GetMatrix();
+
+				universal::SetOffSet(&mtx, mtxPart, m_info.pAttackInfo[i].pos);
+
+				pos =
+				{
+					mtx._41,
+					mtx._42,
+					mtx._43
+				};
+
+				// 位置設定
+				m_info.pClsnAttack->SetPosition(pos);
+
+				// 半径の設定
+				m_info.pClsnAttack->SetRadius(m_info.pAttackInfo[i].fRadius);
+
+#ifdef _DEBUG
+				CEffect3D::Create(pos, m_info.pAttackInfo[i].fRadius, 10, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+#endif
+				// 敵との判定
+				bHit = m_info.pClsnAttack->SphereCollision(CCollision::TAG_ENEMY);
+
+				// 命中したオブジェクトの取得
+				CObject *pObj = m_info.pClsnAttack->GetOther();
+
+				if (bHit == true && pObj != nullptr)
+				{// 敵のヒット処理
+					// 敵をノックバックさせる
+					BlowEnemy(pObj);
+
+					// ヒット処理
+					pObj->Hit(m_param.fDamagePunch);
+				}
+
+				// 木箱との判定
+				bHit = m_info.pClsnAttack->SphereCollision(CCollision::TAG_BOX);
+
+				pObj = m_info.pClsnAttack->GetOther();
+
+				if (bHit == true && pObj != nullptr)
+				{// 木箱のヒット処理
+					pObj->Hit(0.0f);
+				}
+			}
+		}
+	}
+}
+
+//=====================================================
+// 敵を吹き飛ばす処理
+//=====================================================
+void CPlayer::BlowEnemy(CObject *pObj)
+{
+	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
+
+	if (pEnemyManager == nullptr || pObj == nullptr)
+	{
+		return;
+	}
+
+	CEnemy *pEnemy = pEnemyManager->GetHead();
+
+	while (pEnemy != nullptr)
+	{
+		CEnemy *pEnemyNext = pEnemy->GetNext();
+
+		if ((CObject*)pEnemy == pObj)
+		{
+			// 敵とプレイヤーの位置の差分を取得
+			D3DXVECTOR3 posEnemy = pEnemy->GetPosition();
+			D3DXVECTOR3 moveEnemy = pEnemy->GetMove();
+			D3DXVECTOR3 posPlayer = GetPosition();
+			D3DXVECTOR3 vecDiff = posEnemy - posPlayer;
+
+			// 差分ベクトルをふきとばす力に変換
+			D3DXVECTOR3 vecBlow;
+
+			D3DXVec3Normalize(&vecBlow, &vecDiff);
+
+			vecBlow *= m_param.fPowBlow;
+
+			// 吹き飛ばしベクトルを移動量に加算
+			moveEnemy += vecBlow;
+
+			pEnemy->SetMove(moveEnemy);
+		}
+
+		pEnemy = pEnemyNext;
+	}
 }
 
 //=====================================================

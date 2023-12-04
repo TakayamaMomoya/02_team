@@ -13,6 +13,7 @@
 #include "door.h"
 #include "container.h"
 #include "itemRepair.h"
+#include "box.h"
 
 //*****************************************************
 // 定数定義
@@ -124,6 +125,11 @@ void CGimmickManager::CreateGimmick(FILE *pFile, char *pTemp)
 	if (strcmp(pTemp, "REPAIRSET") == 0)
 	{// 部品の設置
 		LoadRepair(pFile, pTemp);
+	}
+
+	if (strcmp(pTemp, "BOXSET") == 0)
+	{// 木箱の設置
+		LoadBox(pFile, pTemp);
 	}
 }
 
@@ -287,6 +293,65 @@ void CGimmickManager::LoadRepair(FILE *pFile, char *pTemp)
 			{
 				pRapair->SetPosition(pos);
 				pRapair->SetRot(rot);
+			}
+
+			break;
+		}
+	}
+}
+
+//=====================================================
+// 木箱読込処理
+//=====================================================
+void CGimmickManager::LoadBox(FILE *pFile, char *pTemp)
+{
+	D3DXVECTOR3 pos = { 0.0f,0.0f,0.0f };
+	D3DXVECTOR3 rot = { 0.0f,0.0f,0.0f };
+	int nType = CBox::TYPE::TYPE_RANDOM;
+
+	while (true)
+	{
+		(void)fscanf(pFile, "%s", pTemp);
+
+		if (strcmp(pTemp, "POS") == 0)
+		{// 位置
+			(void)fscanf(pFile, "%s", pTemp);
+
+			for (int i = 0; i < 3; i++)
+			{
+				(void)fscanf(pFile, "%f", &pos[i]);
+			}
+		}
+
+		if (strcmp(pTemp, "ROT") == 0)
+		{// 向き
+			(void)fscanf(pFile, "%s", pTemp);
+
+			for (int i = 0; i < 3; i++)
+			{
+				float fAngle;
+
+				(void)fscanf(pFile, "%f", &fAngle);
+
+				rot[i] = D3DXToRadian(fAngle);
+			}
+		}
+
+		if (strcmp(pTemp, "TYPE") == 0)
+		{// 種類
+			(void)fscanf(pFile, "%s", pTemp);
+
+			(void)fscanf(pFile, "%d", &nType);
+		}
+
+		if (strcmp(pTemp, "END_BOXSET") == 0)
+		{// 設定終了
+			CBox *pBox = CBox::Create((CBox::TYPE)nType);
+
+			if (pBox != nullptr)
+			{
+				pBox->SetPosition(pos);
+				pBox->SetRot(rot);
 			}
 
 			break;
