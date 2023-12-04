@@ -100,10 +100,9 @@ HRESULT CPause::Init(void)
 
 	char *pPath[MENU_MAX] = 
 	{// メニュー項目のパス
-		"data\\TEXTURE\\UI\\menu_resume.png",
-		"data\\TEXTURE\\UI\\menu_retry.png",
-		"data\\TEXTURE\\UI\\menu_return.png",
-		"data\\TEXTURE\\UI\\menu_quit.png",
+		"data\\TEXTURE\\UI\\pause_resume.png",
+		"data\\TEXTURE\\UI\\pause_restart.png",
+		"data\\TEXTURE\\UI\\pause_quit.png",
 	};
 
 	int nIdxTexture;
@@ -377,11 +376,6 @@ void CPause::Fade(MENU menu)
 	case CPause::MENU_RESTART:
 
 		CGame::SetState(CGame::STATE_END);
-		pFade->SetFade(CScene::MODE_GAME);
-
-		break;
-	case CPause::MENU_CHECKPOINT:
-
 		pFade->SetFade(CScene::MODE_GAME);
 
 		break;
