@@ -35,6 +35,17 @@ public:
 		float fSpeedRot;		// 回転速度
 		float fInitialLife;	// 初期体力
 		float fTimeDamage;	// ダメージ状態の秒数
+		float fPowBlow;	// 敵を吹き飛ばす力
+		float fDamagePunch;	// パンチの威力
+	};
+	struct AttackInfo
+	{// 攻撃の情報
+		int nIdxMotion;	// モーション番号
+		int nIdxParent;	// 親パーツ番号
+		D3DXVECTOR3 pos;	// オフセット位置
+		int nKey;	// キー番号
+		int nFrame;	// 発生するフレーム
+		float fRadius;	// 半径
 	};
 
 	CPlayer(int nPriority = 4);	// コンストラクタ
@@ -117,6 +128,7 @@ private:
 	{
 		bool bDoorPress;		// ドアへの入力情報
 		bool bItemTrigger;		// 物への入力情報
+		bool bPunch;	// パンチの入力情報
 		float bRunawayProtect;	// 暴走入力防止
 	};
 	struct SInfo
@@ -127,7 +139,10 @@ private:
 		float fTimerState;	// 状態遷移カウンタ
 		STATE state;	// 状態
 		SMotionInfo motionInfo;		// モーション情報
+		int nNumAttack;	// 攻撃判定の数
+		AttackInfo *pAttackInfo;	// 攻撃の情報ポインタ
 		CCollisionSphere *pCollisionSphere;	// 球の当たり判定
+		CCollisionSphere *pClsnAttack;	// 攻撃の当たり判定
 		CCollisionCube *pCollisionCube;	// 立方体の当たり判定
 		CWeapon* pWeapon;			// 武器
 		CItemRepair* pItemRepair;	// 修理アイテム
@@ -140,6 +155,8 @@ private:
 	void Aim(void);
 	void ManageState(void);
 	void ManageMotion(void);
+	void ManageAttack(void);
+	void BlowEnemy(CObject *pObj);
 	void Debug(void);
 
 	SInfo m_info;	// 自身の情報

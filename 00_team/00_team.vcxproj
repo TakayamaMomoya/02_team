@@ -26,6 +26,7 @@
     <ClCompile Include="code\bg.cpp" />
     <ClCompile Include="code\billboard.cpp" />
     <ClCompile Include="code\block.cpp" />
+    <ClCompile Include="code\box.cpp" />
     <ClCompile Include="code\bullet.cpp" />
     <ClCompile Include="code\camera.cpp" />
     <ClCompile Include="code\character.cpp" />
@@ -74,6 +75,7 @@
     <ClCompile Include="code\orbit.cpp" />
     <ClCompile Include="code\particle.cpp" />
     <ClCompile Include="code\parts.cpp" />
+    <ClCompile Include="code\pause.cpp" />
     <ClCompile Include="code\player.cpp" />
     <ClCompile Include="code\playerManager.cpp" />
     <ClCompile Include="code\ranking.cpp" />
@@ -106,6 +108,7 @@
     <ClInclude Include="code\bg.h" />
     <ClInclude Include="code\billboard.h" />
     <ClInclude Include="code\block.h" />
+    <ClInclude Include="code\box.h" />
     <ClInclude Include="code\bullet.h" />
     <ClInclude Include="code\camera.h" />
     <ClInclude Include="code\character.h" />
@@ -154,6 +157,7 @@
     <ClInclude Include="code\orbit.h" />
     <ClInclude Include="code\particle.h" />
     <ClInclude Include="code\parts.h" />
+    <ClInclude Include="code\pause.h" />
     <ClInclude Include="code\player.h" />
     <ClInclude Include="code\playerManager.h" />
     <ClInclude Include="code\ranking.h" />

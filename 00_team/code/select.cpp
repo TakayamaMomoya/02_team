@@ -46,15 +46,15 @@
 //*****************************************************
 namespace
 {
-	const D3DXVECTOR3 UI_POS_1P({ -150.0f, 80.0f, -430.0f });	// UIの位置
+	const D3DXVECTOR3 UI_POS({ -150.0f, 30.0f, -470.0f });	// UIの位置
 	const D3DXVECTOR3 UI_SPACE({ 140.0f, 0.0f, 0.0f });	// UI間の間隔
-
-	const float SPOWN_HEIGHT(-80.0f);	//プレイヤー出現高さ
-
-	const float SPACE(-50.0f);	//UI間の広さ
-	const float SIZE_PLUS(20.0f);	//UIの大きさ(+)
-	const D3DXVECTOR2 SIZE_FONT(30.0f, 10.0f);	//UIの大きさ(参加：A)
+	const D3DXVECTOR2 SIZE_FONT(20.0f, 5.0f);	//UIの大きさ(参加：A)
 	const float BLINKING_SPEED(0.02f);	//UI点滅の速さ(参加：A)
+
+	const D3DXVECTOR3 LEAF_POS({ -150.0f, 20.0f, -430.0f });	// ポテトの葉の位置
+
+	const D3DXVECTOR3 SPOWN_POS({ LEAF_POS.x, -80.0f, LEAF_POS.z });	//プレイヤー出現の高さ(旅出すためマイナス値)
+
 	const float ADULTWALL_POS_Z(-470.0f);
 	const float GRAVITY(5.0f);	//重力
 
@@ -127,7 +127,7 @@ HRESULT CSelect::Init(void)
 
 	if (pObject != nullptr)
 	{
-		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood001.jpg");
+		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\MATERIAL\\DirtyConcrete_00.jpg");
 		pObject->SetIdxTexture(nIdx);
 		pObject->SetTex(D3DXVECTOR2(10.0f, 10.0f), D3DXVECTOR2(0.0f, 0.0f));
 	}
@@ -138,6 +138,8 @@ HRESULT CSelect::Init(void)
 	{
 		pObjectX->BindModel(CModel::Load("data\\MODEL\\select\\potato_bed.x"));
 	}
+
+	PotatoLeafInit();
 
 	// 参加人数の表示
 	for (int nCnt = 0; nCnt < 2; nCnt++)
@@ -173,7 +175,7 @@ HRESULT CSelect::Init(void)
 	CAnimEffect3D::Create();
 
 	// コンテナのリスポーン時間を設定
-	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
+	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 	{
 		m_aContainerData[nCnt].fReSpawnTimer = RESPAWN_TIME;
 	}
@@ -197,43 +199,23 @@ void CSelect::MenuInit(void)
 	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 	{
 		// 文字の生成
-		m_aJoinUiData[nCnt].pUi2D[MENU_PLUS] = CBillboard::Create
+		m_aJoinUiData[nCnt].pUi2D = CBillboard::Create
 		(
 			{ // 位置
-				UI_POS_1P.x + (nCnt * UI_SPACE.x),
-				UI_POS_1P.y,
-				UI_POS_1P.z 
-			},
-			// サイズ
-			SIZE_PLUS, SIZE_PLUS
-		);
-
-		if (m_aJoinUiData[nCnt].pUi2D[MENU_PLUS] != nullptr)
-		{
-			m_aJoinUiData[nCnt].pUi2D[MENU_PLUS]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-			m_aJoinUiData[nCnt].pUi2D[MENU_PLUS]->SetIdxTexture(CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\plus.png"));
-		}
-
-		// 文字の生成
-		m_aJoinUiData[nCnt].pUi2D[MENU_CHAR] = CBillboard::Create
-		(
-			{ // 位置
-				m_aJoinUiData[nCnt].pUi2D[MENU_PLUS]->GetPosition().x,
-				m_aJoinUiData[nCnt].pUi2D[MENU_PLUS]->GetPosition().y + SPACE,
-				m_aJoinUiData[nCnt].pUi2D[MENU_PLUS]->GetPosition().z
+				UI_POS.x + (nCnt * UI_SPACE.x),
+				UI_POS.y,
+				UI_POS.z
 			},
 			// サイズ
 			SIZE_FONT.x, SIZE_FONT.y
 		);
 
-		// 文字
-		if (m_aJoinUiData[nCnt].pUi2D[MENU_CHAR] != nullptr)
+		if (m_aJoinUiData[nCnt].pUi2D != nullptr)
 		{
-			m_aJoinUiData[nCnt].pUi2D[MENU_CHAR]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-			m_aJoinUiData[nCnt].pUi2D[MENU_CHAR]->SetIdxTexture(CTexture::GetInstance()->Regist(apPath[nCnt]));
+			m_aJoinUiData[nCnt].pUi2D->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			m_aJoinUiData[nCnt].pUi2D->SetIdxTexture(CTexture::GetInstance()->Regist(apPath[nCnt]));
 		}
 
-		// 
 		m_aJoinUiData[nCnt].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		m_aJoinUiData[nCnt].state = FADE_OUT;
 	}
@@ -260,6 +242,31 @@ void CSelect::StartInit(void)
 }
 
 //=====================================================
+// ポテトの葉の初期化処理
+//=====================================================
+void CSelect::PotatoLeafInit(void)
+{
+	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
+	{
+		// 文字の生成
+		m_apPlayerData[nCnt].pLeaf = CObjectX::Create
+		(
+			{ // 位置
+				LEAF_POS.x + (nCnt * UI_SPACE.x),
+				0.0f,
+				LEAF_POS.z
+			}
+		);
+
+		if (m_apPlayerData[nCnt].pLeaf != nullptr)
+		{
+			int nIdx = CModel::Load("data\\MODEL\\select\\potatoLeaf.x");
+			m_apPlayerData[nCnt].pLeaf->BindModel(nIdx);
+		}
+	}
+}
+
+//=====================================================
 // コンテナの初期化処理
 //=====================================================
 void CSelect::ContainerInit(void)
@@ -267,7 +274,7 @@ void CSelect::ContainerInit(void)
 	// 武器マネージャの生成
 	CWeaponManager::Create();
 
-	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
+	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 	{
 		// コンテナの生成
 		m_aContainerData[nCnt].pContainer = CContainer::Create();
@@ -334,14 +341,8 @@ void CSelect::Update(void)
 					pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
 					pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
 				{// フェード
-
 					m_selectState = STATE_GO;
 					m_bOk = true;
-
-					/*if (pFade != nullptr && m_abEntry[0] != false)
-					{
-						pFade->SetFade(CScene::MODE_GAME);
-					}*/
 				}
 
 				// StartUIを見えるように
@@ -377,9 +378,7 @@ void CSelect::Update(void)
 
 	for (int nCntPlayer = 0; nCntPlayer < NUM_PLAYER; nCntPlayer++)
 	{
-		if (m_aJoinUiData[nCntPlayer].pUi2D[MENU_CHAR] != nullptr && 
-			m_aJoinUiData[nCntPlayer].pUi2D[MENU_PLUS] != nullptr &&
-			m_selectState == SELECT_STATE::STATE_BEFORE)
+		if (m_aJoinUiData[nCntPlayer].pUi2D != nullptr && m_selectState == SELECT_STATE::STATE_BEFORE)
 		{
 			// 色の変更
 			MenuColorChange(nCntPlayer);
@@ -407,7 +406,6 @@ void CSelect::Update(void)
 	
 	// コンテナの再設置
 	ReSetContainer();
-	
 
 #ifdef _DEBUG
 	CCamera* pCamera = CManager::GetCamera();
@@ -432,7 +430,7 @@ void CSelect::Update(void)
 //=====================================================
 void CSelect::ReSetContainer(void)
 {
-	for (int nCnt = 0; nCnt < MAX_CONTAINER; nCnt++)
+	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 	{
 		if (m_aContainerData[nCnt].pContainer != nullptr)
 		{
@@ -465,7 +463,6 @@ void CSelect::ReSetContainer(void)
 
 			// 位置設定
 			if (nCnt % 2 == 0)
-
 			{
 				m_aContainerData[nCnt].pContainer->SetPosition(D3DXVECTOR3
 				(
@@ -516,7 +513,7 @@ void CSelect::MenuColorChange(int nPlayer)
 	}
 
 	// 色の設定
-	m_aJoinUiData[nPlayer].pUi2D[MENU_CHAR]->SetColor(m_aJoinUiData[nPlayer].col);
+	m_aJoinUiData[nPlayer].pUi2D->SetColor(m_aJoinUiData[nPlayer].col);
 }
 
 //=====================================================
@@ -524,8 +521,6 @@ void CSelect::MenuColorChange(int nPlayer)
 //=====================================================
 void CSelect::EntryInput(int nPlayer)
 {
-	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
-	CInputMouse* pMouse = CInputMouse::GetInstance();
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 
@@ -553,17 +548,18 @@ void CSelect::EntryInput(int nPlayer)
 
 		// 位置をUIの場所へ
 		m_apPlayerData[nPlayer].pPlayer->SetPosition(D3DXVECTOR3(
-			m_aJoinUiData[nPlayer].pUi2D[MENU_PLUS]->GetPosition().x,
-			SPOWN_HEIGHT,
-			m_aJoinUiData[nPlayer].pUi2D[MENU_PLUS]->GetPosition().z));
+			SPOWN_POS.x + (nPlayer * UI_SPACE.x),
+			SPOWN_POS.y,
+			SPOWN_POS.z));
+		
 
 		CDebrisSpawner::Create(D3DXVECTOR3(
-			m_aJoinUiData[nPlayer].pUi2D[MENU_PLUS]->GetPosition().x,
+			m_aJoinUiData[nPlayer].pUi2D->GetPosition().x,
 			50.0f,
-			m_aJoinUiData[nPlayer].pUi2D[MENU_PLUS]->GetPosition().z), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_aJoinUiData[nPlayer].pUi2D->GetPosition().z), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 		// UI削除
-		MenuDelete(nPlayer);
+		ObjDelete(nPlayer);
 	}
 }
 
@@ -710,14 +706,19 @@ void CSelect::LiftInNumberUi(int nPlayer)
 }
 
 //=====================================================
-// メニューを消す処理
+// オブジェクトえお消す処理
 //=====================================================
-void CSelect::MenuDelete(int nPlayer)
+void CSelect::ObjDelete(int nPlayer)
 {
-	for (int nCntMenu = 0; nCntMenu < MENU_MAX; nCntMenu++)
+	if (m_aJoinUiData[nPlayer].pUi2D != nullptr)
 	{
-		m_aJoinUiData[nPlayer].pUi2D[nCntMenu]->Uninit();
-		m_aJoinUiData[nPlayer].pUi2D[nCntMenu] = nullptr;
+		m_aJoinUiData[nPlayer].pUi2D->Uninit();
+		m_aJoinUiData[nPlayer].pUi2D = nullptr;
+	}
+	if (m_apPlayerData[nPlayer].pLeaf != nullptr)
+	{
+		m_apPlayerData[nPlayer].pLeaf->Uninit();
+		m_apPlayerData[nPlayer].pLeaf = nullptr;
 	}
 }
 

@@ -36,6 +36,7 @@ private:
 	void LoadDoor(FILE *pFile, char *pTemp);
 	void LoadContainer(FILE *pFile, char *pTemp);
 	void LoadRepair(FILE *pFile, char *pTemp);
+	void LoadBox(FILE *pFile, char *pTemp);
 
 	static CGimmickManager *m_pGimmickManager;	// 自身のポインタ
 };

@@ -30,6 +30,7 @@ public:
 		TYPE_SOIL,		// 土
 		TYPE_SHELF,		// 棚
 		TYPE_HIGHCONCRETE,	// 高いコンクリート壁
+		TYPE_IRONWALL,	// 鉄の壁
 		TYPE_MAX
 	}TYPE;
 

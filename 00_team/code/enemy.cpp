@@ -423,8 +423,8 @@ void CEnemy::ChaseTarget(void)
 
 	SetMove(move);
 
-	// Œü‚«‚ğˆÚ“®•ûŒü‚É•â³
-	float fAngleDist = atan2f(move.x, move.z);
+	// Œü‚«‚ğ–Ú•W•ûŒü‚É•â³
+	float fAngleDist = atan2f(vecDiff.x, vecDiff.z);
 	D3DXVECTOR3 rot = GetRot();
 
 	fAngleDist += D3DX_PI;
