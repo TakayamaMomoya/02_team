@@ -35,6 +35,7 @@
 #include "gimmickManager.h"
 #include "renderer.h"
 #include "animEffect3D.h"
+#include "pause.h"
 
 //*****************************************************
 // マクロ定義
@@ -174,6 +175,14 @@ void CGame::Update(void)
 	{
 		// シーンの更新
 		CScene::Update();
+
+		if (pInputManager != nullptr)
+		{
+			if (pInputManager->GetTrigger(CInputManager::BUTTON_PAUSE))
+			{
+				CPause::Create();
+			}
+		}
 	}
 	else
 	{
@@ -183,6 +192,13 @@ void CGame::Update(void)
 		if (pEdit != nullptr)
 		{
 			pEdit->Update();
+		}
+
+		CPause *pPause = CPause::GetInstance();
+
+		if (pPause != nullptr)
+		{
+			pPause->Update();
 		}
 	}
 
@@ -209,9 +225,9 @@ void CGame::Update(void)
 		}
 	}
 
-//#ifdef _DEBUG
+#ifdef _DEBUG
 	Debug();
-//#endif
+#endif
 }
 
 //=====================================================
