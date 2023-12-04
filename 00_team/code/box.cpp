@@ -17,11 +17,16 @@
 #include "player.h"
 #include "billboard.h"
 #include "texture.h"
+#include "debrisSpawner.h"
+#include "itemRepair.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define SIZE_INTERACT	(30.0f)	// インタラクト表示のサイズ
+namespace 
+{
+	const char* MODEL_PATH = "data\\MODEL\\item\\repairKit.x";	// モデルのパス
+}
 
 //=====================================================
 // コンストラクタ
@@ -30,6 +35,7 @@ CBox::CBox(int nPriority) : CObjectX(nPriority)
 {
 	m_pCollisionSphere = nullptr;
 	m_pCollisionCube = nullptr;
+	m_type = TYPE_NONE;
 }
 
 //=====================================================
@@ -43,22 +49,24 @@ CBox::~CBox()
 //=====================================================
 // 生成処理
 //=====================================================
-CBox *CBox::Create(void)
+CBox *CBox::Create(TYPE type)
 {
-	CBox *pItem = nullptr;
+	CBox *pBox = nullptr;
 
-	if (pItem == nullptr)
+	if (pBox == nullptr)
 	{
-		pItem = new CBox;
+		pBox = new CBox;
 
-		if (pItem != nullptr)
+		if (pBox != nullptr)
 		{
+			pBox->m_type = type;
+
 			// 初期化
-			pItem->Init();
+			pBox->Init();
 		}
 	}
 
-	return pItem;
+	return pBox;
 }
 
 //=====================================================
@@ -69,9 +77,14 @@ HRESULT CBox::Init(void)
 	// 継承クラスの初期化
 	CObjectX::Init();
 
+	// モデルの読込
+	int nIdx = CModel::Load((char*)MODEL_PATH);
+	SetIdxModel(nIdx);
+	BindModel(nIdx);
+
 	if (m_pCollisionSphere == nullptr)
 	{// 当たり判定の生成
-		m_pCollisionSphere = CCollisionSphere::Create(CCollision::TAG_ITEM, CCollision::TYPE_SPHERE, this);
+		m_pCollisionSphere = CCollisionSphere::Create(CCollision::TAG_BOX, CCollision::TYPE_SPHERE, this);
 
 		if (m_pCollisionSphere != nullptr)
 		{
@@ -133,6 +146,38 @@ void CBox::Update(void)
 
 		m_pCollisionSphere->SetPosition(pos);
 	}
+}
+
+//=====================================================
+// ヒット処理
+//=====================================================
+void CBox::Hit(float fDamage)
+{
+	D3DXVECTOR3 pos = GetPosition();
+
+	// 破片の放出
+	CDebrisSpawner::Create(pos,CDebrisSpawner::TYPE::TYPE_WALL);
+
+	switch (m_type)
+	{
+	case CBox::TYPE_REPAIR:
+	{
+		CItemRepair *pRepair = CItemRepair::Create();
+
+		if (pRepair != nullptr)
+		{
+			pRepair->SetPosition(pos);
+		}
+	}
+		break;
+	case CBox::TYPE_RANDOM:
+		break;
+	default:
+		assert(("木箱の種類に不正な値が入ってます", false));
+		break;
+	}
+
+	Uninit();
 }
 
 //=====================================================

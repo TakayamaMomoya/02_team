@@ -1191,14 +1191,27 @@ void CPlayer::ManageAttack(void)
 #ifdef _DEBUG
 				CEffect3D::Create(pos, m_info.pAttackInfo[i].fRadius, 10, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 #endif
-				// 命中したかの判定
+				// 敵との判定
 				bHit = m_info.pClsnAttack->SphereCollision(CCollision::TAG_ENEMY);
+
+				// 木箱との判定
+				bHit = m_info.pClsnAttack->SphereCollision(CCollision::TAG_BOX);
 
 				// 命中したオブジェクトの取得
 				CObject *pObj = m_info.pClsnAttack->GetOther();
 
 				if (bHit == true && pObj != nullptr)
-				{// 命中時のヒット処理
+				{// 敵のヒット処理
+					pObj->Hit(5.0f);
+				}
+
+				// 木箱との判定
+				bHit = m_info.pClsnAttack->SphereCollision(CCollision::TAG_BOX);
+
+				pObj = m_info.pClsnAttack->GetOther();
+
+				if (bHit == true && pObj != nullptr)
+				{// 木箱のヒット処理
 					pObj->Hit(5.0f);
 				}
 			}

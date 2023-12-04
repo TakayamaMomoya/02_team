@@ -25,20 +25,29 @@ class CCollisionCube;
 class CBox : public CObjectX
 {
 public:
+	enum TYPE
+	{
+		TYPE_NONE = 0,	// 何でもない状態
+		TYPE_REPAIR,	// 修理アイテムが出てくる
+		TYPE_RANDOM,	// ランダムに物が出てくる
+	};
+
 	CBox(int nPriority = 3);	// コンストラクタ
 	~CBox();	// デストラクタ
 
-	static CBox *Create(void);
+	static CBox *Create(TYPE type = TYPE_RANDOM);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void Hit(float fDamage);
 	CCollisionSphere *GetCollisionSphere(void) { return m_pCollisionSphere; }
 	CCollisionCube *GetCollisionCube(void) { return m_pCollisionCube; }
 
 private:
 	CCollisionSphere *m_pCollisionSphere;	// 当たり判定
 	CCollisionCube *m_pCollisionCube;	// 矩形の当たり判定
+	TYPE m_type;	// 種類
 };
 
 #endif

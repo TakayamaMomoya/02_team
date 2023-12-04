@@ -36,6 +36,7 @@
 #include "renderer.h"
 #include "animEffect3D.h"
 #include "pause.h"
+#include "box.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
@@ -137,6 +138,8 @@ HRESULT CGame::Init(void)
 	{
 		pRenderer->EnableFog(true);
 	}
+
+	CBox::Create(CBox::TYPE::TYPE_REPAIR);
 
 	return S_OK;
 }
