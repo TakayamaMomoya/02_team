@@ -48,11 +48,6 @@ HRESULT CDebrisSpawner::Init(void)
 {
 	Load();
 
-	//if (m_type == CDebrisSpawner::TYPE_WALL)
-	//{
-	//	m_apDebris[m_type]->
-	//}
-
 	return S_OK;
 }
 
@@ -225,6 +220,13 @@ void CDebrisSpawner::Load(void)
 					if (strcmp(cTemp, "END_DEBRISSET") == 0)
 					{// パーティクル情報終了条件
 						break;
+					}
+
+					if (strcmp(cTemp, "OBJ_TYPE") == 0)
+					{// パーティクル寿命取得
+						(void)fscanf(pFile, "%s", &cTemp[0]);
+
+						(void)fscanf(pFile, "%d", &pInfo->nObjType);
 					}
 
 					if (strcmp(cTemp, "LIFE_DEBRISSPAWNER") == 0)

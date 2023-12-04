@@ -20,13 +20,13 @@ class CDebrisSpawner : public CObject
 {
 public:
 	// 破片の種類
-	typedef enum
+	enum TYPE
 	{
 		TYPE_NONE = 0,	// 何でもない
 		TYPE_WALL,	// 壁
 		TYPE_SOIL,	// 土
 		TYPE_MAX
-	}TYPE;
+	};
 
 	CDebrisSpawner(int nPriority = 3);	// コンストラクタ
 	~CDebrisSpawner();	// デストラクタ	
@@ -43,6 +43,7 @@ public:
 private:
 	typedef struct
 	{// パーティクル情報
+		TYPE nObjType;	// オブジェクトの種類
 		int nLife;	// 寿命
 		int nLifeDebris;	// 破片の寿命
 		int nNumDebris;	// 破片の数

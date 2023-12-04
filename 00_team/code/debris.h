@@ -37,6 +37,13 @@ private:
 		STATE_MAX
 	};
 
+	enum TYPE
+	{
+		TYPE_WALL = 0,	// ï«
+		TYPE_SOIL,	// ìy
+		TYPE_MAX
+	};
+
 	void Shrink(void);
 
 	D3DXVECTOR3 m_rotVelocity;	// âÒì]ë¨ìx
@@ -45,6 +52,7 @@ private:
 	float m_fGravity;	// èdóÕ
 	bool m_bBounce;
 	STATE m_state;	// èÛë‘
+	TYPE m_type;	// 
 };
 
 #endif
