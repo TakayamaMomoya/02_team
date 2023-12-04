@@ -168,6 +168,7 @@
     </ClCompile>
     <ClCompile Include="code\fan2D.cpp" />
     <ClCompile Include="code\fan3D.cpp" />
+    <ClCompile Include="code\pause.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -310,5 +311,6 @@
     </ClInclude>
     <ClInclude Include="code\fan2D.h" />
     <ClInclude Include="code\fan3D.h" />
+    <ClInclude Include="code\pause.h" />
   </ItemGroup>
 </Project>
