@@ -93,6 +93,8 @@ namespace
 	const D3DXVECTOR3 STATE_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.85f, 0.0f);	// スタート表示の位置
 	const float START_WIDTH = 200.0f;	// スタート表示の幅
 	const float START_HEIGHT = 50.0f;	// スタート表示の高さ
+	const float ADD_WIDTH = 16.0f;		// 幅の拡大化
+	const float ADD_HEIGHT = 10.0f;		// 高さの拡大化  
 	const char* START_PATH = "data\\TEXTURE\\UI\\gamestart.png";	// スタート表示のパス
 
 	const int FADE_COUNT = 120;			// フェードまでの時間
@@ -417,8 +419,8 @@ void CTitle::ManageStart(void)
 		}
 
 		// サイズの肥大化
-		m_fSizeX += 16.0f;
-		m_fSizeY += 10.0f;
+		m_fSizeX += ADD_WIDTH;
+		m_fSizeY += ADD_HEIGHT;
 
 		// 設定処理
 		m_pStart->SetCol(colStart);
