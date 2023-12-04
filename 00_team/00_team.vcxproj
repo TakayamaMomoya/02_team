@@ -74,6 +74,7 @@
     <ClCompile Include="code\orbit.cpp" />
     <ClCompile Include="code\particle.cpp" />
     <ClCompile Include="code\parts.cpp" />
+    <ClCompile Include="code\pause.cpp" />
     <ClCompile Include="code\player.cpp" />
     <ClCompile Include="code\playerManager.cpp" />
     <ClCompile Include="code\ranking.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="code\orbit.h" />
     <ClInclude Include="code\particle.h" />
     <ClInclude Include="code\parts.h" />
+    <ClInclude Include="code\pause.h" />
     <ClInclude Include="code\player.h" />
     <ClInclude Include="code\playerManager.h" />
     <ClInclude Include="code\ranking.h" />

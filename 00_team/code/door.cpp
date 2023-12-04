@@ -210,6 +210,7 @@ void CDoor::proceed(void)
 		D3DXVECTOR3 pos = GetPosition();
 
 		pos.y += 150.0f;
+		pos.x += 50.0f;
 
 		m_info.pGauge = CFan3D::Create();
 		m_info.pGauge->SetPosition(pos);
