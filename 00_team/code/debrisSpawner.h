@@ -43,7 +43,7 @@ public:
 private:
 	typedef struct
 	{// パーティクル情報
-		TYPE nObjType;	// オブジェクトの種類
+		int nModelIdx;	// モデルの種類
 		int nLife;	// 寿命
 		int nLifeDebris;	// 破片の寿命
 		int nNumDebris;	// 破片の数
@@ -64,6 +64,7 @@ private:
 	D3DXVECTOR3* m_pPosOwner;	// 持ち主の位置
 	D3DXVECTOR3 m_rot;	// 向き
 	int m_nLife;	// 寿命
+	int m_ModelIdx;
 	static PARTICLE_INFO* m_apDebris[TYPE_MAX + 1];
 	TYPE m_type; // 種類
 	int m_nPriorityDebris;

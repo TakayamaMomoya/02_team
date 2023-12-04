@@ -53,7 +53,8 @@ namespace
 
 	const D3DXVECTOR3 LEAF_POS({ -150.0f, 20.0f, -430.0f });	// ポテトの葉の位置
 
-	const float SPOWN_HEIGHT(-80.0f);	//プレイヤー出現の高さ(旅出すためマイナス値)
+	const D3DXVECTOR3 SPOWN_POS({ LEAF_POS.x, -80.0f, LEAF_POS.z });	//プレイヤー出現の高さ(旅出すためマイナス値)
+
 	const float ADULTWALL_POS_Z(-470.0f);
 	const float GRAVITY(5.0f);	//重力
 
@@ -126,7 +127,7 @@ HRESULT CSelect::Init(void)
 
 	if (pObject != nullptr)
 	{
-		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood001.jpg");
+		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\MATERIAL\\DirtyConcrete_00.jpg");
 		pObject->SetIdxTexture(nIdx);
 		pObject->SetTex(D3DXVECTOR2(10.0f, 10.0f), D3DXVECTOR2(0.0f, 0.0f));
 	}
@@ -415,10 +416,10 @@ void CSelect::Update(void)
 		pCamera->Control();
 	}
 
-	//if (pKeyboard->GetTrigger(DIK_RETURN))
-	//{
-	//	CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	//}
+	if (pKeyboard->GetTrigger(DIK_RETURN))
+	{
+		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	}
 
 	CDebugProc::GetInstance()->Print("\n参加人数[%d]\n", nJoinPlayer);
 #endif
@@ -547,9 +548,10 @@ void CSelect::EntryInput(int nPlayer)
 
 		// 位置をUIの場所へ
 		m_apPlayerData[nPlayer].pPlayer->SetPosition(D3DXVECTOR3(
-			m_aJoinUiData[nPlayer].pUi2D->GetPosition().x,
-			SPOWN_HEIGHT,
-			m_aJoinUiData[nPlayer].pUi2D->GetPosition().z));
+			SPOWN_POS.x + (nPlayer * UI_SPACE.x),
+			SPOWN_POS.y,
+			SPOWN_POS.z));
+		
 
 		CDebrisSpawner::Create(D3DXVECTOR3(
 			m_aJoinUiData[nPlayer].pUi2D->GetPosition().x,
