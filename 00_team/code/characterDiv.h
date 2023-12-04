@@ -58,7 +58,6 @@ public:
 	int GetMotion(int nNum);
 
 private:
-
 	struct SInfo
 	{
 		D3DXVECTOR3 pos;	// ˆÊ’u
