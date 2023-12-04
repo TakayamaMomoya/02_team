@@ -139,8 +139,6 @@ HRESULT CGame::Init(void)
 		pRenderer->EnableFog(true);
 	}
 
-	CBox::Create(CBox::TYPE::TYPE_REPAIR);
-
 	return S_OK;
 }
 

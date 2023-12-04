@@ -59,7 +59,7 @@ CBox *CBox::Create(TYPE type)
 
 		if (pBox != nullptr)
 		{
-			pBox->m_type = type;
+			pBox->SetType(type);
 
 			// 初期化
 			pBox->Init();
@@ -173,11 +173,26 @@ void CBox::Hit(float fDamage)
 	case CBox::TYPE_RANDOM:
 		break;
 	default:
-		assert(("木箱の種類に不正な値が入ってます", false));
+		assert(("木箱の種類に不正な値が入っているか設定していない処理を呼んでいます", false));
 		break;
 	}
 
 	Uninit();
+}
+
+//=====================================================
+// 種類の設定
+//=====================================================
+void CBox::SetType(TYPE type)
+{
+	if (type <= TYPE_NONE || type >= TYPE_MAX)
+	{
+		assert(("木箱の種類に不正な値をいれています", false));
+	}
+	else
+	{
+		m_type = type;
+	}
 }
 
 //=====================================================

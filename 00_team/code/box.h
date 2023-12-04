@@ -30,6 +30,7 @@ public:
 		TYPE_NONE = 0,	// 何でもない状態
 		TYPE_REPAIR,	// 修理アイテムが出てくる
 		TYPE_RANDOM,	// ランダムに物が出てくる
+		TYPE_MAX
 	};
 
 	CBox(int nPriority = 3);	// コンストラクタ
@@ -41,6 +42,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	void Hit(float fDamage);
+	void SetType(TYPE type);
 	CCollisionSphere *GetCollisionSphere(void) { return m_pCollisionSphere; }
 	CCollisionCube *GetCollisionCube(void) { return m_pCollisionCube; }
 
