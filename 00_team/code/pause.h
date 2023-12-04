@@ -39,7 +39,6 @@ private:
 	{// 項目の種類
 		MENU_RESUME = 0,	// 再開
 		MENU_RESTART,	// リトライ
-		MENU_CHECKPOINT,	// チェックポイントから再開
 		MENU_QUIT,	// 終了
 		MENU_MAX
 	};
