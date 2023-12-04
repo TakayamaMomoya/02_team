@@ -117,7 +117,7 @@ HRESULT CSelect::Init(void)
 	CPlayerManager::Create();
 
 	// エディットの生成
-	//CEdit::Create();
+	CEdit::Create();
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
