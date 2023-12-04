@@ -36,6 +36,15 @@ public:
 		float fInitialLife;	// 初期体力
 		float fTimeDamage;	// ダメージ状態の秒数
 	};
+	struct AttackInfo
+	{// 攻撃の情報
+		int nIdxMotion;	// モーション番号
+		int nIdxParent;	// 親パーツ番号
+		D3DXVECTOR3 pos;	// オフセット位置
+		int nKey;	// キー番号
+		int nFrame;	// 発生するフレーム
+		float fRadius;	// 半径
+	};
 
 	CPlayer(int nPriority = 4);	// コンストラクタ
 	~CPlayer();	// デストラクタ
@@ -112,15 +121,6 @@ private:
 		MOTION_ITEM_WALK_LEFT,		// 物持ち左歩き
 
 		MOTION_MAX
-	};
-	struct AttackInfo
-	{// 攻撃の情報
-		int nIdxMotion;	// モーション番号
-		int nIdxParent;	// 親パーツ番号
-		D3DXVECTOR3 pos;	// オフセット位置
-		int nKey;	// キー番号
-		int nFrame;	// 発生するフレーム
-		float fRadius;	// 半径
 	};
 	struct SMotionInfo
 	{

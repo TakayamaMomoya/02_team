@@ -113,6 +113,14 @@ HRESULT CPlayer::Init(void)
 		SParam param = pPlayerManager->GetPlayerParam();
 
 		m_param = param;
+
+		int nNumAttack = pPlayerManager->GetNumAttack();
+
+		m_info.nNumAttack = nNumAttack;
+
+		AttackInfo *pAttackInfo = pPlayerManager->GetAttackInfo();
+
+		m_info.pAttackInfo = pAttackInfo;
 	}
 	else
 	{
@@ -334,6 +342,9 @@ void CPlayer::Update(void)
 		m_info.pArrow->SetPosition(posArrow);
 		m_info.pArrow->SetRot(rot);
 	}
+
+	// UŒ‚”»’èŠÇ—
+	ManageAttack();
 }
 
 //=====================================================
@@ -1160,7 +1171,7 @@ void CPlayer::ManageAttack(void)
 			{// “–‚½‚è”»’è‚ÌÝ’è
 				bool bHit = false;
 				D3DXMATRIX mtx;
-				D3DXMATRIX mtxPart = *pBody->GetParts(CCharacterDiv::PARTS_UPPER,HAND_PARTS_NUM)->pParts->GetMatrix();
+				D3DXMATRIX mtxPart = *pBody->GetMatrix();
 
 				universal::SetOffSet(&mtx, mtxPart, m_info.pAttackInfo[i].pos);
 

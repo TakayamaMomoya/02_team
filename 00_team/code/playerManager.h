@@ -33,6 +33,8 @@ public:
 	static CPlayerManager *GetInstance(void) { return m_pPlayerManager; }
 	int GetNumPlayer(void) { return m_nNumPlayer; }
 	CPlayer::SParam GetPlayerParam(void) { return m_paramPlayer; }
+	int GetNumAttack(void) { return m_nNumAttack; }
+	CPlayer::AttackInfo *GetAttackInfo(void) { return m_pInfoAttack; }
 
 private:
 	void LoadParamPlayer(void);
@@ -42,6 +44,8 @@ private:
 	CPlayer *m_apPlayer[NUM_PLAYER];	// プレイヤーの配列
 	static CPlayerManager *m_pPlayerManager;	// 自身のポインタ
 	CPlayer::SParam m_paramPlayer;	// 保存用プレイヤーパラメーター
+	CPlayer::AttackInfo *m_pInfoAttack;	// 攻撃情報のポインタ
+	int m_nNumAttack;	// 攻撃判定の数
 };
 
 #endif
