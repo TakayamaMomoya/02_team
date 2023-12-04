@@ -1251,7 +1251,7 @@ MOTIONSET
 	KEYSET
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 1.50 -4.40 5.60
+			POS = 0.0 0.0 0.0
 			ROT = 0.75 0.66 0.00
 		END_KEY
 
@@ -1294,7 +1294,7 @@ MOTIONSET
 	KEYSET
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 -3.80 -50.10
+			POS = 0.00 0.0 0.0
 			ROT = -0.57 -0.19 0.00
 		END_KEY
 
