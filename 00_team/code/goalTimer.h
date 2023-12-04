@@ -46,7 +46,6 @@ private:
 	CNumber *m_pObjDecimal;	// 小数点以下表示のポインタ
 	CUI *m_pPoint;	// 小数点
 	float m_fSecond;	// 現在の時間(秒)
-	int m_nIdxTexture;	// テクスチャ番号
 	static CGoalTimer *m_pGoalTimer;	// 自身のポインタ
 	bool m_bStop;	// 止めるかどうか
 };

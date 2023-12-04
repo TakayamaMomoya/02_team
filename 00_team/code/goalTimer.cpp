@@ -15,12 +15,23 @@
 #include "debugproc.h"
 #include "goal.h"
 #include "UI.h"
+#include "texture.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define NUM_PLACE	(2)	// 桁数
-#define INITIAL_TIME	(10.0f)	// 初期の時間
+namespace
+{
+	const int NUM_PLACE = 2;	// 桁数
+	const float INITIAL_TIME = 10.0f;	// 初期の時間
+	const float SIZE_POINT = 10.0f;	// 小数点のサイズ
+	const float WIDTH_NUMBER = 20.0f;	// 数字の幅
+	const float HEIGHT_NUMBER = 50.0f;	// 数字の高さ
+	const D3DXVECTOR3 POS_SECOND = { 620.0f, 80.0f, 0.0f };	// 秒数の位置
+	const D3DXVECTOR3 POS_DECIMAL = { 720.0f, 80.0f, 0.0f };	// 秒数の位置
+	const D3DXVECTOR3 POS_POINT = { 690.0f, 120.0f, 0.0f };	// 秒数の位置
+	const char* POINT_TEX = "data\\TEXTURE\\UI\\point.png";	// 小数点のテクスチャパス
+}
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -33,6 +44,8 @@ CGoalTimer *CGoalTimer::m_pGoalTimer = nullptr;	// 自身のポインタ
 CGoalTimer::CGoalTimer()
 {
 	m_pObjSecond = nullptr;
+	m_pObjDecimal = nullptr;
+	m_pPoint = nullptr;
 	m_bStop = false;
 	m_fSecond = 0;
 }
@@ -58,8 +71,8 @@ HRESULT CGoalTimer::Init(void)
 
 		if (m_pObjSecond != nullptr)
 		{
-			m_pObjSecond->SetPosition(D3DXVECTOR3(620.0f, 80.0f, 0.0f));
-			m_pObjSecond->SetSizeAll(20.0f, 50.0f);
+			m_pObjSecond->SetPosition(POS_SECOND);
+			m_pObjSecond->SetSizeAll(WIDTH_NUMBER, HEIGHT_NUMBER);
 		}
 	}
 
@@ -69,8 +82,23 @@ HRESULT CGoalTimer::Init(void)
 
 		if (m_pObjDecimal != nullptr)
 		{
-			m_pObjDecimal->SetPosition(D3DXVECTOR3(720.0f, 80.0f, 0.0f));
-			m_pObjDecimal->SetSizeAll(20.0f, 50.0f);
+			m_pObjDecimal->SetPosition(POS_DECIMAL);
+			m_pObjDecimal->SetSizeAll(WIDTH_NUMBER, HEIGHT_NUMBER);
+		}
+	}
+
+	if (m_pPoint == nullptr)
+	{
+		m_pPoint = CUI::Create();
+
+		if (m_pPoint != nullptr)
+		{
+			int nIdx = CTexture::GetInstance()->Regist(POINT_TEX);
+			m_pPoint->SetIdxTexture(nIdx);
+
+			m_pPoint->SetPosition(POS_POINT);
+			m_pPoint->SetSize(SIZE_POINT, SIZE_POINT);
+			m_pPoint->SetVtx();
 		}
 	}
 
