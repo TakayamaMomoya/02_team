@@ -172,6 +172,7 @@
     <ClCompile Include="code\goalTimer.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="code\gameover.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -318,5 +319,6 @@
     <ClInclude Include="code\goalTimer.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="code\gameover.h" />
   </ItemGroup>
 </Project>
