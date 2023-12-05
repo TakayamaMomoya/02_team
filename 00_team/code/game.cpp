@@ -37,6 +37,7 @@
 #include "animEffect3D.h"
 #include "pause.h"
 #include "box.h"
+#include "gameover.h"
 
 //*****************************************************
 // マクロ定義
@@ -161,6 +162,14 @@ void CGame::Uninit(void)
 		pPlayerManger->Uninit();
 	}
 
+	// ゲームオーバーの終了
+	CGameover* pGameover = CGameover::GetInstance();
+
+	if (pGameover != nullptr)
+	{
+		pGameover->Uninit();
+	}
+
 	m_pGame = nullptr;
 }
 
@@ -221,7 +230,9 @@ void CGame::Update(void)
 
 			if (pFade != nullptr)
 			{
-				pFade->SetFade(CScene::MODE_RANKING);
+				CGameover::Create();
+				m_bGameover = true;
+				//pFade->SetFade(CScene::MODE_RANKING);
 			}
 		}
 	}

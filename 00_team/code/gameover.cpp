@@ -66,8 +66,9 @@ namespace
 }
 
 //===============================================
-// 静的メンバ変数
+// 静的メンバ変数宣言
 //===============================================
+CGameover* CGameover::m_pGameover = nullptr;	// 自身のポインタ
 
 //===============================================
 // コンストラクタ
@@ -76,6 +77,7 @@ CGameover::CGameover()
 {
 	// 値のクリア
 	ZeroMemory(&m_apModelPlayer[0], sizeof(m_apModelPlayer));
+	ZeroMemory(&m_apModelEnemy[0], sizeof(m_apModelEnemy));
 }
 
 //===============================================
@@ -91,22 +93,20 @@ CGameover::~CGameover()
 //===============================================
 CGameover *CGameover::Create(int nPriority)
 {
-	CGameover *pGameover;
-
 	// ゲームオーバーの生成
-	pGameover = new CGameover;
+	m_pGameover = new CGameover;
 
-	if (pGameover != nullptr)
+	if (m_pGameover != nullptr)
 	{
 		// 初期化処理
-		pGameover->Init();
+		m_pGameover->Init();
 	}
-	else if(pGameover == nullptr)
+	else if(m_pGameover == nullptr)
 	{
 		return nullptr;
 	}
 
-	return pGameover;
+	return m_pGameover;
 }
 
 //===============================================
@@ -189,7 +189,9 @@ HRESULT CGameover::Init()
 //===============================================
 void CGameover::Uninit(void)
 {
-	
+	m_pGameover = nullptr;
+
+	delete this;
 }
 
 //===============================================
@@ -222,14 +224,6 @@ void CGameover::Update(void)
 // 描画処理
 //===============================================
 void CGameover::Draw(void)
-{
-	
-}
-
-//===============================================
-// 設定処理
-//===============================================
-void CGameover::Set(const D3DXVECTOR3 pos, const bool bMove)
 {
 	
 }
