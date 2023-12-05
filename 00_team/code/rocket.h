@@ -45,6 +45,7 @@ public:
 	int GetProgress(void) { return m_nProgress; }
 	void AddProgress(int nProgress);
 	void SetState(STATE state) { m_state = state; }
+	float GetTime(void) { return m_fTimeRapir; }
 
 private:
 	void Load(void);
@@ -56,6 +57,7 @@ private:
 	float m_fRadius;	// ”»’è‚Ì”¼Œa
 	float m_fSpeed;	// ã¸‘¬“x
 	float m_fDeleteHeight;	// íœ‚·‚é‚‚³
+	float m_fTimeRapir;	// C—‚É‚©‚©‚éŠÔ
 	int m_nProgress;	// isó‹µ
 	STATE m_state;	// ó‘Ô
 	CCollisionSphere *m_pCollisionRocket;	// ƒS[ƒ‹”»’è

@@ -36,9 +36,12 @@
 #include "weaponManager.h"
 #include "edit.h"
 #include "animEffect3D.h"
+#include "particle.h"
+#include "number.h"
 #include "number3D.h"
 #include <stdio.h>
-
+#include "number3D.h"
+#include "UIManager.h"
 #include "number3D.h"
 #include "UIManager.h"
 
@@ -57,7 +60,6 @@ namespace
 	const D3DXVECTOR3 SPOWN_POS({ LEAF_POS.x, -80.0f, LEAF_POS.z });	//プレイヤー出現の高さ(旅出すためマイナス値)
 
 	const float ADULTWALL_POS_Z(-470.0f);
-	const float GRAVITY(5.0f);	//重力
 
 	const D3DXVECTOR3 CONTAINER_POS({ -150.0, 0.0, -100.0f });	// コンテナの位置
 	const D3DXVECTOR3 CONTAINER_SPACE({ 400.0, 0.0, -150.0f });	// コンテナ間の広さ
@@ -341,8 +343,6 @@ void CSelect::Update(void)
 	// シーンの更新
 	CScene::Update();
 
-	//CFade* pFade = CFade::GetInstance();
-
 	if (m_selectState == SELECT_STATE::STATE_BEFORE)
 	{
 		if (pKeyboard != nullptr && pMouse != nullptr)
@@ -431,7 +431,9 @@ void CSelect::Update(void)
 
 	if (pKeyboard->GetTrigger(DIK_RETURN))
 	{
-		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		//CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		CParticle::Create({ 0.0f, 300.0f, -400.0f }, CParticle::TYPE::TYPE_INJECTION_FIRE);
+		CParticle::Create({ 0.0f, 300.0f, -400.0f }, CParticle::TYPE::TYPE_INJECTION_SMOKE);
 	}
 
 	CDebugProc::GetInstance()->Print("\n参加人数[%d]\n", nJoinPlayer);
@@ -717,9 +719,12 @@ void CSelect::Rift(void)
 		for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 		{
 			if (m_abEntry[nCnt] == true)
-			{
+			{// リフトが上がる処理
+
 				D3DXVECTOR3 pos = m_apPlayerData[nCnt].pPlayer->GetPosition();
 				D3DXVECTOR3 move = m_apPlayerData[nCnt].pPlayer->GetMove();
+
+				m_apPlayerData[nCnt].pPlayer->SetMove({ move.x, 0.0f, move.z });
 
 				pos = m_apPlayerData[nCnt].pPlayer->GetPosition();
 				pos.y += LIFT_UP;
@@ -730,7 +735,8 @@ void CSelect::Rift(void)
 		CFade* pFade = CFade::GetInstance();
 
 		if (rift.y > GO_GAME_POSy)
-		{
+		{// リフトが一定の高さに行くとゲームへ
+
 			if (pFade != nullptr && m_abEntry[0] != false)
 			{
 				pFade->SetFade(CScene::MODE_GAME);

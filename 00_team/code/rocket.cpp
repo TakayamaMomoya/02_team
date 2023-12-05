@@ -18,6 +18,7 @@
 #include "result.h"
 #include "goal.h"
 #include "inputkeyboard.h"
+#include "particle.h"
 
 //*****************************************************
 // 定数定義
@@ -43,6 +44,7 @@ CRocket::CRocket(int nPriority) : CObjectX(nPriority)
 	m_fSpeed = 0.0f;
 	m_fDeleteHeight = 0.0f;
 	m_nProgress = 0;
+	m_fTimeRapir = 0.0f;
 	m_state = STATE_NONE;
 	m_pCollisionRocket = nullptr;
 }
@@ -211,6 +213,13 @@ void CRocket::ApplyInfo(FILE* pFile, char* pTemp)
 		(void)fscanf(pFile, "%f", &m_fSpeed);
 	}
 
+	if (strcmp(pTemp, "TIME_REPAIR") == 0)
+	{// 修理にかかる時間
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_fTimeRapir);
+	}
+
 	if (strcmp(pTemp, "DELETE_HEIGHT") == 0)
 	{// 削除する高さ
 		(void)fscanf(pFile, "%s", pTemp);
@@ -247,6 +256,8 @@ void CRocket::Update(void)
 	if (m_state == STATE::STATE_ESCAPE)
 	{// 脱出状態の更新
 		UpdateEscape();
+		CParticle::Create({ GetPosition().x, GetPosition().y - 30.0f, GetPosition().z }, CParticle::TYPE::TYPE_INJECTION_FIRE);
+		CParticle::Create({ GetPosition().x, GetPosition().y - 120.0f, GetPosition().z }, CParticle::TYPE::TYPE_INJECTION_SMOKE);
 	}
 
 #ifdef _DEBUG

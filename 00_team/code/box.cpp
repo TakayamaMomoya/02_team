@@ -25,7 +25,7 @@
 //*****************************************************
 namespace 
 {
-	const char* MODEL_PATH = "data\\MODEL\\item\\repairKit.x";	// モデルのパス
+	const char* MODEL_PATH = "data\\MODEL\\item\\WoodBox.x";	// モデルのパス
 }
 
 //=====================================================
@@ -145,6 +145,13 @@ void CBox::Update(void)
 		D3DXVECTOR3 pos = GetPosition();
 
 		m_pCollisionSphere->SetPosition(pos);
+	}
+
+	if (m_pCollisionCube != nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+
+		m_pCollisionCube->SetPosition(pos);
 	}
 }
 

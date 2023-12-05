@@ -23,6 +23,7 @@
 #include "effect3D.h"
 #include "motionDiv.h"
 #include "enemyManager.h"
+#include "sound.h"
 #include "UIManager.h"
 
 //*****************************************************
@@ -482,6 +483,7 @@ void CPlayer::InputMove(void)
 void CPlayer::InputAttack(void)
 {
 	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	CSound* pSound = CSound::GetInstance();
 
 	if (pJoyPad == nullptr)
 	{
@@ -491,18 +493,19 @@ void CPlayer::InputAttack(void)
 	// ÉpÉìÉ`ÇÃì¸óÕ
 	m_info.motionInfo.bPunch = pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_LB, GetIDJoypad());
 
-	if (m_info.pWeapon != nullptr)
-	{// ïêäÌÇÃçUåÇ
-		bool bEnable = m_info.pWeapon->IsEnable();
+	int nMotionUpper = GetMotion(CCharacterDiv::PARTS_UPPER);
 
-		if (bEnable)
-		{
-			m_info.pWeapon->Attack();
+	if (nMotionUpper != MOTION_PUNCH)
+	{
+		if (m_info.pWeapon != nullptr)
+		{// ïêäÌÇÃçUåÇ
+			bool bEnable = m_info.pWeapon->IsEnable();
+
+			if (bEnable)
+			{
+				m_info.pWeapon->Attack();
+			}
 		}
-	}
-	else
-	{// ëféËÇÃèÍçáÇÃèàóù
-		
 	}
 }
 
@@ -686,7 +689,7 @@ void CPlayer::ManageMotion(void)
 
 	// à⁄ìÆó 
 	D3DXVECTOR3 move = GetMove();
-	float fSpeed = D3DXVec3Length(&move);
+	float fSpeed = sqrtf(move.x * move.x + move.z * move.z);
 
 	// å¸Ç´
 	float fRotPlayer = GetRot().y;
@@ -1080,6 +1083,13 @@ void CPlayer::ManageMotion(void)
 				}
 			}
 		}
+		else if (m_info.motionInfo.bPunch || (nMotionUpper == MOTION_PUNCH && bFinish == false))
+		{
+			if (nMotionUpper != MOTION_PUNCH)
+			{
+				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_PUNCH);
+			}
+		}
 		// èäóLïêäÌ
 		else if (m_info.pWeapon != nullptr)
 		{
@@ -1123,13 +1133,6 @@ void CPlayer::ManageMotion(void)
 				}
 
 				break;
-			}
-		}
-		else if ((m_info.motionInfo.bPunch || nMotionUpper == MOTION_PUNCH) && bFinish == false)
-		{
-			if (nMotionUpper != MOTION_PUNCH)
-			{
-				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_PUNCH);
 			}
 		}
 		// âΩÇ‡Ç»Çµ

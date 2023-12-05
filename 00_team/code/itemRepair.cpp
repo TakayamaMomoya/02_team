@@ -17,8 +17,19 @@
 #include "collision.h"
 #include "rocket.h"
 #include "sound.h"
-
+#include "manager.h"
+#include "fan3D.h"
 #include "motionDiv.h"
+#include "billboard.h"
+#include "texture.h"
+
+//*****************************************************
+// 定数定義
+//*****************************************************
+namespace
+{
+const float SIZE_INTERACT = 30.0f;	// インタラクト表示のサイズ
+}
 
 //=====================================================
 // コンストラクタ
@@ -26,6 +37,10 @@
 CItemRepair::CItemRepair(int nPriority) : CGimmick(nPriority)
 {
 	m_pPlayer = nullptr;
+	m_pGauge = nullptr;
+	m_pInteract = nullptr;
+	m_bInRocket = false;
+	m_fCntRepair = 0.0f;
 }
 
 //=====================================================
@@ -89,6 +104,18 @@ void CItemRepair::Uninit(void)
 {
 	m_pPlayer = nullptr;
 
+	if (m_pGauge != nullptr)
+	{
+		m_pGauge->Uninit();
+		m_pGauge = nullptr;
+	}
+
+	if (m_pInteract != nullptr)
+	{
+		m_pInteract->Uninit();
+		m_pInteract = nullptr;
+	}
+
 	// 継承クラスの終了
 	CGimmick::Uninit();
 }
@@ -100,7 +127,7 @@ void CItemRepair::Update(void)
 {
 	bool bRelease = false;
 
-	if (m_pPlayer != nullptr)
+	if (m_pPlayer != nullptr && m_bInRocket == false)
 	{
 		bRelease = m_pPlayer->InputInteract();
 
@@ -254,10 +281,36 @@ void CItemRepair::CollisionRocket(void)
 
 	if (pCollisionSphere != nullptr)
 	{
-		bool bHit = pCollisionSphere->SphereCollision(CCollision::TAG_ROCKET);
+		m_bInRocket = pCollisionSphere->SphereCollision(CCollision::TAG_ROCKET);
 
-		if (bHit)
+		if (m_bInRocket)
 		{
+			if (m_pInteract == nullptr)
+			{// インタラクト表示生成
+				D3DXVECTOR3 pos = GetPosition();
+
+				pos.y += 50.0f;
+
+				m_pInteract = CBillboard::Create(pos, SIZE_INTERACT, SIZE_INTERACT);
+
+				if (m_pInteract != nullptr)
+				{
+					int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\interact.png");
+					m_pInteract->SetIdxTexture(nIdx);
+					m_pInteract->SetZTest(true);
+				}
+			}
+
+			if (m_pInteract != nullptr)
+			{// インタラクト表示追従
+				D3DXVECTOR3 pos = GetPosition();
+
+				pos.y += 50.0f;
+
+				m_pInteract->SetPosition(pos);
+				m_pInteract->SetVtx();
+			}
+
 			//　サウンドインスタンスの取得
 			CSound* pSound = CSound::GetInstance();
 
@@ -266,24 +319,76 @@ void CItemRepair::CollisionRocket(void)
 				pSound->Play(pSound->LABEL_SE_REPAIR);
 			}
 
-			// ロケットの修理状況を加算
+			// ロケット修理タイマー加算
 			CRocket *pRocket = CRocket::GetInstance();
 
-			if (pRocket != nullptr)
+			if (pRocket != nullptr && m_pPlayer != nullptr)
 			{
-				pRocket->AddProgress(1);
+				bool bInteract = m_pPlayer->InputInteractPress();
+
+				if (bInteract)
+				{
+					float fTime = pRocket->GetTime();
+
+					if (m_pGauge == nullptr)
+					{// ゲージの生成
+						D3DXVECTOR3 pos = GetPosition();
+
+						pos.y += 150.0f;
+						pos.x += 50.0f;
+
+						m_pGauge = CFan3D::Create();
+						m_pGauge->SetPosition(pos);
+						m_pGauge->SetRadius(30.0f);
+						m_pGauge->EnableBillboard(true);
+						m_pGauge->EnableZtest(true);
+
+						m_pGauge->SetVtx();
+					}
+
+					if (m_pGauge != nullptr)
+					{// ゲージの角度設定
+						float fRate = m_fCntRepair / fTime;
+						m_pGauge->SetAngleMax(fRate);
+						m_pGauge->SetVtx();
+					}
+
+					// カウンターを加算
+					float fTick = CManager::GetTick();
+
+					m_fCntRepair += fTick;
+
+					if (fTime <= m_fCntRepair)
+					{
+						// 武器を有効化する
+						m_pPlayer->EnableWeapon(true);
+
+						// プレイヤーの修理アイテムポインタを初期化
+						m_pPlayer->ReleaseItemRepair();
+
+						// 修理進行
+						pRocket->AddProgress(1);
+
+						Uninit();
+					}
+				}
+				else
+				{
+					if (m_pGauge != nullptr)
+					{// ゲージの破棄
+						m_pGauge->Uninit();
+						m_pGauge = nullptr;
+					}
+				}
 			}
-
-			if (m_pPlayer != nullptr)
-			{
-				// 武器を有効化する
-				m_pPlayer->EnableWeapon(true);
-
-				// プレイヤーの修理アイテムポインタを初期化
-				m_pPlayer->ReleaseItemRepair();
+		}
+		else
+		{
+			if (m_pInteract != nullptr)
+			{// インタラクト表示削除
+				m_pInteract->Uninit();
+				m_pInteract = nullptr;
 			}
-
-			Uninit();
 		}
 	}
 }

@@ -46,6 +46,7 @@
     <ClCompile Include="code\fan2D.cpp" />
     <ClCompile Include="code\fan3D.cpp" />
     <ClCompile Include="code\game.cpp" />
+    <ClCompile Include="code\gameover.cpp" />
     <ClCompile Include="code\gimmickManager.cpp" />
     <ClCompile Include="code\goal.cpp" />
     <ClCompile Include="code\goalTimer.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="code\fan2D.h" />
     <ClInclude Include="code\fan3D.h" />
     <ClInclude Include="code\game.h" />
+    <ClInclude Include="code\gameover.h" />
     <ClInclude Include="code\gimmickManager.h" />
     <ClInclude Include="code\goal.h" />
     <ClInclude Include="code\goalTimer.h" />
