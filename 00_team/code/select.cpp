@@ -60,7 +60,6 @@ namespace
 	const D3DXVECTOR3 SPOWN_POS({ LEAF_POS.x, -80.0f, LEAF_POS.z });	//プレイヤー出現の高さ(旅出すためマイナス値)
 
 	const float ADULTWALL_POS_Z(-470.0f);
-	const float GRAVITY(5.0f);	//重力
 
 	const D3DXVECTOR3 CONTAINER_POS({ -150.0, 0.0, -100.0f });	// コンテナの位置
 	const D3DXVECTOR3 CONTAINER_SPACE({ 400.0, 0.0, -150.0f });	// コンテナ間の広さ
@@ -720,9 +719,12 @@ void CSelect::Rift(void)
 		for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 		{
 			if (m_abEntry[nCnt] == true)
-			{
+			{// リフトが上がる処理
+
 				D3DXVECTOR3 pos = m_apPlayerData[nCnt].pPlayer->GetPosition();
 				D3DXVECTOR3 move = m_apPlayerData[nCnt].pPlayer->GetMove();
+
+				m_apPlayerData[nCnt].pPlayer->SetMove({ move.x, 0.0f, move.z });
 
 				pos = m_apPlayerData[nCnt].pPlayer->GetPosition();
 				pos.y += LIFT_UP;
@@ -730,15 +732,16 @@ void CSelect::Rift(void)
 			}
 		}
 
-		CFade* pFade = CFade::GetInstance();
+		//CFade* pFade = CFade::GetInstance();
 
-		if (rift.y > GO_GAME_POSy)
-		{
-			if (pFade != nullptr && m_abEntry[0] != false)
-			{
-				pFade->SetFade(CScene::MODE_GAME);
-			}
-		}
+		//if (rift.y > GO_GAME_POSy)
+		//{// リフトが一定の高さに行くとゲームへ
+
+		//	if (pFade != nullptr && m_abEntry[0] != false)
+		//	{
+		//		pFade->SetFade(CScene::MODE_GAME);
+		//	}
+		//}
 	}
 }
 
