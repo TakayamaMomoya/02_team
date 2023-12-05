@@ -29,6 +29,15 @@ class CArrow;
 class CPlayer : public CCharacterDiv
 {
 public:
+	enum STATE
+	{
+		STATE_NONE = 0,	// 何でもない状態
+		STATE_NORMAL,	// 通常状態
+		STATE_BLOW,	// 吹き飛ばされている状態
+		STATE_DAMAGE,	// ダメージ状態
+		STATE_DEATH,	// 死亡状態
+		STATE_MAX
+	};
 	struct SParam
 	{
 		float fSpeedMove;		// 移動速度
@@ -72,16 +81,9 @@ public:
 	bool InputInteract(void);
 	bool InputInteractPress(void);
 	void EnableWeapon(bool bEnable);
+	void SetState(STATE state) { m_info.state = state; }
 
 private:
-	enum STATE
-	{
-		STATE_NONE = 0,	// 何でもない状態
-		STATE_NORMAL,	// 通常状態
-		STATE_DAMAGE,	// ダメージ状態
-		STATE_DEATH,	// 死亡状態
-		STATE_MAX
-	};
 	enum MOTION
 	{
 		MOTION_NEUTRAL = 0,	// 待機
@@ -157,6 +159,7 @@ private:
 	void ManageMotion(void);
 	void ManageAttack(void);
 	void BlowEnemy(CObject *pObj);
+	void BlowPlayer(CObject *pObj);
 	void Debug(void);
 
 	SInfo m_info;	// 自身の情報

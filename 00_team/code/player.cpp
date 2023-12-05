@@ -23,7 +23,11 @@
 #include "effect3D.h"
 #include "motionDiv.h"
 #include "enemyManager.h"
+<<<<<<< HEAD
 #include "sound.h"
+=======
+#include "UIManager.h"
+>>>>>>> cfbb9e32df99aa416fed12d7bc5d9c317129bdae
 
 //*****************************************************
 // 定数定義
@@ -58,6 +62,8 @@ namespace
 	const float ARROW_POSY = 5.0f;	// 矢印の位置の高さ
 	const float ARROW_WIDTH = 30.0f;	// 矢印の幅
 	const float ARROW_HEIGHT = 50.0f;	// 矢印の高さ
+	const float GRAVITY = 1.58f;	// 重力
+	const float POW_PUNCH_UP = 15.0f;	// パンチで飛び上がるジャンプ量
 
 	const int HAND_PARTS_NUM = 6;				// 手の番号
 	const float MOTION_STICK_RUNAWAY = 0.1f;	// スティックの暴走判定
@@ -128,6 +134,19 @@ HRESULT CPlayer::Init(void)
 	{
 		assert(("プレイヤーパラメーターの取得に失敗",false));
 	}
+
+	// パラメーターの受け取り
+	CUIManager* pUIManager = CUIManager::GetInstance();
+
+	if (pUIManager != nullptr)
+	{
+		pUIManager->SetPlayer(m_info.nID);
+	}
+	else
+	{
+		assert(("UI管理（プレイヤー）の取得に失敗", false));
+	}
+
 
 	// 当たり判定の生成
 	if (m_info.pCollisionSphere == nullptr)
@@ -280,8 +299,41 @@ void CPlayer::Update(void)
 			Hit(5.0f);
 		}
 
+		if (m_info.pCollisionCube != nullptr)
+		{
+			D3DXVECTOR3 pos = GetPosition();
+			D3DXVECTOR3 posCollision = m_info.pCollisionCube->GetPosition();
+
+			// 判定の追従
+			m_info.pCollisionCube->SetPositionOld(posCollision);
+			m_info.pCollisionCube->SetPosition(pos);
+
+			// ブロックとの押し出し判定
+			m_info.pCollisionCube->CubeCollision(CCollision::TAG_BLOCK, &move);
+
+			pos = GetPosition();
+			D3DXVECTOR3 posOld = GetPositionOld();
+
+			if (pos.y <= 0.0f && posOld.y >= 0.0f)
+			{
+				pos.y = 0.0f;
+				move.y = 0.0f;
+
+				SetPosition(pos);
+
+				if (m_info.state == STATE_BLOW)
+				{
+					m_info.state = STATE_NORMAL;
+				}
+			}
+
+			SetMove(move);
+		}
+
 		if (m_info.pCollisionSphere != nullptr)
 		{
+			pos = GetPosition();
+
 			// 敵との押し出し判定
 			m_info.pCollisionSphere->SetPosition(pos);
 
@@ -293,26 +345,20 @@ void CPlayer::Update(void)
 
 			SetPosition(pos);
 		}
-
-		if (m_info.pCollisionCube != nullptr)
-		{
-			D3DXVECTOR3 pos = GetPosition();
-			D3DXVECTOR3 posCollision = m_info.pCollisionCube->GetPosition();
-			D3DXVECTOR3 move = GetMove();
-
-			// 判定の追従
-			m_info.pCollisionCube->SetPositionOld(posCollision);
-			m_info.pCollisionCube->SetPosition(pos);
-
-			// ブロックとの押し出し判定
-			m_info.pCollisionCube->CubeCollision(CCollision::TAG_BLOCK, &move);
-
-			SetMove(move);
-		}
 	}
 
 	// 移動量の減衰
-	move *= 0.1f;
+	if (m_info.state == STATE_BLOW)
+	{
+		move.x *= 0.6f;
+		move.z *= 0.6f;
+	}
+	else
+	{
+		move.x *= 0.1f;
+		move.z *= 0.1f;
+	}
+	move.y -= GRAVITY;
 	SetMove(move);
 
 	// 状態管理
@@ -1218,6 +1264,16 @@ void CPlayer::ManageAttack(void)
 				{// 木箱のヒット処理
 					pObj->Hit(0.0f);
 				}
+
+				// プレイヤーとの判定
+				bHit = m_info.pClsnAttack->SphereCollision(CCollision::TAG_PLAYER);
+
+				pObj = m_info.pClsnAttack->GetOther();
+
+				if (bHit == true && pObj != nullptr)
+				{// プレイヤーを吹き飛ばす
+					BlowPlayer(pObj);
+				}
 			}
 		}
 	}
@@ -1263,6 +1319,51 @@ void CPlayer::BlowEnemy(CObject *pObj)
 		}
 
 		pEnemy = pEnemyNext;
+	}
+}
+
+//=====================================================
+// プレイヤーを吹き飛ばす処理
+//=====================================================
+void CPlayer::BlowPlayer(CObject *pObj)
+{
+	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
+
+	if (pPlayerManager == nullptr || pObj == nullptr)
+	{
+		return;
+	}
+
+	for (int i = 0; i < NUM_PLAYER; i++)
+	{
+		CPlayer *pPlayer = pPlayerManager->GetPlayer(i);
+
+		if (pPlayer != nullptr)
+		{
+			if ((CObject*)pPlayer == pObj)
+			{
+				// 相手と自分の位置の差分を取得
+				D3DXVECTOR3 posOther = pPlayer->GetPosition();
+				D3DXVECTOR3 moveOther = pPlayer->GetMove();
+				D3DXVECTOR3 posOwn = GetPosition();
+				D3DXVECTOR3 vecDiff = posOther - posOwn;
+
+				// 差分ベクトルをふきとばす力に変換
+				D3DXVECTOR3 vecBlow;
+
+				D3DXVec3Normalize(&vecBlow, &vecDiff);
+
+				vecBlow *= m_param.fPowBlow;
+				vecBlow.y = POW_PUNCH_UP;
+
+				// 吹き飛ばしベクトルを移動量に加算
+				moveOther += vecBlow;
+
+				pPlayer->SetMove(moveOther);
+
+				pPlayer->SetState(STATE_BLOW);
+			}
+		}
 	}
 }
 
@@ -1354,7 +1455,7 @@ void CPlayer::Debug(void)
 	pDebugProc->Print("\nプレイヤー番号[%d]", m_info.nID);
 	pDebugProc->Print("\nプレイヤー状態カウンタ[%f]", m_info.fTimerState);
 	pDebugProc->Print("\nプレイヤーの位置[%f,%f,%f]", GetPosition().x, GetPosition().y, GetPosition().z);
-	pDebugProc->Print("\nプレイヤーの向き[%f,%f,%f]", GetRot().x, GetRot().y, GetRot().z);
+	pDebugProc->Print("\nプレイヤーの移動量[%f,%f,%f]", GetMove().x, GetMove().y, GetMove().z);
 
 	if (GetBody() != nullptr)
 	{

@@ -40,6 +40,7 @@
 #include <stdio.h>
 
 #include "number3D.h"
+#include "UIManager.h"
 
 //*****************************************************
 // マクロ定義
@@ -66,6 +67,8 @@ namespace
 	const float LIFT_UP(2.0f);	// リフト上昇速度
 
 	const float GO_GAME_POSy(250.0f);	// 遷移する高さ
+
+	const float POW_JUMP = 25.0f;	// エントリー時のジャンプ力
 };
 
 //*****************************************************
@@ -112,6 +115,9 @@ HRESULT CSelect::Init(void)
 	MenuInit();
 	StartInit();
 	ContainerInit();
+
+	// UIマネージャーの追加
+	CUIManager::Create();
 
 	// プレイヤーマネージャーの生成
 	CPlayerManager::Create();
@@ -536,6 +542,7 @@ void CSelect::MenuColorChange(int nPlayer)
 void CSelect::EntryInput(int nPlayer)
 {
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
+	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 
 	if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, nPlayer))
@@ -565,7 +572,10 @@ void CSelect::EntryInput(int nPlayer)
 			SPOWN_POS.x + (nPlayer * UI_SPACE.x),
 			SPOWN_POS.y,
 			SPOWN_POS.z));
-		
+
+		// ジャンプさせる
+		D3DXVECTOR3 move = { 0.0f,POW_JUMP,0.0f };
+		m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 
 		CDebrisSpawner::Create(D3DXVECTOR3(
 			m_aJoinUiData[nPlayer].pUi2D->GetPosition().x,
@@ -575,6 +585,49 @@ void CSelect::EntryInput(int nPlayer)
 		// UI削除
 		ObjDelete(nPlayer);
 	}
+
+#ifdef _DEBUG
+	if (pKeyboard->GetTrigger(DIK_F4))
+	{
+		if (m_abEntry[nPlayer] == true || m_apPlayerData[nPlayer].pPlayer != nullptr || pPlayerManager == nullptr)
+		{
+			return;
+		}
+
+		// サウンドインスタンスの取得
+		CSound* pSound = CSound::GetInstance();
+
+		if (pSound != nullptr)
+		{
+			pSound->Play(pSound->LABEL_SE_APPEARE);
+		}
+
+		// 参加状態へ
+		m_abEntry[nPlayer] = true;
+		m_apPlayerData[nPlayer].state = PLAYER_ENTRY;
+
+		// プレイヤーを生成
+		m_apPlayerData[nPlayer].pPlayer = pPlayerManager->BindPlayer(nPlayer);
+
+		// 位置をUIの場所へ
+		m_apPlayerData[nPlayer].pPlayer->SetPosition(D3DXVECTOR3(
+			SPOWN_POS.x + (nPlayer * UI_SPACE.x),
+			SPOWN_POS.y,
+			SPOWN_POS.z));
+
+		// ジャンプさせる
+		D3DXVECTOR3 move = { 0.0f,POW_JUMP,0.0f };
+		m_apPlayerData[nPlayer].pPlayer->SetMove(move);
+
+		CDebrisSpawner::Create(D3DXVECTOR3(
+			m_aJoinUiData[nPlayer].pUi2D->GetPosition().x,
+			50.0f,
+			m_aJoinUiData[nPlayer].pUi2D->GetPosition().z), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+		// UI削除
+		ObjDelete(nPlayer);
+	}
+#endif
 }
 
 //=====================================================
@@ -595,20 +648,10 @@ void CSelect::MoveLimit(int nPlayer)
 	// 大人の壁判定
 	if (m_selectState == STATE_BEFORE)
 	{
-		// 重力
-		move.y -= GRAVITY;
-
 		if (pos.z < ADULTWALL_POS_Z)
 		{
 			pos.z = ADULTWALL_POS_Z;
 		}
-
-		// 床判定
-		if (pos.y <= 0.0f)
-		{
-			pos.y = 0.0f;
-			move.y = 0.0f;
-		};
 	}
 	else
 	{
@@ -620,7 +663,7 @@ void CSelect::MoveLimit(int nPlayer)
 
 	//情報の反映
 	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
-	m_apPlayerData[nPlayer].pPlayer->SetMove(move);
+	//m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 }
 
 //=====================================================
@@ -646,10 +689,6 @@ void CSelect::PlayerShowUp(int nPlayer)
 	{
 		m_apPlayerData[nPlayer].state = PLAYER_FREE;
 	}
-
-	pos.y += 10.0f;
-
-	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
 }
 
 //=====================================================
