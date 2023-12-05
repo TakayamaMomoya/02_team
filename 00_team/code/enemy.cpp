@@ -225,6 +225,15 @@ HRESULT CEnemy::Init(void)
 
 	SetPositionOld(GetPosition());
 
+	// ‰e‚Ì—LŒø‰Â
+	CMotion *pBody = GetBody();
+
+	if (pBody != nullptr)
+	{
+		pBody->EnableShadow(true);
+		pBody->SetPosShadow(D3DXVECTOR3(0.0f, 0.5f, 0.0f));
+	}
+
 	return S_OK;
 }
 

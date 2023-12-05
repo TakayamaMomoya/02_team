@@ -1189,6 +1189,16 @@ void CPlayer::Hit(float fDamage)
 					pBody->SetAllCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 				}
 			}
+
+			// コントローラーの振動
+			CInputJoypad *pJoypad = CInputJoypad::GetInstance();
+
+			if (pJoypad != nullptr)
+			{
+				int nIdxJoypad = GetIDJoypad();
+
+				pJoypad->Vibration(nIdxJoypad,CInputJoypad::PADVIB::PADVIB_USE,1000,10);
+			}
 		}
 	}
 }
