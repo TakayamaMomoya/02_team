@@ -17,6 +17,7 @@
 #include "collision.h"
 #include "rocket.h"
 #include "sound.h"
+#include "manager.h"
 
 #include "motionDiv.h"
 
@@ -266,24 +267,31 @@ void CItemRepair::CollisionRocket(void)
 				pSound->Play(pSound->LABEL_SE_REPAIR);
 			}
 
-			//// ロケットの修理状況を加算
-			//CRocket *pRocket = CRocket::GetInstance();
+			// ロケット修理タイマー加算
+			CRocket *pRocket = CRocket::GetInstance();
 
-			//if (pRocket != nullptr)
-			//{
-			//	pRocket->AddProgress(1);
-			//}
+			if (pRocket != nullptr && m_pPlayer != nullptr)
+			{
+				bool bInteract = m_pPlayer->InputInteractPress();
 
-			//if (m_pPlayer != nullptr)
-			//{
-			//	// 武器を有効化する
-			//	m_pPlayer->EnableWeapon(true);
+				if (bInteract)
+				{
+					float fTick = CManager::GetTick();
 
-			//	// プレイヤーの修理アイテムポインタを初期化
-			//	m_pPlayer->ReleaseItemRepair();
-			//}
+					bool bFinish = pRocket->AddCntRepair(fTick);
 
-			//Uninit();
+					if (bFinish)
+					{
+						// 武器を有効化する
+						m_pPlayer->EnableWeapon(true);
+
+						// プレイヤーの修理アイテムポインタを初期化
+						m_pPlayer->ReleaseItemRepair();
+
+						Uninit();
+					}
+				}
+			}
 		}
 	}
 }
