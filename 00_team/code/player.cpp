@@ -493,18 +493,19 @@ void CPlayer::InputAttack(void)
 	// ƒpƒ“ƒ`‚Ì“ü—Í
 	m_info.motionInfo.bPunch = pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_LB, GetIDJoypad());
 
-	if (m_info.pWeapon != nullptr)
-	{// •Ší‚ÌUŒ‚
-		bool bEnable = m_info.pWeapon->IsEnable();
+	int nMotionUpper = GetMotion(CCharacterDiv::PARTS_UPPER);
 
-		if (bEnable)
-		{
-			m_info.pWeapon->Attack();
+	if (nMotionUpper != MOTION_PUNCH)
+	{
+		if (m_info.pWeapon != nullptr)
+		{// •Ší‚ÌUŒ‚
+			bool bEnable = m_info.pWeapon->IsEnable();
+
+			if (bEnable)
+			{
+				m_info.pWeapon->Attack();
+			}
 		}
-	}
-	else
-	{// ‘fè‚Ìê‡‚Ìˆ—
-		
 	}
 }
 
