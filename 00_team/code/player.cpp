@@ -603,7 +603,7 @@ void CPlayer::Aim(void)
 
 		float fLengthMove = D3DXVec3Length(&move);
 
-		if (fLengthMove >= 1.0f)
+		if (fLengthMove >= 2.0f)
 		{
 			// Šp“x‚ÌŽæ“¾
 			fAngleDest = atan2f(move.x, move.z);
