@@ -686,7 +686,7 @@ void CPlayer::ManageMotion(void)
 
 	// ˆÚ“®—Ê
 	D3DXVECTOR3 move = GetMove();
-	float fSpeed = D3DXVec3Length(&move);
+	float fSpeed = sqrtf(move.x * move.x + move.z * move.z);
 
 	// Œü‚«
 	float fRotPlayer = GetRot().y;

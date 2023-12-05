@@ -43,6 +43,8 @@ CRocket::CRocket(int nPriority) : CObjectX(nPriority)
 	m_fSpeed = 0.0f;
 	m_fDeleteHeight = 0.0f;
 	m_nProgress = 0;
+	m_fCntRepair = 0.0f;
+	m_fTimeRapir = 0.0f;
 	m_state = STATE_NONE;
 	m_pCollisionRocket = nullptr;
 }
@@ -211,6 +213,13 @@ void CRocket::ApplyInfo(FILE* pFile, char* pTemp)
 		(void)fscanf(pFile, "%f", &m_fSpeed);
 	}
 
+	if (strcmp(pTemp, "TIME_REPAIR") == 0)
+	{// 修理にかかる時間
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_fTimeRapir);
+	}
+
 	if (strcmp(pTemp, "DELETE_HEIGHT") == 0)
 	{// 削除する高さ
 		(void)fscanf(pFile, "%s", pTemp);
@@ -327,6 +336,27 @@ void CRocket::AddProgress(int nProgress)
 
 	// ロケットモデルの変化
 	SwapModel(m_nProgress);
+}
+
+//=====================================================
+// 修理タイマーの加算
+//=====================================================
+bool CRocket::AddCntRepair(float fTime)
+{
+	bool bFinish = false;
+
+	m_fCntRepair += fTime;
+
+	if (m_fCntRepair >= m_fTimeRapir)
+	{
+		m_fCntRepair = 0.0f;
+
+		AddProgress(1);
+
+		bFinish = true;
+	}
+
+	return bFinish;
 }
 
 //=====================================================
