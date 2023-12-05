@@ -1082,6 +1082,13 @@ void CPlayer::ManageMotion(void)
 				}
 			}
 		}
+		else if (m_info.motionInfo.bPunch || (nMotionUpper == MOTION_PUNCH && bFinish == false))
+		{
+			if (nMotionUpper != MOTION_PUNCH)
+			{
+				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_PUNCH);
+			}
+		}
 		// èäóLïêäÌ
 		else if (m_info.pWeapon != nullptr)
 		{
@@ -1125,13 +1132,6 @@ void CPlayer::ManageMotion(void)
 				}
 
 				break;
-			}
-		}
-		else if ((m_info.motionInfo.bPunch || nMotionUpper == MOTION_PUNCH) && bFinish == false)
-		{
-			if (nMotionUpper != MOTION_PUNCH)
-			{
-				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_PUNCH);
 			}
 		}
 		// âΩÇ‡Ç»Çµ
