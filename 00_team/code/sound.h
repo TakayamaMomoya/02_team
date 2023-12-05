@@ -36,6 +36,9 @@ public:
 		LABEL_SE_GET_MACHINEGUN,		// マシンガン取得時
 		LABEL_SE_GET_SHOTGUN,			// ショットガン取得時
 		LABEL_SE_GET_RAILGUN,			// レールガン取得時
+
+		LABEL_SE_SWING,					// スウィング
+		//LABEL_SE_PUNCH,					// パンチ
 		LABEL_MAX
 	} LABEL;
 
@@ -107,6 +110,9 @@ private:
 		{ "data/SOUND/SE/get_submachinegun.wav",0 },	// マシンガンボイス
 		{ "data/SOUND/SE/get_shotgun.wav",0 },			// ショットガンボイス
 		{ "data/SOUND/SE/get_railgun.wav",0 },			// レールガンボイス
+
+		{ "data/SOUND/SE/swing.wav",0 },				// スウィング
+		//{ "data/SOUND_SE/punch.wav",0 }					// パンチ
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ
