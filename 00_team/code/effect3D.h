@@ -23,6 +23,8 @@ public:
 	~CEffect3D();	// デストラクタ
 
 	static CEffect3D *Create(D3DXVECTOR3 pos, float fRadius, int nLife, D3DXCOLOR col, D3DXVECTOR3 move = { 0.0f,0.0f,0.0f }, float fGravity = 0.0f, bool bAdd = true,float fDecrease = 0.0f,D3DXVECTOR3 *pPosOwner = nullptr,int nPriority = 6,bool bTurn = false);
+	static CEffect3D* Create(const char* pTexName, D3DXVECTOR3 pos, float fRadius, int nLife, D3DXCOLOR col, D3DXVECTOR3 move = { 0.0f,0.0f,0.0f }, float fGravity = 0.0f, bool bAdd = true, float fDecrease = 0.0f, D3DXVECTOR3* pPosOwner = nullptr, int nPriority = 6, bool bTurn = false);
+
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
