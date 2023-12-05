@@ -57,6 +57,7 @@ CGame::CGame()
 {
 	m_nCntState = 0;
 	m_bStop = false;
+	m_bGameover = false;
 }
 
 //=====================================================
@@ -76,6 +77,7 @@ HRESULT CGame::Init(void)
 
 	m_state = STATE_NORMAL;
 	m_bStop = false;
+	m_bGameover = false;
 
 	// UIマネージャーの追加
 	CUIManager::Create();

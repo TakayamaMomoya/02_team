@@ -53,6 +53,7 @@ public:
 	void UpdateTitle(D3DXVECTOR3 move);
 	void UpdateTitleEsc(D3DXVECTOR3 move);
 	void UpdateResult(void);
+	void UpdateGameover(D3DXVECTOR3 posVDest, D3DXVECTOR3 posRDest);
 	void SetTitle(D3DXVECTOR3 posV, D3DXVECTOR3 posR);
 	void SetTitleDest(D3DXVECTOR3 posVDest, D3DXVECTOR3 posRDest);
 	void SetSelect(void);

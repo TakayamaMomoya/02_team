@@ -16,13 +16,15 @@
 #include "fade.h"
 #include "inputkeyboard.h"
 #include "inputjoypad.h"
+#include "camera.h"
+#include "manager.h"
 
 //===============================================
 // 定数定義
 //===============================================
 namespace
 {
-	// 敵の体のパス
+	// プレイヤーの体のパス
 	const char* PLAYER_BODY_PATH[NUM_PLAYER] =
 	{
 		"data\\MOTION\\motionPotatoman01.txt",
@@ -34,18 +36,18 @@ namespace
 	// プレイヤーの位置
 	const D3DXVECTOR3 PLAYER_POS[NUM_PLAYER] =
 	{
-		D3DXVECTOR3(0.0f, 0.0f, -150.0f),
-		D3DXVECTOR3(-125.0f, 0.0f, -100.0f),
-		D3DXVECTOR3(100.0f, 0.0f,  -50.0f),
-		D3DXVECTOR3(-75.0f, 0.0f,  100.0f),
+		D3DXVECTOR3(100.0f, 0.0f, 130.0f),
+		D3DXVECTOR3(150.0f, 0.0f, 130.0f),
+		D3DXVECTOR3(200.0f, 0.0f, 130.0f),
+		D3DXVECTOR3(250.0f, 0.0f, 130.0f),
 	};
 
 	// プレイヤーの向き
 	const D3DXVECTOR3 PLAYER_ROT[NUM_PLAYER] =
 	{
 		D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI * -0.25f, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * -0.15f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.15f, 0.0f),
 		D3DXVECTOR3(0.0f, D3DX_PI * -0.10f, 0.0f),
 	};
 
@@ -55,7 +57,7 @@ namespace
 	// 敵の位置
 	const D3DXVECTOR3 ENEMY_POS[NUM_ENEMY] =
 	{
-		D3DXVECTOR3(0.0f, 0.0f, -150.0f),
+		D3DXVECTOR3(170.0f, 0.0f, 200.0f),
 	};
 
 	// 敵の向き
@@ -63,6 +65,12 @@ namespace
 	{
 		D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
 	};
+
+	// 視点カメラの位置
+	const D3DXVECTOR3 CAMERA_POSV = D3DXVECTOR3(150.0f, 100.0f, -50.0f);
+
+	// 注視点カメラの位置
+	const D3DXVECTOR3 CAMERA_POSR = D3DXVECTOR3(150.0f, -50.0f, 250.0f);
 }
 
 //===============================================
@@ -201,10 +209,15 @@ void CGameover::Update(void)
 {
 	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
+	CCamera* pCamera = CManager::GetCamera();
 
 	// カメラをロケット付近へ移動
 
-
+	if (pCamera != nullptr)
+	{
+		// カメラの設定
+		pCamera->UpdateGameover(CAMERA_POSV, CAMERA_POSR);
+	}
 
 	// ゲームオーバーの表示
 
