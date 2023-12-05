@@ -126,7 +126,7 @@ void CParticle::Update(void)
 		{
 			// エフェクト生成
 			pEffect3D = CEffect3D::Create(
-				&m_apParticleInfo[m_type]->acTexName[0],
+				&m_apParticleInfo[m_type]->acTexPass[0],
 				m_pos + move * (float)nLife, 
 				fRadius, 
 				nLife, 
@@ -143,7 +143,7 @@ void CParticle::Update(void)
 		{
 			// エフェクト生成
 			pEffect3D = CEffect3D::Create(
-				&m_apParticleInfo[m_type]->acTexName[0],
+				&m_apParticleInfo[m_type]->acTexPass[0],
 				m_pos, 
 				fRadius, 
 				nLife,
@@ -242,11 +242,11 @@ void CParticle::Load(void)
 						break;
 					}
 
-					if (strcmp(cTemp, "TEXTURE_NAME") == 0)
+					if (strcmp(cTemp, "TEXTURE_PASS") == 0)
 					{// パーティクル寿命取得
 						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						(void)fscanf(pFile, "%s", &pInfo->acTexName[0]);
+						(void)fscanf(pFile, "%s", &pInfo->acTexPass[0]);
 					}
 
 					if (strcmp(cTemp, "LIFE_PARTICLE") == 0)

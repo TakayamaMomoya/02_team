@@ -49,7 +49,7 @@ public:
 private:
 	typedef struct
 	{// パーティクル情報
-		char acTexName[256];
+		char acTexPass[256];
 		int nLife;	// 寿命
 		int nLifeEffect;	// エフェクトの寿命
 		float fRadiusEffect;	// エフェクトの半径

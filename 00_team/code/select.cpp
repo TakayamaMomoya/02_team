@@ -732,16 +732,16 @@ void CSelect::Rift(void)
 			}
 		}
 
-		//CFade* pFade = CFade::GetInstance();
+		CFade* pFade = CFade::GetInstance();
 
-		//if (rift.y > GO_GAME_POSy)
-		//{// リフトが一定の高さに行くとゲームへ
+		if (rift.y > GO_GAME_POSy)
+		{// リフトが一定の高さに行くとゲームへ
 
-		//	if (pFade != nullptr && m_abEntry[0] != false)
-		//	{
-		//		pFade->SetFade(CScene::MODE_GAME);
-		//	}
-		//}
+			if (pFade != nullptr && m_abEntry[0] != false)
+			{
+				pFade->SetFade(CScene::MODE_GAME);
+			}
+		}
 	}
 }
 
