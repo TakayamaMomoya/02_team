@@ -232,6 +232,14 @@ void CGameover::Update(void)
 		if (pFade != nullptr)
 		{
 			pFade->SetFade(CScene::MODE_RANKING);	// ランキングに遷移
+
+			// プレイヤーマネージャーの終了
+			CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();
+
+			if (pPlayerManger != nullptr)
+			{
+				pPlayerManger->Uninit();
+			}
 		}
 	}
 }

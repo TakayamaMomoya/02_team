@@ -17,6 +17,7 @@
 #include "texture.h"
 #include "fade.h"
 #include "game.h"
+#include "playerManager.h"
 
 //*****************************************************
 // マクロ定義
@@ -380,9 +381,17 @@ void CPause::Fade(MENU menu)
 
 		break;
 	case CPause::MENU_QUIT:
-
+	{
 		pFade->SetFade(CScene::MODE_TITLE);
 
+		// プレイヤーマネージャーの終了
+		CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();
+
+		if (pPlayerManger != nullptr)
+		{
+			pPlayerManger->Uninit();
+		}
+	}
 		break;
 	default:
 		break;

@@ -156,14 +156,6 @@ void CGame::Uninit(void)
 	// ブロックの破棄
 	CBlock::DeleteAll();
 
-	// プレイヤーマネージャーの終了
-	CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();
-
-	if (pPlayerManger != nullptr)
-	{
-		pPlayerManger->Uninit();
-	}
-
 	// ゲームオーバーの終了
 	CGameover* pGameover = CGameover::GetInstance();
 
