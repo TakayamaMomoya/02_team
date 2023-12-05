@@ -101,17 +101,20 @@ CGameover::~CGameover()
 //===============================================
 CGameover *CGameover::Create(int nPriority)
 {
-	// ゲームオーバーの生成
-	m_pGameover = new CGameover;
+	if (m_pGameover == nullptr)
+	{
+		// ゲームオーバーの生成
+		m_pGameover = new CGameover;
 
-	if (m_pGameover != nullptr)
-	{
-		// 初期化処理
-		m_pGameover->Init();
-	}
-	else if(m_pGameover == nullptr)
-	{
-		return nullptr;
+		if (m_pGameover != nullptr)
+		{
+			// 初期化処理
+			m_pGameover->Init();
+		}
+		else if (m_pGameover == nullptr)
+		{
+			return nullptr;
+		}
 	}
 
 	return m_pGameover;
