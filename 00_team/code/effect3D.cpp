@@ -209,6 +209,62 @@ CEffect3D *CEffect3D::Create(D3DXVECTOR3 pos, float fRadius, int nLife, D3DXCOLO
 }
 
 //=====================================================
+// 生成処理(オーバーロード)
+//=====================================================
+CEffect3D* CEffect3D::Create(const char* pTexName, D3DXVECTOR3 pos, float fRadius, int nLife, D3DXCOLOR col, D3DXVECTOR3 move, float fGravity, bool bAdd, float fDecrease, D3DXVECTOR3* pPosOwner, int nPriority, bool bTurn)
+{
+	CEffect3D* pEffect3D = nullptr;
+
+	if (pEffect3D == nullptr)
+	{// インスタンス生成
+		pEffect3D = new CEffect3D(nPriority);
+
+		if (pEffect3D != nullptr)
+		{
+			pEffect3D->SetPosition(pos);
+			pEffect3D->SetSize(fRadius, fRadius);
+
+			// 初期化処理
+			pEffect3D->Init();
+
+			pEffect3D->SetColor(col);
+
+			// テクスチャの読込
+			int nIdx = CTexture::GetInstance()->Regist(pTexName);
+			pEffect3D->SetIdxTexture(nIdx);
+
+			pEffect3D->m_nLife = nLife;
+
+			pEffect3D->m_move = move;
+
+			pEffect3D->m_fDecreaseRadius = fDecrease;
+
+			pEffect3D->m_fDecreaseAlpha = 1.0f / nLife;
+
+			pEffect3D->m_fGravity = fGravity;
+
+			pEffect3D->m_bAdd = bAdd;
+
+			pEffect3D->m_pPosOwner = pPosOwner;
+
+			if (pPosOwner != nullptr)
+			{// 位置のリセット
+				pEffect3D->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+				if (bTurn)
+				{
+					pEffect3D->m_relPos = move * (float)nLife;
+
+					pEffect3D->m_move *= -1;
+				}
+			}
+		}
+	}
+
+	return pEffect3D;
+}
+
+//=====================================================
 // 読込処理
 //=====================================================
 HRESULT CEffect3D::Load(void)

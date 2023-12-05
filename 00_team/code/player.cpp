@@ -23,6 +23,7 @@
 #include "effect3D.h"
 #include "motionDiv.h"
 #include "enemyManager.h"
+#include "sound.h"
 #include "UIManager.h"
 
 //*****************************************************
@@ -482,6 +483,7 @@ void CPlayer::InputMove(void)
 void CPlayer::InputAttack(void)
 {
 	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	CSound* pSound = CSound::GetInstance();
 
 	if (pJoyPad == nullptr)
 	{

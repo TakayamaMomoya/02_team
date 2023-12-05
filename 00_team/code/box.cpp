@@ -25,7 +25,7 @@
 //*****************************************************
 namespace 
 {
-	const char* MODEL_PATH = "data\\MODEL\\item\\repairKit.x";	// モデルのパス
+	const char* MODEL_PATH = "data\\MODEL\\item\\WoodBox.x";	// モデルのパス
 }
 
 //=====================================================
