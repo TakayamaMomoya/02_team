@@ -91,6 +91,7 @@
     <ClCompile Include="code\title.cpp" />
     <ClCompile Include="code\tutorial.cpp" />
     <ClCompile Include="code\UI.cpp" />
+    <ClCompile Include="code\UIMagazine.cpp" />
     <ClCompile Include="code\UIManager.cpp" />
     <ClCompile Include="code\universal.cpp" />
     <ClCompile Include="code\weapon.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="code\title.h" />
     <ClInclude Include="code\tutorial.h" />
     <ClInclude Include="code\UI.h" />
+    <ClInclude Include="code\UIMagazine.h" />
     <ClInclude Include="code\UIManager.h" />
     <ClInclude Include="code\universal.h" />
     <ClInclude Include="code\weapon.h" />

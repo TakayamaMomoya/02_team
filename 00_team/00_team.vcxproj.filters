@@ -87,9 +87,6 @@
     <ClCompile Include="code\UI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="code\UIManager.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="code\number.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -172,6 +169,12 @@
     <ClCompile Include="code\goalTimer.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="code\UIMagazine.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="code\UIManager.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -231,9 +234,6 @@
       <Filter>scene</Filter>
     </ClInclude>
     <ClInclude Include="code\UI.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="code\UIManager.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="code\number.h">
@@ -316,6 +316,12 @@
     <ClInclude Include="code\pause.h" />
     <ClInclude Include="code\box.h" />
     <ClInclude Include="code\goalTimer.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="code\UIMagazine.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="code\UIManager.h">
       <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
