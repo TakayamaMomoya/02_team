@@ -727,8 +727,8 @@ void CPlayer::ManageMotion(void)
 				SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_OPEN_DOOR);
 			}
 		}
-		// 修理アイテム
-		else if (m_info.pItemRepair != nullptr)
+		// 歩きモーション
+		else
 		{
 			// 各方向指定移動
 			if (fSpeed > MOVE_LINE)
@@ -736,278 +736,39 @@ void CPlayer::ManageMotion(void)
 				if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
 					fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
 				{// 上
-					if (nMotionLower != MOTION_ITEM_WALK_FRONT)
+					if (nMotionLower != MOTION_MAGNUM_WALK_FRONT)
 					{
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_ITEM_WALK_FRONT);
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_FRONT);
 					}
 				}
 				else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
 					fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
 				{// 下
-					if (nMotionLower != MOTION_ITEM_WALK_BACK)
+					if (nMotionLower != MOTION_MAGNUM_WALK_BACK)
 					{
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_ITEM_WALK_BACK);
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_BACK);
 					}
 				}
 				else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
 				{// 右
-					if (nMotionLower != MOTION_ITEM_WALK_RIGHT)
+					if (nMotionLower != MOTION_MAGNUM_WALK_RIGHT)
 					{
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_ITEM_WALK_RIGHT);
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_RIGHT);
 					}
 				}
 				else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
 				{// 左
-					if (nMotionLower != MOTION_ITEM_WALK_LEFT)
+					if (nMotionLower != MOTION_MAGNUM_WALK_LEFT)
 					{
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_ITEM_WALK_LEFT);
+						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_LEFT);
 					}
 				}
 			}
 			else
 			{
-				if (nMotionLower != MOTION_ITEM_NEUTRAL)
+				if (nMotionLower != MOTION_MAGNUM_NEUTRAL)
 				{// 待機
-					SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_ITEM_NEUTRAL);
-				}
-			}
-		}
-		// 所有武器
-		else if (m_info.pWeapon != nullptr)
-		{
-			switch (m_info.pWeapon->GetType())
-			{
-				// マグナム
-			case CWeapon::TYPE_MAGNUM:
-
-				// 各方向指定移動
-				if (fSpeed > MOVE_LINE)
-				{
-					if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
-						fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
-					{// 上
-						if (nMotionLower != MOTION_MAGNUM_WALK_FRONT)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_FRONT);
-						}
-					}
-					else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
-							 fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
-					{// 下
-						if (nMotionLower != MOTION_MAGNUM_WALK_BACK)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_BACK);
-						}
-					}
-					else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
-					{// 右
-						if (nMotionLower != MOTION_MAGNUM_WALK_RIGHT)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_RIGHT);
-						}
-					}
-					else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
-					{// 左
-						if (nMotionLower != MOTION_MAGNUM_WALK_LEFT)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_LEFT);
-						}
-					}
-				}
-				else
-				{
-					if (nMotionLower != MOTION_MAGNUM_NEUTRAL)
-					{// 待機
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_NEUTRAL);
-					}
-				}
-
-				break;
-
-				// マシンガン
-			case CWeapon::TYPE_MACHINEGUN:
-
-				// 各方向指定移動
-				if (fSpeed > MOVE_LINE)
-				{
-					if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
-						fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
-					{// 上
-						if (nMotionLower != MOTION_MAGNUM_WALK_FRONT)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_FRONT);
-						}
-					}
-					else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
-							 fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
-					{// 下
-						if (nMotionLower != MOTION_MAGNUM_WALK_BACK)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_BACK);
-						}
-					}
-					else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
-					{// 右
-						if (nMotionLower != MOTION_MAGNUM_WALK_RIGHT)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_RIGHT);
-						}
-					}
-					else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
-					{// 左
-						if (nMotionLower != MOTION_MAGNUM_WALK_LEFT)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_WALK_LEFT);
-						}
-					}
-				}
-				else
-				{
-					if (nMotionLower != MOTION_MAGNUM_NEUTRAL)
-					{// 待機
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_NEUTRAL);
-					}
-				}
-
-				break;
-
-				// ショットガン
-			case CWeapon::TYPE_SHOTGUN:
-
-				// 各方向指定移動
-				if (fSpeed > MOVE_LINE)
-				{
-					if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
-						fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
-					{// 上
-						if (nMotionLower != MOTION_RIFLE_WALK_FRONT)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_FRONT);
-						}
-					}
-					else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
-						fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
-					{// 下
-						if (nMotionLower != MOTION_RIFLE_WALK_BACK)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_BACK);
-						}
-					}
-					else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
-					{// 右
-						if (nMotionLower != MOTION_RIFLE_WALK_RIGHT)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_RIGHT);
-						}
-					}
-					else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
-					{// 左
-						if (nMotionLower != MOTION_RIFLE_WALK_LEFT)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_LEFT);
-						}
-					}
-				}
-				else
-				{
-					if (nMotionLower != MOTION_RIFLE_NEUTRAL)
-					{// 待機
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_NEUTRAL);
-					}
-				}
-
-				break;
-				// レールガン
-			case CWeapon::TYPE_RAILGUN:
-
-				// 各方向指定移動
-				if (fSpeed > MOVE_LINE)
-				{
-					if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
-						fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f))
-					{// 上
-						if (nMotionLower != MOTION_RIFLE_WALK_FRONT)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_FRONT);
-						}
-					}
-					else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
-						fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
-					{// 下
-						if (nMotionLower != MOTION_RIFLE_WALK_BACK)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_BACK);
-						}
-					}
-					else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
-					{// 右
-						if (nMotionLower != MOTION_RIFLE_WALK_RIGHT)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_RIGHT);
-						}
-					}
-					else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
-					{// 左
-						if (nMotionLower != MOTION_RIFLE_WALK_LEFT)
-						{
-							SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_WALK_LEFT);
-						}
-					}
-				}
-				else
-				{
-					if (nMotionLower != MOTION_RIFLE_NEUTRAL)
-					{// 待機
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_RIFLE_NEUTRAL);
-					}
-				}
-
-				break;
-			}
-		}
-		// 何もなし
-		else
-		{
-			// 各方向指定移動
-			if (fSpeed > MOVE_LINE)
-			{
-				if (fRot >= 0.0f && fRot <= (D3DX_PI * 0.25f) ||
-					fRot <= 0.0f && fRot >= -(D3DX_PI * 0.25f) || 
-					m_info.motionInfo.bRunawayProtect)
-				{// 上
-					if (nMotionLower != MOTION_WALK_FRONT)
-					{
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_WALK_FRONT);
-					}
-				}
-				else if (fRot >= (D3DX_PI * 0.75f) && fRot <= D3DX_PI ||
-					fRot <= -(D3DX_PI * 0.75f) && fRot >= -D3DX_PI)
-				{// 下
-					if (nMotionLower != MOTION_WALK_BACK)
-					{
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_WALK_BACK);
-					}
-				}
-				else if (fRot >= (D3DX_PI * 0.25f) && fRot <= (D3DX_PI * 0.75f))
-				{// 右
-					if (nMotionLower != MOTION_WALK_RIGHT)
-					{
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_WALK_RIGHT);
-					}
-				}
-				else if (fRot <= -(D3DX_PI * 0.25f) && fRot >= -(D3DX_PI * 0.75f))
-				{// 左
-					if (nMotionLower != MOTION_WALK_LEFT)
-					{
-						SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_WALK_LEFT);
-					}
-				}
-			}
-			else
-			{
-				if (nMotionLower != MOTION_NEUTRAL)
-				{// 待機
-					SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_NEUTRAL);
+					SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_MAGNUM_NEUTRAL);
 				}
 			}
 		}
@@ -1084,7 +845,7 @@ void CPlayer::ManageMotion(void)
 			}
 		}
 		else if (m_info.motionInfo.bPunch || (nMotionUpper == MOTION_PUNCH && bFinish == false))
-		{
+		{// パンチのモーション
 			if (nMotionUpper != MOTION_PUNCH)
 			{
 				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_PUNCH);
