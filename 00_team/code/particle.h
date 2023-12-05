@@ -23,15 +23,7 @@ public:
 	{
 		TYPE_NONE = 0,	// 何でもない
 		TYPE_EXPLOSION,	// 爆発
-		TYPE_SAND,	// 砂ぼこり
-		TYPE_HIT,	// 命中エフェクト
-		TYPE_BOOST,	// ブースト
-		TYPE_SMOKE,	// 煙
-		TYPE_EXPLSMOKE,	// 爆煙
-		TYPE_CHARGE,	// チャージ
-		TYPE_MAXCHARGE,	// マックスチャージ
-		TYPE_SHOT,	// 射撃
-		TYPE_DUST,	// 塵
+		TYPE_INJECTION,	// 噴射
 		TYPE_MAX
 	}TYPE;
 

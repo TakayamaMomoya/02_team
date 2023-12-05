@@ -36,10 +36,10 @@
 #include "weaponManager.h"
 #include "edit.h"
 #include "animEffect3D.h"
+#include "particle.h"
+#include "number.h"
 #include "number3D.h"
 #include <stdio.h>
-
-#include "number3D.h"
 
 //*****************************************************
 // マクロ定義
@@ -335,8 +335,6 @@ void CSelect::Update(void)
 	// シーンの更新
 	CScene::Update();
 
-	//CFade* pFade = CFade::GetInstance();
-
 	if (m_selectState == SELECT_STATE::STATE_BEFORE)
 	{
 		if (pKeyboard != nullptr && pMouse != nullptr)
@@ -417,6 +415,7 @@ void CSelect::Update(void)
 #ifdef _DEBUG
 	CCamera* pCamera = CManager::GetCamera();
 
+
 	if (pCamera != nullptr)
 	{
 		// 操作
@@ -425,7 +424,8 @@ void CSelect::Update(void)
 
 	if (pKeyboard->GetTrigger(DIK_RETURN))
 	{
-		CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		//CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		CParticle::Create({ 0.0f, 300.0f, -400.0f }, CParticle::TYPE::TYPE_INJECTION);
 	}
 
 	CDebugProc::GetInstance()->Print("\n参加人数[%d]\n", nJoinPlayer);

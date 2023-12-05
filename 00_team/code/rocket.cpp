@@ -18,6 +18,7 @@
 #include "result.h"
 #include "goal.h"
 #include "inputkeyboard.h"
+#include "particle.h"
 
 //*****************************************************
 // 定数定義
@@ -247,6 +248,7 @@ void CRocket::Update(void)
 	if (m_state == STATE::STATE_ESCAPE)
 	{// 脱出状態の更新
 		UpdateEscape();
+		CParticle::Create({ GetPosition().x, GetPosition().y - 30.0f, GetPosition().z }, CParticle::TYPE::TYPE_INJECTION);
 	}
 
 #ifdef _DEBUG

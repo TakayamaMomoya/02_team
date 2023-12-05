@@ -144,7 +144,7 @@ void CParticle::Update(void)
 			pEffect3D = CEffect3D::Create(
 				m_pos, 
 				fRadius, 
-				nLife, 
+				nLife,
 				m_apParticleInfo[m_type]->col, 
 				move, 
 				m_apParticleInfo[m_type]->fGravity, 
