@@ -27,6 +27,7 @@
 CItemRepair::CItemRepair(int nPriority) : CGimmick(nPriority)
 {
 	m_pPlayer = nullptr;
+	m_bInRocket = false;
 }
 
 //=====================================================
@@ -101,7 +102,7 @@ void CItemRepair::Update(void)
 {
 	bool bRelease = false;
 
-	if (m_pPlayer != nullptr)
+	if (m_pPlayer != nullptr && m_bInRocket == false)
 	{
 		bRelease = m_pPlayer->InputInteract();
 
@@ -255,9 +256,9 @@ void CItemRepair::CollisionRocket(void)
 
 	if (pCollisionSphere != nullptr)
 	{
-		bool bHit = pCollisionSphere->SphereCollision(CCollision::TAG_ROCKET);
+		m_bInRocket = pCollisionSphere->SphereCollision(CCollision::TAG_ROCKET);
 
-		if (bHit)
+		if (m_bInRocket)
 		{
 			//　サウンドインスタンスの取得
 			CSound* pSound = CSound::GetInstance();

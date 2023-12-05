@@ -40,6 +40,7 @@ private:
 	void CheckPlayerAlive(void);
 	void FollowPlayerHand(void);
 
+	bool m_bInRocket;
 	CPlayer *m_pPlayer;
 };
 
