@@ -44,8 +44,8 @@ public:
 	void Draw(void);
 	int GetProgress(void) { return m_nProgress; }
 	void AddProgress(int nProgress);
-	bool AddCntRepair(float fTime);
 	void SetState(STATE state) { m_state = state; }
+	float GetTime(void) { return m_fTimeRapir; }
 
 private:
 	void Load(void);
@@ -57,7 +57,6 @@ private:
 	float m_fRadius;	// 判定の半径
 	float m_fSpeed;	// 上昇速度
 	float m_fDeleteHeight;	// 削除する高さ
-	float m_fCntRepair;	// 修理タイマー
 	float m_fTimeRapir;	// 修理にかかる時間
 	int m_nProgress;	// 進行状況
 	STATE m_state;	// 状態

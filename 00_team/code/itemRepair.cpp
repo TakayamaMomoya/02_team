@@ -28,6 +28,7 @@ CItemRepair::CItemRepair(int nPriority) : CGimmick(nPriority)
 {
 	m_pPlayer = nullptr;
 	m_bInRocket = false;
+	m_fCntRepair = 0.0f;
 }
 
 //=====================================================
@@ -277,17 +278,23 @@ void CItemRepair::CollisionRocket(void)
 
 				if (bInteract)
 				{
+					// カウンターを加算
 					float fTick = CManager::GetTick();
 
-					bool bFinish = pRocket->AddCntRepair(fTick);
+					m_fCntRepair += fTick;
 
-					if (bFinish)
+					float fTime = pRocket->GetTime();
+
+					if (fTime <= m_fCntRepair)
 					{
 						// 武器を有効化する
 						m_pPlayer->EnableWeapon(true);
 
 						// プレイヤーの修理アイテムポインタを初期化
 						m_pPlayer->ReleaseItemRepair();
+
+						// 修理進行
+						pRocket->AddProgress(1);
 
 						Uninit();
 					}
