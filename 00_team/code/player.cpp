@@ -173,8 +173,8 @@ HRESULT CPlayer::Init(void)
 
 		if (m_info.pCollisionCube != nullptr)
 		{
-			D3DXVECTOR3 vtxMax = { 10.0f,10.0f,10.0f };
-			D3DXVECTOR3 vtxMin = { -10.0f,0.0f,-10.0f };
+			D3DXVECTOR3 vtxMax = { 20.0f,100.0f,20.0f };
+			D3DXVECTOR3 vtxMin = { -20.0f,0.0f,-20.0f };
 
 			m_info.pCollisionCube->SetPosition(GetPosition());
 
