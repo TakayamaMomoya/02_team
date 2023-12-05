@@ -16,8 +16,10 @@
 //*****************************************************
 // 前方宣言
 //*****************************************************
+
 class CUI;
 class CLife;
+class CUIMagazine;
 
 //*****************************************************
 // クラスの定義
@@ -38,20 +40,21 @@ public:
 	void EnableDisp(bool bDisp) { m_bDisp = bDisp; }
 	void SetPlayer(int nIdx);
 
-
 private:
 
 	CUI* CreateFrame(void);
 	CLife* CreateLife(int nIdx);
+	CUIMagazine* CreateUIMagazine(int nIdx);
 
 	struct SInfo
 	{
-		CUI *pFrame;		// フレームUI
-		CLife *pLife;		// ライフUI
+		CUI *pFrame;				// フレームUI
+		CLife *pLife;				// ライフUI
+		CUIMagazine* pUIMagazine;	// 装弾数UI
 	};
 
 	static CUIManager *m_pUIManager;	// 自身のポインタ
-	bool m_bDisp;	// UIを表示するかどうか
+	bool m_bDisp;				// UIを表示するかどうか
 	SInfo m_aInfo[NUM_PLAYER];	// 自身の情報
 };
 
