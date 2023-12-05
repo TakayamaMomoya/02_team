@@ -182,7 +182,7 @@ void CPlayerManager::LoadParamPlayer(void)
 			}
 
 			if (strcmp(cTemp, "DAMAGE_PUNCH") == 0)
-			{// ‚«”ò‚Î‚·—Í
+			{// ƒpƒ“ƒ`‚ÌˆĞ—Í
 				(void)fscanf(pFile, "%s", &cTemp[0]);
 
 				(void)fscanf(pFile, "%f", &m_paramPlayer.fDamagePunch);
