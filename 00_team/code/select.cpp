@@ -66,6 +66,8 @@ namespace
 	const float LIFT_UP(2.0f);	// リフト上昇速度
 
 	const float GO_GAME_POSy(250.0f);	// 遷移する高さ
+
+	const float POW_JUMP = 25.0f;	// エントリー時のジャンプ力
 };
 
 //*****************************************************
@@ -551,7 +553,10 @@ void CSelect::EntryInput(int nPlayer)
 			SPOWN_POS.x + (nPlayer * UI_SPACE.x),
 			SPOWN_POS.y,
 			SPOWN_POS.z));
-		
+
+		// ジャンプさせる
+		D3DXVECTOR3 move = { 0.0f,POW_JUMP,0.0f };
+		m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 
 		CDebrisSpawner::Create(D3DXVECTOR3(
 			m_aJoinUiData[nPlayer].pUi2D->GetPosition().x,
@@ -581,20 +586,10 @@ void CSelect::MoveLimit(int nPlayer)
 	// 大人の壁判定
 	if (m_selectState == STATE_BEFORE)
 	{
-		// 重力
-		move.y -= GRAVITY;
-
 		if (pos.z < ADULTWALL_POS_Z)
 		{
 			pos.z = ADULTWALL_POS_Z;
 		}
-
-		// 床判定
-		if (pos.y <= 0.0f)
-		{
-			pos.y = 0.0f;
-			move.y = 0.0f;
-		};
 	}
 	else
 	{
@@ -605,8 +600,8 @@ void CSelect::MoveLimit(int nPlayer)
 	}
 
 	//情報の反映
-	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
-	m_apPlayerData[nPlayer].pPlayer->SetMove(move);
+	//m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
+	//m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 }
 
 //=====================================================
@@ -632,10 +627,6 @@ void CSelect::PlayerShowUp(int nPlayer)
 	{
 		m_apPlayerData[nPlayer].state = PLAYER_FREE;
 	}
-
-	pos.y += 10.0f;
-
-	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
 }
 
 //=====================================================
