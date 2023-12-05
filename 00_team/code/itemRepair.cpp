@@ -266,24 +266,24 @@ void CItemRepair::CollisionRocket(void)
 				pSound->Play(pSound->LABEL_SE_REPAIR);
 			}
 
-			// ロケットの修理状況を加算
-			CRocket *pRocket = CRocket::GetInstance();
+			//// ロケットの修理状況を加算
+			//CRocket *pRocket = CRocket::GetInstance();
 
-			if (pRocket != nullptr)
-			{
-				pRocket->AddProgress(1);
-			}
+			//if (pRocket != nullptr)
+			//{
+			//	pRocket->AddProgress(1);
+			//}
 
-			if (m_pPlayer != nullptr)
-			{
-				// 武器を有効化する
-				m_pPlayer->EnableWeapon(true);
+			//if (m_pPlayer != nullptr)
+			//{
+			//	// 武器を有効化する
+			//	m_pPlayer->EnableWeapon(true);
 
-				// プレイヤーの修理アイテムポインタを初期化
-				m_pPlayer->ReleaseItemRepair();
-			}
+			//	// プレイヤーの修理アイテムポインタを初期化
+			//	m_pPlayer->ReleaseItemRepair();
+			//}
 
-			Uninit();
+			//Uninit();
 		}
 	}
 }
