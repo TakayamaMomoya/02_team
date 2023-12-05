@@ -542,6 +542,7 @@ void CSelect::MenuColorChange(int nPlayer)
 void CSelect::EntryInput(int nPlayer)
 {
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
+	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 
 	if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, nPlayer))
@@ -584,6 +585,49 @@ void CSelect::EntryInput(int nPlayer)
 		// UI削除
 		ObjDelete(nPlayer);
 	}
+
+#ifdef _DEBUG
+	if (pKeyboard->GetTrigger(DIK_F4))
+	{
+		if (m_abEntry[nPlayer] == true || m_apPlayerData[nPlayer].pPlayer != nullptr || pPlayerManager == nullptr)
+		{
+			return;
+		}
+
+		// サウンドインスタンスの取得
+		CSound* pSound = CSound::GetInstance();
+
+		if (pSound != nullptr)
+		{
+			pSound->Play(pSound->LABEL_SE_APPEARE);
+		}
+
+		// 参加状態へ
+		m_abEntry[nPlayer] = true;
+		m_apPlayerData[nPlayer].state = PLAYER_ENTRY;
+
+		// プレイヤーを生成
+		m_apPlayerData[nPlayer].pPlayer = pPlayerManager->BindPlayer(nPlayer);
+
+		// 位置をUIの場所へ
+		m_apPlayerData[nPlayer].pPlayer->SetPosition(D3DXVECTOR3(
+			SPOWN_POS.x + (nPlayer * UI_SPACE.x),
+			SPOWN_POS.y,
+			SPOWN_POS.z));
+
+		// ジャンプさせる
+		D3DXVECTOR3 move = { 0.0f,POW_JUMP,0.0f };
+		m_apPlayerData[nPlayer].pPlayer->SetMove(move);
+
+		CDebrisSpawner::Create(D3DXVECTOR3(
+			m_aJoinUiData[nPlayer].pUi2D->GetPosition().x,
+			50.0f,
+			m_aJoinUiData[nPlayer].pUi2D->GetPosition().z), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+		// UI削除
+		ObjDelete(nPlayer);
+	}
+#endif
 }
 
 //=====================================================
