@@ -212,6 +212,13 @@ void CGame::Update(void)
 		}
 	}
 
+	CGameover* pGameover = CGameover::GetInstance();
+
+	if (pGameover != nullptr)
+	{
+		pGameover->Update();
+	}
+
 	// ƒJƒƒ‰XV
 	UpdateCamera();
 
@@ -224,7 +231,7 @@ void CGame::Update(void)
 	{
 		int nNumPlayer = pPlayerManager->GetNumPlayer();
 
-		if (nNumPlayer <= 0)
+		if (nNumPlayer <= 0 && m_bGameover == false)
 		{
 			CFade *pFade = CFade::GetInstance();
 
