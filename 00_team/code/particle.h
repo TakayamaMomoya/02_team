@@ -23,7 +23,8 @@ public:
 	{
 		TYPE_NONE = 0,	// 何でもない
 		TYPE_EXPLOSION,	// 爆発
-		TYPE_INJECTION,	// 噴射
+		TYPE_INJECTION_FIRE,	// 噴射(火)
+		TYPE_INJECTION_SMOKE,	// 噴射(煙)
 		TYPE_MAX
 	}TYPE;
 
@@ -48,6 +49,7 @@ public:
 private:
 	typedef struct
 	{// パーティクル情報
+		char acTexName[256];
 		int nLife;	// 寿命
 		int nLifeEffect;	// エフェクトの寿命
 		float fRadiusEffect;	// エフェクトの半径

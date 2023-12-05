@@ -415,7 +415,6 @@ void CSelect::Update(void)
 #ifdef _DEBUG
 	CCamera* pCamera = CManager::GetCamera();
 
-
 	if (pCamera != nullptr)
 	{
 		// ‘€ì
@@ -425,7 +424,8 @@ void CSelect::Update(void)
 	if (pKeyboard->GetTrigger(DIK_RETURN))
 	{
 		//CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-		CParticle::Create({ 0.0f, 300.0f, -400.0f }, CParticle::TYPE::TYPE_INJECTION);
+		CParticle::Create({ 0.0f, 300.0f, -400.0f }, CParticle::TYPE::TYPE_INJECTION_FIRE);
+		CParticle::Create({ 0.0f, 300.0f, -400.0f }, CParticle::TYPE::TYPE_INJECTION_SMOKE);
 	}
 
 	CDebugProc::GetInstance()->Print("\nQ‰Ál”[%d]\n", nJoinPlayer);

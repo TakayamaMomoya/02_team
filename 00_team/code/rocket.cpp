@@ -248,7 +248,8 @@ void CRocket::Update(void)
 	if (m_state == STATE::STATE_ESCAPE)
 	{// íEèoèÛë‘ÇÃçXêV
 		UpdateEscape();
-		CParticle::Create({ GetPosition().x, GetPosition().y - 30.0f, GetPosition().z }, CParticle::TYPE::TYPE_INJECTION);
+		CParticle::Create({ GetPosition().x, GetPosition().y - 30.0f, GetPosition().z }, CParticle::TYPE::TYPE_INJECTION_FIRE);
+		CParticle::Create({ GetPosition().x, GetPosition().y - 120.0f, GetPosition().z }, CParticle::TYPE::TYPE_INJECTION_SMOKE);
 	}
 
 #ifdef _DEBUG
