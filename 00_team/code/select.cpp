@@ -662,7 +662,7 @@ void CSelect::MoveLimit(int nPlayer)
 	}
 
 	//î•ñ‚Ì”½‰f
-	//m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
+	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
 	//m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 }
 
