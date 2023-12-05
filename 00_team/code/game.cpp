@@ -107,7 +107,7 @@ HRESULT CGame::Init(void)
 	CWeaponManager::Create();
 
 	// 敵マネージャーの生成
-	CEnemyManager *pEnemyManager = CEnemyManager::Create();
+	//CEnemyManager *pEnemyManager = CEnemyManager::Create();
 
 	// ロケットの生成
 	CRocket::Create();
