@@ -16,6 +16,7 @@
 //*****************************************************
 // 前方宣言
 //*****************************************************
+class CUI;
 class CLife;
 
 //*****************************************************
@@ -37,18 +38,21 @@ public:
 	void EnableDisp(bool bDisp) { m_bDisp = bDisp; }
 	void SetPlayer(int nIdx);
 
+
 private:
 
+	CUI* CreateFrame(void);
 	CLife* CreateLife(int nIdx);
 
 	struct SInfo
 	{
-		CLife *m_apLife[NUM_PLAYER];	// ライフUI
+		CUI *pFrame;		// フレームUI
+		CLife *pLife;		// ライフUI
 	};
 
 	static CUIManager *m_pUIManager;	// 自身のポインタ
 	bool m_bDisp;	// UIを表示するかどうか
-	SInfo m_info;	// 自身の情報
+	SInfo m_aInfo[NUM_PLAYER];	// 自身の情報
 };
 
 #endif

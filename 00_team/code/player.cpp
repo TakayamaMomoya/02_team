@@ -23,6 +23,7 @@
 #include "effect3D.h"
 #include "motionDiv.h"
 #include "enemyManager.h"
+#include "UIManager.h"
 
 //*****************************************************
 // 定数定義
@@ -129,6 +130,19 @@ HRESULT CPlayer::Init(void)
 	{
 		assert(("プレイヤーパラメーターの取得に失敗",false));
 	}
+
+	// パラメーターの受け取り
+	CUIManager* pUIManager = CUIManager::GetInstance();
+
+	if (pUIManager != nullptr)
+	{
+		pUIManager->SetPlayer(m_info.nID);
+	}
+	else
+	{
+		assert(("UI管理（プレイヤー）の取得に失敗", false));
+	}
+
 
 	// 当たり判定の生成
 	if (m_info.pCollisionSphere == nullptr)

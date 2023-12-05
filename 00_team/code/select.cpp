@@ -40,6 +40,7 @@
 #include <stdio.h>
 
 #include "number3D.h"
+#include "UIManager.h"
 
 //*****************************************************
 // マクロ定義
@@ -114,6 +115,9 @@ HRESULT CSelect::Init(void)
 	MenuInit();
 	StartInit();
 	ContainerInit();
+
+	// UIマネージャーの追加
+	CUIManager::Create();
 
 	// プレイヤーマネージャーの生成
 	CPlayerManager::Create();

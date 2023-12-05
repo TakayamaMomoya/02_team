@@ -37,7 +37,8 @@ public:
 	void SetLife(int nLife);
 	void SetPosition(D3DXVECTOR3 pos);
 	void SetSize(float width, float height);
-	void SetColor(D3DXCOLOR col);
+	void SetCol(D3DXCOLOR col);
+	void SetTexture(const char* pFileName);
 
 private:
 
