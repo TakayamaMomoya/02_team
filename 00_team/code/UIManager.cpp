@@ -28,16 +28,16 @@
 //*****************************************************
 namespace
 {
-	const D3DXVECTOR3 POS[NUM_PLAYER] =
+	const D3DXVECTOR3 FRAME_POS[NUM_PLAYER] =
 	{// 位置
-		D3DXVECTOR3(SCREEN_WIDTH * 0.025f, SCREEN_HEIGHT * 0.3f, 0.0f),
-		D3DXVECTOR3(SCREEN_WIDTH * 0.975f, SCREEN_HEIGHT * 0.3f, 0.0f),
-		D3DXVECTOR3(SCREEN_WIDTH * 0.025f, SCREEN_HEIGHT * 0.7f, 0.0f),
-		D3DXVECTOR3(SCREEN_WIDTH * 0.975f, SCREEN_HEIGHT * 0.7f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.05f, SCREEN_HEIGHT * 0.225f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.950f, SCREEN_HEIGHT * 0.225f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.05f, SCREEN_HEIGHT * 0.775f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.950f, SCREEN_HEIGHT * 0.775f, 0.0f),
 	};
 
-	const float FRAME_WIDTH = 30.0f;
-	const float FRAME_HEIGHT = 100.0f;
+	const float FRAME_WIDTH = 60.0f;
+	const float FRAME_HEIGHT = 150.0f;
 	const D3DXCOLOR FRAME_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	const char* FRAME_FILE_NAME[NUM_PLAYER] =
 	{// 位置
@@ -51,8 +51,6 @@ namespace
 	const float LIFE_HEIGHT = 100.0f;
 	const D3DXCOLOR LIFE_COLOR = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 	const char* LIFE_FILE_NAME = "data\\UI\\UILife000.txt";
-
-
 }
 
 //*****************************************************
@@ -144,7 +142,7 @@ void CUIManager::SetPlayer(int nIdx)
 		m_aInfo[nIdx].pFrame = pFrame;
 
 		// ライフの設定
-		m_aInfo[nIdx].pFrame->SetPosition(POS[nIdx]);
+		m_aInfo[nIdx].pFrame->SetPosition(FRAME_POS[nIdx]);
 		m_aInfo[nIdx].pFrame->SetSize(FRAME_WIDTH, FRAME_HEIGHT);
 		m_aInfo[nIdx].pFrame->SetCol(FRAME_COLOR);
 
@@ -159,21 +157,21 @@ void CUIManager::SetPlayer(int nIdx)
 
 	}
 
-	//// ライフの生成処理
-	//CLife* pLife = CreateLife(nIdx);
+	// ライフの生成処理
+	CLife* pLife = CreateLife(nIdx);
 
-	//if (pLife != NULL &&
-	//	m_aInfo[nIdx].pLife == NULL)
-	//{
-	//	// ライフのポインタを代入
-	//	m_aInfo[nIdx].pLife = pLife;
+	if (pLife != NULL &&
+		m_aInfo[nIdx].pLife == NULL)
+	{
+		// ライフのポインタを代入
+		m_aInfo[nIdx].pLife = pLife;
 
-	//	// ライフの設定
-	//	m_aInfo[nIdx].pLife->SetPosition(POS[nIdx]);
-	//	m_aInfo[nIdx].pLife->SetSize(LIFE_WIDTH,LIFE_HEIGHT);
-	//	m_aInfo[nIdx].pLife->SetCol(LIFE_COLOR);
-	//	//m_aInfo[nIdx].pLife->SetTexture(LIFE_FILE_NAME);
-	//}
+		// ライフの設定
+		m_aInfo[nIdx].pLife->SetPosition(FRAME_POS[nIdx]);
+		m_aInfo[nIdx].pLife->SetSize(LIFE_WIDTH,LIFE_HEIGHT);
+		m_aInfo[nIdx].pLife->SetCol(LIFE_COLOR);
+		//m_aInfo[nIdx].pLife->SetTexture(LIFE_FILE_NAME);
+	}
 }
 
 //=====================================================
