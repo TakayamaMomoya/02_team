@@ -58,8 +58,8 @@ namespace
 	const float ADULTWALL_POS_Z(-470.0f);
 	const float GRAVITY(5.0f);	//重力
 
-	const D3DXVECTOR3 CONTAINER_POS({ -150.0, 0.0, -130.0f });	// コンテナの位置
-	const D3DXVECTOR3 CONTAINER_SPACE({ 400.0, 0.0, -50.0f });	// コンテナ間の広さ
+	const D3DXVECTOR3 CONTAINER_POS({ -150.0, 0.0, -100.0f });	// コンテナの位置
+	const D3DXVECTOR3 CONTAINER_SPACE({ 400.0, 0.0, -150.0f });	// コンテナ間の広さ
 	const float RESPAWN_TIME(10.0f);	// コンテナ復活の時間
 
 	const float RIFT_IN(100.0f);	// リフトの範囲
@@ -129,7 +129,7 @@ HRESULT CSelect::Init(void)
 
 	if (pObject != nullptr)
 	{
-		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\MATERIAL\\DirtyConcrete_00.jpg");
+		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\wood001.jpg");
 		pObject->SetIdxTexture(nIdx);
 		pObject->SetTex(D3DXVECTOR2(10.0f, 10.0f), D3DXVECTOR2(0.0f, 0.0f));
 	}
@@ -276,6 +276,9 @@ void CSelect::ContainerInit(void)
 	// 武器マネージャの生成
 	CWeaponManager::Create();
 
+	int nCnt1 = 0;
+	int nCnt2 = 0;
+
 	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 	{
 		// コンテナの生成
@@ -288,8 +291,10 @@ void CSelect::ContainerInit(void)
 			(
 				CONTAINER_POS.x,
 				0.0f, 
-				CONTAINER_POS.z + (nCnt * CONTAINER_SPACE.z))
+				CONTAINER_POS.z + (nCnt1 * CONTAINER_SPACE.z))
 			);
+
+			nCnt1++;
 		}
 		else
 		{
@@ -297,8 +302,10 @@ void CSelect::ContainerInit(void)
 			(
 				CONTAINER_POS.x + CONTAINER_SPACE.x,
 				0.0f + +CONTAINER_SPACE.y,
-				CONTAINER_POS.z + (nCnt * CONTAINER_SPACE.z))
+				CONTAINER_POS.z + (nCnt2 * CONTAINER_SPACE.z))
 			);
+
+			nCnt2++;
 		}
 	}
 }
@@ -432,6 +439,9 @@ void CSelect::Update(void)
 //=====================================================
 void CSelect::ReSetContainer(void)
 {
+	int nCnt1 = 0;
+	int nCnt2 = 0;
+
 	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 	{
 		if (m_aContainerData[nCnt].pContainer != nullptr)
@@ -454,8 +464,8 @@ void CSelect::ReSetContainer(void)
 			{
 				continue;
 			}
-
-			// コンテナ生成
+			
+			// コンテナの生成
 			m_aContainerData[nCnt].pContainer = CContainer::Create();
 
 			if (m_aContainerData[nCnt].pContainer == nullptr)
@@ -470,8 +480,10 @@ void CSelect::ReSetContainer(void)
 				(
 					CONTAINER_POS.x,
 					0.0f,
-					CONTAINER_POS.z + (nCnt * CONTAINER_SPACE.z))
+					CONTAINER_POS.z + (nCnt1 * CONTAINER_SPACE.z))
 				);
+
+				nCnt1++;
 			}
 			else
 			{
@@ -479,8 +491,10 @@ void CSelect::ReSetContainer(void)
 				(
 					CONTAINER_POS.x + CONTAINER_SPACE.x,
 					0.0f + +CONTAINER_SPACE.y,
-					CONTAINER_POS.z + (nCnt * CONTAINER_SPACE.z))
+					CONTAINER_POS.z + (nCnt2 * CONTAINER_SPACE.z))
 				);
+
+				nCnt2++;
 			}
 		}
 	}

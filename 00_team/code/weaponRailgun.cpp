@@ -196,6 +196,14 @@ void CRailgun::Shot(void)
 			{
 				if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB, nID))
 				{// ŽËŒ‚
+
+					CSound* pSound = CSound::GetInstance();
+
+					if (pSound != nullptr)
+					{
+						pSound->Play(pSound->LABEL_SE_GUNSHOT_03);
+					}
+
 					if (nBullet > 0 && nCntShot == 0)
 					{// ’e‚Ì”­ŽË
 						pEnemy->Hit(info.fDamage);
