@@ -146,6 +146,13 @@ void CBox::Update(void)
 
 		m_pCollisionSphere->SetPosition(pos);
 	}
+
+	if (m_pCollisionCube != nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+
+		m_pCollisionCube->SetPosition(pos);
+	}
 }
 
 //=====================================================
