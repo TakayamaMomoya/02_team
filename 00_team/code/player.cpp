@@ -57,7 +57,7 @@ namespace
 	const float ARROW_POSY = 5.0f;	// 矢印の位置の高さ
 	const float ARROW_WIDTH = 30.0f;	// 矢印の幅
 	const float ARROW_HEIGHT = 50.0f;	// 矢印の高さ
-	const float GRAVITY = 0.98f;	// 重力
+	const float GRAVITY = 1.58f;	// 重力
 	const float POW_PUNCH_UP = 15.0f;	// パンチで飛び上がるジャンプ量
 
 	const int HAND_PARTS_NUM = 6;				// 手の番号
@@ -332,8 +332,8 @@ void CPlayer::Update(void)
 	// 移動量の減衰
 	if (m_info.state == STATE_BLOW)
 	{
-		move.x *= 0.01f;
-		move.z *= 0.01f;
+		move.x *= 0.6f;
+		move.z *= 0.6f;
 	}
 	else
 	{
