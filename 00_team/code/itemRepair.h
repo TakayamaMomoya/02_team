@@ -17,6 +17,7 @@
 // 前方宣言
 //*****************************************************
 class CPlayer;
+class CFan3D;
 
 //*****************************************************
 // クラスの定義
@@ -43,6 +44,7 @@ private:
 	bool m_bInRocket;
 	float m_fCntRepair;
 	CPlayer *m_pPlayer;
+	CFan3D *m_pGauge;
 };
 
 #endif

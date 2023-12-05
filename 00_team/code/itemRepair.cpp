@@ -18,7 +18,7 @@
 #include "rocket.h"
 #include "sound.h"
 #include "manager.h"
-
+#include "fan3D.h"
 #include "motionDiv.h"
 
 //=====================================================
@@ -27,6 +27,7 @@
 CItemRepair::CItemRepair(int nPriority) : CGimmick(nPriority)
 {
 	m_pPlayer = nullptr;
+	m_pGauge = nullptr;
 	m_bInRocket = false;
 	m_fCntRepair = 0.0f;
 }
@@ -91,6 +92,12 @@ void CItemRepair::Load(void)
 void CItemRepair::Uninit(void)
 {
 	m_pPlayer = nullptr;
+
+	if (m_pGauge != nullptr)
+	{
+		m_pGauge->Uninit();
+		m_pGauge = nullptr;
+	}
 
 	// Œp³ƒNƒ‰ƒX‚ÌI—¹
 	CGimmick::Uninit();
@@ -278,12 +285,35 @@ void CItemRepair::CollisionRocket(void)
 
 				if (bInteract)
 				{
+					float fTime = pRocket->GetTime();
+
+					if (m_pGauge == nullptr)
+					{// ƒQ[ƒW‚Ì¶¬
+						D3DXVECTOR3 pos = GetPosition();
+
+						pos.y += 150.0f;
+						pos.x += 50.0f;
+
+						m_pGauge = CFan3D::Create();
+						m_pGauge->SetPosition(pos);
+						m_pGauge->SetRadius(30.0f);
+						m_pGauge->EnableBillboard(true);
+						m_pGauge->EnableZtest(true);
+
+						m_pGauge->SetVtx();
+					}
+
+					if (m_pGauge != nullptr)
+					{// ƒQ[ƒW‚ÌŠp“xÝ’è
+						float fRate = m_fCntRepair / fTime;
+						m_pGauge->SetAngleMax(fRate);
+						m_pGauge->SetVtx();
+					}
+
 					// ƒJƒEƒ“ƒ^[‚ð‰ÁŽZ
 					float fTick = CManager::GetTick();
 
 					m_fCntRepair += fTick;
-
-					float fTime = pRocket->GetTime();
 
 					if (fTime <= m_fCntRepair)
 					{
@@ -297,6 +327,14 @@ void CItemRepair::CollisionRocket(void)
 						pRocket->AddProgress(1);
 
 						Uninit();
+					}
+				}
+				else
+				{
+					if (m_pGauge != nullptr)
+					{// ƒQ[ƒW‚Ì”jŠü
+						m_pGauge->Uninit();
+						m_pGauge = nullptr;
 					}
 				}
 			}
