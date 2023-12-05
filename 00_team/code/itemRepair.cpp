@@ -20,6 +20,16 @@
 #include "manager.h"
 #include "fan3D.h"
 #include "motionDiv.h"
+#include "billboard.h"
+#include "texture.h"
+
+//*****************************************************
+// 定数定義
+//*****************************************************
+namespace
+{
+const float SIZE_INTERACT = 30.0f;	// インタラクト表示のサイズ
+}
 
 //=====================================================
 // コンストラクタ
@@ -28,6 +38,7 @@ CItemRepair::CItemRepair(int nPriority) : CGimmick(nPriority)
 {
 	m_pPlayer = nullptr;
 	m_pGauge = nullptr;
+	m_pInteract = nullptr;
 	m_bInRocket = false;
 	m_fCntRepair = 0.0f;
 }
@@ -97,6 +108,12 @@ void CItemRepair::Uninit(void)
 	{
 		m_pGauge->Uninit();
 		m_pGauge = nullptr;
+	}
+
+	if (m_pInteract != nullptr)
+	{
+		m_pInteract->Uninit();
+		m_pInteract = nullptr;
 	}
 
 	// 継承クラスの終了
@@ -268,6 +285,32 @@ void CItemRepair::CollisionRocket(void)
 
 		if (m_bInRocket)
 		{
+			if (m_pInteract == nullptr)
+			{// インタラクト表示生成
+				D3DXVECTOR3 pos = GetPosition();
+
+				pos.y += 50.0f;
+
+				m_pInteract = CBillboard::Create(pos, SIZE_INTERACT, SIZE_INTERACT);
+
+				if (m_pInteract != nullptr)
+				{
+					int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\interact.png");
+					m_pInteract->SetIdxTexture(nIdx);
+					m_pInteract->SetZTest(true);
+				}
+			}
+
+			if (m_pInteract != nullptr)
+			{// インタラクト表示追従
+				D3DXVECTOR3 pos = GetPosition();
+
+				pos.y += 50.0f;
+
+				m_pInteract->SetPosition(pos);
+				m_pInteract->SetVtx();
+			}
+
 			//　サウンドインスタンスの取得
 			CSound* pSound = CSound::GetInstance();
 
@@ -337,6 +380,14 @@ void CItemRepair::CollisionRocket(void)
 						m_pGauge = nullptr;
 					}
 				}
+			}
+		}
+		else
+		{
+			if (m_pInteract != nullptr)
+			{// インタラクト表示削除
+				m_pInteract->Uninit();
+				m_pInteract = nullptr;
 			}
 		}
 	}

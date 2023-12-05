@@ -18,6 +18,7 @@
 //*****************************************************
 class CPlayer;
 class CFan3D;
+class CBillboard;
 
 //*****************************************************
 // ƒNƒ‰ƒX‚Ì’è‹`
@@ -45,6 +46,7 @@ private:
 	float m_fCntRepair;
 	CPlayer *m_pPlayer;
 	CFan3D *m_pGauge;
+	CBillboard *m_pInteract;
 };
 
 #endif
