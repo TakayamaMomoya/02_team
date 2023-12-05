@@ -20,13 +20,16 @@
 #include "rocket.h"
 #include "game.h"
 #include "sound.h"
+#include "object3D.h"
+#include "texture.h"
 
 //*****************************************************
 // 定数定義
 //*****************************************************
 namespace
 {
-	const char* INFO_PATH = "data\\TEXT\\goal.txt";	// ゴール情報のテキスト
+const char* INFO_PATH = "data\\TEXT\\goal.txt";	// ゴール情報のテキスト
+const char* TEX_PATH = "data\\TEXTURE\\UI\\escape.png";	// 脱出表示テクスチャのパス
 }
 
 //*****************************************************
@@ -42,6 +45,7 @@ CGoal::CGoal(int nPriority) : CObjectX(nPriority)
 	m_bFinish = false;
 	m_fRadius = 0.0f;
 	m_pCollisionGoal = nullptr;
+	m_pArea = nullptr;
 }
 
 //=====================================================
@@ -92,6 +96,23 @@ HRESULT CGoal::Init(void)
 
 	// 情報読み込み
 	Load();
+
+	if (m_pArea == nullptr)
+	{// 範囲表示の生成
+		D3DXVECTOR3 pos = GetPosition();
+		pos.y += 1.0f;
+
+		m_pArea = CObject3D::Create(pos);
+
+		if (m_pArea != nullptr)
+		{
+			int nIdx = CTexture::GetInstance()->Regist(TEX_PATH);
+			m_pArea->SetIdxTexture(nIdx);
+
+			m_pArea->SetSize(m_fRadius, m_fRadius);
+			m_pArea->SetVtx();
+		}
+	}
 
 	return S_OK;
 }
@@ -211,6 +232,12 @@ void CGoal::Uninit(void)
 		m_pCollisionGoal = nullptr;
 	}
 
+	if (m_pArea != nullptr)
+	{
+		m_pArea->Uninit();
+		m_pArea = nullptr;
+	}
+
 	m_pGoal = nullptr;
 
 	// 継承クラスの終了
@@ -233,6 +260,15 @@ void CGoal::Update(void)
 		D3DXVECTOR3 pos = GetPosition();
 
 		m_pCollisionGoal->SetPosition(pos);
+	}
+
+	if (m_pArea != nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+		pos.y += 1.0f;
+
+		m_pArea->SetPosition(pos);
+		m_pArea->SetVtx();
 	}
 }
 
