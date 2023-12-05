@@ -24,13 +24,15 @@
 #include "universal.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define INITIAL_LIFE	(10.0f)	// 初期体力
-#define INITIAL_SPEED	(1.0f)	// 初期移動速度
-#define DAMAGE_FRAME	(10)	// ダメージ状態の継続フレーム数
-#define INITIAL_SCORE	(1000)	// 初期スコア
-#define TIME_DEATH	(30)	// 死亡までのタイム
+namespace
+{
+	const float INITIAL_LIFE = 10.0f;	// 初期体力
+	const float INITIAL_SPEED = 1.0f;	// 初期速度
+	const int DAMAGE_FRAME = 10;	// ダメージ状態のフレーム数
+	const int TIME_DEATH = 60;	// 死亡までの時間
+}
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -57,7 +59,6 @@ CEnemy::CEnemy()
 	}
 
 	m_fLife = 0;
-	m_nScore = 0;
 	m_fMoveSpeed = 0.0f;
 	m_nTimerState = 0;
 	m_pCollisionSphere = nullptr;
@@ -222,8 +223,6 @@ HRESULT CEnemy::Init(void)
 	// 通常状態にする
 	m_state = STATE_NORMAL;
 
-	m_nScore = INITIAL_SCORE;
-
 	SetPositionOld(GetPosition());
 
 	return S_OK;
@@ -255,8 +254,11 @@ void CEnemy::Update(void)
 	// 当たり判定の管理
 	ManageCollision();
 
-	// 目標追跡
-	ChaseTarget();
+	if (m_state != STATE_DEATH)
+	{
+		// 目標追跡
+		ChaseTarget();
+	}
 
 	// 移動量を反映
 	D3DXVECTOR3 pos = GetPosition();
