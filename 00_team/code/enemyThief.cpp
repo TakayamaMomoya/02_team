@@ -25,6 +25,7 @@
 namespace 
 {
 const float TIME_CAMERAEVENT = 4.0f;	// カメラのイベント継続時間
+const float MOVE_SPEED = 1.7f;	// 移動速度
 }
 
 //=====================================================
@@ -62,6 +63,9 @@ HRESULT CEnemyThief::Init(void)
 
 	// 追跡状態に設定
 	m_state = STATE_CHASE;
+
+	// 移動速度の設定
+	SetMoveSpeed(MOVE_SPEED);
 
 	return S_OK;
 }
