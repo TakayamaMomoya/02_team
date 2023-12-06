@@ -19,6 +19,7 @@
 class CPlayer;
 class CFan3D;
 class CBillboard;
+class CAnim3D;
 
 //*****************************************************
 // ƒNƒ‰ƒX‚Ì’è‹`
@@ -37,6 +38,7 @@ public:
 
 private:
 	void Load(void);
+	void CreateGuide(void);
 	void Interact(CObject* pObj);
 	void CollisionRocket(void);
 	void CheckPlayerAlive(void);
@@ -47,6 +49,7 @@ private:
 	CPlayer *m_pPlayer;
 	CFan3D *m_pGauge;
 	CBillboard *m_pInteract;
+	CAnim3D *m_pGuide;
 };
 
 #endif
