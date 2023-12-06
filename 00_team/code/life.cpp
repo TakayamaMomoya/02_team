@@ -224,50 +224,53 @@ void CLife::SetVtxGage(void)
 	// 頂点情報のポインタ
 	VERTEX_2D* pVtx;
 
-	if (m_pUi->GetVtxBuff() != nullptr)
+	if (m_pUi != nullptr)
 	{
-		// 頂点バッファをロックし、頂点情報へのポインタを取得
-		m_pUi->GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
-
-		// 対角線の角度取得
-		float fAngleUp = atan2f(m_info.fWidth, m_info.fHeight);
-		// 長さの取得
-		float fLengthUp = sqrtf(m_info.fWidth * m_info.fWidth + m_info.fHeight * m_info.fHeight);
-		float fLengthSub = sqrtf(m_info.fWidthSub * m_info.fWidthSub + m_info.fHeightSub * m_info.fHeightSub);
-
-		if (fLengthUp - fLengthSub <= 1.0f)
+		if (m_pUi->GetVtxBuff() != nullptr)
 		{
-			fLengthUp = 0.0f;
-			fLengthSub = 0.0f;
+			// 頂点バッファをロックし、頂点情報へのポインタを取得
+			m_pUi->GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
+
+			// 対角線の角度取得
+			float fAngleUp = atan2f(m_info.fWidth, m_info.fHeight);
+			// 長さの取得
+			float fLengthUp = sqrtf(m_info.fWidth * m_info.fWidth + m_info.fHeight * m_info.fHeight);
+			float fLengthSub = sqrtf(m_info.fWidthSub * m_info.fWidthSub + m_info.fHeightSub * m_info.fHeightSub);
+
+			if (fLengthUp - fLengthSub <= 1.0f)
+			{
+				fLengthUp = 0.0f;
+				fLengthSub = 0.0f;
+			}
+
+			// 頂点座標の設定
+			pVtx[0].pos = D3DXVECTOR3
+			(
+				m_info.pos.x + sinf(0.0f - D3DX_PI + fAngleUp) * fLengthUp,
+				m_info.pos.y + cosf(0.0f - D3DX_PI + fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
+				0.0f
+			);
+			pVtx[1].pos = D3DXVECTOR3
+			(
+				m_info.pos.x + sinf(0.0f + D3DX_PI - fAngleUp) * fLengthUp,
+				m_info.pos.y + cosf(0.0f + D3DX_PI - fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
+				0.0f
+			);
+			pVtx[2].pos = D3DXVECTOR3
+			(
+				m_info.pos.x + sinf(0.0f - fAngleUp) * fLengthUp,
+				m_info.pos.y + cosf(0.0f - fAngleUp),
+				0.0f
+			);
+			pVtx[3].pos = D3DXVECTOR3
+			(
+				m_info.pos.x + sinf(0.0f + fAngleUp) * fLengthUp,
+				m_info.pos.y + cosf(0.0f + fAngleUp),
+				0.0f
+			);
+
+			// 頂点バッファのアンロック
+			m_pUi->GetVtxBuff()->Unlock();
 		}
-
-		// 頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3
-		(
-			m_info.pos.x + sinf(0.0f - D3DX_PI + fAngleUp) * fLengthUp,
-			m_info.pos.y + cosf(0.0f - D3DX_PI + fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
-			0.0f
-		);
-		pVtx[1].pos = D3DXVECTOR3
-		(
-			m_info.pos.x + sinf(0.0f + D3DX_PI - fAngleUp) * fLengthUp,
-			m_info.pos.y + cosf(0.0f + D3DX_PI - fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
-			0.0f
-		);
-		pVtx[2].pos = D3DXVECTOR3
-		(
-			m_info.pos.x + sinf(0.0f - fAngleUp) * fLengthUp,
-			m_info.pos.y + cosf(0.0f - fAngleUp),
-			0.0f
-		);
-		pVtx[3].pos = D3DXVECTOR3
-		(
-			m_info.pos.x + sinf(0.0f + fAngleUp) * fLengthUp,
-			m_info.pos.y + cosf(0.0f + fAngleUp),
-			0.0f
-		);
-
-		// 頂点バッファのアンロック
-		m_pUi->GetVtxBuff()->Unlock();
 	}
 }

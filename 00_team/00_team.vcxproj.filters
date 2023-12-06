@@ -172,9 +172,11 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="code\gameover.cpp" />
-    <ClCompile Include="code\UIMagazine.cpp" />
     <ClCompile Include="code\enemyThief.cpp">
       <Filter>enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="code\UIMagazine.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -322,9 +324,11 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="code\gameover.h" />
-    <ClInclude Include="code\UIMagazine.h" />
     <ClInclude Include="code\enemyThief.h">
       <Filter>enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="code\UIMagazine.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
