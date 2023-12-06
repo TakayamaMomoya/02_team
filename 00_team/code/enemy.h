@@ -59,7 +59,6 @@ public:
 	void SetLife(float fLife);
 	float GetLife(void) { return m_fLife; }
 	void Hit(float fDamage);
-	void Death(void);
 	void SetSpherePosition(D3DXVECTOR3 pos);
 	STATE GetState(void) { return m_state; }
 	void SetState(STATE state) { m_state = state; }
@@ -76,6 +75,7 @@ protected:
 	void ManageScore(void);
 	CBlock *GetTouchBlock(void) { return m_pBlock; }
 	void ChaseTarget(void);
+	virtual void Death(void);
 
 private:
 	void ManageState(void);

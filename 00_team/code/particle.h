@@ -25,6 +25,7 @@ public:
 		TYPE_EXPLOSION,	// ”š”­
 		TYPE_INJECTION_FIRE,	// •¬ŽË(‰Î)
 		TYPE_INJECTION_SMOKE,	// •¬ŽË(‰Œ)
+		TYPE_SMOKE,	// ‰Œ
 		TYPE_MAX
 	}TYPE;
 

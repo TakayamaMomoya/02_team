@@ -257,7 +257,8 @@ void CRocket::Update(void)
 	{// íEèoèÛë‘ÇÃçXêV
 		UpdateEscape();
 		CParticle::Create({ GetPosition().x, GetPosition().y - 30.0f, GetPosition().z }, CParticle::TYPE::TYPE_INJECTION_FIRE);
-		CParticle::Create({ GetPosition().x, GetPosition().y - 120.0f, GetPosition().z }, CParticle::TYPE::TYPE_INJECTION_SMOKE);
+		CParticle::Create({ GetPosition().x, GetPosition().y - 30.0f, GetPosition().z }, CParticle::TYPE::TYPE_INJECTION_SMOKE);
+		CParticle::Create({ GetPosition().x, 0.0f, GetPosition().z }, CParticle::TYPE::TYPE_SMOKE);
 	}
 
 #ifdef _DEBUG

@@ -50,10 +50,10 @@ namespace
 
 	const D3DXVECTOR3 LIFE_POS_PLUS[NUM_PLAYER] =
 	{// Šî€‚©‚ç‰ÁŽZ•ª‚ÌˆÊ’u
-		D3DXVECTOR3(-15.5f,  45.0f, 0.0f),
-		D3DXVECTOR3( 15.5f,  45.0f, 0.0f),
-		D3DXVECTOR3(-15.5f, -45.0f, 0.0f),
-		D3DXVECTOR3( 15.5f, -45.0f, 0.0f),
+		D3DXVECTOR3(-15.5f,  135.0f, 0.0f),
+		D3DXVECTOR3( 15.5f,  135.0f, 0.0f),
+		D3DXVECTOR3(-15.5f,   45.0f, 0.0f),
+		D3DXVECTOR3( 15.5f,   45.0f, 0.0f),
 	};
 	const float LIFE_SIZE = 100.0f;
 	const float LIFE_WIDTH = LIFE_SIZE * 0.1f;
@@ -62,13 +62,6 @@ namespace
 	const char* LIFE_FILE_NAME = "data\\UI\\UILife000.txt";
 
 	const D3DXVECTOR3 MAGAZINE_POS_PLUS[NUM_PLAYER] =
-	{// Šî€‚©‚ç‰ÁŽZ•ª‚ÌˆÊ’u
-		D3DXVECTOR3( 15.0f,  80.0f, 0.0f),
-		D3DXVECTOR3(-65.0f,  80.0f, 0.0f),
-		D3DXVECTOR3( 15.0f, -80.0f, 0.0f),
-		D3DXVECTOR3(-65.0f, -80.0f, 0.0f),
-	};
-	const D3DXVECTOR3 MAGAZINE_MAX_POS_PLUS[NUM_PLAYER] =
 	{// Šî€‚©‚ç‰ÁŽZ•ª‚ÌˆÊ’u
 		D3DXVECTOR3( 15.0f,  50.0f, 0.0f),
 		D3DXVECTOR3(-65.0f,  50.0f, 0.0f),
@@ -212,9 +205,7 @@ void CUIManager::SetPlayer(int nIdx)
 		m_aInfo[nIdx].pUIMagazine = pUIMagazine;
 
 		// ƒ‰ƒCƒt‚ÌÝ’è
-		m_aInfo[nIdx].pUIMagazine->SetPosition(
-			FRAME_POS[nIdx] + MAGAZINE_POS_PLUS[nIdx],
-			FRAME_POS[nIdx] + MAGAZINE_MAX_POS_PLUS[nIdx]);
+		m_aInfo[nIdx].pUIMagazine->SetPosition(FRAME_POS[nIdx] + MAGAZINE_POS_PLUS[nIdx]);
 		m_aInfo[nIdx].pUIMagazine->SetSize(MAGAZINE_WIDTH, MAGAZINE_HEIGHT);
 		m_aInfo[nIdx].pUIMagazine->SetCol(MAGAZINE_COLOR);
 		//m_aInfo[nIdx].pLife->SetTexture(LIFE_FILE_NAME);

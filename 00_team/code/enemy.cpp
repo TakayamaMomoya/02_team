@@ -357,7 +357,7 @@ void CEnemy::ManageState(void)
 
 		if (m_nTimerState >= TIME_DEATH)
 		{// €–S
-			Death();
+			Uninit();
 		}
 
 		break;
@@ -472,6 +472,9 @@ void CEnemy::Hit(float fDamage)
 
 			// “–‚½‚è”»’èíœ
 			DeleteCollision();
+
+			// €–Sˆ—
+			Death();
 		}
 		else
 		{
@@ -490,8 +493,7 @@ void CEnemy::Hit(float fDamage)
 //=====================================================
 void CEnemy::Death(void)
 {
-	// ©g‚ÌI—¹
-	Uninit();
+
 }
 
 //=====================================================
