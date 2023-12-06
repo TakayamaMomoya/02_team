@@ -38,6 +38,8 @@ CEnemyManager *CEnemyManager::m_pEnemyManager = nullptr;	// 自身のポインタ
 CEnemyManager::CEnemyManager()
 {
 	m_nCntSpawn = 0;
+	m_nMinTimeSpawnThief = 0;
+	m_nMaxTimeSpawnThief = 0;
 	m_fTimerThief = 0.0f;
 	m_fTimeSpawnThief = 0.0f;
 	m_pThief = nullptr;
@@ -123,9 +125,55 @@ CEnemy *CEnemyManager::CreateEnemy(D3DXVECTOR3 pos, CEnemy::TYPE type)
 //=====================================================
 HRESULT CEnemyManager::Init(void)
 {
-	m_fTimeSpawnThief = 2.0f;
+	// 読込処理
+	Load();
+
+	// 最初の出現時間設定
+	m_fTimeSpawnThief = (float)universal::RandRange(m_nMaxTimeSpawnThief, m_nMinTimeSpawnThief);
 
 	return S_OK;
+}
+
+//=====================================================
+// 読込処理
+//=====================================================
+void CEnemyManager::Load(void)
+{
+	// 変数宣言
+	char cTemp[256];
+	int nCntAttack = 0;
+
+	// ファイルから読み込む
+	FILE *pFile = fopen("data\\TEXT\\enemy.txt", "r");
+
+	if (pFile != nullptr)
+	{// ファイルが開けた場合
+		while (true)
+		{
+			// 文字読み込み
+			(void)fscanf(pFile, "%s", &cTemp[0]);
+
+			if (strcmp(cTemp, "TIME_SPAWN_THIEF") == 0)
+			{// 初期体力
+				(void)fscanf(pFile, "%s", &cTemp[0]);
+
+				(void)fscanf(pFile, "%d", &m_nMinTimeSpawnThief);
+				(void)fscanf(pFile, "%d", &m_nMaxTimeSpawnThief);
+			}
+
+			if (strcmp(cTemp, "END_SCRIPT") == 0)
+			{
+				break;
+			}
+		}
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		assert(("敵情報読み込みに失敗", false));
+	}
 }
 
 //=====================================================
@@ -219,7 +267,7 @@ void CEnemyManager::SpawnThief(void)
 		m_fTimerThief = 0.0f;
 
 		// 次に出現する時間を設定
-		m_fTimeSpawnThief = (float)universal::RandRange(20,10);
+		m_fTimeSpawnThief = (float)universal::RandRange(m_nMaxTimeSpawnThief,m_nMinTimeSpawnThief);
 	}
 }
 

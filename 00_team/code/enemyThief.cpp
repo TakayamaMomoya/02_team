@@ -132,8 +132,11 @@ void CEnemyThief::Update(void)
 
 	CEnemy::STATE state = GetState();
 
-	// 更新処理の分岐
-	SwitchUpdate();
+	if (state != CEnemy::STATE::STATE_DEATH)
+	{
+		// 更新処理の分岐
+		SwitchUpdate();
+	}
 }
 
 //=====================================================
