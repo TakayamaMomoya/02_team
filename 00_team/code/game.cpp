@@ -112,6 +112,8 @@ HRESULT CGame::Init(void)
 	// 敵マネージャーの生成
 	CEnemyManager *pEnemyManager = CEnemyManager::Create();
 
+	pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, 0.0f), CEnemy::TYPE::TYPE_THIEF);
+
 	// ロケットの生成
 	CRocket::Create();
 

@@ -263,12 +263,6 @@ void CEnemy::Update(void)
 	// “–‚½‚è”»’è‚ÌŠÇ—
 	ManageCollision();
 
-	if (m_state != STATE_DEATH)
-	{
-		// –Ú•W’ÇÕ
-		ChaseTarget();
-	}
-
 	// ˆÚ“®—Ê‚ğ”½‰f
 	D3DXVECTOR3 pos = GetPosition();
 	D3DXVECTOR3 move = GetMove();
