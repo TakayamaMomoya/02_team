@@ -360,8 +360,8 @@ void CCamera::UpdateResult(void)
 	m_camera.posVDest =
 	{
 		0.0f,
-		100.0f,
-		-100.0f,
+		500.0f,
+		-300.0f,
 	};
 
 	// –Ú“IÀ•W‚É•â³
