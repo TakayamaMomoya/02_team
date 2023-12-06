@@ -127,6 +127,9 @@ HRESULT CBlock::Init(void)
 
 	m_fLife = 900.0f;
 
+	// ‰e‚Ì—LŒø‰»
+	EnableShadow(true);
+
 	return S_OK;
 }
 

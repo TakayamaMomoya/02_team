@@ -17,6 +17,8 @@
 // 前方宣言
 //*****************************************************
 class CPlayer;
+class CFan3D;
+class CBillboard;
 
 //*****************************************************
 // クラスの定義
@@ -40,7 +42,11 @@ private:
 	void CheckPlayerAlive(void);
 	void FollowPlayerHand(void);
 
+	bool m_bInRocket;
+	float m_fCntRepair;
 	CPlayer *m_pPlayer;
+	CFan3D *m_pGauge;
+	CBillboard *m_pInteract;
 };
 
 #endif

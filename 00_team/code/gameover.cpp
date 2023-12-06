@@ -16,13 +16,15 @@
 #include "fade.h"
 #include "inputkeyboard.h"
 #include "inputjoypad.h"
+#include "camera.h"
+#include "manager.h"
 
 //===============================================
 // 定数定義
 //===============================================
 namespace
 {
-	// 敵の体のパス
+	// プレイヤーの体のパス
 	const char* PLAYER_BODY_PATH[NUM_PLAYER] =
 	{
 		"data\\MOTION\\motionPotatoman01.txt",
@@ -34,18 +36,18 @@ namespace
 	// プレイヤーの位置
 	const D3DXVECTOR3 PLAYER_POS[NUM_PLAYER] =
 	{
-		D3DXVECTOR3(0.0f, 0.0f, -150.0f),
-		D3DXVECTOR3(-125.0f, 0.0f, -100.0f),
-		D3DXVECTOR3(100.0f, 0.0f,  -50.0f),
-		D3DXVECTOR3(-75.0f, 0.0f,  100.0f),
+		D3DXVECTOR3(100.0f, 0.0f, 130.0f),
+		D3DXVECTOR3(150.0f, 0.0f, 130.0f),
+		D3DXVECTOR3(200.0f, 0.0f, 130.0f),
+		D3DXVECTOR3(250.0f, 0.0f, 130.0f),
 	};
 
 	// プレイヤーの向き
 	const D3DXVECTOR3 PLAYER_ROT[NUM_PLAYER] =
 	{
 		D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI * -0.25f, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * -0.15f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.15f, 0.0f),
 		D3DXVECTOR3(0.0f, D3DX_PI * -0.10f, 0.0f),
 	};
 
@@ -55,7 +57,7 @@ namespace
 	// 敵の位置
 	const D3DXVECTOR3 ENEMY_POS[NUM_ENEMY] =
 	{
-		D3DXVECTOR3(0.0f, 0.0f, -150.0f),
+		D3DXVECTOR3(170.0f, 0.0f, 200.0f),
 	};
 
 	// 敵の向き
@@ -63,11 +65,18 @@ namespace
 	{
 		D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
 	};
+
+	// 視点カメラの位置
+	const D3DXVECTOR3 CAMERA_POSV = D3DXVECTOR3(150.0f, 100.0f, -50.0f);
+
+	// 注視点カメラの位置
+	const D3DXVECTOR3 CAMERA_POSR = D3DXVECTOR3(150.0f, -50.0f, 250.0f);
 }
 
 //===============================================
-// 静的メンバ変数
+// 静的メンバ変数宣言
 //===============================================
+CGameover* CGameover::m_pGameover = nullptr;	// 自身のポインタ
 
 //===============================================
 // コンストラクタ
@@ -76,6 +85,7 @@ CGameover::CGameover()
 {
 	// 値のクリア
 	ZeroMemory(&m_apModelPlayer[0], sizeof(m_apModelPlayer));
+	ZeroMemory(&m_apModelEnemy[0], sizeof(m_apModelEnemy));
 }
 
 //===============================================
@@ -91,22 +101,23 @@ CGameover::~CGameover()
 //===============================================
 CGameover *CGameover::Create(int nPriority)
 {
-	CGameover *pGameover;
-
-	// ゲームオーバーの生成
-	pGameover = new CGameover;
-
-	if (pGameover != nullptr)
+	if (m_pGameover == nullptr)
 	{
-		// 初期化処理
-		pGameover->Init();
-	}
-	else if(pGameover == nullptr)
-	{
-		return nullptr;
+		// ゲームオーバーの生成
+		m_pGameover = new CGameover;
+
+		if (m_pGameover != nullptr)
+		{
+			// 初期化処理
+			m_pGameover->Init();
+		}
+		else if (m_pGameover == nullptr)
+		{
+			return nullptr;
+		}
 	}
 
-	return pGameover;
+	return m_pGameover;
 }
 
 //===============================================
@@ -189,7 +200,9 @@ HRESULT CGameover::Init()
 //===============================================
 void CGameover::Uninit(void)
 {
-	
+	m_pGameover = nullptr;
+
+	delete this;
 }
 
 //===============================================
@@ -199,10 +212,15 @@ void CGameover::Update(void)
 {
 	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
+	CCamera* pCamera = CManager::GetCamera();
 
 	// カメラをロケット付近へ移動
 
-
+	if (pCamera != nullptr)
+	{
+		// カメラの設定
+		pCamera->UpdateGameover(CAMERA_POSV, CAMERA_POSR);
+	}
 
 	// ゲームオーバーの表示
 
@@ -214,6 +232,14 @@ void CGameover::Update(void)
 		if (pFade != nullptr)
 		{
 			pFade->SetFade(CScene::MODE_RANKING);	// ランキングに遷移
+
+			// プレイヤーマネージャーの終了
+			CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();
+
+			if (pPlayerManger != nullptr)
+			{
+				pPlayerManger->Uninit();
+			}
 		}
 	}
 }
@@ -222,14 +248,6 @@ void CGameover::Update(void)
 // 描画処理
 //===============================================
 void CGameover::Draw(void)
-{
-	
-}
-
-//===============================================
-// 設定処理
-//===============================================
-void CGameover::Set(const D3DXVECTOR3 pos, const bool bMove)
 {
 	
 }

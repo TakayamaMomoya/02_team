@@ -37,6 +37,7 @@
 #include "animEffect3D.h"
 #include "pause.h"
 #include "box.h"
+#include "gameover.h"
 
 //*****************************************************
 // マクロ定義
@@ -56,6 +57,7 @@ CGame::CGame()
 {
 	m_nCntState = 0;
 	m_bStop = false;
+	m_bGameover = false;
 }
 
 //=====================================================
@@ -75,6 +77,7 @@ HRESULT CGame::Init(void)
 
 	m_state = STATE_NORMAL;
 	m_bStop = false;
+	m_bGameover = false;
 
 	// UIマネージャーの追加
 	CUIManager::Create();
@@ -107,7 +110,7 @@ HRESULT CGame::Init(void)
 	CWeaponManager::Create();
 
 	// 敵マネージャーの生成
-	//CEnemyManager *pEnemyManager = CEnemyManager::Create();
+	CEnemyManager *pEnemyManager = CEnemyManager::Create();
 
 	// ロケットの生成
 	CRocket::Create();
@@ -153,12 +156,12 @@ void CGame::Uninit(void)
 	// ブロックの破棄
 	CBlock::DeleteAll();
 
-	// プレイヤーマネージャーの終了
-	CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();
+	// ゲームオーバーの終了
+	CGameover* pGameover = CGameover::GetInstance();
 
-	if (pPlayerManger != nullptr)
+	if (pGameover != nullptr)
 	{
-		pPlayerManger->Uninit();
+		pGameover->Uninit();
 	}
 
 	m_pGame = nullptr;
@@ -203,6 +206,13 @@ void CGame::Update(void)
 		}
 	}
 
+	CGameover* pGameover = CGameover::GetInstance();
+
+	if (pGameover != nullptr)
+	{
+		pGameover->Update();
+	}
+
 	// カメラ更新
 	UpdateCamera();
 
@@ -215,13 +225,15 @@ void CGame::Update(void)
 	{
 		int nNumPlayer = pPlayerManager->GetNumPlayer();
 
-		if (nNumPlayer <= 0)
+		if (nNumPlayer <= 0 && m_bGameover == false)
 		{
 			CFade *pFade = CFade::GetInstance();
 
 			if (pFade != nullptr)
 			{
-				pFade->SetFade(CScene::MODE_RANKING);
+				CGameover::Create();
+				m_bGameover = true;
+				//pFade->SetFade(CScene::MODE_RANKING);
 			}
 		}
 	}

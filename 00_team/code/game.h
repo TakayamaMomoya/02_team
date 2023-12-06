@@ -59,6 +59,7 @@ private:
 
 	int m_nCntState;	// 状態遷移カウンター
 	bool m_bStop;	// 停止状態
+	bool m_bGameover;	// ゲームオーバーのフラグ
 };
 
 #endif
