@@ -166,8 +166,8 @@ void CEnemyManager::Update(void)
 		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
 
 		// 出現する座標を設定
-		posCenter.x = (float)universal::RandRange(1000, -1000);
-		posCenter.z = (float)universal::RandRange(1000, -1000);
+		posCenter.x = (float)universal::RandRange(RAND_SPAWN, -RAND_SPAWN);
+		posCenter.z = (float)universal::RandRange(RAND_SPAWN, -RAND_SPAWN);
 
 		// 位置の正規化
 		D3DXVec3Normalize(&posCenter, &posCenter);
@@ -206,8 +206,8 @@ void CEnemyManager::SpawnThief(void)
 		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
 
 		// 出現する座標を設定
-		posCenter.x = (float)universal::RandRange(1000, -1000);
-		posCenter.z = (float)universal::RandRange(1000, -1000);
+		posCenter.x = (float)universal::RandRange(RAND_SPAWN, -RAND_SPAWN);
+		posCenter.z = (float)universal::RandRange(RAND_SPAWN, -RAND_SPAWN);
 
 		// 位置の正規化
 		D3DXVec3Normalize(&posCenter, &posCenter);
@@ -217,6 +217,9 @@ void CEnemyManager::SpawnThief(void)
 		m_pThief = CreateEnemy(posCenter, CEnemy::TYPE::TYPE_THIEF);
 
 		m_fTimerThief = 0.0f;
+
+		// 次に出現する時間を設定
+		m_fTimeSpawnThief = (float)universal::RandRange(20,10);
 	}
 }
 
