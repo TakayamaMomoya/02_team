@@ -10,6 +10,7 @@
 //*****************************************************
 #include "main.h"
 #include "enemyThief.h"
+#include "enemyManager.h"
 #include <stdio.h>
 #include "playerManager.h"
 #include "game.h"
@@ -75,6 +76,14 @@ HRESULT CEnemyThief::Init(void)
 //=====================================================
 void CEnemyThief::Uninit(void)
 {
+	// ‚¢‚È‚¢ó‘Ô‚Éİ’è‚·‚é
+	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
+
+	if (pEnemyManager != nullptr)
+	{
+		pEnemyManager->ReleaseThief();
+	}
+
 	// Œp³ƒNƒ‰ƒX‚ÌI—¹
 	CEnemy::Uninit();
 }

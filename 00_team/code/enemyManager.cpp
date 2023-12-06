@@ -40,6 +40,7 @@ CEnemyManager::CEnemyManager()
 	m_nCntSpawn = 0;
 	m_fTimerThief = 0.0f;
 	m_fTimeSpawnThief = 0.0f;
+	m_pThief = nullptr;
 
 	m_pHead = nullptr;
 	m_pTail = nullptr;
@@ -134,6 +135,8 @@ void CEnemyManager::Uninit(void)
 {
 	m_pEnemyManager = nullptr;
 
+	m_pThief = nullptr;
+
 	Release();
 }
 
@@ -179,8 +182,8 @@ void CEnemyManager::Update(void)
 	// ìDñ_ìGÇÃÉXÉ|Å[Éì
 	CRocket *pRocket = CRocket::GetInstance();
 
-	if (pRocket != nullptr)
-	{
+	if (pRocket != nullptr && m_pThief == nullptr)
+	{// ä˘Ç…Ç¢ÇÈèÍçáÇÕí ÇÁÇ»Ç¢
 		int nProgress = pRocket->GetProgress();
 
 		if (nProgress > 0)
@@ -211,7 +214,7 @@ void CEnemyManager::SpawnThief(void)
 		posCenter *= RAND_SPAWN;
 
 		// ìGÉXÉ|Å[Éì
-		CreateEnemy(posCenter, CEnemy::TYPE::TYPE_THIEF);
+		m_pThief = CreateEnemy(posCenter, CEnemy::TYPE::TYPE_THIEF);
 
 		m_fTimerThief = 0.0f;
 	}
