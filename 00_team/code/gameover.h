@@ -12,6 +12,7 @@
 //===============================================
 #include "main.h"
 #include "motion.h"
+#include "object2D.h"
 
 //===============================================
 // 定数定義
@@ -43,6 +44,7 @@ private:	// 自分のみアクセス可能 [アクセス指定子]
 	static CGameover* m_pGameover;	// 自身のポインタ
 	CMotion* m_apModelPlayer[NUM_PLAYER];		// プレイヤーモデルのポインタ
 	CMotion* m_apModelEnemy[NUM_ENEMY];			// エネミーモデルのポインタ
+	CObject2D* m_pLogo;							// ゲームオーバー表示
 };
 
 #endif
