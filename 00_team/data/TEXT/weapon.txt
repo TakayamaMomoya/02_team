@@ -16,9 +16,9 @@ MAGNUMSET
 END_MAGNUMSET
 
 MACHINEGUNSET
-	BULLET = 90	# 弾数
-	DAMAGE = 1.6	# 威力
-	RAPID = 3		# 発射頻度(左のフレーム数ごとに発射できる)
+	BULLET = 100	# 弾数
+	DAMAGE = 2.6	# 威力
+	RAPID = 6		# 発射頻度(左のフレーム数ごとに発射できる)
 	BULLET_LIFE = 0.65	# 弾の寿命（秒数）
 END_MACHINEGUNSET
 
@@ -32,11 +32,11 @@ SHOTGUNSET
 END_SHOTGUNSET
 
 RAILGUNSET
-	BULLET = 2	# 弾数
+	BULLET = 3	# 弾数
 	DAMAGE = 20.0	# 威力
-	RAPID = 20		# 発射頻度(左のフレーム数ごとに発射できる)
+	RAPID = 26		# 発射頻度(左のフレーム数ごとに発射できる)
 	BULLET_LIFE = 1.0	# 弾の寿命（秒数）
-	WIDTH = 100.0	# 判定の幅
+	WIDTH = 220.0	# 判定の幅
 	LENGTH = 1000.0	# 判定の長さ
 END_RAILGUNSET
 
@@ -47,7 +47,7 @@ PROBSET
 	PROB = 40 # マグナムの確率
 	PROB = 80 # マシンガンの確率
 	PROB = 20 # ショットガンの確率
-	PROB = 100 # レールガンの確率
+	PROB = 1000 # レールガンの確率
 END_PROBSET
 
 END_SCRIPT

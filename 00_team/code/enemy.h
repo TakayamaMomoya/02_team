@@ -34,6 +34,7 @@ public:
 	{// “G‚Ìí—Ş
 		TYPE_NONE = 0,	// ‰½‚Å‚à‚È‚¢
 		TYPE_NORMAL,	// ’Êí“G
+		TYPE_THIEF,	// “D–_“G
 		TYPE_MAX
 	}TYPE;
 
@@ -74,11 +75,11 @@ protected:
 	CArrow *GetShadow(void) { return m_pShadow; }
 	void ManageScore(void);
 	CBlock *GetTouchBlock(void) { return m_pBlock; }
+	void ChaseTarget(void);
 
 private:
 	void ManageState(void);
 	void ManageCollision(void);
-	void ChaseTarget(void);
 
 	static int m_nNumAll;	// ‘”
 	float m_fLife;	// ‘Ì—Í
