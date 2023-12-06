@@ -47,6 +47,7 @@ public:
 	static void SetState(STATE state) { m_state = state; }
 	static STATE GetState(void) { return m_state; }
 	void EnableStop(bool bStop) { m_bStop = bStop; }
+	void SetEventCamera(float fTime, D3DXVECTOR3 posRDest, D3DXVECTOR3 posVDest);
 	static CGame *GetInstance(void) { return m_pGame; }
 
 private:
