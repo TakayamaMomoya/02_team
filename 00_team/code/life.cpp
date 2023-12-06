@@ -126,32 +126,34 @@ void CLife::SetLife(void)
 		pPlayer = pPlayerManager->GetPlayer(m_info.nIdxPlayer);
 	}
 
-	if (pPlayerManager != nullptr &&
-		pPlayer != nullptr)
+	if (pPlayerManager != nullptr )
 	{
-		// 現在の体力を取得
-		float fLife = pPlayer->GetLife();
+		if (pPlayer != nullptr)
+		{
+			// 現在の体力を取得
+			float fLife = pPlayer->GetLife();
 
-		// 体力の初期値を取得
-		float fMaxLife = pPlayerManager->GetPlayerParam().fInitialLife;
+			// 体力の初期値を取得
+			float fMaxLife = pPlayerManager->GetPlayerParam().fInitialLife;
 
-		// ゲージの消費量を計算
-		m_info.fHeightSub = (1.0f - (fLife / fMaxLife)) * m_info.fHeight;
+			// ゲージの消費量を計算
+			m_info.fHeightSub = (1.0f - (fLife / fMaxLife)) * m_info.fHeight;
 
-		SetVtxGage();
-	}
-	else
-	{
-		// 体力はない
-		float fLife = 0.0f;
+			SetVtxGage();
+		}
+		else
+		{
+			// 体力はない
+			float fLife = 0.0f;
 
-		// 体力の初期値を取得
-		float fMaxLife = pPlayerManager->GetPlayerParam().fInitialLife;
+			// 体力の初期値を取得
+			float fMaxLife = pPlayerManager->GetPlayerParam().fInitialLife;
 
-		// ゲージの消費量を計算
-		m_info.fHeightSub = (1.0f - (fLife / fMaxLife)) * m_info.fHeight;
+			// ゲージの消費量を計算
+			m_info.fHeightSub = (1.0f - (fLife / fMaxLife)) * m_info.fHeight;
 
-		SetVtxGage();
+			SetVtxGage();
+		}
 	}
 }
 
