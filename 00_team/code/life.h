@@ -34,18 +34,26 @@ public:
 	void Update(void);
 	void Draw(void);
 
-	void SetLife(int nLife);
+	void SetLife(void);
 	void SetPosition(D3DXVECTOR3 pos);
 	void SetSize(float width, float height);
 	void SetCol(D3DXCOLOR col);
 	void SetTexture(const char* pFileName);
+	void SetVtxGage(void);
 
 private:
 
 	struct Sinfo
 	{
 		int nIdxPlayer;		// 参照するプレイヤーの番号
-		int nLife;			// 体力の値
+
+		D3DXVECTOR3 pos;		// 位置
+		float fWidth;			// 横幅
+		float fHeight;			// 縦幅
+		float fWidthSub;		// 減算する横幅
+		float fHeightSub;		// 減算する縦幅
+		D3DXCOLOR col;			// 色
+
 		int nIdxTexture;					// テクスチャ番号
 		static LPDIRECT3DTEXTURE9 pTexture;	// テクスチャへのポインタ
 	};

@@ -82,6 +82,7 @@ public:
 	bool InputInteractPress(void);
 	void EnableWeapon(bool bEnable);
 	void SetState(STATE state) { m_info.state = state; }
+	float GetLife(void) { return m_info.fLife; }
 
 private:
 	enum MOTION

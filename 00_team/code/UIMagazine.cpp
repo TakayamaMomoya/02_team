@@ -19,7 +19,6 @@
 namespace
 {
 	const int DIG_MAG_NUM = 3;		// ‘•’e”‚ÌŒ…”
-	const int DIG_MAX_MAG_NUM = 3;	// Å‘å‘•’e”‚ÌŒ…”
 }
 
 //=====================================================
@@ -28,7 +27,6 @@ namespace
 CUIMagazine::CUIMagazine(int nPriority) : CObject(nPriority)
 {
 	m_pNumDig = nullptr;
-	m_pNumMaxDig = nullptr;
 
 	ZeroMemory(&m_info, sizeof(m_info));
 }
@@ -63,14 +61,6 @@ CUIMagazine* CUIMagazine::Create(int nIdx)
 			pUIMagazine->m_pNumDig = pDigMag;
 		}
 
-		// ‘•’eÅ‘å”i”Žšj‚Ì¶¬ˆ—
-		CNumber* pDigMaxMag = CNumber::Create(DIG_MAX_MAG_NUM, 0);
-
-		if (pDigMaxMag != nullptr)
-		{
-			pUIMagazine->m_pNumMaxDig = pDigMaxMag;
-		}
-
 		// ‘•’e”UI‚Ì‰Šú‰»
 		pUIMagazine->Init();
 	}
@@ -90,13 +80,6 @@ HRESULT CUIMagazine::Init(void)
 		m_pNumDig->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 
-	if (m_pNumMaxDig != nullptr)
-	{
-		// ‰Šú’lÝ’èˆ—
-		m_pNumMaxDig->SetSizeAll(50.0f, 100.0f);
-		m_pNumMaxDig->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	}
-
 	return S_OK;
 }
 
@@ -110,11 +93,6 @@ void CUIMagazine::Uninit(void)
 		m_pNumDig->Uninit();
 	}
 
-	if (m_pNumMaxDig != nullptr)
-	{
-		m_pNumMaxDig->Uninit();
-	}
-
 	Release();
 }
 
@@ -123,11 +101,9 @@ void CUIMagazine::Uninit(void)
 //=====================================================
 void CUIMagazine::Update(void)
 {
-	if (m_pNumDig != nullptr ||
-		m_pNumMaxDig != nullptr)
+	if (m_pNumDig != nullptr)
 	{
 		m_pNumDig->SetValue(0, DIG_MAG_NUM);
-		m_pNumMaxDig->SetValue(0, DIG_MAX_MAG_NUM);
 	}
 }
 
@@ -141,13 +117,11 @@ void CUIMagazine::Draw(void)
 //=====================================================
 // ˆÊ’uÝ’èˆ—
 //=====================================================
-void CUIMagazine::SetPosition(D3DXVECTOR3 posDig , D3DXVECTOR3 posMaxDig)
+void CUIMagazine::SetPosition(D3DXVECTOR3 pos)
 {
-	if (m_pNumDig != nullptr ||
-		m_pNumMaxDig != nullptr)
+	if (m_pNumDig != nullptr)
 	{
-		m_pNumDig->SetPosition(posDig);
-		m_pNumMaxDig->SetPosition(posMaxDig);
+		m_pNumDig->SetPosition(pos);
 	}
 }
 
@@ -156,11 +130,9 @@ void CUIMagazine::SetPosition(D3DXVECTOR3 posDig , D3DXVECTOR3 posMaxDig)
 //=====================================================
 void CUIMagazine::SetSize(float width, float height)
 {
-	if (m_pNumDig != nullptr ||
-		m_pNumMaxDig != nullptr)
+	if (m_pNumDig != nullptr)
 	{
 		m_pNumDig->SetSizeAll(width, height);
-		m_pNumMaxDig->SetSizeAll(width, height);
 	}
 }
 
@@ -169,10 +141,8 @@ void CUIMagazine::SetSize(float width, float height)
 //=====================================================
 void CUIMagazine::SetCol(D3DXCOLOR col)
 {
-	if (m_pNumDig != nullptr ||
-		m_pNumMaxDig != nullptr)
+	if (m_pNumDig != nullptr)
 	{
 		m_pNumDig->SetColor(col);
-		m_pNumMaxDig->SetColor(col);
 	}
 }

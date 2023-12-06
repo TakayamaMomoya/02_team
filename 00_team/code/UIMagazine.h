@@ -36,7 +36,7 @@ public:
 	void Update(void);
 	void Draw(void);
 
-	void SetPosition(D3DXVECTOR3 posDig, D3DXVECTOR3 posMaxDig);
+	void SetPosition(D3DXVECTOR3 pos);
 	void SetSize(float width, float height);
 	void SetCol(D3DXCOLOR col);
 
@@ -49,9 +49,8 @@ private:
 		static LPDIRECT3DTEXTURE9 pTexture;	// テクスチャへのポインタ
 	};
 
-	CNumber* m_pNumDig;			// 装弾数（数字）のポインタ
-	CNumber* m_pNumMaxDig;		// 最大装弾数（数字）のポインタ
-	Sinfo m_info;	// 自身の情報
+	CNumber* m_pNumDig;	// 装弾数（数字）のポインタ
+	Sinfo m_info;		// 自身の情報
 };
 
 #endif
