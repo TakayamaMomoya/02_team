@@ -46,6 +46,7 @@ public:
 	void AddProgress(int nProgress);
 	void SetState(STATE state) { m_state = state; }
 	float GetTime(void) { return m_fTimeRapir; }
+	float GetRadius(void) { return m_fRadius; }
 
 private:
 	void Load(void);

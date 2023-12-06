@@ -28,6 +28,13 @@ public:
 	void Draw(void);
 
 private:
+	enum STATE
+	{
+		STATE_NONE = 0,	// 何もしていない状態
+		STATE_CHASE,	// 追跡状態
+		STATE_ESCAPE,	// 逃走状態
+		STATE_MAX
+	};
 	enum MOTION
 	{
 		MOTION_NEUTRAL = 0,	// 待機モーション
@@ -36,10 +43,14 @@ private:
 		MOTION_DANCE,	// ダンスモーション
 		MOTION_MAX
 	};
-
+	void SwitchUpdate(void);
 	void ChaseRocket(void);
+	void CollisionRocket(void);
+	void Escape(void);
+	void Death(void);
 
 	bool m_bTakeRepair;
+	STATE m_state;
 };
 
 #endif
