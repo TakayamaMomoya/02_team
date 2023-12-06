@@ -13,6 +13,9 @@
 
 #include "texture.h"
 
+#include "player.h"
+#include "playerManager.h"
+
 //*****************************************************
 // 定数定義
 //*****************************************************
@@ -103,7 +106,7 @@ void CUIMagazine::Update(void)
 {
 	if (m_pNumDig != nullptr)
 	{
-		m_pNumDig->SetValue(0, DIG_MAG_NUM);
+		SetNumMagazine();
 	}
 }
 
@@ -114,6 +117,7 @@ void CUIMagazine::Draw(void)
 {
 
 }
+
 //=====================================================
 // 位置設定処理
 //=====================================================
@@ -144,5 +148,42 @@ void CUIMagazine::SetCol(D3DXCOLOR col)
 	if (m_pNumDig != nullptr)
 	{
 		m_pNumDig->SetColor(col);
+	}
+}
+
+//=====================================================
+// 装弾数設定処理
+//=====================================================
+void CUIMagazine::SetNumMagazine(void)
+{
+	// ポインタの取得
+	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
+	CPlayer* pPlayer = nullptr;
+	CWeapon* pWeapon = nullptr;
+
+	int nBullet = 0;
+
+	if (pPlayerManager != nullptr)
+	{
+		// プレイヤー管理の取得
+		pPlayer = pPlayerManager->GetPlayer(m_info.nIdxPlayer);
+	}
+
+	if (pPlayer != nullptr)
+	{
+		// プレイヤーの取得
+		pWeapon = pPlayer->GetWeapon();
+	}
+
+	if (pWeapon != nullptr)
+	{
+		// プレイヤーの弾を取得
+		nBullet = pWeapon->GetBullet();
+	}
+
+	if (m_pNumDig != nullptr)
+	{
+		// 弾を反映
+		m_pNumDig->SetValue(nBullet, DIG_MAG_NUM);
 	}
 }

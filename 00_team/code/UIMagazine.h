@@ -39,6 +39,7 @@ public:
 	void SetPosition(D3DXVECTOR3 pos);
 	void SetSize(float width, float height);
 	void SetCol(D3DXCOLOR col);
+	void SetNumMagazine(void);
 
 private:
 

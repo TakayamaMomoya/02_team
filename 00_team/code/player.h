@@ -66,6 +66,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	void SetWeapon(CWeapon::TYPE type);
+	CWeapon* GetWeapon(void) { return m_info.pWeapon; }
 	void SetItemRepair(CItemRepair* itemRepair) { m_info.pItemRepair = itemRepair; }
 	void SetDoorPress(bool bDoorPress) { m_info.motionInfo.bDoorPress = bDoorPress; }
 	void SetItemTrigger(bool bItemTrigger) { m_info.motionInfo.bItemTrigger = bItemTrigger; }
