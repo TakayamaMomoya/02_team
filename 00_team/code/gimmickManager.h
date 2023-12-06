@@ -12,6 +12,7 @@
 // インクルード
 //*****************************************************
 #include "object.h"
+#include "gimmick.h"
 #include <stdio.h>
 
 //*****************************************************
@@ -28,6 +29,11 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void DeleteAllGimmick(void);
+	CGimmick *GetHead(void) { return m_pHead; }
+	CGimmick *GetTail(void) { return m_pTail; }
+	void SetHead(CGimmick *pGimmick) { m_pHead = pGimmick; }
+	void SetTail(CGimmick *pGimmick) { m_pTail = pGimmick; }
 	static CGimmickManager*GetInstance(void) { return m_pGimmickManager; }
 
 private:
@@ -37,6 +43,9 @@ private:
 	void LoadContainer(FILE *pFile, char *pTemp);
 	void LoadRepair(FILE *pFile, char *pTemp);
 	void LoadBox(FILE *pFile, char *pTemp);
+
+	CGimmick *m_pHead;	// 先頭のアドレス
+	CGimmick *m_pTail;	// 最後尾のアドレス
 
 	static CGimmickManager *m_pGimmickManager;	// 自身のポインタ
 };

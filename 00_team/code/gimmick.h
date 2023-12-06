@@ -28,20 +28,24 @@ public:
 	CGimmick(int nPriority = 3);	// コンストラクタ
 	~CGimmick();	// デストラクタ
 
+	static CGimmick *Create(void);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static CGimmick *Create(void);
 	virtual void Interact(CObject* pObj);
 	CCollisionSphere *GetCollisionSphere(void) { return m_pCollisionSphere; }
 	void SetEnable(bool bEnable) { m_bEnable = bEnable; }
 	CBillboard *GetGuide(void) { return m_pInteract; }
+	CGimmick *GetNext(void) { return m_pNext; }
 
 private:
 	CCollisionSphere *m_pCollisionSphere;
 	CBillboard *m_pInteract;
 	bool m_bEnable;	// インタラクトできるかどうか
+
+	CGimmick *m_pPrev;	// 前のアドレス
+	CGimmick *m_pNext;	// 次のアドレス
 };
 
 #endif
