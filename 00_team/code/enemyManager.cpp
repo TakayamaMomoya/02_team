@@ -11,6 +11,7 @@
 #include "main.h"
 #include "enemyManager.h"
 #include "enemyNormal.h"
+#include "enemyThief.h"
 #include "manager.h"
 #include "camera.h"
 #include "universal.h"
@@ -20,7 +21,6 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define FILE_PATH	"data\\MAP\\enemies.txt"	// 配置データのパス
 #define RAND_SPAWN	(1000)	// スポーン範囲
 
 //*****************************************************
@@ -72,6 +72,7 @@ CEnemy *CEnemyManager::CreateEnemy(D3DXVECTOR3 pos, CEnemy::TYPE type)
 	{
 		nullptr,
 		"data\\MOTION\\motionEnemy00.txt",
+		"data\\MOTION\\motionEnemy01.txt",
 	};
 
 	CEnemy *pEnemy = nullptr;
@@ -83,6 +84,11 @@ CEnemy *CEnemyManager::CreateEnemy(D3DXVECTOR3 pos, CEnemy::TYPE type)
 		case CEnemy::TYPE_NORMAL:
 
 			pEnemy = new CEnemyNormal;
+
+			break;
+		case CEnemy::TYPE_THIEF:
+
+			pEnemy = new CEnemyThief;
 
 			break;
 		default:
@@ -110,80 +116,7 @@ CEnemy *CEnemyManager::CreateEnemy(D3DXVECTOR3 pos, CEnemy::TYPE type)
 //=====================================================
 HRESULT CEnemyManager::Init(void)
 {
-	// 読込処理
-	//Load();
-
 	return S_OK;
-}
-
-//=====================================================
-// 読込処理
-//=====================================================
-void CEnemyManager::Load(void)
-{
-	// 変数宣言
-	char cTemp[256];
-	int nCntAttack = 0;
-
-	// ファイルから読み込む
-	FILE *pFile = fopen(FILE_PATH, "r");
-
-	if (pFile != nullptr)
-	{// ファイルが開けた場合
-		while (true)
-		{
-			// 文字読み込み
-			(void)fscanf(pFile, "%s", &cTemp[0]);
-
-			if (strcmp(cTemp, "ENEMYSET") == 0)
-			{
-				CEnemy::TYPE type;
-				D3DXVECTOR3 pos;
-
-				while (true)
-				{
-					// 文字読み込み
-					(void)fscanf(pFile, "%s", &cTemp[0]);
-
-					if (strcmp(cTemp, "POS") == 0)
-					{// 位置
-						(void)fscanf(pFile, "%s", &cTemp[0]);
-
-						for (int nCntPos = 0; nCntPos < 3; nCntPos++)
-						{
-							(void)fscanf(pFile, "%f", &pos[nCntPos]);
-						}
-					}
-
-					if (strcmp(cTemp, "TYPE") == 0)
-					{// 種類
-						(void)fscanf(pFile, "%s", &cTemp[0]);
-						
-						(void)fscanf(pFile, "%d", &type);
-					}
-
-					if (strcmp(cTemp, "END_ENEMYSET") == 0)
-					{
-						CreateEnemy(pos,type);
-
-						break;
-					}
-				}
-			}
-
-			if (strcmp(cTemp, "END_SCRIPT") == 0)
-			{// 終了条件
-				break;
-			}
-		}
-
-		// ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{
-		assert(("敵配置データの読み込みに失敗",false));
-	}
 }
 
 //=====================================================

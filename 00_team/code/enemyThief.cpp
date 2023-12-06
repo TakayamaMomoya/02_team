@@ -1,6 +1,6 @@
 //*****************************************************
 //
-// 通常敵の処理[enemyNormal.cpp]
+// 泥棒敵の処理[enemyThief.cpp]
 // Author:髙山桃也
 //
 //*****************************************************
@@ -9,7 +9,7 @@
 // インクルード
 //*****************************************************
 #include "main.h"
-#include "enemyNormal.h"
+#include "enemyThief.h"
 #include "manager.h"
 #include "collision.h"
 #include "debugproc.h"
@@ -24,7 +24,7 @@
 //=====================================================
 // コンストラクタ
 //=====================================================
-CEnemyNormal::CEnemyNormal()
+CEnemyThief::CEnemyThief()
 {
 
 }
@@ -32,7 +32,7 @@ CEnemyNormal::CEnemyNormal()
 //=====================================================
 // デストラクタ
 //=====================================================
-CEnemyNormal::~CEnemyNormal()
+CEnemyThief::~CEnemyThief()
 {
 
 }
@@ -40,7 +40,7 @@ CEnemyNormal::~CEnemyNormal()
 //=====================================================
 // 初期化処理
 //=====================================================
-HRESULT CEnemyNormal::Init(void)
+HRESULT CEnemyThief::Init(void)
 {
 	// 継承クラスの初期化
 	CEnemy::Init();
@@ -51,7 +51,7 @@ HRESULT CEnemyNormal::Init(void)
 //=====================================================
 // 終了処理
 //=====================================================
-void CEnemyNormal::Uninit(void)
+void CEnemyThief::Uninit(void)
 {
 	// 継承クラスの終了
 	CEnemy::Uninit();
@@ -60,7 +60,7 @@ void CEnemyNormal::Uninit(void)
 //=====================================================
 // 更新処理
 //=====================================================
-void CEnemyNormal::Update(void)
+void CEnemyThief::Update(void)
 {
 	// 継承クラスの更新
 	CEnemy::Update();
@@ -83,17 +83,12 @@ void CEnemyNormal::Update(void)
 			SetMotion(MOTION_DEATH);
 		}
 	}
-	else
-	{
-		// 目標追跡
-		ChaseTarget();
-	}
 }
 
 //=====================================================
 // 描画処理
 //=====================================================
-void CEnemyNormal::Draw(void)
+void CEnemyThief::Draw(void)
 {
 	// 継承クラスの描画
 	CEnemy::Draw();
