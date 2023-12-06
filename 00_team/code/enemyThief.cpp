@@ -10,6 +10,7 @@
 //*****************************************************
 #include "main.h"
 #include "enemyThief.h"
+#include "enemyManager.h"
 #include <stdio.h>
 #include "playerManager.h"
 #include "game.h"
@@ -75,6 +76,14 @@ HRESULT CEnemyThief::Init(void)
 //=====================================================
 void CEnemyThief::Uninit(void)
 {
+	// いない状態に設定する
+	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
+
+	if (pEnemyManager != nullptr)
+	{
+		pEnemyManager->ReleaseThief();
+	}
+
 	// 継承クラスの終了
 	CEnemy::Uninit();
 }
@@ -123,8 +132,11 @@ void CEnemyThief::Update(void)
 
 	CEnemy::STATE state = GetState();
 
-	// 更新処理の分岐
-	SwitchUpdate();
+	if (state != CEnemy::STATE::STATE_DEATH)
+	{
+		// 更新処理の分岐
+		SwitchUpdate();
+	}
 }
 
 //=====================================================
