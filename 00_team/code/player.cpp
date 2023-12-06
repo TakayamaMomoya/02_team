@@ -31,7 +31,7 @@
 //*****************************************************
 namespace
 {
-	const char* BODY_PATH_LOWER[NUM_PLAYER] = 
+	const char* BODY_PATH_LOWER[NUM_PLAYER] =
 	{// 下半身のパス
 		"data\\MOTION\\motionPotatoman01_lower.txt",
 		"data\\MOTION\\motionPotatoman02_lower.txt",
@@ -64,7 +64,12 @@ namespace
 
 	const int HAND_PARTS_NUM = 6;				// 手の番号
 	const float MOTION_STICK_RUNAWAY = 0.1f;	// スティックの暴走判定
-}
+
+	const float LIMID_RANGE_LEFT = -460.0f;
+	const float LIMID_RANGE_RIGHT = 460.0f;
+	const float LIMID_RANGE_UP = 460.0f;
+	const float LIMID_RANGE_DOWN = -460.0f;
+}	
 
 //=====================================================
 // 優先順位を決めるコンストラクタ
@@ -390,6 +395,9 @@ void CPlayer::Update(void)
 
 	// 攻撃判定管理
 	ManageAttack();
+
+	// 行動範囲
+	LimidPostion();
 }
 
 //=====================================================
@@ -1199,6 +1207,43 @@ void CPlayer::Hit(float fDamage)
 
 				pJoypad->Vibration(nIdxJoypad,CInputJoypad::PADVIB::PADVIB_USE,1000,10);
 			}
+		}
+	}
+}
+
+//=====================================================
+// プレイヤーの移動制限
+//=====================================================
+void CPlayer::LimidPostion(void)
+{
+	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
+
+	for (int i = 0; i < NUM_PLAYER; i++)
+	{
+		CPlayer* pPlayer = pPlayerManager->GetPlayer(i);
+
+		if (pPlayer != nullptr)
+		{
+			D3DXVECTOR3 pos = pPlayer->GetPosition();
+
+			if (pos.x <= LIMID_RANGE_LEFT)
+			{
+				pos.x = LIMID_RANGE_LEFT;
+			}
+			else if (pos.x >= LIMID_RANGE_RIGHT)
+			{
+				pos.x = LIMID_RANGE_RIGHT;
+			}
+			else if (pos.z >= LIMID_RANGE_UP)
+			{
+				pos.z = LIMID_RANGE_UP;
+			}
+			else if (pos.z <= LIMID_RANGE_DOWN)
+			{
+				pos.z = LIMID_RANGE_DOWN;
+			}
+
+			pPlayer->SetPosition(pos);
 		}
 	}
 }
