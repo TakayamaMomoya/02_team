@@ -19,6 +19,14 @@
 #include "motion.h"
 #include "itemRepair.h"
 
+//*****************************************************
+// 定数定義
+//*****************************************************
+namespace 
+{
+const float TIME_CAMERAEVENT = 4.0f;	// カメラのイベント継続時間
+}
+
 //=====================================================
 // コンストラクタ
 //=====================================================
@@ -228,9 +236,10 @@ void CEnemyThief::CollisionRocket(void)
 		{
 			D3DXVECTOR3 posV = posOwn;
 			posV.x += 100.0f;
-			posV.y += 100.0f;
+			posV.y += 150.0f;
+			posOwn.y += 60.0f;
 
-			pGame->SetEventCamera(4.0f, posOwn, posV);
+			pGame->SetEventCamera(TIME_CAMERAEVENT, posOwn, posV);
 		}
 	}
 }
