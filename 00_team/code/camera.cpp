@@ -44,8 +44,8 @@ HRESULT CCamera::Init(void)
 	m_camera.posV = D3DXVECTOR3(0.0f, 1050.0f, -590.0f);
 	m_camera.posVOld = D3DXVECTOR3(0.0f, 30.0f, 100.0f);
 	m_camera.posR = D3DXVECTOR3(0.0f, 200.0f, -145.0f);
-	m_camera.posVDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_camera.posRDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_camera.posVDest = D3DXVECTOR3(0.0f, 1050.0f, -590.0f);
+	m_camera.posRDest = D3DXVECTOR3(0.0f, 200.0f, -145.0f);
 	m_camera.vecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_camera.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_camera.fLength = 100.0f;
@@ -66,6 +66,8 @@ HRESULT CCamera::Init(void)
 
 	SetPosV();
 
+	m_camera.fTimeEvent = 0.0f;
+
 	return S_OK;
 }
 
@@ -83,6 +85,41 @@ void CCamera::Uninit(void)
 void CCamera::Update(void)
 {
 
+}
+
+//====================================================
+// 目標に向かう処理
+//====================================================
+void CCamera::MoveDist(float fFact)
+{
+	// 目標位置に補正
+	m_camera.posV += (m_camera.posVDest - m_camera.posV) * fFact;
+	m_camera.posR += (m_camera.posRDest - m_camera.posR) * fFact;
+	
+	// カウンターの変更
+	if (m_camera.fTimeEvent > 0.0f)
+	{
+		float fTick = CManager::GetTick();
+
+		m_camera.fTimeEvent -= fTick;
+
+		if (m_camera.fTimeEvent <= 0.0f)
+		{
+			// 初期値に戻す
+			m_camera.fTimeEvent = 0.0f;
+
+			m_camera.posVDest = D3DXVECTOR3(0.0f, 1050.0f, -590.0f);
+			m_camera.posRDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+			// ゲームを動かす
+			CGame *pGame = CGame::GetInstance();
+
+			if (pGame != nullptr)
+			{
+				pGame->EnableStop(false);
+			}
+		}
+	}
 }
 
 //====================================================
@@ -457,7 +494,9 @@ void CCamera::SetCamera(void)
 
 #ifdef _DEBUG
 	CDebugProc::GetInstance()->Print("\n視点の位置：[%f,%f,%f]", m_camera.posV.x, m_camera.posV.y, m_camera.posV.z);
+	CDebugProc::GetInstance()->Print("\n視点の目標位置：[%f,%f,%f]", m_camera.posVDest.x, m_camera.posVDest.y, m_camera.posVDest.z);
 	CDebugProc::GetInstance()->Print("\n注視点の位置：[%f,%f,%f]", m_camera.posR.x, m_camera.posR.y, m_camera.posR.z);
+	CDebugProc::GetInstance()->Print("\n注視点の目標位置：[%f,%f,%f]", m_camera.posRDest.x, m_camera.posRDest.y, m_camera.posRDest.z);
 	CDebugProc::GetInstance()->Print("\nカメラ距離：[%f]", m_camera.fLength);
 #endif
 }

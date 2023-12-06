@@ -220,6 +220,18 @@ void CEnemyThief::CollisionRocket(void)
 		m_state = STATE_ESCAPE;
 
 		m_bTakeRepair = true;
+
+		// カメライベントの設定
+		CGame *pGame = CGame::GetInstance();
+
+		if (pGame != nullptr)
+		{
+			D3DXVECTOR3 posV = posOwn;
+			posV.x += 100.0f;
+			posV.y += 100.0f;
+
+			pGame->SetEventCamera(4.0f, posOwn, posV);
+		}
 	}
 }
 

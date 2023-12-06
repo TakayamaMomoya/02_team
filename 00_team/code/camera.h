@@ -37,6 +37,7 @@ public:
 		int nTimerQuake;	// 振動のタイマー
 		float fQuakeSizeV;	// 振動のサイズ
 		float fQuakeSizeH;	// 振動のサイズ
+		float fTimeEvent;	// イベントのカウンター
 	}Camera;
 
 	HRESULT Init(void);
@@ -59,6 +60,10 @@ public:
 	void SetSelect(void);
 	void SetLift(void);
 	void SetUpLift(void);
+	void MoveDist(float fFact);
+	void SetPosRDest(D3DXVECTOR3 posRDest) { m_camera.posRDest = posRDest; }
+	void SetPosVDest(D3DXVECTOR3 posVDest) { m_camera.posVDest = posVDest; }
+	void SetEventTimer(float fTime) { m_camera.fTimeEvent = fTime; }
 
 private:
 	void SetPosV(void);
