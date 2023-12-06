@@ -18,6 +18,10 @@
 #include "inputjoypad.h"
 #include "camera.h"
 #include "manager.h"
+#include "goalTimer.h"
+#include "UIManager.h"
+#include "goal.h"
+#include "texture.h"
 
 //===============================================
 // 定数定義
@@ -30,16 +34,16 @@ namespace
 		"data\\MOTION\\motionPotatoman01.txt",
 		"data\\MOTION\\motionPotatoman02.txt",
 		"data\\MOTION\\motionPotatoman03.txt",
-		"data\\MOTION\\motionPotatoman04.txt",
+		"data\\MOTION\\motionPotatoman04.txt"
 	};
 
 	// プレイヤーの位置
 	const D3DXVECTOR3 PLAYER_POS[NUM_PLAYER] =
 	{
-		D3DXVECTOR3(100.0f, 0.0f, 130.0f),
-		D3DXVECTOR3(150.0f, 0.0f, 130.0f),
-		D3DXVECTOR3(200.0f, 0.0f, 130.0f),
-		D3DXVECTOR3(250.0f, 0.0f, 130.0f),
+		D3DXVECTOR3(150.0f, 0.0f, 100.0f),
+		D3DXVECTOR3(200.0f, 0.0f, 100.0f),
+		D3DXVECTOR3(250.0f, 0.0f, 100.0f),
+		D3DXVECTOR3(100.0f, 0.0f, 100.0f)
 	};
 
 	// プレイヤーの向き
@@ -48,7 +52,7 @@ namespace
 		D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
 		D3DXVECTOR3(0.0f, D3DX_PI * -0.15f, 0.0f),
 		D3DXVECTOR3(0.0f, D3DX_PI * 0.15f, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI * -0.10f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * -0.10f, 0.0f)
 	};
 
 	// 敵の体のパス
@@ -67,10 +71,22 @@ namespace
 	};
 
 	// 視点カメラの位置
-	const D3DXVECTOR3 CAMERA_POSV = D3DXVECTOR3(150.0f, 100.0f, -50.0f);
+	const D3DXVECTOR3 CAMERA_POSV = D3DXVECTOR3(170.0f, 120.0f, -50.0f);
 
 	// 注視点カメラの位置
-	const D3DXVECTOR3 CAMERA_POSR = D3DXVECTOR3(150.0f, -50.0f, 250.0f);
+	const D3DXVECTOR3 CAMERA_POSR = D3DXVECTOR3(170.0f, -50.0f, 300.0f);
+
+	// ゲームオーバーのテクスチャのパス
+	const char* LOGO_PATH = "data\\TEXTURE\\UI\\start_game.png";
+
+	// ゲームオーバーの横幅
+	const float LOGO_WIDTH = 300.0f;
+
+	// ゲームオーバーの縦幅
+	const float LOGO_HEIGHT = 100.0f;
+
+	// ゲームオーバーの位置
+	const D3DXVECTOR3 LOGO_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 150.0f, 0.0f);
 }
 
 //===============================================
@@ -86,6 +102,7 @@ CGameover::CGameover()
 	// 値のクリア
 	ZeroMemory(&m_apModelPlayer[0], sizeof(m_apModelPlayer));
 	ZeroMemory(&m_apModelEnemy[0], sizeof(m_apModelEnemy));
+	m_pLogo = nullptr;
 }
 
 //===============================================
@@ -210,12 +227,25 @@ void CGameover::Uninit(void)
 //===============================================
 void CGameover::Update(void)
 {
+	// インスタンスを取得
 	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
 	CCamera* pCamera = CManager::GetCamera();
+	CGoalTimer* pGoalTimer = CGoalTimer::GetInstance();
+	CUIManager* pUIManager = CUIManager::GetInstance();
+	CGoal* pGoal = CGoal::GetInstance();
+
+	// UIを非表示
+	if (pUIManager != nullptr)
+	{
+		pUIManager->EnableDisp(false);
+	}
+	if (pGoal != nullptr)
+	{
+		pGoal->Uninit();
+	}
 
 	// カメラをロケット付近へ移動
-
 	if (pCamera != nullptr)
 	{
 		// カメラの設定
@@ -223,6 +253,19 @@ void CGameover::Update(void)
 	}
 
 	// ゲームオーバーの表示
+	if (m_pLogo == nullptr)
+	{
+		m_pLogo = CObject2D::Create(7);
+	}
+
+	if (m_pLogo != nullptr)
+	{
+		m_pLogo->SetSize(LOGO_WIDTH, LOGO_HEIGHT);
+		m_pLogo->SetPosition(LOGO_POS);
+		int nIdx = CTexture::GetInstance()->Regist(LOGO_PATH);
+		m_pLogo->SetIdxTexture(nIdx);
+		m_pLogo->SetVtx();
+	}
 
 	CFade* pFade = CFade::GetInstance();
 
