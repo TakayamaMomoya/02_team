@@ -267,8 +267,10 @@ void CGame::UpdateCamera(void)
 	else
 	{
 		// 操作
-		pCamera->Control();
+		//pCamera->Control();
 	}
+
+	pCamera->MoveDist(0.05f);
 }
 
 //=====================================================
@@ -313,6 +315,23 @@ void CGame::ManageState(void)
 		break;
 	default:
 		break;
+	}
+}
+
+//=====================================================
+// イベントカメラの設定
+//=====================================================
+void CGame::SetEventCamera(float fTime, D3DXVECTOR3 posRDest, D3DXVECTOR3 posVDest)
+{
+	CCamera *pCamera = CManager::GetCamera();
+
+	if (pCamera != nullptr)
+	{
+		pCamera->SetEventTimer(fTime);
+		pCamera->SetPosRDest(posRDest);
+		pCamera->SetPosVDest(posVDest);
+
+		EnableStop(true);
 	}
 }
 
