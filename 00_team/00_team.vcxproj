@@ -23,7 +23,6 @@
     <ClCompile Include="code\animation2D.cpp" />
     <ClCompile Include="code\animEffect3D.cpp" />
     <ClCompile Include="code\arrow.cpp" />
-    <ClCompile Include="code\bg.cpp" />
     <ClCompile Include="code\billboard.cpp" />
     <ClCompile Include="code\block.cpp" />
     <ClCompile Include="code\box.cpp" />
@@ -42,6 +41,7 @@
     <ClCompile Include="code\enemy.cpp" />
     <ClCompile Include="code\enemyManager.cpp" />
     <ClCompile Include="code\enemyNormal.cpp" />
+    <ClCompile Include="code\enemyThief.cpp" />
     <ClCompile Include="code\fade.cpp" />
     <ClCompile Include="code\fan2D.cpp" />
     <ClCompile Include="code\fan3D.cpp" />
@@ -107,7 +107,6 @@
     <ClInclude Include="code\animation2D.h" />
     <ClInclude Include="code\animEffect3D.h" />
     <ClInclude Include="code\arrow.h" />
-    <ClInclude Include="code\bg.h" />
     <ClInclude Include="code\billboard.h" />
     <ClInclude Include="code\block.h" />
     <ClInclude Include="code\box.h" />
@@ -126,6 +125,7 @@
     <ClInclude Include="code\enemy.h" />
     <ClInclude Include="code\enemyManager.h" />
     <ClInclude Include="code\enemyNormal.h" />
+    <ClInclude Include="code\enemyThief.h" />
     <ClInclude Include="code\fade.h" />
     <ClInclude Include="code\fan2D.h" />
     <ClInclude Include="code\fan3D.h" />

@@ -26,6 +26,7 @@ CObjectX::CObjectX(int nPriority) : CObject(nPriority)
 	m_fRadius = 0.0f;
 	m_fScale = 0.0f;
 	m_bChangeCol = false;
+	m_bShadow = false;
 	m_pModel = nullptr;
 }
 
@@ -82,11 +83,41 @@ void CObjectX::Draw(void)
 {
 	if (m_pModel != nullptr)
 	{
-		// マトリックスの設定
-		SetMatrix();
-
 		// デバイスの取得
 		LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
+
+		if (m_bShadow)
+		{
+			D3DXMATRIX *pMtx = GetMatrix();
+			D3DXMATRIX mtxShadow;
+			D3DLIGHT9 light;
+			D3DXVECTOR4 posLight;
+			D3DXVECTOR3 normal;
+			D3DXPLANE plane;
+
+			// ライトの位置設定
+			pDevice->GetLight(2, &light);
+			posLight = { -light.Direction.x, -light.Direction.y, -light.Direction.z, 0.0f };
+
+			// 平面情報の生成
+			normal = { 0.0f,1.0f,0.0f };
+			D3DXPlaneFromPointNormal(&plane, &D3DXVECTOR3(0.0f, 0.5f, 0.0f), &normal);
+
+			// シャドウマトリックス初期化
+			D3DXMatrixIdentity(&mtxShadow);
+
+			// シャドウマトリックスの作成
+			D3DXMatrixShadow(&mtxShadow, &posLight, &plane);
+			D3DXMatrixMultiply(&mtxShadow, pMtx, &mtxShadow);
+
+			// シャドウマトリックスの設定
+			pDevice->SetTransform(D3DTS_WORLD, &mtxShadow);
+
+			DrawShadow();
+		}
+
+		// マトリックスの設定
+		SetMatrix();
 
 		D3DXMATERIAL *pMat;				// マテリアルデータへのポインタ
 		D3DMATERIAL9 matDef;			// 現在のマテリアル保存用
@@ -124,6 +155,58 @@ void CObjectX::Draw(void)
 			// 色を戻す
 			pMat[nCntMat].MatD3D = matDef;
 		}
+
+		// マテリアルを戻す
+		pDevice->SetMaterial(&matDef);
+	}
+}
+
+//====================================================
+// 影用の描画処理
+//====================================================
+void CObjectX::DrawShadow(void)
+{
+	if (m_pModel == nullptr)
+	{
+		return;
+	}
+
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
+
+	D3DXMATERIAL *pMat;				//マテリアルデータへのポインタ
+	D3DMATERIAL9 matDef;			//現在のマテリアル保存用
+	LPDIRECT3DTEXTURE9 pTexture;
+
+	// 現在のマテリアル取得
+	pDevice->GetMaterial(&matDef);
+
+	// マテリアルデータへのポインタを取得
+	pMat = (D3DXMATERIAL*)m_pModel->pBuffMat->GetBufferPointer();
+
+	for (int nCntMat = 0; nCntMat < (int)m_pModel->dwNumMat; nCntMat++)
+	{
+		// マテリアルの保存
+		matDef = pMat[nCntMat].MatD3D;
+
+		// 色の設定
+		pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+		pMat[nCntMat].MatD3D.Emissive = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+
+		//マテリアル設定
+		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+
+		// テクスチャの取得
+		pTexture = CTexture::GetInstance()->GetAddress(m_pModel->pIdxTexture[nCntMat]);
+
+		//テクスチャ設定
+		pDevice->SetTexture(0, pTexture);
+
+		//モデル（パーツ）描画
+		m_pModel->pMesh->DrawSubset(nCntMat);
+
+		// 色を戻す
+		pMat[nCntMat].MatD3D = matDef;
 
 		// マテリアルを戻す
 		pDevice->SetMaterial(&matDef);

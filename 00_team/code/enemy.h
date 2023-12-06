@@ -34,6 +34,7 @@ public:
 	{// 敵の種類
 		TYPE_NONE = 0,	// 何でもない
 		TYPE_NORMAL,	// 通常敵
+		TYPE_THIEF,	// 泥棒敵
 		TYPE_MAX
 	}TYPE;
 
@@ -58,14 +59,11 @@ public:
 	void SetLife(float fLife);
 	float GetLife(void) { return m_fLife; }
 	void Hit(float fDamage);
-	void Death(void);
 	void SetSpherePosition(D3DXVECTOR3 pos);
 	STATE GetState(void) { return m_state; }
 	void SetState(STATE state) { m_state = state; }
 	CCollisionSphere *GetClsnSphere(void) { return m_pCollisionSphere; }
 	CEnemy *GetNext(void) { return m_pNext; }
-	int GetScore(void) { return m_nScore; }
-	void SetScore(int nScore) { m_nScore = nScore; }
 	int GetCntState(void) { return m_nTimerState; }
 	void SetCntState(int nCnt) { m_nTimerState = nCnt; }
 	void DeleteCollision(void);
@@ -76,11 +74,12 @@ protected:
 	CArrow *GetShadow(void) { return m_pShadow; }
 	void ManageScore(void);
 	CBlock *GetTouchBlock(void) { return m_pBlock; }
+	void ChaseTarget(void);
+	virtual void Death(void);
 
 private:
 	void ManageState(void);
 	void ManageCollision(void);
-	void ChaseTarget(void);
 
 	static int m_nNumAll;	// 総数
 	float m_fLife;	// 体力
@@ -91,7 +90,6 @@ private:
 	CArrow *m_pShadow;	// 影のポインタ
 	CBlock *m_pBlock;	// ブロックのポインタ
 	STATE m_state;	// 状態
-	int m_nScore;	// スコア値
 
 	CEnemy *m_pPrev;	// 前のアドレス
 	CEnemy *m_pNext;	// 次のアドレス

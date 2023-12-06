@@ -11,7 +11,6 @@
 #include "fan2D.h"
 #include "manager.h"
 #include "renderer.h"
-#include "bg.h"
 #include "texture.h"
 #include "universal.h"
 #include "debugproc.h"

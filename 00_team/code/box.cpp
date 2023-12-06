@@ -108,6 +108,9 @@ HRESULT CBox::Init(void)
 		}
 	}
 
+	// ‰e‚Ì—LŒø‰»
+	EnableShadow(true);
+
 	return S_OK;
 }
 

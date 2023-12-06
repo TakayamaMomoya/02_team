@@ -57,6 +57,7 @@ CGame::CGame()
 {
 	m_nCntState = 0;
 	m_bStop = false;
+	m_bGameover = false;
 }
 
 //=====================================================
@@ -76,6 +77,7 @@ HRESULT CGame::Init(void)
 
 	m_state = STATE_NORMAL;
 	m_bStop = false;
+	m_bGameover = false;
 
 	// UIマネージャーの追加
 	CUIManager::Create();
@@ -109,6 +111,8 @@ HRESULT CGame::Init(void)
 
 	// 敵マネージャーの生成
 	CEnemyManager *pEnemyManager = CEnemyManager::Create();
+
+	pEnemyManager->CreateEnemy(D3DXVECTOR3(0.0f, 0.0f, 0.0f), CEnemy::TYPE::TYPE_THIEF);
 
 	// ロケットの生成
 	CRocket::Create();
@@ -153,14 +157,6 @@ void CGame::Uninit(void)
 
 	// ブロックの破棄
 	CBlock::DeleteAll();
-
-	// プレイヤーマネージャーの終了
-	CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();
-
-	if (pPlayerManger != nullptr)
-	{
-		pPlayerManger->Uninit();
-	}
 
 	// ゲームオーバーの終了
 	CGameover* pGameover = CGameover::GetInstance();

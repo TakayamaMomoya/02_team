@@ -161,6 +161,7 @@ private:
 	void ManageAttack(void);
 	void BlowEnemy(CObject *pObj);
 	void BlowPlayer(CObject *pObj);
+	void LimidPostion();
 	void Debug(void);
 
 	SInfo m_info;	// ©g‚Ìî•ñ

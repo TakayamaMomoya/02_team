@@ -29,7 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\animation2D.cpp" />
-    <ClCompile Include="code\bg.cpp" />
     <ClCompile Include="code\billboard.cpp" />
     <ClCompile Include="code\camera.cpp" />
     <ClCompile Include="code\collision.cpp" />
@@ -173,13 +172,13 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="code\gameover.cpp" />
-    <ClCompile Include="code\UIMagazine.cpp">
-      <Filter>UI</Filter>
+    <ClCompile Include="code\UIMagazine.cpp" />
+    <ClCompile Include="code\enemyThief.cpp">
+      <Filter>enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
-    <ClInclude Include="code\bg.h" />
     <ClInclude Include="code\billboard.h" />
     <ClInclude Include="code\camera.h" />
     <ClInclude Include="code\collision.h" />
@@ -323,8 +322,9 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="code\gameover.h" />
-    <ClInclude Include="code\UIMagazine.h">
-      <Filter>UI</Filter>
+    <ClInclude Include="code\UIMagazine.h" />
+    <ClInclude Include="code\enemyThief.h">
+      <Filter>enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

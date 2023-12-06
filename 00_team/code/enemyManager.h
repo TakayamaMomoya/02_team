@@ -36,8 +36,6 @@ public:
 	static CEnemyManager *GetInstance(void) { return m_pEnemyManager; }
 
 private:
-	void Load(void);
-
 	CEnemy *m_pHead;	// 先頭のアドレス
 	CEnemy *m_pTail;	// 最後尾のアドレス
 	int m_nCntSpawn;	// スポーンカウンター
