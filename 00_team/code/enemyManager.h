@@ -33,7 +33,6 @@ public:
 	CEnemy *GetTail(void) { return m_pTail; }
 	void SetHead(CEnemy *pEnemy) { m_pHead = pEnemy; }
 	void SetTail(CEnemy *pEnemy) { m_pTail = pEnemy; }
-	void ReleaseThief(void) { m_pThief = nullptr; }
 	static CEnemyManager *GetInstance(void) { return m_pEnemyManager; }
 
 private:
@@ -45,7 +44,6 @@ private:
 	int m_nCntSpawn;	// 通常敵スポーンカウンター
 	float m_fTimerThief;	// 泥棒敵スポーンタイマー
 	float m_fTimeSpawnThief;	// 泥棒敵がスポーンするまでの時間
-	CEnemy *m_pThief;	// 泥棒敵のポインタ
 	int m_nMinTimeSpawnThief;	// 泥棒敵のスポーンタイマーの最小
 	int m_nMaxTimeSpawnThief;	// 泥棒敵のスポーンタイマーの最大
 

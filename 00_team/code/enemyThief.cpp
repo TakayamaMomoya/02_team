@@ -79,11 +79,6 @@ void CEnemyThief::Uninit(void)
 	// ‚¢‚È‚¢ó‘Ô‚Éİ’è‚·‚é
 	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
 
-	if (pEnemyManager != nullptr)
-	{
-		pEnemyManager->ReleaseThief();
-	}
-
 	// Œp³ƒNƒ‰ƒX‚ÌI—¹
 	CEnemy::Uninit();
 }

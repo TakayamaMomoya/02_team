@@ -17,6 +17,7 @@
 #include "player.h"
 #include "number.h"
 #include "inputjoypad.h"
+#include "playerManager.h"
 
 //*****************************************************
 // 定数定義
@@ -157,6 +158,14 @@ void CResult::Uninit(void)
 	}
 
 	ZeroMemory(&m_aInfoSurvived[0], sizeof(m_aInfoSurvived));
+
+	// プレイヤーマネージャーの終了
+	CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();
+
+	if (pPlayerManger != nullptr)
+	{
+		pPlayerManger->Uninit();
+	}
 
 	Release();
 }
