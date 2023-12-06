@@ -69,8 +69,6 @@ HRESULT CGimmickManager::Init(void)
 	// 配置データの読込
 	Load();
 
-	DeleteAllGimmick();
-
 	return S_OK;
 }
 

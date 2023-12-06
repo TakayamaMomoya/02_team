@@ -32,6 +32,7 @@ public:
 	enum TYPE
 	{
 		TYPE_MUZZLEFLUSH = 0,	// マズルフラッシュ
+		TYPE_BLOOD,	// 血しぶき
 		TYPE_MAX
 	};
 
