@@ -20,6 +20,7 @@
 #include "enemyManager.h"
 #include "debrisSpawner.h"
 #include "block.h"
+#include "motion.h"
 
 //=====================================================
 // コンストラクタ
@@ -44,6 +45,14 @@ HRESULT CEnemyNormal::Init(void)
 {
 	// 継承クラスの初期化
 	CEnemy::Init();
+
+	// 歩きモーションに設定
+	CMotion *pBody = GetBody();
+
+	if (pBody != nullptr)
+	{
+		pBody->SetMotion(MOTION_WALK);
+	}
 
 	return S_OK;
 }

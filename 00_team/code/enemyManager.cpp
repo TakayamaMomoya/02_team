@@ -162,7 +162,7 @@ void CEnemyManager::Update(void)
 		posCenter *= RAND_SPAWN;
 
 		// ìGÉXÉ|Å[Éì
-		CreateEnemy(posCenter, CEnemy::TYPE_NORMAL);
+		CreateEnemy(posCenter, CEnemy::TYPE::TYPE_NORMAL);
 
 		m_nCntSpawn = 0;
 	}

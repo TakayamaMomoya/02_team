@@ -32,10 +32,14 @@ private:
 	{
 		MOTION_NEUTRAL = 0,	// 待機モーション
 		MOTION_WALK,	// 歩きモーション
-		MOTION_ATTACK,	// 攻撃モーション
 		MOTION_DEATH,	// 死亡モーション
+		MOTION_DANCE,	// ダンスモーション
 		MOTION_MAX
 	};
+
+	void ChaseRocket(void);
+
+	bool m_bTakeRepair;
 };
 
 #endif
