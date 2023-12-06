@@ -42,13 +42,15 @@ public:
 
 private:
 
-	CUI* CreateFrame(void);
+	CUI* CreateUi(void);
 	CLife* CreateLife(int nIdx);
 	CUIMagazine* CreateUIMagazine(int nIdx);
 
 	struct SInfo
 	{
-		CUI *pFrame;				// フレームUI
+		CUI *pUiFrame;				// フレームUI
+		CUI *pUiFace;				// 顔のUI			
+		CUI *pUiWeapon;				// 武器のUI			
 		CLife *pLife;				// ライフUI
 		CUIMagazine* pUIMagazine;	// 装弾数UI
 	};
