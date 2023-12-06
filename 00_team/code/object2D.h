@@ -33,6 +33,7 @@ public:
 	D3DXVECTOR2 GetSize(void) { return D3DXVECTOR2(m_width, m_heigth); }
 	void SetAnim(int nAnim, int nNumAnim, int nNumV);
 	void SetTex(D3DXVECTOR2 texLeftUp, D3DXVECTOR2 texRightDown);
+	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void) { return m_pVtxBuff; }
 	void SetPosition(D3DXVECTOR3 pos);	// İ’èˆ—
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }	// æ“¾ˆ—
 	D3DXVECTOR3 GetPositionOld(void) { return m_posOld; }
