@@ -41,19 +41,19 @@ namespace
 	// プレイヤーの位置
 	const D3DXVECTOR3 PLAYER_POS[NUM_PLAYER] =
 	{
-		D3DXVECTOR3(150.0f, 0.0f, 100.0f),
-		D3DXVECTOR3(200.0f, 0.0f, 100.0f),
-		D3DXVECTOR3(250.0f, 0.0f, 100.0f),
-		D3DXVECTOR3(100.0f, 0.0f, 100.0f)
+		D3DXVECTOR3(145.0f, 0.0f, 65.0f),
+		D3DXVECTOR3(205.0f, 0.0f, 65.0f),
+		D3DXVECTOR3(260.0f, 0.0f, 65.0f),
+		D3DXVECTOR3(90.0f, 0.0f, 65.0f)
 	};
 
 	// プレイヤーの向き
 	const D3DXVECTOR3 PLAYER_ROT[NUM_PLAYER] =
 	{
-		D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI * -0.15f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * -0.10f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.10f, 0.0f),
 		D3DXVECTOR3(0.0f, D3DX_PI * 0.15f, 0.0f),
-		D3DXVECTOR3(0.0f, D3DX_PI * -0.10f, 0.0f)
+		D3DXVECTOR3(0.0f, D3DX_PI * -0.15f, 0.0f)
 	};
 
 	// 敵の体のパス
@@ -62,17 +62,25 @@ namespace
 	// 敵の位置
 	const D3DXVECTOR3 ENEMY_POS[NUM_ENEMY] =
 	{
-		D3DXVECTOR3(170.0f, 0.0f, 200.0f),
+		D3DXVECTOR3(30.0f, 0.0f, 90.0f),
+		D3DXVECTOR3(100.0f, 0.0f, 120.0f),
+		D3DXVECTOR3(170.0f, 0.0f, 150.0f),
+		D3DXVECTOR3(240.0f, 0.0f, 120.0f),
+		D3DXVECTOR3(310.0f, 0.0f, 90.0f)
 	};
 
 	// 敵の向き
 	const D3DXVECTOR3 ENEMY_ROT[NUM_ENEMY] =
 	{
+		D3DXVECTOR3(0.0f, D3DX_PI * -0.2f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * -0.1f, 0.0f),
 		D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.1f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.2f, 0.0f)
 	};
 
 	// 視点カメラの位置
-	const D3DXVECTOR3 CAMERA_POSV = D3DXVECTOR3(170.0f, 120.0f, -50.0f);
+	const D3DXVECTOR3 CAMERA_POSV = D3DXVECTOR3(170.0f, 115.0f, -95.0f);
 
 	// 注視点カメラの位置
 	const D3DXVECTOR3 CAMERA_POSR = D3DXVECTOR3(170.0f, -50.0f, 300.0f);
@@ -217,6 +225,25 @@ HRESULT CGameover::Init()
 		return E_FAIL;
 	}
 
+	// ゲームオーバーの表示
+	if (m_pLogo == nullptr)
+	{
+		m_pLogo = CObject2D::Create(7);
+	}
+
+	if (m_pLogo != nullptr)
+	{
+		m_pLogo->SetSize(LOGO_WIDTH, LOGO_HEIGHT);
+		m_pLogo->SetPosition(LOGO_POS);
+		int nIdx = CTexture::GetInstance()->Regist(LOGO_PATH);
+		m_pLogo->SetIdxTexture(nIdx);
+		m_pLogo->SetVtx();
+	}
+	else if (m_pLogo == nullptr)
+	{
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -226,6 +253,7 @@ HRESULT CGameover::Init()
 void CGameover::Uninit(void)
 {
 	m_pGameover = nullptr;
+	m_pLogo = nullptr;
 
 	delete this;
 }
@@ -258,21 +286,6 @@ void CGameover::Update(void)
 	{
 		// カメラの設定
 		pCamera->UpdateGameover(CAMERA_POSV, CAMERA_POSR);
-	}
-
-	// ゲームオーバーの表示
-	if (m_pLogo == nullptr)
-	{
-		m_pLogo = CObject2D::Create(7);
-	}
-
-	if (m_pLogo != nullptr)
-	{
-		m_pLogo->SetSize(LOGO_WIDTH, LOGO_HEIGHT);
-		m_pLogo->SetPosition(LOGO_POS);
-		int nIdx = CTexture::GetInstance()->Regist(LOGO_PATH);
-		m_pLogo->SetIdxTexture(nIdx);
-		m_pLogo->SetVtx();
 	}
 
 	CFade* pFade = CFade::GetInstance();
