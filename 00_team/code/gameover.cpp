@@ -22,6 +22,7 @@
 #include "UIManager.h"
 #include "goal.h"
 #include "texture.h"
+#include "game.h"
 
 //===============================================
 // 定数定義
@@ -145,6 +146,7 @@ HRESULT CGameover::Init()
 	// インスタンスを取得
 	CEnemyManager* pEnemyManager = CEnemyManager::GetInstance();
 	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
+	CGame* pGame = CGame::GetInstance();
 
 	if (pEnemyManager != nullptr)
 	{
@@ -165,6 +167,12 @@ HRESULT CGameover::Init()
 
 			// 次のアドレスを代入
 			pEnemy = pEnemyNext;
+		}
+
+		// ゲームオーバー状態にして敵のスポーンを停止する
+		if (pGame != nullptr)
+		{
+			pGame->SetState(CGame::STATE_GAMEOVER);
 		}
 
 		// 敵を生成
