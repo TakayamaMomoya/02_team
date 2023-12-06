@@ -133,6 +133,9 @@ void CBullet::Update(void)
 		{
 		case TYPE_PLAYER:
 			tag = CCollision::TAG_ENEMY;
+
+			// –Ø” ‚Æ‚Ì“–‚½‚è”»’è
+			bHit = BulletHit(CCollision::TAG_BOX);
 			break;
 		case TYPE_ENEMY:
 			tag = CCollision::TAG_PLAYER;

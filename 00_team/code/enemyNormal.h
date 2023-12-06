@@ -28,6 +28,14 @@ public:
 	void Draw(void);
 
 private:
+	enum MOTION
+	{
+		MOTION_NEUTRAL = 0,	// 待機モーション
+		MOTION_WALK,	// 歩きモーション
+		MOTION_ATTACK,	// 攻撃モーション
+		MOTION_DEATH,	// 死亡モーション
+		MOTION_MAX
+	};
 };
 
 #endif

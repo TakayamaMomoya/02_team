@@ -13,7 +13,6 @@
 #include "object2D.h"
 #include "inputkeyboard.h"
 #include "inputmouse.h"
-#include "bg.h"
 #include "debugproc.h"
 #include "effect2D.h"
 #include "effect3D.h"

@@ -71,6 +71,18 @@ void CEnemyNormal::Update(void)
 	{
 		pBlock->Hit(5.0f);
 	}
+
+	CEnemy::STATE state = GetState();
+
+	if (state == CEnemy::STATE::STATE_DEATH)
+	{// éÄñSÉÇÅ[ÉVÉáÉì
+		int nMotion = GetMotion();
+
+		if (nMotion != MOTION_DEATH)
+		{
+			SetMotion(MOTION_DEATH);
+		}
+	}
 }
 
 //=====================================================

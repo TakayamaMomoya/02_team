@@ -7,7 +7,7 @@
 SCRIPT
 
 PARTICLESET		#1 爆発のパーティクル
-	TEXTURE_PASS = data//TEXTURE//EFFECT//effect000.png
+	TEXTURE_PATH = data//TEXTURE//EFFECT//effect000.png
     LIFE_PARTICLE = 1
     NUM_EFFECT = 114
     LIFE_EFFECT = 61
@@ -23,7 +23,7 @@ PARTICLESET		#1 爆発のパーティクル
 END_PARTICLESET
 
 PARTICLESET		#2 噴射(火)のエフェクト
-	TEXTURE_PASS = data//TEXTURE//EFFECT//effect000.png
+	TEXTURE_PATH = data//TEXTURE//EFFECT//effect000.png
     LIFE_PARTICLE = 1
     NUM_EFFECT = 26
     LIFE_EFFECT = 20
@@ -39,7 +39,7 @@ PARTICLESET		#2 噴射(火)のエフェクト
 END_PARTICLESET
 
 PARTICLESET		#2 噴射(煙)のエフェクト
-	TEXTURE_PASS = data//TEXTURE//EFFECT//smoke.png
+	TEXTURE_PATH = data//TEXTURE//EFFECT//smoke.png
     LIFE_PARTICLE = 1
     NUM_EFFECT = 26
     LIFE_EFFECT = 20

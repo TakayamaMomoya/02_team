@@ -60,8 +60,11 @@ public:
 	void ResetColor(void) { m_bChangeCol = false; }
 	float GetScale(void) { return m_fScale; }
 	void SetScale(float fScale) { m_fScale = fScale; }
+	void EnableShadow(bool bEnable) { m_bShadow = bEnable; }
 
 private:
+	void DrawShadow(void);
+
 	D3DXVECTOR3 m_pos;								//位置
 	D3DXVECTOR3 m_posOld;	// 前回の位置
 	D3DXVECTOR3 m_move;	// 移動量
@@ -75,6 +78,7 @@ private:
 	D3DXVECTOR3 m_vtxMax;	// 最大頂点
 	D3DXVECTOR3 m_vtxMin;	// 最小頂点
 	bool m_bChangeCol;
+	bool m_bShadow;
 };
 
 #endif

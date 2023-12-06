@@ -333,6 +333,20 @@ void CCamera::UpdateResult(void)
 }
 
 //====================================================
+// ゲームオーバーのカメラ挙動
+//====================================================
+void CCamera::UpdateGameover(D3DXVECTOR3 posVDest, D3DXVECTOR3 posRDest)
+{
+	// 目的座標設定
+	m_camera.posRDest = posRDest;
+	m_camera.posVDest = posVDest;
+
+	// 目的座標に補正
+	m_camera.posV += (m_camera.posVDest - m_camera.posV) * MOVE_FACT;
+	m_camera.posR += (m_camera.posRDest - m_camera.posR) * MOVE_FACT;
+}
+
+//====================================================
 // 振動処理
 //====================================================
 void CCamera::Quake(void)

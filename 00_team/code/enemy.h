@@ -64,8 +64,6 @@ public:
 	void SetState(STATE state) { m_state = state; }
 	CCollisionSphere *GetClsnSphere(void) { return m_pCollisionSphere; }
 	CEnemy *GetNext(void) { return m_pNext; }
-	int GetScore(void) { return m_nScore; }
-	void SetScore(int nScore) { m_nScore = nScore; }
 	int GetCntState(void) { return m_nTimerState; }
 	void SetCntState(int nCnt) { m_nTimerState = nCnt; }
 	void DeleteCollision(void);
@@ -91,7 +89,6 @@ private:
 	CArrow *m_pShadow;	// 影のポインタ
 	CBlock *m_pBlock;	// ブロックのポインタ
 	STATE m_state;	// 状態
-	int m_nScore;	// スコア値
 
 	CEnemy *m_pPrev;	// 前のアドレス
 	CEnemy *m_pNext;	// 次のアドレス

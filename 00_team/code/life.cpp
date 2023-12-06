@@ -120,7 +120,7 @@ void CLife::SetLife(int nLife)
 //=====================================================
 void CLife::SetPosition(D3DXVECTOR3 pos)
 {
-	if (m_pUi != NULL)
+	if (m_pUi != nullptr)
 	{
 		// ƒtƒŒ[ƒ€‚ÌˆÊ’u
 		m_pUi->SetPosition(pos);
