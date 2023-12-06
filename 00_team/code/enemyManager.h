@@ -36,9 +36,13 @@ public:
 	static CEnemyManager *GetInstance(void) { return m_pEnemyManager; }
 
 private:
+	void SpawnThief(void);
+
 	CEnemy *m_pHead;	// 先頭のアドレス
 	CEnemy *m_pTail;	// 最後尾のアドレス
-	int m_nCntSpawn;	// スポーンカウンター
+	int m_nCntSpawn;	// 通常敵スポーンカウンター
+	float m_fTimerThief;	// 泥棒敵スポーンタイマー
+	float m_fTimeSpawnThief;	// 泥棒敵がスポーンするまでの時間
 
 	static CEnemyManager *m_pEnemyManager;	// 自身のポインタ
 };

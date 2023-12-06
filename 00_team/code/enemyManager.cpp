@@ -17,11 +17,15 @@
 #include "universal.h"
 #include <stdio.h>
 #include "game.h"
+#include "rocket.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define RAND_SPAWN	(1000)	// スポーン範囲
+namespace
+{
+const int RAND_SPAWN = 1000;	// スポーン範囲
+}
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -34,6 +38,8 @@ CEnemyManager *CEnemyManager::m_pEnemyManager = nullptr;	// 自身のポインタ
 CEnemyManager::CEnemyManager()
 {
 	m_nCntSpawn = 0;
+	m_fTimerThief = 0.0f;
+	m_fTimeSpawnThief = 0.0f;
 
 	m_pHead = nullptr;
 	m_pTail = nullptr;
@@ -116,6 +122,8 @@ CEnemy *CEnemyManager::CreateEnemy(D3DXVECTOR3 pos, CEnemy::TYPE type)
 //=====================================================
 HRESULT CEnemyManager::Init(void)
 {
+	m_fTimeSpawnThief = 2.0f;
+
 	return S_OK;
 }
 
@@ -147,6 +155,7 @@ void CEnemyManager::Update(void)
 		}
 	}
 
+	// 通常敵のスポーン
 	m_nCntSpawn++;
 
 	if (m_nCntSpawn >= 60)
@@ -165,6 +174,46 @@ void CEnemyManager::Update(void)
 		CreateEnemy(posCenter, CEnemy::TYPE::TYPE_NORMAL);
 
 		m_nCntSpawn = 0;
+	}
+
+	// 泥棒敵のスポーン
+	CRocket *pRocket = CRocket::GetInstance();
+
+	if (pRocket != nullptr)
+	{
+		int nProgress = pRocket->GetProgress();
+
+		if (nProgress > 0)
+		{// 一度でも修理されている場合のみスポーン
+			SpawnThief();
+		}
+	}
+}
+
+//=====================================================
+// 泥棒のスポーン
+//=====================================================
+void CEnemyManager::SpawnThief(void)
+{
+	float fTick = CManager::GetTick();
+	m_fTimerThief += fTick;
+
+	if (m_fTimerThief > m_fTimeSpawnThief)
+	{
+		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
+
+		// 出現する座標を設定
+		posCenter.x = (float)universal::RandRange(1000, -1000);
+		posCenter.z = (float)universal::RandRange(1000, -1000);
+
+		// 位置の正規化
+		D3DXVec3Normalize(&posCenter, &posCenter);
+		posCenter *= RAND_SPAWN;
+
+		// 敵スポーン
+		CreateEnemy(posCenter, CEnemy::TYPE::TYPE_THIEF);
+
+		m_fTimerThief = 0.0f;
 	}
 }
 
