@@ -226,7 +226,9 @@ HRESULT CGameover::Init()
 		{
 			for (int nCntPlayer = 0; nCntPlayer < nNumPlayer; nCntPlayer++)
 			{
-				if (m_bDeathPlayer[nCntPlayer] == false)
+				bool bDeathPlayer = pPlayerManager->GetDeathPlayer(nCntPlayer);
+
+				if (bDeathPlayer == true)
 				{
 					m_apModelPlayer[nCntPlayer] = CMotion::Create((char*)PLAYER_BODY_PATH[nCntPlayer]);	// ê∂ê¨
 

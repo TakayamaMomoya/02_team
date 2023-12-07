@@ -27,6 +27,7 @@ CPlayerManager::CPlayerManager()
 	m_pInfoAttack = nullptr;
 	ZeroMemory(&m_apPlayer[0], sizeof(m_apPlayer));
 	ZeroMemory(&m_anIDJoypad[0], sizeof(m_anIDJoypad));
+	ZeroMemory(&m_abDeathPlayer[0], sizeof(m_abDeathPlayer));
 }
 
 //=====================================================
