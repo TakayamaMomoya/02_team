@@ -23,6 +23,7 @@
 #include "goal.h"
 #include "texture.h"
 #include "game.h"
+#include "gimmickManager.h"
 
 //===============================================
 // 定数定義
@@ -80,19 +81,19 @@ namespace
 	};
 
 	// 視点カメラの位置
-	const D3DXVECTOR3 CAMERA_POSV = D3DXVECTOR3(170.0f, 115.0f, -95.0f);
+	const D3DXVECTOR3 CAMERA_POSV = D3DXVECTOR3(170.0f, 110.0f, -90.0f);
 
 	// 注視点カメラの位置
 	const D3DXVECTOR3 CAMERA_POSR = D3DXVECTOR3(170.0f, -50.0f, 300.0f);
 
 	// ゲームオーバーのテクスチャのパス
-	const char* LOGO_PATH = "data\\TEXTURE\\UI\\start_game.png";
+	const char* LOGO_PATH = "data\\TEXTURE\\UI\\gameover.png";
 
 	// ゲームオーバーの横幅
-	const float LOGO_WIDTH = 300.0f;
+	const float LOGO_WIDTH = 480.0f;
 
 	// ゲームオーバーの縦幅
-	const float LOGO_HEIGHT = 100.0f;
+	const float LOGO_HEIGHT = 270.0f;
 
 	// ゲームオーバーの位置
 	const D3DXVECTOR3 LOGO_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 150.0f, 0.0f);
@@ -112,6 +113,7 @@ CGameover::CGameover()
 	ZeroMemory(&m_apModelPlayer[0], sizeof(m_apModelPlayer));
 	ZeroMemory(&m_apModelEnemy[0], sizeof(m_apModelEnemy));
 	m_pLogo = nullptr;
+	m_bDeathPlayer[0] = {};
 }
 
 //===============================================
@@ -155,6 +157,9 @@ HRESULT CGameover::Init()
 	CEnemyManager* pEnemyManager = CEnemyManager::GetInstance();
 	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
 	CGame* pGame = CGame::GetInstance();
+	CUIManager* pUIManager = CUIManager::GetInstance();
+	CGoal* pGoal = CGoal::GetInstance();
+	CGimmickManager* pGimmickManager = CGimmickManager::GetInstance();
 
 	if (pEnemyManager != nullptr)
 	{
@@ -199,6 +204,16 @@ HRESULT CGameover::Init()
 		return E_FAIL;
 	}
 
+	// ギミックの削除
+	if (pGimmickManager != nullptr)
+	{
+		pGimmickManager->DeleteAllGimmick();
+	}
+	else if (pGimmickManager == nullptr)
+	{
+		return E_FAIL;
+	}
+
 	// プレイヤーの生成
 	if (pPlayerManager != nullptr)
 	{
@@ -211,12 +226,15 @@ HRESULT CGameover::Init()
 		{
 			for (int nCntPlayer = 0; nCntPlayer < nNumPlayer; nCntPlayer++)
 			{
-				m_apModelPlayer[nCntPlayer] = CMotion::Create((char*)PLAYER_BODY_PATH[nCntPlayer]);	// 生成
+				if (m_bDeathPlayer[nCntPlayer] == false)
+				{
+					m_apModelPlayer[nCntPlayer] = CMotion::Create((char*)PLAYER_BODY_PATH[nCntPlayer]);	// 生成
 
-				// プレイヤーの情報の設定
-				m_apModelPlayer[nCntPlayer]->SetPosition(PLAYER_POS[nCntPlayer]);	// 位置
-				m_apModelPlayer[nCntPlayer]->SetRot(PLAYER_ROT[nCntPlayer]);		// 向き
-				m_apModelPlayer[nCntPlayer]->SetMotion(5);							// モーション
+					// プレイヤーの情報の設定
+					m_apModelPlayer[nCntPlayer]->SetPosition(PLAYER_POS[nCntPlayer]);	// 位置
+					m_apModelPlayer[nCntPlayer]->SetRot(PLAYER_ROT[nCntPlayer]);		// 向き
+					m_apModelPlayer[nCntPlayer]->SetMotion(5);							// モーション
+				}
 			}
 		}
 	}
@@ -244,6 +262,24 @@ HRESULT CGameover::Init()
 		return E_FAIL;
 	}
 
+	// UIを非表示
+	if (pUIManager != nullptr)
+	{
+		pUIManager->EnableDisp(false);
+	}
+	else if (pUIManager == nullptr)
+	{
+		return E_FAIL;
+	}
+	if (pGoal != nullptr)
+	{
+		pGoal->Uninit();
+	}
+	else if (pGoal == nullptr)
+	{
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -267,19 +303,6 @@ void CGameover::Update(void)
 	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
 	CCamera* pCamera = CManager::GetCamera();
-	CGoalTimer* pGoalTimer = CGoalTimer::GetInstance();
-	CUIManager* pUIManager = CUIManager::GetInstance();
-	CGoal* pGoal = CGoal::GetInstance();
-
-	// UIを非表示
-	if (pUIManager != nullptr)
-	{
-		pUIManager->EnableDisp(false);
-	}
-	if (pGoal != nullptr)
-	{
-		pGoal->Uninit();
-	}
 
 	// カメラをロケット付近へ移動
 	if (pCamera != nullptr)
