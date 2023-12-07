@@ -22,6 +22,7 @@
 #include "motionDiv.h"
 #include "billboard.h"
 #include "texture.h"
+#include "anim3D.h"
 
 //*****************************************************
 // 定数定義
@@ -29,6 +30,11 @@
 namespace
 {
 const float SIZE_INTERACT = 30.0f;	// インタラクト表示のサイズ
+const float GUIDE_POSY = 150.0f;	// ガイド表示の高さ
+const float GUIDE_SIZE = 50.0f;	// ガイド表示のサイズ
+const char* GUIDE_PATH = "data\\TEXTURE\\UI\\repairGuide.png";	// ガイド表示のテクスチャパス
+const int NUM_ANIM = 2;	// ガイド表示のアニメーション数
+const int SPEED_ANIM = 20;	// ガイド表示のアニメーション速度
 }
 
 //=====================================================
@@ -39,6 +45,7 @@ CItemRepair::CItemRepair(int nPriority) : CGimmick(nPriority)
 	m_pPlayer = nullptr;
 	m_pGauge = nullptr;
 	m_pInteract = nullptr;
+	m_pGuide = nullptr;
 	m_bInRocket = false;
 	m_fCntRepair = 0.0f;
 }
@@ -83,6 +90,9 @@ HRESULT CItemRepair::Init(void)
 	// 読み込み
 	Load();
 
+	// ガイド表示生成
+	CreateGuide();
+
 	return S_OK;
 }
 
@@ -95,6 +105,34 @@ void CItemRepair::Load(void)
 	int nIdx = CModel::Load("data\\MODEL\\item\\repairKit.x");
 	SetIdxModel(nIdx);
 	BindModel(nIdx);
+}
+
+//=====================================================
+// ガイドの生成
+//=====================================================
+void CItemRepair::CreateGuide(void)
+{
+	if (m_pGuide == nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+
+		pos.y += GUIDE_POSY;
+
+		m_pGuide = CAnim3D::Create(pos, NUM_ANIM, SPEED_ANIM, true);
+
+		if (m_pGuide != nullptr)
+		{
+			m_pGuide->SetSize(GUIDE_SIZE, GUIDE_SIZE);
+
+			CTexture *pTexture = CTexture::GetInstance();
+
+			if (pTexture != nullptr)
+			{// テクスチャの設定
+				int nIdx = pTexture->Regist(GUIDE_PATH);
+				m_pGuide->SetIdxTexture(nIdx);
+			}
+		}
+	}
 }
 
 //=====================================================
@@ -116,6 +154,12 @@ void CItemRepair::Uninit(void)
 		m_pInteract = nullptr;
 	}
 
+	if (m_pGuide != nullptr)
+	{
+		m_pGuide->Uninit();
+		m_pGuide = nullptr;
+	}
+
 	// 継承クラスの終了
 	CGimmick::Uninit();
 }
@@ -132,7 +176,7 @@ void CItemRepair::Update(void)
 		bRelease = m_pPlayer->InputInteract();
 
 		if (bRelease)
-		{// 持ち上げているプレイヤーの検出
+		{// 手放す
 			// 武器を有効化する
 			m_pPlayer->EnableWeapon(true);
 			
@@ -142,6 +186,8 @@ void CItemRepair::Update(void)
 			m_pPlayer = nullptr;
 
 			SetEnable(true);
+
+			CreateGuide();
 		}
 		else
 		{
@@ -181,6 +227,15 @@ void CItemRepair::Update(void)
 	else
 	{// 持ち上げられている場合
 		FollowPlayerHand();
+	}
+
+	if (m_pGuide != nullptr)
+	{// ガイド表示の追従
+		D3DXVECTOR3 pos = GetPosition();
+
+		pos.y += GUIDE_POSY;
+
+		m_pGuide->SetPosition(pos);
 	}
 
 	// ロケットとの当たり判定
@@ -266,6 +321,12 @@ void CItemRepair::Interact(CObject *pObj)
 					pPlayer->SetItemTrigger(true);
 
 					SetEnable(false);
+
+					if (m_pGuide != nullptr)
+					{// ガイド表示の削除
+						m_pGuide->Uninit();
+						m_pGuide = nullptr;
+					}
 				}
 			}
 		}

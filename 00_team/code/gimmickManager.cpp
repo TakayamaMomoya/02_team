@@ -33,7 +33,8 @@ CGimmickManager *CGimmickManager::m_pGimmickManager = nullptr;	// 自身のポインタ
 //=====================================================
 CGimmickManager::CGimmickManager()
 {
-
+	m_pHead = nullptr;
+	m_pTail = nullptr;
 }
 
 //=====================================================
@@ -367,6 +368,26 @@ void CGimmickManager::Uninit(void)
 	m_pGimmickManager = nullptr;
 
 	Release();
+}
+
+//=====================================================
+// 全ギミック削除処理
+//=====================================================
+void CGimmickManager::DeleteAllGimmick(void)
+{
+	CGimmick *pGimmick = GetHead();
+
+	while (pGimmick != nullptr)
+	{
+		CGimmick *pGimmickNext = pGimmick->GetNext();
+
+		if (pGimmick != nullptr)
+		{
+			pGimmick->Uninit();
+		}
+
+		pGimmick = pGimmickNext;
+	}
 }
 
 //=====================================================

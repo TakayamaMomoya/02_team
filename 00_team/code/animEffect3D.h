@@ -32,6 +32,7 @@ public:
 	enum TYPE
 	{
 		TYPE_MUZZLEFLUSH = 0,	// マズルフラッシュ
+		TYPE_BLOOD,	// 血しぶき
 		TYPE_MAX
 	};
 
@@ -55,6 +56,7 @@ private:
 		float fSize;	// サイズ
 		D3DXCOLOR col;	// 色
 		bool bAdd;	// 加算合成するかどうか
+		bool bBillboard;	// ビルボードにするかどうか
 	};
 	
 	void Load(void);

@@ -62,7 +62,7 @@ namespace
 	const float ADULTWALL_POS_Z(-470.0f);
 
 	const D3DXVECTOR3 CONTAINER_POS({ -150.0, 0.0, -100.0f });	// コンテナの位置
-	const D3DXVECTOR3 CONTAINER_SPACE({ 400.0, 0.0, -150.0f });	// コンテナ間の広さ
+	const D3DXVECTOR3 CONTAINER_SPACE({ 400.0, 0.0, -70.0f });	// コンテナ間の広さ
 	const float RESPAWN_TIME(10.0f);	// コンテナ復活の時間
 
 	const float RIFT_IN(100.0f);	// リフトの範囲
@@ -72,11 +72,6 @@ namespace
 
 	const float POW_JUMP = 25.0f;	// エントリー時のジャンプ力
 };
-
-//*****************************************************
-// 静的メンバ変数宣言
-//*****************************************************
-CNumber3D *CSelect::m_apNumber[2] = {};
 
 //=====================================================
 // コンストラクタ
@@ -89,6 +84,7 @@ CSelect::CSelect()
 	ZeroMemory(&m_aJoinUiData[0], sizeof(m_aJoinUiData));
 	m_pStartUI = nullptr;
 	m_pLift = nullptr;
+	m_pSlash = nullptr;
 	m_bRiftCamera = false;
 	m_bOk = false;
 	m_selectState = SELECT_STATE::STATE_BEFORE;
@@ -161,11 +157,11 @@ HRESULT CSelect::Init(void)
 		}
 	}
 
-	CBillboard* pBill = CBillboard::Create({ m_apNumber[0]->GetPosition().x + 15.0f, m_apNumber[0]->GetPosition().y, m_apNumber[0]->GetPosition().z }, 10.0f, 20.0f);
-	if (pBill != nullptr)
+	m_pSlash = CBillboard::Create({ m_apNumber[0]->GetPosition().x + 15.0f, m_apNumber[0]->GetPosition().y, m_apNumber[0]->GetPosition().z }, 10.0f, 20.0f);
+	if (m_pSlash != nullptr)
 	{
 		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\slash.png");
-		pBill->SetIdxTexture(nIdx);
+		m_pSlash->SetIdxTexture(nIdx);
 	}
 
 	// 開始位置
@@ -282,9 +278,6 @@ void CSelect::ContainerInit(void)
 	// 武器マネージャの生成
 	CWeaponManager::Create();
 
-	int nCnt1 = 0;
-	int nCnt2 = 0;
-
 	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 	{
 		// コンテナの生成
@@ -297,10 +290,8 @@ void CSelect::ContainerInit(void)
 			(
 				CONTAINER_POS.x,
 				0.0f, 
-				CONTAINER_POS.z + (nCnt1 * CONTAINER_SPACE.z))
+				CONTAINER_POS.z + (nCnt * CONTAINER_SPACE.z))
 			);
-
-			nCnt1++;
 		}
 		else
 		{
@@ -308,10 +299,8 @@ void CSelect::ContainerInit(void)
 			(
 				CONTAINER_POS.x + CONTAINER_SPACE.x,
 				0.0f + +CONTAINER_SPACE.y,
-				CONTAINER_POS.z + (nCnt2 * CONTAINER_SPACE.z))
+				CONTAINER_POS.z + (nCnt * CONTAINER_SPACE.z))
 			);
-
-			nCnt2++;
 		}
 	}
 }
@@ -354,6 +343,7 @@ void CSelect::Update(void)
 					pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
 					pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
 				{// フェード
+					m_pSlash->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 					m_selectState = STATE_GO;
 					m_bOk = true;
 				}
@@ -361,16 +351,14 @@ void CSelect::Update(void)
 				// StartUIを見えるように
 				if (m_pStartUI != nullptr)
 				{
-					m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-					m_pStartUI->SetVtx();
-				}
-			}
-			else
-			{
-				// StartのUIを見えないように
-				if (m_pStartUI != nullptr)
-				{
-					m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+					if (m_selectState != STATE_GO)
+					{
+						m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+					}
+					else
+					{
+						m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+					}
 					m_pStartUI->SetVtx();
 				}
 			}
@@ -433,7 +421,7 @@ void CSelect::Update(void)
 	{
 		//CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		//CParticle::Create({ 0.0f, 300.0f, -400.0f }, CParticle::TYPE::TYPE_INJECTION_FIRE);
-		CParticle::Create({ 0.0f, 200.0f, -400.0f }, CParticle::TYPE::TYPE_SMOKE);
+		CParticle::Create({ 0.0f, 200.0f, -400.0f }, CParticle::TYPE::TYPE_TOMATO_JUICE);
 	}
 
 	CDebugProc::GetInstance()->Print("\n参加人数[%d]\n", nJoinPlayer);
@@ -445,9 +433,6 @@ void CSelect::Update(void)
 //=====================================================
 void CSelect::ReSetContainer(void)
 {
-	int nCnt1 = 0;
-	int nCnt2 = 0;
-
 	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 	{
 		if (m_aContainerData[nCnt].pContainer != nullptr)
@@ -486,10 +471,8 @@ void CSelect::ReSetContainer(void)
 				(
 					CONTAINER_POS.x,
 					0.0f,
-					CONTAINER_POS.z + (nCnt1 * CONTAINER_SPACE.z))
+					CONTAINER_POS.z + (nCnt * CONTAINER_SPACE.z))
 				);
-
-				nCnt1++;
 			}
 			else
 			{
@@ -497,10 +480,8 @@ void CSelect::ReSetContainer(void)
 				(
 					CONTAINER_POS.x + CONTAINER_SPACE.x,
 					0.0f + +CONTAINER_SPACE.y,
-					CONTAINER_POS.z + (nCnt2 * CONTAINER_SPACE.z))
+					CONTAINER_POS.z + (nCnt * CONTAINER_SPACE.z))
 				);
-
-				nCnt2++;
 			}
 		}
 	}

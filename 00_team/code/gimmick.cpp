@@ -9,6 +9,7 @@
 // インクルード
 //*****************************************************
 #include "gimmick.h"
+#include "gimmickManager.h"
 #include "manager.h"
 #include "renderer.h"
 #include "collision.h"
@@ -34,6 +35,45 @@ CGimmick::CGimmick(int nPriority) : CObjectX(nPriority)
 	m_pCollisionSphere = nullptr;
 	m_pInteract = nullptr;
 	m_bEnable = true;
+
+	// 先頭、最後尾アドレス取得
+	CGimmickManager *pManager = CGimmickManager::GetInstance();
+	CGimmick *pHead = nullptr;
+	CGimmick *pTail = nullptr;
+
+	if (pManager != nullptr)
+	{
+		pHead = pManager->GetHead();
+		pTail = pManager->GetTail();
+	}
+	else
+	{
+		return;
+	}
+
+	// 値のクリア
+	m_pPrev = nullptr;
+	m_pNext = nullptr;
+
+	if (pHead == nullptr)
+	{// 先頭と最後尾アドレスの代入
+		pManager->SetHead(this);
+		pManager->SetTail(this);
+
+		return;
+	}
+
+	// 前のアドレスに最後尾のアドレスを代入する
+	m_pPrev = pTail;
+
+	// 最後尾のアドレスを自分にする
+	pManager->SetTail(this);
+
+	if (m_pPrev != nullptr)
+	{
+		// 前のオブジェクトの次のアドレスを自分にする
+		m_pPrev->m_pNext = this;
+	}
 }
 
 //=====================================================
@@ -41,7 +81,54 @@ CGimmick::CGimmick(int nPriority) : CObjectX(nPriority)
 //=====================================================
 CGimmick::~CGimmick()
 {
+	// 先頭、最後尾アドレス取得
+	CGimmickManager *pManager = CGimmickManager::GetInstance();
+	CGimmick *pHead = nullptr;
+	CGimmick *pTail = nullptr;
 
+	if (pManager != nullptr)
+	{
+		pHead = pManager->GetHead();
+		pTail = pManager->GetTail();
+	}
+
+	if (pTail != this && pHead != this)
+	{// 真ん中のアドレスの破棄
+		if (m_pPrev != nullptr)
+		{
+			// 前のアドレスから次のアドレスをつなぐ
+			m_pPrev->m_pNext = m_pNext;
+		}
+
+		if (m_pNext != nullptr)
+		{
+			// 次のアドレスから前のアドレスをつなぐ
+			m_pNext->m_pPrev = m_pPrev;
+		}
+	}
+
+	if (pHead == this)
+	{// 先頭アドレスの破棄
+		//if (m_pNext != nullptr)
+		{// 先頭アドレスを次のアドレスに引き継ぐ
+			pManager->SetHead(m_pNext);
+
+			if (m_pNext != nullptr)
+			{
+				m_pNext->m_pPrev = nullptr;
+			}
+		}
+	}
+
+	if (pTail == this)
+	{// 最後尾アドレスの破棄
+		if (m_pPrev != nullptr)
+		{// 最後尾アドレスを前のアドレスに引き継ぐ
+			pManager->SetTail(m_pPrev);
+
+			m_pPrev->m_pNext = nullptr;
+		}
+	}
 }
 
 //=====================================================
