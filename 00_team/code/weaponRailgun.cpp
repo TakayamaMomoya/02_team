@@ -29,6 +29,7 @@
 namespace
 {
 const int NUM_VTX = 4;	// 当たり判定の頂点数
+const D3DXCOLOR COL_RANGE = { 1.0f,1.0f,1.0f,0.4f };	// 範囲表示の色
 }
 
 //=====================================================
@@ -72,6 +73,7 @@ HRESULT CRailgun::Init(void)
 	{
 		m_pRange = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		m_pRange->SetSize(0.0f, 0.0f);
+		m_pRange->SetColor(COL_RANGE);
 	}
 
 	return S_OK;
@@ -298,6 +300,8 @@ void CRailgun::ToggleEnable(bool bEnable)
 		if (m_pRange == nullptr)
 		{// 範囲表示の生成
 			m_pRange = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pRange->SetSize(0.0f, 0.0f);
+			m_pRange->SetColor(COL_RANGE);
 		}
 	}
 	else
