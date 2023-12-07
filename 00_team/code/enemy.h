@@ -34,7 +34,7 @@ public:
 	{// “G‚ÌŽí—Þ
 		TYPE_NONE = 0,	// ‰½‚Å‚à‚È‚¢
 		TYPE_NORMAL,	// ’Êí“G
-		TYPE_THIEF,	// “D–_“G
+		TYPE_THIEF,		// “D–_“G
 		TYPE_MAX
 	}TYPE;
 

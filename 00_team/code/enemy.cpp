@@ -23,6 +23,7 @@
 #include "motion.h"
 #include "universal.h"
 #include "animEffect3D.h"
+#include "sound.h"
 
 //*****************************************************
 // 定数定義
@@ -464,6 +465,13 @@ void CEnemy::Hit(float fDamage)
 
 		// ダメージエフェクトの生成
 		CAnimEffect3D *pAnim3D = CAnimEffect3D::GetInstance();
+
+		CSound* pSound = CSound::GetInstance();
+
+		if (pSound != nullptr)
+		{
+			pSound->Play(pSound->LABEL_SE_HIT);
+		}
 
 		if (pAnim3D != nullptr)
 		{
