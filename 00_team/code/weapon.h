@@ -67,7 +67,7 @@ public:
 	void SetCntShot(int nCntShot) { m_info.nCntShot = nCntShot; }
 	int GetCntShot(void) { return m_info.nCntShot; }
 	void FollowPlayerHand(void);
-	void SetEnable(bool bEnable) { m_info.bEnable = bEnable; }
+	void SetEnable(bool bEnable);
 	bool IsEnable(void) { return m_info.bEnable; }
 	void SetDamage(float fDamage) { m_info.fDamage = fDamage; }
 	float GetDamage(void) { return m_info.fDamage; }
@@ -76,8 +76,10 @@ public:
 	SInfo GetInfo(void) { return m_info; }
 	void SetInfo(SInfo info) { m_info = info; }
 
-private:
+protected:
+	virtual void ToggleEnable(bool bEnable) {};
 
+private:
 	SInfo m_info;
 };
 

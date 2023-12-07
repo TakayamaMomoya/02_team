@@ -21,6 +21,7 @@
 
 #include "player.h"
 #include "playerManager.h"
+#include "weapon.h"
 
 //*****************************************************
 // マクロ定義
@@ -40,8 +41,8 @@ namespace
 		D3DXVECTOR3(SCREEN_WIDTH * 0.95f, SCREEN_HEIGHT * 0.775f, 0.0f),
 	};
 	const float FRAME_SIZE = 150.0f;
-	const float FRAME_WIDTH = FRAME_SIZE * 0.4f;
-	const float FRAME_HEIGHT = FRAME_SIZE * 1.0f;
+	const float FRAME_WIDTH = 0.4f * FRAME_SIZE;
+	const float FRAME_HEIGHT = 1.0f * FRAME_SIZE;
 	const D3DXCOLOR FRAME_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	const char* FRAME_FILE_NAME[NUM_PLAYER] =
 	{// ファイル名
@@ -59,8 +60,8 @@ namespace
 		D3DXVECTOR3(0.0f,  90.0f, 0.0f),
 	};
 	const float FACE_SIZE = 65.0f;
-	const float FACE_WIDTH = FACE_SIZE * 0.5f;
-	const float FACE_HEIGHT = FACE_SIZE * 0.6f;
+	const float FACE_WIDTH = 0.5f * FACE_SIZE ;
+	const float FACE_HEIGHT = 0.6f * FACE_SIZE;
 	const D3DXCOLOR FACE_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	const char* FACE_FILE_NAME[NUM_PLAYER] =
 	{// ファイル名
@@ -70,23 +71,70 @@ namespace
 		"data\\TEXTURE\\UI\\player04.png",
 	};
 
-	const D3DXVECTOR3 WEAPON_POS_PLUS[NUM_PLAYER] =
+	const D3DXVECTOR3 WEAPON_NULL_POS_PLUS[NUM_PLAYER] =
 	{// 基準から加算分の位置
-		D3DXVECTOR3(0.0f, -95.0f, 0.0f),
-		D3DXVECTOR3(0.0f, -95.0f, 0.0f),
-		D3DXVECTOR3(0.0f,  90.0f, 0.0f),
-		D3DXVECTOR3(0.0f,  90.0f, 0.0f),
+		D3DXVECTOR3( 30.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-30.0f, 0.0f, 0.0f),
+		D3DXVECTOR3( 30.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-30.0f, 0.0f, 0.0f),
 	};
-	const float WEAPON_SIZE = 65.0f;
-	const float WEAPON_WIDTH = WEAPON_SIZE * 0.5f;
-	const float WEAPON_HEIGHT = WEAPON_SIZE * 0.6f;
+	const float WEAPON_NULL_SIZE = 30.0f;
+	const float WEAPON_NULL_WIDTH = 1.0f * WEAPON_NULL_SIZE;
+	const float WEAPON_NULL_HEIGHT = 0.5f * WEAPON_NULL_SIZE;
+	const D3DXCOLOR WEAPON_NULL_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	const char* WEAPON_NULL_FILE_NAME = "data\\TEXTURE\\UI\\weapon_null.png";
+
+	const D3DXVECTOR3 WEAPON_POS_PLUS[CWeapon::TYPE_MAX][NUM_PLAYER] =
+	{// 基準から加算分の位置
+		
+		D3DXVECTOR3( 40.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-40.0f, 0.0f, 0.0f),
+		D3DXVECTOR3( 40.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-40.0f, 0.0f, 0.0f),
+		
+		D3DXVECTOR3( 30.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-30.0f, 0.0f, 0.0f),
+		D3DXVECTOR3( 30.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-30.0f, 0.0f, 0.0f),
+
+		D3DXVECTOR3( 50.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-50.0f, 0.0f, 0.0f),
+		D3DXVECTOR3( 50.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-50.0f, 0.0f, 0.0f),
+		
+		D3DXVECTOR3( 50.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-50.0f, 0.0f, 0.0f),
+		D3DXVECTOR3( 50.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-50.0f, 0.0f, 0.0f),
+	};
+	const float WEAPON_SIZE[CWeapon::TYPE_MAX] =
+	{// 基準から加算分の位置
+		40.0f,
+		50.0f,
+		50.0f,
+		35.0f,
+	};
+	const float WEAPON_WIDTH[CWeapon::TYPE_MAX] =
+	{// 基準から加算分の位置
+		1.0f * WEAPON_SIZE[CWeapon::TYPE_MAGNUM],
+		0.6f * WEAPON_SIZE[CWeapon::TYPE_MACHINEGUN],
+		1.0f * WEAPON_SIZE[CWeapon::TYPE_SHOTGUN],
+		1.4f * WEAPON_SIZE[CWeapon::TYPE_RAILGUN],
+	};
+	const float WEAPON_HEIGHT[CWeapon::TYPE_MAX] =
+	{// 基準から加算分の位置
+		0.5f * WEAPON_SIZE[CWeapon::TYPE_MAGNUM],
+		0.7f * WEAPON_SIZE[CWeapon::TYPE_MACHINEGUN],
+		0.2f * WEAPON_SIZE[CWeapon::TYPE_SHOTGUN],
+		0.4f * WEAPON_SIZE[CWeapon::TYPE_RAILGUN],
+	};
 	const D3DXCOLOR WEAPON_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	const char* WEAPON_FILE_NAME[NUM_PLAYER] =
+	const char* WEAPON_FILE_NAME[CWeapon::TYPE_MAX] =
 	{// ファイル名
-		"data\\TEXTURE\\UI\\player01.png",
-		"data\\TEXTURE\\UI\\player02.png",
-		"data\\TEXTURE\\UI\\player03.png",
-		"data\\TEXTURE\\UI\\player04.png",
+		"data\\TEXTURE\\UI\\weapon_magnum.png",
+		"data\\TEXTURE\\UI\\weapon_mac10.png",
+		"data\\TEXTURE\\UI\\weapon_shotgun.png",
+		"data\\TEXTURE\\UI\\weapon_railgun.png",
 	};
 
 	const D3DXVECTOR3 LIFE_POS_PLUS[NUM_PLAYER] =
@@ -97,8 +145,8 @@ namespace
 		D3DXVECTOR3( 15.5f,   45.0f, 0.0f),
 	};
 	const float LIFE_SIZE = 100.0f;
-	const float LIFE_WIDTH = LIFE_SIZE * 0.1f;
-	const float LIFE_HEIGHT = LIFE_SIZE * 0.9f;
+	const float LIFE_WIDTH = 0.1f * LIFE_SIZE;
+	const float LIFE_HEIGHT = 0.9f * LIFE_SIZE;
 	const D3DXCOLOR LIFE_COLOR = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 	const char* LIFE_FILE_NAME = "data\\UI\\UILife000.txt";
 
@@ -179,6 +227,68 @@ void CUIManager::Uninit(void)
 //=====================================================
 void CUIManager::Update(void)
 {
+	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
+	CPlayer* pPlayer = nullptr;
+	CWeapon* pWeapon = nullptr;
+
+	if (pPlayerManager != nullptr)
+	{
+		pPlayer = pPlayerManager->GetPlayer(m_aInfo->nIdxPlayer);
+
+		if (m_aInfo[m_aInfo->nIdxPlayer].pUiWeapon != nullptr)
+		{
+			if (pPlayer != nullptr)
+			{
+				pWeapon = pPlayer->GetWeapon();
+			}
+
+			if (pWeapon != nullptr)
+			{
+				CWeapon::TYPE weaponType = pWeapon->GetType();
+
+				if (m_aInfo[m_aInfo->nIdxPlayer].weaponType != weaponType ||
+					m_aInfo[m_aInfo->nIdxPlayer].bIsWeaponNull == true)
+				{
+					m_aInfo[m_aInfo->nIdxPlayer].weaponType = weaponType;
+					m_aInfo[m_aInfo->nIdxPlayer].bIsWeaponNull = false;
+
+					m_aInfo[m_aInfo->nIdxPlayer].pUiWeapon->SetPosition(FRAME_POS[m_aInfo->nIdxPlayer] + WEAPON_POS_PLUS[weaponType][m_aInfo->nIdxPlayer]);
+					m_aInfo[m_aInfo->nIdxPlayer].pUiWeapon->SetSize(WEAPON_WIDTH[weaponType], WEAPON_HEIGHT[weaponType]);
+					m_aInfo[m_aInfo->nIdxPlayer].pUiWeapon->SetCol(WEAPON_COLOR);
+
+					CTexture* pTexture = CTexture::GetInstance();
+
+					if (pTexture != nullptr)
+					{
+						int nTexIdx = pTexture->Regist(WEAPON_FILE_NAME[weaponType]);
+						m_aInfo[m_aInfo->nIdxPlayer].pUiWeapon->SetIdxTexture(nTexIdx);
+						m_aInfo[m_aInfo->nIdxPlayer].pUiWeapon->SetVtx();
+					}
+				}
+			}
+			else
+			{
+				if (m_aInfo[m_aInfo->nIdxPlayer].bIsWeaponNull == false)
+				{
+					m_aInfo[m_aInfo->nIdxPlayer].bIsWeaponNull = true;
+
+					m_aInfo[m_aInfo->nIdxPlayer].pUiWeapon->SetPosition(FRAME_POS[m_aInfo->nIdxPlayer] + WEAPON_NULL_POS_PLUS[m_aInfo->nIdxPlayer]);
+					m_aInfo[m_aInfo->nIdxPlayer].pUiWeapon->SetSize(WEAPON_NULL_WIDTH, WEAPON_NULL_HEIGHT);
+					m_aInfo[m_aInfo->nIdxPlayer].pUiWeapon->SetCol(WEAPON_NULL_COLOR);
+
+					CTexture* pTexture = CTexture::GetInstance();
+
+					if (pTexture != nullptr)
+					{
+						int nTexIdx = pTexture->Regist(WEAPON_NULL_FILE_NAME);
+						m_aInfo[m_aInfo->nIdxPlayer].pUiWeapon->SetIdxTexture(nTexIdx);
+						m_aInfo[m_aInfo->nIdxPlayer].pUiWeapon->SetVtx();
+					}
+				}
+			}
+		}
+	}
+
 	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
 
 	if (pKeyboard != nullptr)
@@ -195,11 +305,13 @@ void CUIManager::Update(void)
 //=====================================================
 void CUIManager::SetPlayer(int nIdx)
 {
+	m_aInfo->nIdxPlayer = nIdx;
+
 	// フレームUIの生成処理
 	CUI* pUiFrame = CreateUi();
 
-	if (pUiFrame != NULL &&
-		m_aInfo[nIdx].pUiFrame == NULL)
+	if (pUiFrame != nullptr &&
+		m_aInfo[nIdx].pUiFrame == nullptr)
 	{
 		// フレームUIのポインタを代入
 		m_aInfo[nIdx].pUiFrame = pUiFrame;
@@ -211,7 +323,7 @@ void CUIManager::SetPlayer(int nIdx)
 
 		CTexture* pTexture = CTexture::GetInstance();
 
-		if (pTexture != NULL)
+		if (pTexture != nullptr)
 		{
 			int nTexIdx = pTexture->Regist(FRAME_FILE_NAME[nIdx]);
 			m_aInfo[nIdx].pUiFrame->SetIdxTexture(nTexIdx);
@@ -222,8 +334,8 @@ void CUIManager::SetPlayer(int nIdx)
 	// 顔UIの生成処理
 	CUI* pUiFace = CreateUi();
 
-	if (pUiFace != NULL &&
-		m_aInfo[nIdx].pUiFace == NULL)
+	if (pUiFace != nullptr &&
+		m_aInfo[nIdx].pUiFace == nullptr)
 	{
 		// 顔UIのポインタを代入
 		m_aInfo[nIdx].pUiFace = pUiFace;
@@ -235,7 +347,7 @@ void CUIManager::SetPlayer(int nIdx)
 
 		CTexture* pTexture = CTexture::GetInstance();
 
-		if (pTexture != NULL)
+		if (pTexture != nullptr)
 		{
 			int nTexIdx = pTexture->Regist(FACE_FILE_NAME[nIdx]);
 			m_aInfo[nIdx].pUiFace->SetIdxTexture(nTexIdx);
@@ -243,35 +355,76 @@ void CUIManager::SetPlayer(int nIdx)
 		}
 	}
 
-	// 武器UIの生成処理
-	CUI* pUiWeapon = CreateUi();
+	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
+	CPlayer* pPlayer = nullptr;
+	CWeapon* pWeapon = nullptr;
 
-	if (pUiWeapon != NULL &&
-		m_aInfo[nIdx].pUiWeapon == NULL)
+	if (pPlayerManager != nullptr)
 	{
-		// 武器UIのポインタを代入
-		m_aInfo[nIdx].pUiWeapon = pUiWeapon;
+		pPlayer = pPlayerManager->GetPlayer(nIdx);
 
-		// 武器UIの設定
-		m_aInfo[nIdx].pUiWeapon->SetPosition(FRAME_POS[nIdx] + WEAPON_POS_PLUS[nIdx]);
-		m_aInfo[nIdx].pUiWeapon->SetSize(WEAPON_WIDTH, WEAPON_HEIGHT);
-		m_aInfo[nIdx].pUiWeapon->SetCol(WEAPON_COLOR);
+		// 武器UIの生成処理
+		CUI* pUiWeapon = CreateUi();
 
-		CTexture* pTexture = CTexture::GetInstance();
-
-		if (pTexture != NULL)
+		if (pUiWeapon != nullptr &&
+			m_aInfo[nIdx].pUiWeapon == nullptr)
 		{
-			int nTexIdx = pTexture->Regist(WEAPON_FILE_NAME[nIdx]);
-			m_aInfo[nIdx].pUiWeapon->SetIdxTexture(nTexIdx);
-			m_aInfo[nIdx].pUiWeapon->SetVtx();
+			if (pPlayer != nullptr)
+			{
+				pWeapon = pPlayer->GetWeapon();
+			}
+
+			if (pWeapon != nullptr)
+			{
+				// 種類を取得
+				CWeapon::TYPE type = pWeapon->GetType();
+				m_aInfo[m_aInfo->nIdxPlayer].bIsWeaponNull = false;
+
+				// 武器UIのポインタを代入
+				m_aInfo[nIdx].pUiWeapon = pUiWeapon;
+
+				// 武器UIの設定
+				m_aInfo[nIdx].pUiWeapon->SetPosition(FRAME_POS[nIdx] + WEAPON_POS_PLUS[type][nIdx]);
+				m_aInfo[nIdx].pUiWeapon->SetSize(WEAPON_WIDTH[type], WEAPON_HEIGHT[type]);
+				m_aInfo[nIdx].pUiWeapon->SetCol(WEAPON_COLOR);
+
+				CTexture* pTexture = CTexture::GetInstance();
+
+				if (pTexture != nullptr)
+				{
+					int nTexIdx = pTexture->Regist(WEAPON_FILE_NAME[type]);
+					m_aInfo[nIdx].pUiWeapon->SetIdxTexture(nTexIdx);
+					m_aInfo[nIdx].pUiWeapon->SetVtx();
+				}
+			}
+			else
+			{
+				// 武器UIのポインタを代入
+				m_aInfo[nIdx].pUiWeapon = pUiWeapon;
+				m_aInfo[m_aInfo->nIdxPlayer].bIsWeaponNull = true;
+
+				// 武器UIの設定
+				m_aInfo[nIdx].pUiWeapon->SetPosition(FRAME_POS[nIdx] + WEAPON_NULL_POS_PLUS[nIdx]);
+				m_aInfo[nIdx].pUiWeapon->SetSize(WEAPON_NULL_WIDTH, WEAPON_NULL_HEIGHT);
+				m_aInfo[nIdx].pUiWeapon->SetCol(WEAPON_NULL_COLOR);
+
+				CTexture* pTexture = CTexture::GetInstance();
+
+				if (pTexture != nullptr)
+				{
+					int nTexIdx = pTexture->Regist(WEAPON_NULL_FILE_NAME);
+					m_aInfo[nIdx].pUiWeapon->SetIdxTexture(nTexIdx);
+					m_aInfo[nIdx].pUiWeapon->SetVtx();
+				}
+			}
 		}
 	}
 
 	// ライフの生成処理
 	CLife* pLife = CreateLife(nIdx);
 
-	if (pLife != NULL &&
-		m_aInfo[nIdx].pLife == NULL)
+	if (pLife != nullptr &&
+		m_aInfo[nIdx].pLife == nullptr)
 	{
 		// ライフのポインタを代入
 		m_aInfo[nIdx].pLife = pLife;
@@ -286,8 +439,8 @@ void CUIManager::SetPlayer(int nIdx)
 	// 装弾数UIの生成処理
 	CUIMagazine* pUIMagazine = CreateUIMagazine(nIdx);
 
-	if (pUIMagazine != NULL &&
-		m_aInfo[nIdx].pUIMagazine == NULL)
+	if (pUIMagazine != nullptr &&
+		m_aInfo[nIdx].pUIMagazine == nullptr)
 	{
 		// ライフのポインタを代入
 		m_aInfo[nIdx].pUIMagazine = pUIMagazine;

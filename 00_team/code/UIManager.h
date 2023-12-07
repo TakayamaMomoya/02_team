@@ -11,7 +11,9 @@
 //*****************************************************
 // インクルード
 //*****************************************************
+
 #include "object.h"
+#include "weapon.h"
 
 //*****************************************************
 // 前方宣言
@@ -48,6 +50,10 @@ private:
 
 	struct SInfo
 	{
+		int nIdxPlayer;				// 参照するプレイヤーの番号
+		CWeapon::TYPE weaponType;	// 武器の種類
+		bool bIsWeaponNull;			// 武器の有無
+
 		CUI *pUiFrame;				// フレームUI
 		CUI *pUiFace;				// 顔のUI			
 		CUI *pUiWeapon;				// 武器のUI			

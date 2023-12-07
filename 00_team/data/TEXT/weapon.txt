@@ -47,7 +47,7 @@ PROBSET
 	PROB = 70 # マグナムの確率
 	PROB = 50 # マシンガンの確率
 	PROB = 30 # ショットガンの確率
-	PROB = 1 # レールガンの確率
+	PROB = 1000 # レールガンの確率
 END_PROBSET
 
 END_SCRIPT

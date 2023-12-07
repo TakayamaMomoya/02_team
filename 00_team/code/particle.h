@@ -26,6 +26,7 @@ public:
 		TYPE_INJECTION_FIRE,	// •¬ŽË(‰Î)
 		TYPE_INJECTION_SMOKE,	// •¬ŽË(‰Œ)
 		TYPE_SMOKE,	// ‰Œ
+		TYPE_TOMATO_JUICE,	// ƒgƒ}ƒg`
 		TYPE_MAX
 	}TYPE;
 

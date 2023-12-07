@@ -39,12 +39,14 @@ public:		// 誰でもアクセス可能 [アクセス指定子]
 	void Draw(void);
 
 	static CGameover* GetInstance(void) { return m_pGameover; }
+	void SetDeathPlayer(int nID, bool bDeath) { m_bDeathPlayer[nID] = bDeath; }
 
 private:	// 自分のみアクセス可能 [アクセス指定子]
 	static CGameover* m_pGameover;	// 自身のポインタ
 	CMotion* m_apModelPlayer[NUM_PLAYER];		// プレイヤーモデルのポインタ
 	CMotion* m_apModelEnemy[NUM_ENEMY];			// エネミーモデルのポインタ
 	CObject2D* m_pLogo;							// ゲームオーバー表示
+	bool m_bDeathPlayer[NUM_PLAYER];			// 死亡したプレイヤー
 };
 
 #endif
