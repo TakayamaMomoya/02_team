@@ -104,7 +104,8 @@ private:
 	PlayerInfo m_apPlayerData[NUM_PLAYER];	// プレイヤー情報
 	CContainerInfo m_aContainerData[NUM_PLAYER];	// コンテナ
 	CLift* m_pLift;	// リフト
-	static CNumber3D* m_apNumber[2];
+	CNumber3D* m_apNumber[2];
+	CBillboard* m_pSlash;
 	SELECT_STATE m_selectState;	// 人数選択の状態
 	bool m_abEntry[NUM_PLAYER];	// 参加したかどうか
 	bool m_bRiftCamera;
