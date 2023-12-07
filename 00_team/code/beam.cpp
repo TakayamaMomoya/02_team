@@ -21,6 +21,9 @@ namespace
 const int NUM_VTX = 4;	// 当たり判定の頂点数
 const float INITIAL_WIDTH_ANIM = 50.0f;	// アニメーションの幅
 const float INITIAL_WIDTH_LENGTH = 300.0f;	// アニメーションの長さ
+const float INITIAL_SPEED_EXPAND = 40.f;	// 膨らむ速度
+const float INITIAL_SPEED_SHRINK = 5.0f;	// 縮む速度
+const float INITIAL_SPEED_EXTEND = 200.0f;	// 伸びる速度
 }
 
 //=====================================================
@@ -51,11 +54,20 @@ HRESULT CBeam::Init(void)
 		if (pAnimEffect != nullptr)
 		{
 			m_info.pAnim = pAnimEffect->CreateEffect(D3DXVECTOR3(0.0f, 0.0f, 0.0f), CAnimEffect3D::TYPE::TYPE_BEAM);
+
+			if (m_info.pAnim != nullptr)
+			{
+				m_info.pAnim->EnableZtest(false);
+			}
 		}
 	}
 
-	m_info.fWidthAnim = INITIAL_WIDTH_ANIM;
-	m_info.fLengthAnim = INITIAL_WIDTH_LENGTH;
+	// 値の初期化
+	m_info.fWidthAnimDest = INITIAL_WIDTH_ANIM;
+	m_info.fLengthAnimDest = INITIAL_WIDTH_LENGTH;
+	m_info.fSpeedExpand = INITIAL_SPEED_EXPAND;
+	m_info.fSpeedShrink = INITIAL_SPEED_SHRINK;
+	m_info.fSpeedExtend = INITIAL_SPEED_EXTEND;
 
 	return S_OK;
 }
@@ -79,8 +91,56 @@ void CBeam::Uninit(void)
 //=====================================================
 void CBeam::Update(void)
 {
+	// サイズの管理
+	ManageSize();
+
 	// アニメーションの頂点位置設定
 	SetAnimVtx();
+}
+
+//=====================================================
+// サイズの管理
+//=====================================================
+void CBeam::ManageSize(void)
+{
+	if (m_info.fLengthAnimDest > m_info.fLengthAnim)
+	{
+		// 伸びる処理
+		m_info.fLengthAnim += m_info.fSpeedExtend;
+
+		if (m_info.fLengthAnimDest <= m_info.fLengthAnim)
+		{// 長さ制限
+			m_info.fLengthAnim = m_info.fLengthAnimDest;
+		}
+	}
+
+	if (m_info.bFinish == false)
+	{
+		if (m_info.fWidthAnimDest > m_info.fWidthAnim)
+		{
+			// 膨らむ処理
+			m_info.fWidthAnim += m_info.fSpeedExpand;
+
+			if (m_info.fWidthAnimDest <= m_info.fWidthAnim)
+			{// 幅の制限
+				m_info.fWidthAnim = m_info.fWidthAnimDest;
+
+				m_info.bFinish = true;
+			}
+		}
+	}
+	else
+	{
+		// 縮む処理
+		m_info.fWidthAnim -= m_info.fSpeedShrink;
+		
+		if (m_info.fWidthAnim <= 0.0f)
+		{// 縮みきったら終了
+			m_info.fWidthAnim = 0.0f;
+
+			Uninit();
+		}
+	}
 }
 
 //=====================================================
