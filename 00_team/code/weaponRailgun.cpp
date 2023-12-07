@@ -71,6 +71,7 @@ HRESULT CRailgun::Init(void)
 	if (m_pRange == nullptr)
 	{
 		m_pRange = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pRange->SetSize(0.0f, 0.0f);
 	}
 
 	return S_OK;
@@ -285,6 +286,30 @@ void CRailgun::SetVtx(D3DXVECTOR3 vtx1, D3DXVECTOR3 vtx2, D3DXVECTOR3 vtx3, D3DX
 
 	//頂点バッファをアンロック
 	pVtxBuff->Unlock();
+}
+
+//=====================================================
+// 有効化切り替え
+//=====================================================
+void CRailgun::ToggleEnable(bool bEnable)
+{
+	if (bEnable)
+	{
+		if (m_pRange == nullptr)
+		{// 範囲表示の生成
+			m_pRange = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		}
+	}
+	else
+	{
+		if (m_pRange != nullptr)
+		{
+			m_pRange->Uninit();
+			m_pRange = nullptr;
+		}
+	}
+
+	CWeapon::ToggleEnable(bEnable);
 }
 
 //=====================================================
