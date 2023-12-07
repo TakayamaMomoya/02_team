@@ -1170,6 +1170,8 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 //=====================================================
 void CPlayer::Hit(float fDamage)
 {
+	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
+
 	if (m_info.state == STATE_NORMAL)
 	{
 		m_info.fLife -= fDamage;
@@ -1179,6 +1181,12 @@ void CPlayer::Hit(float fDamage)
 			m_info.fLife = 0.0f;
 
 			m_info.state = STATE_DEATH;
+
+			// Ž€–S‚µ‚½ƒvƒŒƒCƒ„[‚Ì”Ô†‚ð“n‚·
+			if (pPlayerManager != nullptr)
+			{
+				pPlayerManager->SetDeathPlayer(m_info.nID, true);
+			}
 
 			Uninit();
 		}
