@@ -48,6 +48,7 @@ private:
 	void CollisionRocket(void);
 	void Escape(void);
 	void Death(void);
+	void LimidPostion(void);
 
 	bool m_bTakeRepair;
 	STATE m_state;

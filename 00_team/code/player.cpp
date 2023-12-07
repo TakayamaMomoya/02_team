@@ -1170,6 +1170,8 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 //=====================================================
 void CPlayer::Hit(float fDamage)
 {
+	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
+
 	if (m_info.state == STATE_NORMAL)
 	{
 		m_info.fLife -= fDamage;
@@ -1180,11 +1182,24 @@ void CPlayer::Hit(float fDamage)
 
 			m_info.state = STATE_DEATH;
 
+			// 死亡したプレイヤーの番号を渡す
+			if (pPlayerManager != nullptr)
+			{
+				pPlayerManager->SetDeathPlayer(m_info.nID, true);
+			}
+
 			Uninit();
 		}
 		else
 		{// ダメージ判定
 			m_info.state = STATE_DAMAGE;
+
+			CSound* pSound = CSound::GetInstance();
+
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_DAMAGE);
+			}
 
 			m_info.fTimerState = m_param.fTimeDamage;
 

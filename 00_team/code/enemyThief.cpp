@@ -26,7 +26,13 @@
 namespace 
 {
 const float TIME_CAMERAEVENT = 4.0f;	// カメラのイベント継続時間
-const float MOVE_SPEED = 1.7f;	// 移動速度
+const float MOVE_SPEED = 1.7f;			// 移動速度
+
+const float LIMID_RANGE_LEFT = -460.0f;
+const float LIMID_RANGE_RIGHT = 460.0f;
+const float LIMID_RANGE_UP = 460.0f;
+const float LIMID_RANGE_DOWN = -460.0f;
+
 }
 
 //=====================================================
@@ -326,6 +332,8 @@ void CEnemyThief::Escape(void)
 	universal::FactingRot(&rot.y, fAngleDist, 0.1f);
 
 	SetRot(rot);
+
+	LimidPostion();
 }
 
 //=====================================================
@@ -335,4 +343,30 @@ void CEnemyThief::Draw(void)
 {
 	// 継承クラスの描画
 	CEnemy::Draw();
+}
+
+//=====================================================
+// 移動範囲
+//=====================================================
+void CEnemyThief::LimidPostion(void)
+{
+	D3DXVECTOR3 pos = GetPosition();
+
+	if (pos.x <= LIMID_RANGE_LEFT)
+	{
+		pos.x = LIMID_RANGE_LEFT;
+	}
+	else if (pos.x >= LIMID_RANGE_RIGHT)
+	{
+		pos.x = LIMID_RANGE_RIGHT;
+	}
+	else if (pos.z >= LIMID_RANGE_UP)
+	{
+		pos.z = LIMID_RANGE_UP;
+	}
+	else if (pos.z <= LIMID_RANGE_DOWN)
+	{
+		pos.z = LIMID_RANGE_DOWN;
+	}
+	SetPosition(pos);
 }

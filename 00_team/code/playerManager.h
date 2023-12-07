@@ -35,6 +35,8 @@ public:
 	CPlayer::SParam GetPlayerParam(void) { return m_paramPlayer; }
 	int GetNumAttack(void) { return m_nNumAttack; }
 	CPlayer::AttackInfo *GetAttackInfo(void) { return m_pInfoAttack; }
+	void SetDeathPlayer(int nID, bool bDeath) { m_abDeathPlayer[nID] = bDeath; }
+	bool GetDeathPlayer(int nID) { return m_abDeathPlayer[nID]; }
 
 private:
 	void LoadParamPlayer(void);
@@ -46,6 +48,7 @@ private:
 	CPlayer::SParam m_paramPlayer;	// 保存用プレイヤーパラメーター
 	CPlayer::AttackInfo *m_pInfoAttack;	// 攻撃情報のポインタ
 	int m_nNumAttack;	// 攻撃判定の数
+	bool m_abDeathPlayer[NUM_PLAYER];		// プレイヤーが死亡しているか
 };
 
 #endif

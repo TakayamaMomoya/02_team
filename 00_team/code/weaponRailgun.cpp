@@ -22,6 +22,7 @@
 #include "weaponManager.h"
 #include "object3D.h"
 #include "motion.h"
+#include "beam.h"
 
 //*****************************************************
 // íËêîíËã`
@@ -199,7 +200,16 @@ void CRailgun::Shot(void)
 			{
 				if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB, nID))
 				{// éÀåÇ
+					// ÉrÅ[ÉÄÇÃê∂ê¨
+					CBeam *pBeam = CBeam::Create();
 
+					if (pBeam != nullptr)
+					{
+						pBeam->SetMtx(mtxMuzzle);
+						pBeam->SetAnimSize(m_info.fWidth, m_info.fLength);
+					}
+
+					// âπÇÃçƒê∂
 					CSound* pSound = CSound::GetInstance();
 
 					if (pSound != nullptr)

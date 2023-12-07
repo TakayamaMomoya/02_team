@@ -46,6 +46,7 @@ private:
 
 	bool m_bInRocket;
 	float m_fCntRepair;
+	float m_fRepairCounter;
 	CPlayer *m_pPlayer;
 	CFan3D *m_pGauge;
 	CBillboard *m_pInteract;

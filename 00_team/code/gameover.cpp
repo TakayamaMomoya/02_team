@@ -96,7 +96,7 @@ namespace
 	const float LOGO_HEIGHT = 270.0f;
 
 	// ゲームオーバーの位置
-	const D3DXVECTOR3 LOGO_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 150.0f, 0.0f);
+	const D3DXVECTOR3 LOGO_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f - 200.0f, 0.0f);
 }
 
 //===============================================
@@ -112,8 +112,10 @@ CGameover::CGameover()
 	// 値のクリア
 	ZeroMemory(&m_apModelPlayer[0], sizeof(m_apModelPlayer));
 	ZeroMemory(&m_apModelEnemy[0], sizeof(m_apModelEnemy));
+	m_pBlack = nullptr;
 	m_pLogo = nullptr;
 	m_bDeathPlayer[0] = {};
+	m_fFadeCounter = 0;
 }
 
 //===============================================
@@ -153,6 +155,12 @@ CGameover *CGameover::Create(int nPriority)
 //===============================================
 HRESULT CGameover::Init()
 {
+	// 値の初期化
+	m_pBlack = nullptr;
+	m_pLogo = nullptr;
+	m_bDeathPlayer[0] = {};
+	m_fFadeCounter = 0;
+
 	// インスタンスを取得
 	CEnemyManager* pEnemyManager = CEnemyManager::GetInstance();
 	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
@@ -214,27 +222,23 @@ HRESULT CGameover::Init()
 		return E_FAIL;
 	}
 
-	// プレイヤーの生成
+	// 死亡モーションのプレイヤーの生成
 	if (pPlayerManager != nullptr)
 	{
-		// プレイヤーが死んだときにplayerなどから数を取得
-
-		//int nNumPlayer = pPlayerManager->GetNumPlayer();
 		int nNumPlayer = 4;
 
-		if (nNumPlayer >= 0)
+		for (int nCntPlayer = 0; nCntPlayer < nNumPlayer; nCntPlayer++)
 		{
-			for (int nCntPlayer = 0; nCntPlayer < nNumPlayer; nCntPlayer++)
-			{
-				if (m_bDeathPlayer[nCntPlayer] == false)
-				{
-					m_apModelPlayer[nCntPlayer] = CMotion::Create((char*)PLAYER_BODY_PATH[nCntPlayer]);	// 生成
+			bool bDeathPlayer = pPlayerManager->GetDeathPlayer(nCntPlayer);		// 死んだプレイヤーを取得
 
-					// プレイヤーの情報の設定
-					m_apModelPlayer[nCntPlayer]->SetPosition(PLAYER_POS[nCntPlayer]);	// 位置
-					m_apModelPlayer[nCntPlayer]->SetRot(PLAYER_ROT[nCntPlayer]);		// 向き
-					m_apModelPlayer[nCntPlayer]->SetMotion(5);							// モーション
-				}
+			if (bDeathPlayer == true)
+			{
+				m_apModelPlayer[nCntPlayer] = CMotion::Create((char*)PLAYER_BODY_PATH[nCntPlayer]);	// 生成
+
+				// プレイヤーの情報の設定
+				m_apModelPlayer[nCntPlayer]->SetPosition(PLAYER_POS[nCntPlayer]);	// 位置
+				m_apModelPlayer[nCntPlayer]->SetRot(PLAYER_ROT[nCntPlayer]);		// 向き
+				m_apModelPlayer[nCntPlayer]->SetMotion(5);							// モーション
 			}
 		}
 	}
@@ -243,6 +247,25 @@ HRESULT CGameover::Init()
 		return E_FAIL;
 	}
 
+	// 黒ポリゴンの表示
+	if (m_pBlack == nullptr)
+	{
+		m_pBlack = CObject2D::Create(7);
+	}
+
+	if (m_pBlack != nullptr)
+	{// 黒ポリゴンの情報を設定
+		m_pBlack->SetSize(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f);
+		m_pBlack->SetPosition({ SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f });
+		m_pBlack->SetVtx();
+		m_pBlack->SetCol({ 0.0, 0.0, 0.0, 0.0 });
+	}
+	else if (m_pBlack == nullptr)
+	{
+		return E_FAIL;
+	}
+
+
 	// ゲームオーバーの表示
 	if (m_pLogo == nullptr)
 	{
@@ -250,12 +273,13 @@ HRESULT CGameover::Init()
 	}
 
 	if (m_pLogo != nullptr)
-	{
+	{// ゲームオーバーの情報を設定
 		m_pLogo->SetSize(LOGO_WIDTH, LOGO_HEIGHT);
 		m_pLogo->SetPosition(LOGO_POS);
 		int nIdx = CTexture::GetInstance()->Regist(LOGO_PATH);
 		m_pLogo->SetIdxTexture(nIdx);
 		m_pLogo->SetVtx();
+		m_pLogo->SetCol({1.0, 1.0, 1.0, 0.0});
 	}
 	else if (m_pLogo == nullptr)
 	{
@@ -289,6 +313,7 @@ HRESULT CGameover::Init()
 void CGameover::Uninit(void)
 {
 	m_pGameover = nullptr;
+	m_pBlack = nullptr;
 	m_pLogo = nullptr;
 
 	delete this;
@@ -300,8 +325,7 @@ void CGameover::Uninit(void)
 void CGameover::Update(void)
 {
 	// インスタンスを取得
-	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
-	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
+	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
 	CCamera* pCamera = CManager::GetCamera();
 
 	// カメラをロケット付近へ移動
@@ -311,23 +335,12 @@ void CGameover::Update(void)
 		pCamera->UpdateGameover(CAMERA_POSV, CAMERA_POSR);
 	}
 
-	CFade* pFade = CFade::GetInstance();
+	bool bFinish = m_apModelPlayer[0]->IsFinish();		// 死亡モーションが終了したか
 
-	if (pKeyboard->GetTrigger(DIK_RETURN) ||
-		pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0))
-	{//ENTERキーが押されたら
-		if (pFade != nullptr)
-		{
-			pFade->SetFade(CScene::MODE_RANKING);	// ランキングに遷移
-
-			// プレイヤーマネージャーの終了
-			CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();
-
-			if (pPlayerManger != nullptr)
-			{
-				pPlayerManger->Uninit();
-			}
-		}
+	if (bFinish == true)
+	{
+		// 暗転処理
+		BlackOut();
 	}
 }
 
@@ -337,4 +350,56 @@ void CGameover::Update(void)
 void CGameover::Draw(void)
 {
 	
+}
+
+//===============================================
+// 暗転処理
+//===============================================
+void CGameover::BlackOut(void)
+{
+	// インスタンスを取得
+	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
+	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
+	CFade* pFade = CFade::GetInstance();
+
+	// カウントを更新
+	m_fFadeCounter += 0.01f;
+
+	if (m_pBlack != nullptr)
+	{// 黒ポリゴンを表示する
+		m_pBlack->SetCol({ 0.0, 0.0, 0.0, m_fFadeCounter });
+	}
+
+	if (m_pLogo != nullptr)
+	{// ゲームオーバーを表示する
+		m_pLogo->SetCol({ 1.0, 1.0, 1.0, m_fFadeCounter });
+
+		if (m_fFadeCounter >= 0.8f)
+		{
+			m_pLogo->DicMove(0.1f);
+			m_pLogo->SetVtx();
+		}
+		else
+		{
+			m_pLogo->SetMove({ 0.0f, 1.0f, 0.0f });
+			m_pLogo->SetVtx();
+		}
+	}
+
+	if (pKeyboard->GetTrigger(DIK_RETURN) ||
+		pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0))
+	{//ENTERキーが押されたら
+		if (pFade != nullptr)
+		{
+			pFade->SetFade(CScene::MODE_RANKING);	// ランキングに遷移
+
+			// プレイヤーマネージャーの終了
+			CPlayerManager* pPlayerManger = CPlayerManager::GetInstance();
+
+			if (pPlayerManger != nullptr)
+			{
+				pPlayerManger->Uninit();
+			}
+		}
+	}
 }

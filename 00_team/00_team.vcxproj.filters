@@ -178,6 +178,8 @@
     <ClCompile Include="code\UIMagazine.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="code\beam.cpp" />
+    <ClCompile Include="code\meshcylinder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -330,5 +332,7 @@
     <ClInclude Include="code\UIMagazine.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="code\beam.h" />
+    <ClInclude Include="code\meshcylinder.h" />
   </ItemGroup>
 </Project>

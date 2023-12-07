@@ -23,6 +23,7 @@
     <ClCompile Include="code\animation2D.cpp" />
     <ClCompile Include="code\animEffect3D.cpp" />
     <ClCompile Include="code\arrow.cpp" />
+    <ClCompile Include="code\beam.cpp" />
     <ClCompile Include="code\billboard.cpp" />
     <ClCompile Include="code\block.cpp" />
     <ClCompile Include="code\box.cpp" />
@@ -63,6 +64,7 @@
     <ClCompile Include="code\light.cpp" />
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\manager.cpp" />
+    <ClCompile Include="code\meshcylinder.cpp" />
     <ClCompile Include="code\model.cpp" />
     <ClCompile Include="code\motion.cpp" />
     <ClCompile Include="code\motionDiv.cpp" />
@@ -107,6 +109,7 @@
     <ClInclude Include="code\animation2D.h" />
     <ClInclude Include="code\animEffect3D.h" />
     <ClInclude Include="code\arrow.h" />
+    <ClInclude Include="code\beam.h" />
     <ClInclude Include="code\billboard.h" />
     <ClInclude Include="code\block.h" />
     <ClInclude Include="code\box.h" />
@@ -147,6 +150,7 @@
     <ClInclude Include="code\light.h" />
     <ClInclude Include="code\main.h" />
     <ClInclude Include="code\manager.h" />
+    <ClInclude Include="code\meshcylinder.h" />
     <ClInclude Include="code\model.h" />
     <ClInclude Include="code\motion.h" />
     <ClInclude Include="code\motionDiv.h" />

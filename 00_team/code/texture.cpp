@@ -65,6 +65,7 @@ HRESULT CTexture::Load(void)
 	char *apFileName[MAX_TEX] = 
 	{
 		"data\\TEXTURE\\EFFECT\\muzzleFlush.png",
+		"data\\TEXTURE\\EFFECT\\beam.png",
 		"data\\TEXTURE\\UI\\pause_quit.png",
 		"data\\TEXTURE\\UI\\pause_restart.png",
 		"data\\TEXTURE\\UI\\pause_resume.png",
