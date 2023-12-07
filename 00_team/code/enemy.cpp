@@ -23,6 +23,7 @@
 #include "motion.h"
 #include "universal.h"
 #include "animEffect3D.h"
+#include "particle.h"
 
 //*****************************************************
 // 定数定義
@@ -480,6 +481,9 @@ void CEnemy::Hit(float fDamage)
 
 			// スコア管理
 			ManageScore();
+
+			// 汁
+			CParticle::Create(GetPosition(), CParticle::TYPE::TYPE_TOMATO_JUICE);
 
 			// 当たり判定削除
 			DeleteCollision();

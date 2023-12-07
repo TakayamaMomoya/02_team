@@ -421,7 +421,7 @@ void CSelect::Update(void)
 	{
 		//CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		//CParticle::Create({ 0.0f, 300.0f, -400.0f }, CParticle::TYPE::TYPE_INJECTION_FIRE);
-		CParticle::Create({ 0.0f, 200.0f, -400.0f }, CParticle::TYPE::TYPE_SMOKE);
+		CParticle::Create({ 0.0f, 200.0f, -400.0f }, CParticle::TYPE::TYPE_TOMATO_JUICE);
 	}
 
 	CDebugProc::GetInstance()->Print("\n参加人数[%d]\n", nJoinPlayer);
@@ -592,11 +592,11 @@ void CSelect::EntryInput(int nPlayer)
 		// プレイヤーを生成
 		m_apPlayerData[nPlayer].pPlayer = pPlayerManager->BindPlayer(nPlayer);
 
-		//// 位置をUIの場所へ
-		//m_apPlayerData[nPlayer].pPlayer->SetPosition(D3DXVECTOR3(
-		//	SPOWN_POS.x + (nPlayer * UI_SPACE.x),
-		//	SPOWN_POS.y,
-		//	SPOWN_POS.z));
+		// 位置をUIの場所へ
+		m_apPlayerData[nPlayer].pPlayer->SetPosition(D3DXVECTOR3(
+			SPOWN_POS.x + (nPlayer * UI_SPACE.x),
+			SPOWN_POS.y,
+			SPOWN_POS.z));
 
 		// ジャンプさせる
 		D3DXVECTOR3 move = { 0.0f,POW_JUMP,0.0f };
