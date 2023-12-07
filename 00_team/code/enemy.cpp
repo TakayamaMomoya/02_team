@@ -23,12 +23,8 @@
 #include "motion.h"
 #include "universal.h"
 #include "animEffect3D.h"
-
-<<<<<<< .mine
 #include "sound.h"
-=======
 #include "particle.h"
->>>>>>> .theirs
 
 //*****************************************************
 // ’è”’è‹`
