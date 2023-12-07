@@ -5,7 +5,8 @@
 #
 #====================================================================
 SCRIPT
-
+	
+	TEXTURE_PATH = data\\TEXTURE\\EFFECT\\smoke.png
     LIFE_PARTICLE = 1
     NUM_EFFECT = 114
     LIFE_EFFECT = 61

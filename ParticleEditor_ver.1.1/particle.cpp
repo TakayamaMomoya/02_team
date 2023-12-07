@@ -15,6 +15,7 @@
 #include "manager.h"
 #include "debugproc.h"
 #include <stdio.h>
+#include "texture.h"
 
 //*****************************************************
 // マクロ定義
@@ -26,6 +27,7 @@
 //*****************************************************
 // 静的メンバ変数宣言
 //*****************************************************
+char *CParticle::m_pTexPath = nullptr;	// テクスチャパス
 int CParticle::m_nLife = 5;	// 寿命
 int CParticle::m_nRate = 2;	// 加算倍率
 int CParticle::m_nCurrentCol = 0;	// 色の選択要素
@@ -152,6 +154,12 @@ void CParticle::Update(void)
 			pEffect3D = CEffect3D::Create(m_pos, fRadius, nLife, m_col, move, m_fGravity, m_bAdd, m_fDecrease);
 		}
 
+		if (pEffect3D != nullptr && m_pTexPath != nullptr)
+		{
+			int nIdx = CManager::GetTexture()->Regist(m_pTexPath);
+			pEffect3D->SetIdxTexture(nIdx);
+		}
+
 	}
 
 	// 寿命減少
@@ -206,6 +214,15 @@ void CParticle::Load(void)
 			// 文字読み込み
 			fscanf(pFile, "%s", &cTemp[0]);
 			
+			if (strcmp(cTemp, "TEXTURE_PATH") == 0)
+			{// テクスチャパス取得
+				m_pTexPath = new char[MAX_STRING];
+				
+				fscanf(pFile, "%s", &cTemp[0]);
+
+				fscanf(pFile, "%s", m_pTexPath);
+			}
+
 			if (strcmp(cTemp, "LIFE_PARTICLE") == 0)
 			{// パーティクル寿命取得
 				fscanf(pFile, "%s", &cTemp[0]);
@@ -330,6 +347,7 @@ void CParticle::Save(void)
 		fprintf(pFile, "#====================================================================\n");
 		fprintf(pFile, "SCRIPT\n\n");
 
+		fprintf(pFile, "    TEXTURE_PATH = %s\n", m_pTexPath);
 		fprintf(pFile, "    LIFE_PARTICLE = %d\n", m_nLife);
 		fprintf(pFile, "    NUM_EFFECT = %d\n", m_nNumEffect);
 		fprintf(pFile, "    LIFE_EFFECT = %d\n", m_nLifeEffect);

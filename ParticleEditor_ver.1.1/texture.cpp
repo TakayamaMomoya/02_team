@@ -110,8 +110,11 @@ int CTexture::Regist(const char *pFileName)
 	D3DXCreateTextureFromFile
 	(pDevice, pFileName, &m_apTexture[m_nNumAll]);
 
+	m_apFilename[m_nNumAll] = new char[MAX_STRING];
+
 	// ÉtÉ@ÉCÉãñºÇÃï€ë∂
-	m_apFilename[m_nNumAll] = (char*)pFileName;
+	strcpy(m_apFilename[m_nNumAll], "\0");
+	strcpy(m_apFilename[m_nNumAll], pFileName);
 
 	// åªç›ÇÃî‘çÜÇï€ë∂
 	int nIdx = m_nNumAll;
