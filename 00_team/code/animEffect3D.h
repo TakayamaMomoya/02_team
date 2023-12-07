@@ -33,6 +33,7 @@ public:
 	{
 		TYPE_MUZZLEFLUSH = 0,	// マズルフラッシュ
 		TYPE_BLOOD,	// 血しぶき
+		TYPE_BEAM,	// ビーム
 		TYPE_MAX
 	};
 
@@ -56,6 +57,7 @@ private:
 		float fSize;	// サイズ
 		D3DXCOLOR col;	// 色
 		bool bAdd;	// 加算合成するかどうか
+		bool bLoop;	// ループするかどうか
 		bool bBillboard;	// ビルボードにするかどうか
 	};
 	
