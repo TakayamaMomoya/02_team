@@ -490,7 +490,14 @@ void CEnemy::Hit(float fDamage)
 			// スコア管理
 			ManageScore();
 
-			// 汁
+			if (pAnim3D != nullptr)
+			{
+				D3DXVECTOR3 pos = GetPosition();
+
+				pAnim3D->CreateEffect(pos, CAnimEffect3D::TYPE::TYPE_BLOOD1);
+			}
+
+			// トマト汁
 			CParticle::Create(GetPosition(), CParticle::TYPE::TYPE_TOMATO_JUICE);
 
 			// 当たり判定削除

@@ -33,6 +33,7 @@ public:
 	{
 		TYPE_MUZZLEFLUSH = 0,	// マズルフラッシュ
 		TYPE_BLOOD,	// 血しぶき
+		TYPE_BLOOD1,	// 血しぶき
 		TYPE_BEAM,	// ビーム
 		TYPE_MAX
 	};
