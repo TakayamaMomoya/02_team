@@ -23,6 +23,7 @@
 #include "billboard.h"
 #include "texture.h"
 #include "anim3D.h"
+#include "debugproc.h"
 
 //*****************************************************
 // 定数定義
@@ -48,6 +49,7 @@ CItemRepair::CItemRepair(int nPriority) : CGimmick(nPriority)
 	m_pGuide = nullptr;
 	m_bInRocket = false;
 	m_fCntRepair = 0.0f;
+	m_fRepairCounter = 0.0f;
 }
 
 //=====================================================
@@ -372,14 +374,6 @@ void CItemRepair::CollisionRocket(void)
 				m_pInteract->SetVtx();
 			}
 
-			//　サウンドインスタンスの取得
-			CSound* pSound = CSound::GetInstance();
-
-			if (pSound != nullptr)
-			{
-				pSound->Play(pSound->LABEL_SE_REPAIR);
-			}
-
 			// ロケット修理タイマー加算
 			CRocket *pRocket = CRocket::GetInstance();
 
@@ -418,6 +412,19 @@ void CItemRepair::CollisionRocket(void)
 					float fTick = CManager::GetTick();
 
 					m_fCntRepair += fTick;
+					m_fRepairCounter += fTick;
+
+					if (m_fRepairCounter >= 0.5f)
+					{
+						CSound* pSound = CSound::GetInstance();
+
+						if (pSound != nullptr)
+						{
+							pSound->Play(pSound->LABEL_SE_REPAIR);
+						}
+
+						m_fRepairCounter = 0.0f;
+					}
 
 					if (fTime <= m_fCntRepair)
 					{
@@ -440,6 +447,7 @@ void CItemRepair::CollisionRocket(void)
 						m_pGauge->Uninit();
 						m_pGauge = nullptr;
 					}
+					m_fRepairCounter = 0.0f;
 				}
 			}
 		}
