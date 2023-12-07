@@ -41,6 +41,8 @@ public:
 	void SetTexture(const char* pFileName);
 	void SetVtxGage(void);
 
+	D3DXCOLOR GetCol(void) { return m_info.col; }
+
 private:
 
 	struct Sinfo

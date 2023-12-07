@@ -41,11 +41,21 @@ public:
 	void SetCol(D3DXCOLOR col);
 	void SetNumMagazine(void);
 
+	D3DXCOLOR GetCol(void) { return m_info.col; }
+
 private:
 
 	struct Sinfo
 	{
 		int nIdxPlayer;		// 参照するプレイヤーの番号
+
+		D3DXVECTOR3 pos;		// 位置
+		float fWidth;			// 横幅
+		float fHeight;			// 縦幅
+		float fWidthSub;		// 減算する横幅
+		float fHeightSub;		// 減算する縦幅
+		D3DXCOLOR col;			// 色
+
 		int nIdxTexture;					// テクスチャ番号
 		static LPDIRECT3DTEXTURE9 pTexture;	// テクスチャへのポインタ
 	};
