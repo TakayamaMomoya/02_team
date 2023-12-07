@@ -42,6 +42,7 @@ public:
 private:
 	void Shot(void);
 	void SetVtx(D3DXVECTOR3 vtx1, D3DXVECTOR3 vtx2, D3DXVECTOR3 vtx3, D3DXVECTOR3 vtx4);
+	void ToggleEnable(bool bEnable);
 
 	SInfoRailgun m_info;
 	CObject3D *m_pRange;	// ”ÍˆÍ•\Ž¦‚Ìƒ|ƒŠƒSƒ“

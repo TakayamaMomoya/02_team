@@ -151,6 +151,24 @@ void CAnimEffect3D::Load(void)
 							m_apAnimEffect[nCntEffect]->bAdd = false;
 						}
 					}
+
+					if (strcmp(cTemp, "IS_BILLBOARD") == 0)
+					{// ビルボードにするかどうか
+						int i;
+
+						(void)fscanf(pFile, "%s", &cTemp[0]);
+
+						(void)fscanf(pFile, "%d", &i);
+
+						if (i == 1)
+						{
+							m_apAnimEffect[nCntEffect]->bBillboard = true;
+						}
+						else
+						{
+							m_apAnimEffect[nCntEffect]->bBillboard = false;
+						}
+					}
 				}
 			}
 
@@ -248,6 +266,8 @@ CAnim3D *CAnimEffect3D::CreateEffect(D3DXVECTOR3 pos, TYPE type)
 		{// テクスチャの設定
 			int nIdx = pTexture->Regist(&m_apAnimEffect[type]->acPath[0]);
 			pAnim3D->SetIdxTexture(nIdx);
+			pAnim3D->EnableBillboard(m_apAnimEffect[type]->bBillboard);
+			pAnim3D->SetVtx();
 		}
 	}
 
