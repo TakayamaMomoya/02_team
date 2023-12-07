@@ -49,6 +49,7 @@ private:
 	D3DXVECTOR3 m_pos;	// 位置
 	int m_nLifeParticle;	// 寿命
 
+	static char *m_pTexPath;	// テクスチャパス
 	static D3DXVECTOR3 m_rot;	// 向き
 	static int m_nLife;	// 寿命
 	static int m_nLifeEffect;	// エフェクトの寿命
