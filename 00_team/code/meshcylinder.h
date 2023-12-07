@@ -14,6 +14,19 @@
 #include "object.h"
 
 //*****************************************************
+// 定数定義
+//*****************************************************
+namespace meshCylinder
+{
+const float  MESH_RADIUS = 500.0f;	// 半径
+const int MESH_U = 16;	// 横の分割数
+const int MESH_V = 1;	// 縦の分割数
+const int SPLIT_TEX_U = 3;	// 横のテクスチャ分割数
+const int SPLIT_TEX_V = 1;	// 縦のテクスチャ分割数
+const float MESH_HEIGHT = 50.0f;	// メッシュの高さ
+}
+
+//*****************************************************
 // クラス定義
 //*****************************************************
 class CMeshCylinder : public CObject
@@ -30,11 +43,20 @@ public:
 		int nNumIdx;							//インデックス数
 		int nNumVtx;							//頂点数
 		float fRadius;	// 半径
+		float fHeight;	// 高さ
 		int nMeshU;	// 横の分割数
 		int nMeshV;	// 縦の分割数
+		int nTexU;	// テクスチャの横の分割数
+		int nTexV;	// テクスチャの縦の分割数
 	}MeshCylinder;
 
-	static CMeshCylinder *Create(void);
+	static CMeshCylinder *Create
+	(
+		int nMeshU = meshCylinder::MESH_U,
+		int nMeshV = meshCylinder::MESH_V,
+		int nTexU = meshCylinder::SPLIT_TEX_U,
+		int nTexV = meshCylinder::SPLIT_TEX_V
+	);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
@@ -43,6 +65,8 @@ public:
 	void SetPosition(D3DXVECTOR3 pos) { m_meshCylinder.pos = pos; }
 	D3DXVECTOR3 GetPosition(void) { return m_meshCylinder.pos; }
 	int GetNumVtx(void) { return m_meshCylinder.nNumVtx; }
+	void SetRadius(float fRadius) { m_meshCylinder.fRadius = fRadius; }
+	void SetHeight(float fHeight) { m_meshCylinder.fHeight = fHeight; }
 
 private:
 	LPDIRECT3DTEXTURE9 m_pTexture;	//テクスチャへのポインタ

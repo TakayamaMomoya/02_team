@@ -21,12 +21,6 @@
 // マクロ定義
 //*****************************************************
 #define MESHCYLINDER_TEX_FILE		"data\\TEXTURE\\EFFECT\\boost.png"				// テクスチャファイル名
-#define MESH_LENGTH					(500.0f)									// メッシュの一辺の長さ
-#define MESH_U						(256)										// 横のブロック数
-#define MESH_V						(1)											// 縦のブロック数
-#define SPLIT_TEX_U					(3)											// 横のテクスチャ分割数
-#define SPLIT_TEX_V					(1)											// 縦のテクスチャ分割数
-#define MESH_HEIGHT	(50.0f)	// メッシュの高さ
 
 //=====================================================
 // コンストラクタ
@@ -51,7 +45,7 @@ CMeshCylinder::~CMeshCylinder()
 //=====================================================
 // 生成処理
 //=====================================================
-CMeshCylinder *CMeshCylinder::Create(void)
+CMeshCylinder *CMeshCylinder::Create(int nMeshU,int nMeshV,int nTexU,int nTexV)
 {
 	CMeshCylinder *pMeshCylinder = nullptr;
 
@@ -61,6 +55,11 @@ CMeshCylinder *CMeshCylinder::Create(void)
 
 		if (pMeshCylinder != nullptr)
 		{
+			pMeshCylinder->m_meshCylinder.nMeshU = nMeshU;
+			pMeshCylinder->m_meshCylinder.nMeshV = nMeshV;
+			pMeshCylinder->m_meshCylinder.nTexU = nTexU;
+			pMeshCylinder->m_meshCylinder.nTexV = nTexV;
+
 			pMeshCylinder->Init();
 		}
 	}
@@ -73,11 +72,22 @@ CMeshCylinder *CMeshCylinder::Create(void)
 //=====================================================
 HRESULT CMeshCylinder::Init(void)
 {
+	m_meshCylinder.fRadius = meshCylinder::MESH_RADIUS;
+	m_meshCylinder.fHeight = meshCylinder::MESH_HEIGHT;
+
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
 
+	m_meshCylinder.fRadius = m_meshCylinder.fRadius;
+	int nMeshU = m_meshCylinder.nMeshU;
+	int nMeshV = m_meshCylinder.nMeshV;
+	int nTexU = m_meshCylinder.nTexU;
+	int nTexV = m_meshCylinder.nTexV;
+	float fRadius = m_meshCylinder.fRadius;
+	float fHeight = m_meshCylinder.fHeight;
+
 	//頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * (MESH_U + 1) * (MESH_V + 1),
+	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * (nMeshU + 1) * (nMeshV + 1),
 		D3DUSAGE_WRITEONLY,
 		FVF_VERTEX_3D,
 		D3DPOOL_MANAGED,
@@ -85,7 +95,7 @@ HRESULT CMeshCylinder::Init(void)
 		NULL);
 
 	//インデックスバッファの生成
-	pDevice->CreateIndexBuffer(sizeof(WORD) * ((MESH_U + 1) * (MESH_V + 1) + ((MESH_V + 1) - 2) * (MESH_U + 1) + (((MESH_V + 1) - 2) * 2)),
+	pDevice->CreateIndexBuffer(sizeof(WORD) * ((nMeshU + 1) * (nMeshV + 1) + ((nMeshV + 1) - 2) * (nMeshU + 1) + (((nMeshV + 1) - 2) * 2)),
 		D3DUSAGE_WRITEONLY,
 		D3DFMT_INDEX16,
 		D3DPOOL_MANAGED,
@@ -95,8 +105,6 @@ HRESULT CMeshCylinder::Init(void)
 	// テクスチャの読込
 	D3DXCreateTextureFromFile
 	(pDevice, MESHCYLINDER_TEX_FILE, &m_pTexture);
-
-	m_meshCylinder.fRadius = MESH_LENGTH;
 
 	//頂点情報のポインタ
 	VERTEX_3D *pVtx;
@@ -111,7 +119,7 @@ HRESULT CMeshCylinder::Init(void)
 	m_pIdxBuff->Lock(0, 0, (void**)&pIdx, 0);
 
 	//最大頂点数計算
-	m_meshCylinder.nNumVtx = (MESH_U + 1) * (MESH_V + 1);
+	m_meshCylinder.nNumVtx = (nMeshU + 1) * (nMeshV + 1);
 
 	//変数初期化
 	m_meshCylinder.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -122,36 +130,36 @@ HRESULT CMeshCylinder::Init(void)
 	D3DXVECTOR3 VecRot;
 
 	//頂点情報==================================================================================
-	for (int nCountV = 0; nCountV < MESH_V + 1; nCountV++)
+	for (int nCountV = 0; nCountV < nMeshV + 1; nCountV++)
 	{//頂点座標の設定
-		for (int nCountU = 0; nCountU < MESH_U + 1; nCountU++)
+		for (int nCountU = 0; nCountU < nMeshU + 1; nCountU++)
 		{
 			//角度算出
-			fRot = nCountU * (D3DX_PI / MESH_U) * 2;
+			fRot = nCountU * (D3DX_PI / nMeshU) * 2;
 
-			pVtx[nCountV * (MESH_U + 1) + nCountU].pos.x = (float)sin(fRot) * MESH_LENGTH;
-			pVtx[nCountV * (MESH_U + 1) + nCountU].pos.y = (MESH_V - nCountV) * MESH_HEIGHT;
-			pVtx[nCountV * (MESH_U + 1) + nCountU].pos.z = cosf(fRot) * MESH_LENGTH;
+			pVtx[nCountV * (nMeshU + 1) + nCountU].pos.x = (float)sin(fRot) * fRadius;
+			pVtx[nCountV * (nMeshU + 1) + nCountU].pos.y = (nMeshV - nCountV) * fHeight;
+			pVtx[nCountV * (nMeshU + 1) + nCountU].pos.z = cosf(fRot) * fRadius;
 
 			//テクスチャ座標
-			pVtx[nCountV * (MESH_U + 1) + nCountU].tex = D3DXVECTOR2
+			pVtx[nCountV * (nMeshU + 1) + nCountU].tex = D3DXVECTOR2
 			(
-				((float)SPLIT_TEX_U / MESH_U) * nCountU,
-				((float)SPLIT_TEX_V / MESH_V) * nCountV
+				((float)nTexU / nMeshU) * nCountU,
+				((float)nTexV / nMeshV) * nCountV
 			);
 
 			VecRot = D3DXVECTOR3
 			(
-				pVtx[nCountV * (MESH_U + 1) + nCountU].pos.x,
+				pVtx[nCountV * (nMeshU + 1) + nCountU].pos.x,
 				0.0f,
-				pVtx[nCountV * (MESH_U + 1) + nCountU].pos.z
+				pVtx[nCountV * (nMeshU + 1) + nCountU].pos.z
 			);
 
 			//ベクトル正規化
 			D3DXVec3Normalize(&VecRot, &VecRot);
 
 			//法線ベクトルの設定
-			pVtx[nCountV * (MESH_U + 1) + nCountU].nor = VecRot;
+			pVtx[nCountV * (nMeshU + 1) + nCountU].nor = VecRot;
 		}
 	}
 
@@ -162,24 +170,24 @@ HRESULT CMeshCylinder::Init(void)
 	}
 
 	//インデックス==================================================================================
-	m_meshCylinder.nNumIdx = (MESH_U + 1) * (MESH_V + 1) + ((MESH_V + 1) - 2) * (MESH_U + 1) + (((MESH_V + 1) - 2) * 2);
+	m_meshCylinder.nNumIdx = (nMeshU + 1) * (nMeshV + 1) + ((nMeshV + 1) - 2) * (nMeshU + 1) + (((nMeshV + 1) - 2) * 2);
 
 	for (int nCount = 0; nCount < m_meshCylinder.nNumIdx / 2; nCount++)
 	{//インデックス決定
 		if (
-			nCount % ((MESH_U + 1) + (MESH_U + 2) * (nCount / (MESH_U + 2))) == 0
+			nCount % ((nMeshU + 1) + (nMeshU + 2) * (nCount / (nMeshU + 2))) == 0
 			&& nCount != 0
 			)
 		{
-			pIdx[nCount * 2 + 1] = ((MESH_U + 1) * 2) + (MESH_U + 1) * (nCount / (MESH_U + 2));
+			pIdx[nCount * 2 + 1] = ((nMeshU + 1) * 2) + (nMeshU + 1) * (nCount / (nMeshU + 2));
 
-			pIdx[nCount * 2] = MESH_U + (MESH_U + 1) * (nCount / (MESH_U + 2));
+			pIdx[nCount * 2] = nMeshU + (nMeshU + 1) * (nCount / (nMeshU + 2));
 		}
 		else
 		{
-			pIdx[nCount * 2 + 1] = nCount - (nCount / (MESH_U + 2));
+			pIdx[nCount * 2 + 1] = nCount - (nCount / (nMeshU + 2));
 
-			pIdx[nCount * 2] = (nCount - (nCount / (MESH_U + 2))) + (MESH_U + 1);
+			pIdx[nCount * 2] = (nCount - (nCount / (nMeshU + 2))) + (nMeshU + 1);
 		}
 	}
 

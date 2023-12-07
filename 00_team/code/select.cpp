@@ -44,6 +44,7 @@
 #include "UIManager.h"
 #include "number3D.h"
 #include "UIManager.h"
+#include "meshcylinder.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
