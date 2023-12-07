@@ -51,11 +51,6 @@ HRESULT CBeam::Init(void)
 		if (pAnimEffect != nullptr)
 		{
 			m_info.pAnim = pAnimEffect->CreateEffect(D3DXVECTOR3(0.0f, 0.0f, 0.0f), CAnimEffect3D::TYPE::TYPE_BEAM);
-
-			if (m_info.pAnim != nullptr)
-			{// 位置の設定
-
-			}
 		}
 	}
 
@@ -121,8 +116,8 @@ void CBeam::SetAnimVtx(void)
 	{
 		{ -m_info.fLengthAnim,0.0f,m_info.fWidthAnim },
 		{ 0.0f,0.0f,m_info.fWidthAnim },
-		{ 0.0f,0.0f,-m_info.fWidthAnim },
 		{ -m_info.fLengthAnim,0.0f,-m_info.fWidthAnim },
+		{ 0.0f,0.0f,-m_info.fWidthAnim },
 	};
 
 	for (int i = 0; i < NUM_VTX; i++)
@@ -136,7 +131,7 @@ void CBeam::SetAnimVtx(void)
 			aMtxVtx[i]._43,
 		};
 
-		pVtx[0].pos = aPosVtx[i];
+		pVtx[i].pos = aPosVtx[i];
 	}
 
 	//頂点バッファをアンロック
