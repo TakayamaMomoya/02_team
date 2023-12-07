@@ -11,7 +11,7 @@
 MAGNUMSET
 	BULLET = 23	# 弾数
 	DAMAGE = 10.0	# 威力
-	RAPID = 12	# 発射頻度(左のフレーム数ごとに発射できる)
+	RAPID = 10	# 発射頻度(左のフレーム数ごとに発射できる)
 	BULLET_LIFE = 1.0	# 弾の寿命（秒数）
 END_MAGNUMSET
 
