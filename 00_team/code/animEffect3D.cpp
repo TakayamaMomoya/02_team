@@ -152,6 +152,24 @@ void CAnimEffect3D::Load(void)
 						}
 					}
 
+					if (strcmp(cTemp, "IS_LOOP") == 0)
+					{// ループするかどうか
+						int i;
+
+						(void)fscanf(pFile, "%s", &cTemp[0]);
+
+						(void)fscanf(pFile, "%d", &i);
+
+						if (i == 1)
+						{
+							m_apAnimEffect[nCntEffect]->bLoop = true;
+						}
+						else
+						{
+							m_apAnimEffect[nCntEffect]->bLoop = false;
+						}
+					}
+
 					if (strcmp(cTemp, "IS_BILLBOARD") == 0)
 					{// ビルボードにするかどうか
 						int i;
@@ -251,7 +269,7 @@ CAnim3D *CAnimEffect3D::CreateEffect(D3DXVECTOR3 pos, TYPE type)
 	CAnim3D *pAnim3D = nullptr;
 
 	// インスタンス生成
-	pAnim3D = CAnim3D::Create(pos, m_apAnimEffect[type]->nNumAnim, m_apAnimEffect[type]->nSpeedAnim);
+	pAnim3D = CAnim3D::Create(pos, m_apAnimEffect[type]->nNumAnim, m_apAnimEffect[type]->nSpeedAnim, m_apAnimEffect[type]->bLoop);
 
 	if (pAnim3D != nullptr)
 	{
