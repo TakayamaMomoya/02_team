@@ -38,7 +38,8 @@ public:
 		LABEL_SE_GET_RAILGUN,			// レールガン取得時
 
 		LABEL_SE_SWING,					// スウィング
-		//LABEL_SE_PUNCH,					// パンチ
+		LABEL_SE_DAMAGE,				// ダメージ
+		LABEL_SE_HIT,					// ヒット
 		LABEL_MAX
 	} LABEL;
 
@@ -112,7 +113,8 @@ private:
 		{ "data/SOUND/SE/get_railgun.wav",0 },			// レールガンボイス
 
 		{ "data/SOUND/SE/swing.wav",0 },				// スウィング
-		//{ "data/SOUND_SE/punch.wav",0 }					// パンチ
+		{ "data/SOUND/SE/damage.wav",0 },				// ダメージ
+		{ "data/SOUND/SE/hit.wav",0 },					// ヒット
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ

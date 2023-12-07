@@ -38,6 +38,7 @@ public:
 private:
 	void Load(void);
 	void SpawnThief(void);
+	void LimidPostion(void);
 
 	CEnemy *m_pHead;	// 先頭のアドレス
 	CEnemy *m_pTail;	// 最後尾のアドレス

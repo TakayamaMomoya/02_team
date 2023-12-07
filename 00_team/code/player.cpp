@@ -1194,6 +1194,13 @@ void CPlayer::Hit(float fDamage)
 		{// ƒ_ƒ[ƒW”»’è
 			m_info.state = STATE_DAMAGE;
 
+			CSound* pSound = CSound::GetInstance();
+
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_DAMAGE);
+			}
+
 			m_info.fTimerState = m_param.fTimeDamage;
 
 			for (int nCutPath = 0; nCutPath < CCharacterDiv::PARTS_MAX; nCutPath++)

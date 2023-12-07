@@ -25,6 +25,11 @@
 namespace
 {
 const int RAND_SPAWN = 1000;	// ÉXÉ|Å[ÉìîÕàÕ
+
+const float LIMID_RANGE_LEFT = -460.0f;
+const float LIMID_RANGE_RIGHT = 460.0f;
+const float LIMID_RANGE_UP = 460.0f;
+const float LIMID_RANGE_DOWN = -460.0f;
 }
 
 //*****************************************************
