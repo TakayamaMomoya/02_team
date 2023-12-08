@@ -120,7 +120,7 @@ void CRailgun::Attack(void)
 void CRailgun::Shot(void)
 {
 	// ƒ}ƒYƒ‹‚ÌˆÊ’u‚ðÝ’è
-	D3DXMATRIX* pMtxWeapon = GetMatrix();
+	D3DXMATRIX* pMtxWeapon = GetPlayer()->GetMatrix();
 	D3DXMATRIX mtxMuzzle;
 	universal::SetOffSet(&mtxMuzzle, *pMtxWeapon, D3DXVECTOR3(-18.0f, 6.0f, 0.0f));
 
@@ -136,10 +136,11 @@ void CRailgun::Shot(void)
 	D3DXMATRIX aMtxVtx[NUM_VTX];
 	D3DXVECTOR3 aOffset[NUM_VTX] =
 	{
-		{ -m_info.fLength,0.0f,m_info.fWidth },
-		{ 0.0f,0.0f,m_info.fWidth },
-		{ 0.0f,0.0f,-m_info.fWidth },
-		{ -m_info.fLength,0.0f,-m_info.fWidth },
+		{ m_info.fWidth,0.0f,-m_info.fLength },
+		{ -m_info.fWidth,0.0f,-m_info.fLength },
+		{ -m_info.fWidth,0.0f,0.0f },
+		{ m_info.fWidth,0.0f,0.0f },
+
 	};
 
 	for (int i = 0; i < NUM_VTX; i++)
@@ -249,14 +250,18 @@ void CRailgun::Shot(void)
 
 		if (pBeam != nullptr)
 		{
-			pBeam->SetMtx(mtxMuzzle);
+			D3DXMATRIX mtxBeam;
+
+			universal::SetOffSet(&mtxBeam, mtxMuzzle, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f));
+
+			pBeam->SetMtx(mtxBeam);
 			pBeam->SetAnimSize(m_info.fWidth, m_info.fLength);
 		}
 
 		// ÕŒ‚”g‚Ì¶¬
 		D3DXMATRIX mtxInpact;
 
-		universal::SetOffSet(&mtxInpact, mtxMuzzle, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, -D3DX_PI * 0.5f, 0.0f));
+		universal::SetOffSet(&mtxInpact, mtxMuzzle, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, D3DX_PI, 0.0f));
 
 		CInpact *pInpact = CInpact::Create(0.2f, &mtxInpact);
 
@@ -265,7 +270,7 @@ void CRailgun::Shot(void)
 			pInpact->SetSpeedExpand(25.0f);
 		}
 
-		universal::SetOffSet(&mtxInpact, mtxMuzzle, D3DXVECTOR3(m_info.fLength * -0.5f, 0.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, -D3DX_PI * 0.5f, 0.0f));
+		universal::SetOffSet(&mtxInpact, mtxMuzzle, D3DXVECTOR3(0.0f, 0.0f, m_info.fLength * -0.5f), D3DXVECTOR3(D3DX_PI * 0.5f, D3DX_PI, 0.0f));
 		pInpact = CInpact::Create(0.2f, &mtxInpact);
 
 		if (pInpact != nullptr)

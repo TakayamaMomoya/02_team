@@ -11,7 +11,7 @@
 #include "main.h"
 #include "characterDiv.h"
 #include "motionDiv.h"
-
+#include "renderer.h"
 #include "universal.h"
 
 //*****************************************************
@@ -117,7 +117,27 @@ void CCharacterDiv::Update(void)
 //=====================================================
 void CCharacterDiv::Draw(void)
 {
+	//変数宣言
+	D3DXMATRIX mtxRotModel, mtxTransModel;
 
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
+
+	//ワールドマトリックス初期化
+	D3DXMatrixIdentity(&m_info.mtxWorld);
+
+	//向きを反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRotModel,
+		m_info.rot.y, m_info.rot.x, m_info.rot.z);
+	D3DXMatrixMultiply(&m_info.mtxWorld, &m_info.mtxWorld, &mtxRotModel);
+
+	//位置を反映
+	D3DXMatrixTranslation(&mtxTransModel,
+		m_info.pos.x, m_info.pos.y, m_info.pos.z);
+	D3DXMatrixMultiply(&m_info.mtxWorld, &m_info.mtxWorld, &mtxTransModel);
+
+	//ワールドマトリックス設定
+	pDevice->SetTransform(D3DTS_WORLD, &m_info.mtxWorld);
 }
 
 //=====================================================

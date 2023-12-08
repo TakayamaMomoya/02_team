@@ -56,6 +56,7 @@ public:
 	void Load(char* pPathLower, char* pPathUpper);
 	void SetMotion(int nNum,int nMotion);
 	int GetMotion(int nNum);
+	D3DXMATRIX *GetMatrix(void) { return &m_info.mtxWorld; }
 
 private:
 	struct SInfo
@@ -64,6 +65,7 @@ private:
 		D3DXVECTOR3 posOld;	// 前回の位置
 		D3DXVECTOR3 move;	// 移動量
 		D3DXVECTOR3 rot;	// 向き
+		D3DXMATRIX mtxWorld;	// ワールドマトリックス
 		CMotionDiv* pBody;			// 体
 		char* apPath[PARTS_MAX];	// 体のパス
 	};
