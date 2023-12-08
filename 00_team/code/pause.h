@@ -61,6 +61,7 @@ private:
 	D3DXVECTOR3 m_aPosDest[MENU_MAX];	// 目標の位置
 	STATE m_state;	// 状態
 	static CPause *m_pPause;	// 自身のポインタ
+	bool m_bSound;			
 };
 
 #endif

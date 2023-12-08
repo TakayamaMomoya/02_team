@@ -110,6 +110,7 @@ private:
 	bool m_abEntry[NUM_PLAYER];	// ŽQ‰Á‚µ‚½‚©‚Ç‚¤‚©
 	bool m_bRiftCamera;
 	bool m_bOk;
+	bool m_bSound;
 };
 
 #endif

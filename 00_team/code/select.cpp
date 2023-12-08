@@ -87,6 +87,7 @@ CSelect::CSelect()
 	m_pSlash = nullptr;
 	m_bRiftCamera = false;
 	m_bOk = false;
+	m_bSound = false;
 	m_selectState = SELECT_STATE::STATE_BEFORE;
 }
 
@@ -701,6 +702,16 @@ void CSelect::Rift(void)
 		{
 			if (m_abEntry[nCnt] == true)
 			{// ƒŠƒtƒg‚ªã‚ª‚éˆ—
+				if (m_bSound == false)
+				{
+					CSound* pSound = CSound::GetInstance();
+
+					if (pSound != nullptr)
+					{
+						pSound->Play(pSound->LABEL_SE_RIFT);
+					}
+					m_bSound = true;
+				}
 
 				D3DXVECTOR3 pos = m_apPlayerData[nCnt].pPlayer->GetPosition();
 				D3DXVECTOR3 move = m_apPlayerData[nCnt].pPlayer->GetMove();

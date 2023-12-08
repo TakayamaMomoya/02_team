@@ -18,6 +18,7 @@
 #include "fade.h"
 #include "game.h"
 #include "playerManager.h"
+#include "sound.h"
 
 //*****************************************************
 // マクロ定義
@@ -44,6 +45,7 @@ CPause::CPause()
 	m_state = STATE_NONE;
 	ZeroMemory(&m_apMenu[0], sizeof(m_apMenu));
 	ZeroMemory(&m_aPosDest[0], sizeof(D3DXVECTOR3) * MENU_MAX);
+	m_bSound = false;
 }
 
 //====================================================
@@ -83,6 +85,13 @@ HRESULT CPause::Init(void)
 	if (pGame != nullptr)
 	{
 		pGame->EnableStop(true);
+
+		CSound* pSound = CSound::GetInstance();
+
+		if (pSound != nullptr)
+		{
+			pSound->Play(pSound->LABEL_SE_PAUSE_MENU);
+		}
 	}
 
 	// 背景の生成
@@ -298,6 +307,7 @@ void CPause::Input(void)
 	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
 	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
 	CInputManager *pInputManager = CInputManager::GetInstance();
+	CSound* pSound = CSound::GetInstance();
 
 	CFade *pFade = CFade::GetInstance();
 
@@ -336,6 +346,13 @@ void CPause::Input(void)
 	if (pInputManager->GetTrigger(CInputManager::BUTTON_AXIS_DOWN))
 	{
 		m_menu = (MENU)((m_menu + 1) % MENU_MAX);
+
+		if (pSound != nullptr && m_bSound == false)
+		{
+			pSound->Play(pSound->LABEL_SE_PAUSE_ARROW);
+
+			m_bSound = true;
+		}
 	}
 
 	if (pInputManager->GetTrigger(CInputManager::BUTTON_AXIS_UP))
@@ -350,6 +367,11 @@ void CPause::Input(void)
 
 	if (pInputManager->GetTrigger(CInputManager::BUTTON_ENTER))
 	{// 選択項目にフェードする
+
+		if (pSound != nullptr)
+		{
+			pSound->Play(pSound->LABEL_SE_PAUSE_ENTER);
+		}
 		Fade(m_menu);
 	}
 }
