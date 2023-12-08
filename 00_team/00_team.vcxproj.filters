@@ -180,6 +180,7 @@
     </ClCompile>
     <ClCompile Include="code\beam.cpp" />
     <ClCompile Include="code\meshcylinder.cpp" />
+    <ClCompile Include="code\inpact.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -334,5 +335,6 @@
     </ClInclude>
     <ClInclude Include="code\beam.h" />
     <ClInclude Include="code\meshcylinder.h" />
+    <ClInclude Include="code\inpact.h" />
   </ItemGroup>
 </Project>

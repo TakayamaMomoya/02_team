@@ -16,11 +16,12 @@
 #include "enemy.h"
 #include "debugproc.h"
 #include "universal.h"
+#include "texture.h"
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define MESHCYLINDER_TEX_FILE		"data\\TEXTURE\\EFFECT\\boost.png"				// テクスチャファイル名
+#define TEX_PATH		"data\\TEXTURE\\EFFECT\\boost.png"				// テクスチャファイル名
 
 //=====================================================
 // コンストラクタ
@@ -29,9 +30,9 @@ CMeshCylinder::CMeshCylinder(int nPriority) : CObject(nPriority)
 {
 	ZeroMemory(&m_meshCylinder, sizeof(m_meshCylinder));
 	m_pIdxBuff = nullptr;
-	m_pTexture = nullptr;
 	m_pVtxBuff = nullptr;
-	m_col = { 0.0f,0.0f,0.0f,0.0f };
+	m_col = { 1.0f,1.0f,1.0f,1.0f };
+	m_nIdxTexture = -1;
 }
 
 //=====================================================
@@ -68,7 +69,7 @@ CMeshCylinder *CMeshCylinder::Create(int nMeshU,int nMeshV,int nTexU,int nTexV)
 }
 
 //=====================================================
-//初期化処理
+// 初期化処理
 //=====================================================
 HRESULT CMeshCylinder::Init(void)
 {
@@ -77,7 +78,9 @@ HRESULT CMeshCylinder::Init(void)
 
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
-
+	
+	m_meshCylinder.nTexU = meshCylinder::SPLIT_TEX_U;
+	m_meshCylinder.nTexV = meshCylinder::SPLIT_TEX_V;
 	m_meshCylinder.fRadius = m_meshCylinder.fRadius;
 	int nMeshU = m_meshCylinder.nMeshU;
 	int nMeshV = m_meshCylinder.nMeshV;
@@ -103,8 +106,13 @@ HRESULT CMeshCylinder::Init(void)
 		NULL);
 
 	// テクスチャの読込
-	D3DXCreateTextureFromFile
-	(pDevice, MESHCYLINDER_TEX_FILE, &m_pTexture);
+	CTexture *pTexture = CTexture::GetInstance();
+
+	if (pTexture != nullptr)
+	{
+		int nIdx = pTexture->Regist(TEX_PATH);
+		SetIdxTexture(nIdx);
+	}
 
 	//頂点情報のポインタ
 	VERTEX_3D *pVtx;
@@ -120,10 +128,6 @@ HRESULT CMeshCylinder::Init(void)
 
 	//最大頂点数計算
 	m_meshCylinder.nNumVtx = (nMeshU + 1) * (nMeshV + 1);
-
-	//変数初期化
-	m_meshCylinder.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_meshCylinder.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	//計算用変数
 	float fRot;
@@ -205,12 +209,6 @@ HRESULT CMeshCylinder::Init(void)
 //=====================================================
 void CMeshCylinder::Uninit(void)
 {
-	if (m_pTexture != NULL)
-	{
-		m_pTexture->Release();
-		m_pTexture = NULL;
-	}
-
 	if (m_pVtxBuff != NULL)
 	{//頂点バッファポインタの破棄
 		m_pVtxBuff->Release();
@@ -232,6 +230,34 @@ void CMeshCylinder::Uninit(void)
 void CMeshCylinder::Update(void)
 {
 
+}
+
+//=====================================================
+// 色設定
+//=====================================================
+void CMeshCylinder::SetCol(D3DXCOLOR col)
+{
+	if (m_pVtxBuff == nullptr)
+	{
+		return;
+	}
+
+	m_col = col;
+
+	//頂点情報のポインタ
+	VERTEX_3D *pVtx;
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	for (int nCnt = 0; nCnt < m_meshCylinder.nNumVtx; nCnt++)
+	{
+		//頂点カラーの設定
+		pVtx[nCnt].col = m_col;
+	}
+
+	//頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
 }
 
 //=====================================================
@@ -274,8 +300,75 @@ void CMeshCylinder::Draw(void)
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_3D);
 
+	// テクスチャ取得
+	CTexture *pTextureManager = CTexture::GetInstance();
+
+	LPDIRECT3DTEXTURE9 pTexture = nullptr;
+
+	if (pTextureManager != nullptr)
+	{
+		pTexture = pTextureManager->GetAddress(m_nIdxTexture);
+	}
+
 	//テクスチャ設定
-	pDevice->SetTexture(0, m_pTexture);
+	pDevice->SetTexture(0, pTexture);
+
+	//ポリゴン描画
+	pDevice->DrawIndexedPrimitive
+	(
+		D3DPT_TRIANGLESTRIP,
+		0,
+		0,
+		m_meshCylinder.nNumVtx,								//頂点数
+		0,													//最初のインデックス
+		m_meshCylinder.nNumIdx - 2							//ポリゴン数
+	);
+
+	// カリングを有効化
+	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+
+	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+}
+
+//=====================================================
+// 描画のみ行う
+//=====================================================
+void CMeshCylinder::JustDraw(void)
+{
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
+
+	D3DXMATRIX mtxRot, mtxTrans;
+
+	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	// カリングを無効化
+	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
+	//ワールドマトリックス設定
+	pDevice->SetTransform(D3DTS_WORLD, &m_meshCylinder.mtxWorld);
+
+	//頂点バッファをデータストリームに設定
+	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_3D));
+
+	//インデックスバッファをデータストリームに設定
+	pDevice->SetIndices(m_pIdxBuff);
+
+	//頂点フォーマットの設定
+	pDevice->SetFVF(FVF_VERTEX_3D);
+
+	// テクスチャ取得
+	CTexture *pTextureManager = CTexture::GetInstance();
+
+	LPDIRECT3DTEXTURE9 pTexture = nullptr;
+
+	if (pTextureManager != nullptr)
+	{
+		pTexture = pTextureManager->GetAddress(m_nIdxTexture);
+	}
+
+	//テクスチャ設定
+	pDevice->SetTexture(0, pTexture);
 
 	//ポリゴン描画
 	pDevice->DrawIndexedPrimitive

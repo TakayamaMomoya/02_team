@@ -18,7 +18,7 @@
 //*****************************************************
 namespace meshCylinder
 {
-const float  MESH_RADIUS = 500.0f;	// 半径
+const float  MESH_RADIUS = 100.0f;	// 半径
 const int MESH_U = 16;	// 横の分割数
 const int MESH_V = 1;	// 縦の分割数
 const int SPLIT_TEX_U = 3;	// 横のテクスチャ分割数
@@ -61,18 +61,28 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void JustDraw(void);
 	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void) { return m_pVtxBuff; }
 	void SetPosition(D3DXVECTOR3 pos) { m_meshCylinder.pos = pos; }
 	D3DXVECTOR3 GetPosition(void) { return m_meshCylinder.pos; }
+	void SetRot(D3DXVECTOR3 rot) { m_meshCylinder.rot = rot; }
+	D3DXVECTOR3 GetRot(void) { return m_meshCylinder.rot; }
 	int GetNumVtx(void) { return m_meshCylinder.nNumVtx; }
 	void SetRadius(float fRadius) { m_meshCylinder.fRadius = fRadius; }
 	void SetHeight(float fHeight) { m_meshCylinder.fHeight = fHeight; }
+	void SetIdxTexture(int nIdx) { m_nIdxTexture = nIdx; }
+	void SetNumMeshU(int nNumMesh) { m_meshCylinder.nMeshU = nNumMesh; }
+	void SetNumMeshV(int nNumMesh) { m_meshCylinder.nMeshV = nNumMesh; }
+	MeshCylinder *GetMeshCylinder(void) { return &m_meshCylinder; }
+	void SetCol(D3DXCOLOR col);
+	D3DXCOLOR GetCol(void) { return m_col; }
+	void SetMtx(D3DXMATRIX mtx) { m_meshCylinder.mtxWorld = mtx; }
 
 private:
-	LPDIRECT3DTEXTURE9 m_pTexture;	//テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
 	LPDIRECT3DINDEXBUFFER9 m_pIdxBuff;	//インデックスバッファへのポインタ
 	MeshCylinder m_meshCylinder;	//構造体の情報
 	D3DXCOLOR m_col;	// 色
+	int m_nIdxTexture;	// テクスチャ番号
 };
 #endif

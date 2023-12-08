@@ -398,6 +398,24 @@ void CPlayer::Update(void)
 
 	// 行動範囲
 	LimidPostion();
+
+// デバッグ処理
+#if _DEBUG
+	CInputKeyboard* pKeyboard = CInputKeyboard::GetInstance();
+	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
+
+	// プレイヤーを死亡させます
+	if (pPlayerManager != nullptr && pKeyboard != nullptr)
+	{
+		if (pKeyboard->GetTrigger(DIK_F5))
+		{
+			float fDamage = pPlayerManager->GetPlayerParam().fInitialLife;	// プレイヤーの初期体力を取得
+
+			// ダメージ処理
+			Hit(fDamage);
+		}
+	}
+#endif // _DEBUG
 }
 
 //=====================================================

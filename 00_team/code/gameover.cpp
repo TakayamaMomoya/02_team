@@ -96,7 +96,22 @@ namespace
 	const float LOGO_HEIGHT = 270.0f;
 
 	// ゲームオーバーの位置
-	const D3DXVECTOR3 LOGO_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f - 200.0f, 0.0f);
+	const D3DXVECTOR3 LOGO_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f - 100.0f, 0.0f);
+
+	// コンティニューのテクスチャのパス
+	const char* CONTINY_PATH = "data\\TEXTURE\\UI\\gamestart.png";
+
+	// コンティニューの横幅
+	const float CONTINY_WIDTH = 240.0f;
+
+	// コンティニューの縦幅
+	const float CONTINY_HEIGHT = 70.0f;
+
+	// コンティニューの位置
+	const D3DXVECTOR3 CONTINY_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f + 250.0f, 0.0f);
+
+	// コンティニューの表示タイミング
+	const float CONTINY_DISPTIMING = 0.7f;
 }
 
 //===============================================
@@ -114,8 +129,11 @@ CGameover::CGameover()
 	ZeroMemory(&m_apModelEnemy[0], sizeof(m_apModelEnemy));
 	m_pBlack = nullptr;
 	m_pLogo = nullptr;
+	m_pContiny = nullptr;
 	m_bDeathPlayer[0] = {};
-	m_fFadeCounter = 0;
+	m_bFlash = false;
+	m_fFadeCounter = 0.0f;
+	m_fFlashCounter = 0.0f;
 }
 
 //===============================================
@@ -158,8 +176,11 @@ HRESULT CGameover::Init()
 	// 値の初期化
 	m_pBlack = nullptr;
 	m_pLogo = nullptr;
+	m_pContiny = nullptr;
 	m_bDeathPlayer[0] = {};
-	m_fFadeCounter = 0;
+	m_bFlash = false;
+	m_fFadeCounter = 0.0f;
+	m_fFlashCounter = 0.0f;
 
 	// インスタンスを取得
 	CEnemyManager* pEnemyManager = CEnemyManager::GetInstance();
@@ -286,6 +307,26 @@ HRESULT CGameover::Init()
 		return E_FAIL;
 	}
 
+	// コンティニューの表示
+	if (m_pContiny == nullptr)
+	{
+		m_pContiny = CObject2D::Create(7);
+	}
+
+	if (m_pContiny != nullptr)
+	{// コンティニューの情報を設定
+		m_pContiny->SetSize(CONTINY_WIDTH, CONTINY_HEIGHT);
+		m_pContiny->SetPosition(CONTINY_POS);
+		int nIdx = CTexture::GetInstance()->Regist(CONTINY_PATH);
+		m_pContiny->SetIdxTexture(nIdx);
+		m_pContiny->SetVtx();
+		m_pContiny->SetCol({ 1.0, 1.0, 1.0, 0.0 });
+	}
+	else if (m_pContiny == nullptr)
+	{
+		return E_FAIL;
+	}
+
 	// UIを非表示
 	if (pUIManager != nullptr)
 	{
@@ -315,6 +356,7 @@ void CGameover::Uninit(void)
 	m_pGameover = nullptr;
 	m_pBlack = nullptr;
 	m_pLogo = nullptr;
+	m_pContiny = nullptr;
 
 	delete this;
 }
@@ -366,23 +408,45 @@ void CGameover::BlackOut(void)
 	m_fFadeCounter += 0.01f;
 
 	if (m_pBlack != nullptr)
-	{// 黒ポリゴンを表示する
+	{// 黒ポリゴンを少しずつ表示する
 		m_pBlack->SetCol({ 0.0, 0.0, 0.0, m_fFadeCounter });
 	}
 
 	if (m_pLogo != nullptr)
-	{// ゲームオーバーを表示する
-		m_pLogo->SetCol({ 1.0, 1.0, 1.0, m_fFadeCounter });
+	{// ゲームオーバーを少しずつ表示する
+		m_pLogo->SetCol({ 1.0, 1.0, 1.0, m_fFadeCounter - 0.1f });
 
-		if (m_fFadeCounter >= 0.8f)
-		{
+		if (m_fFadeCounter - 0.1f >= 0.7f)
+		{// 移動量を減衰させる
 			m_pLogo->DicMove(0.1f);
 			m_pLogo->SetVtx();
 		}
 		else
-		{
-			m_pLogo->SetMove({ 0.0f, 1.0f, 0.0f });
+		{// 文字を下へ移動
+			m_pLogo->SetMove({ 0.0f, 0.8f, 0.0f });
 			m_pLogo->SetVtx();
+		}
+	}
+
+	if (m_fFadeCounter >= CONTINY_DISPTIMING)
+	{
+		if (m_pContiny != nullptr)
+		{// コンティニューを少しずつ表示する
+			if (m_fFlashCounter > 1.0f || m_fFlashCounter < 0.0f)
+			{// 透明度が最小か最大になった
+				m_bFlash = m_bFlash ? false : true;		// 状態を切り替える
+			}
+
+			if (m_bFlash == false)
+			{
+				m_fFlashCounter += 0.02f;
+			}
+			else if(m_bFlash == true)
+			{
+				m_fFlashCounter -= 0.02f;
+			}
+
+			m_pContiny->SetCol({ 1.0, 1.0, 1.0, m_fFlashCounter });
 		}
 	}
 
