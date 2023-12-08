@@ -16,11 +16,12 @@
 #include "enemy.h"
 #include "debugproc.h"
 #include "universal.h"
+#include "texture.h"
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define MESHCYLINDER_TEX_FILE		"data\\TEXTURE\\EFFECT\\boost.png"				// テクスチャファイル名
+#define TEX_PATH		"data\\TEXTURE\\EFFECT\\boost.png"				// テクスチャファイル名
 
 //=====================================================
 // コンストラクタ
@@ -29,9 +30,9 @@ CMeshCylinder::CMeshCylinder(int nPriority) : CObject(nPriority)
 {
 	ZeroMemory(&m_meshCylinder, sizeof(m_meshCylinder));
 	m_pIdxBuff = nullptr;
-	m_pTexture = nullptr;
 	m_pVtxBuff = nullptr;
 	m_col = { 0.0f,0.0f,0.0f,0.0f };
+	m_nIdxTexture = -1;
 }
 
 //=====================================================
@@ -103,8 +104,13 @@ HRESULT CMeshCylinder::Init(void)
 		NULL);
 
 	// テクスチャの読込
-	D3DXCreateTextureFromFile
-	(pDevice, MESHCYLINDER_TEX_FILE, &m_pTexture);
+	CTexture *pTexture = CTexture::GetInstance();
+
+	if (pTexture != nullptr)
+	{
+		int nIdx = pTexture->Regist(TEX_PATH);
+		SetIdxTexture(nIdx);
+	}
 
 	//頂点情報のポインタ
 	VERTEX_3D *pVtx;
@@ -205,12 +211,6 @@ HRESULT CMeshCylinder::Init(void)
 //=====================================================
 void CMeshCylinder::Uninit(void)
 {
-	if (m_pTexture != NULL)
-	{
-		m_pTexture->Release();
-		m_pTexture = NULL;
-	}
-
 	if (m_pVtxBuff != NULL)
 	{//頂点バッファポインタの破棄
 		m_pVtxBuff->Release();
@@ -274,8 +274,18 @@ void CMeshCylinder::Draw(void)
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_3D);
 
+	// テクスチャ取得
+	CTexture *pTextureManager = CTexture::GetInstance();
+
+	LPDIRECT3DTEXTURE9 pTexture = nullptr;
+
+	if (pTextureManager != nullptr)
+	{
+		pTexture = pTextureManager->GetAddress(m_nIdxTexture);
+	}
+
 	//テクスチャ設定
-	pDevice->SetTexture(0, m_pTexture);
+	pDevice->SetTexture(0, pTexture);
 
 	//ポリゴン描画
 	pDevice->DrawIndexedPrimitive

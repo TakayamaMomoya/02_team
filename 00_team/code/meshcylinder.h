@@ -64,15 +64,20 @@ public:
 	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void) { return m_pVtxBuff; }
 	void SetPosition(D3DXVECTOR3 pos) { m_meshCylinder.pos = pos; }
 	D3DXVECTOR3 GetPosition(void) { return m_meshCylinder.pos; }
+	void SetRot(D3DXVECTOR3 rot) { m_meshCylinder.rot = rot; }
+	D3DXVECTOR3 GetRot(void) { return m_meshCylinder.rot; }
 	int GetNumVtx(void) { return m_meshCylinder.nNumVtx; }
 	void SetRadius(float fRadius) { m_meshCylinder.fRadius = fRadius; }
 	void SetHeight(float fHeight) { m_meshCylinder.fHeight = fHeight; }
+	void SetIdxTexture(int nIdx) { m_nIdxTexture = nIdx; }
+	void SetNumMeshU(int nNumMesh) { m_meshCylinder.nMeshU = nNumMesh; }
+	void SetNumMeshV(int nNumMesh) { m_meshCylinder.nMeshV = nNumMesh; }
 
 private:
-	LPDIRECT3DTEXTURE9 m_pTexture;	//テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
 	LPDIRECT3DINDEXBUFFER9 m_pIdxBuff;	//インデックスバッファへのポインタ
 	MeshCylinder m_meshCylinder;	//構造体の情報
 	D3DXCOLOR m_col;	// 色
+	int m_nIdxTexture;	// テクスチャ番号
 };
 #endif

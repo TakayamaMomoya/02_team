@@ -44,7 +44,7 @@
 #include "UIManager.h"
 #include "number3D.h"
 #include "UIManager.h"
-#include "meshcylinder.h"
+#include "inpact.h"
 
 //*****************************************************
 // É}ÉNÉçíËã`
@@ -184,6 +184,8 @@ HRESULT CSelect::Init(void)
 	{
 		m_aContainerData[nCnt].fReSpawnTimer = RESPAWN_TIME;
 	}
+
+	CInpact::Create();
 
 	return S_OK;
 }
