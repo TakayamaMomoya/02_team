@@ -44,13 +44,18 @@ public:
 
 private:
 
-	CUI* CreateUi(void);
-	CLife* CreateLife(int nIdx);
-	CUIMagazine* CreateUIMagazine(int nIdx);
+	void CreateFrame(int nIdx);
+	void CreateFace(int nIdx);
+	void CreateWeapon(int nIdx);
+	void CreateLife(int nIdx);
+	void CreateUIMagazine(int nIdx);
+
+	void UpdateUIWeapon(void);
+	void UpdateUIColor(void);
 
 	struct SInfo
 	{
-		int nIdxPlayer;				// 参照するプレイヤーの番号
+		float fUIColorAlpha;		// UIのアルファ値
 		CWeapon::TYPE weaponType;	// 武器の種類
 		bool bIsWeaponNull;			// 武器の有無
 

@@ -125,6 +125,7 @@ void CUIMagazine::SetPosition(D3DXVECTOR3 pos)
 {
 	if (m_pNumDig != nullptr)
 	{
+		m_info.pos = pos;
 		m_pNumDig->SetPosition(pos);
 	}
 }
@@ -136,6 +137,8 @@ void CUIMagazine::SetSize(float width, float height)
 {
 	if (m_pNumDig != nullptr)
 	{
+		m_info.fWidth = width;
+		m_info.fHeight = height;
 		m_pNumDig->SetSizeAll(width, height);
 	}
 }
@@ -147,6 +150,7 @@ void CUIMagazine::SetCol(D3DXCOLOR col)
 {
 	if (m_pNumDig != nullptr)
 	{
+		m_info.col = col;
 		m_pNumDig->SetColor(col);
 	}
 }
