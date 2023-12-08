@@ -61,6 +61,7 @@ public:
 	int GetID(void) { return m_info.nIdxJoypad; }
 	void SetBullet(int nBullet);
 	int GetBullet(void) { return m_info.nNumBullet; }
+	int GetMaxBullet(void) { return m_info.nMaxBullet; }
 	void SetMaxBullet(int nBullet);
 	void SetRapid(int nRapid) { m_info.nRapid = nRapid; }
 	int GetRapid(void) { return m_info.nRapid; }

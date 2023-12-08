@@ -144,15 +144,15 @@ namespace
 	const float LIFE_WIDTH = 0.8f * LIFE_SIZE;
 	const float LIFE_HEIGHT = 0.7f * LIFE_SIZE;
 	const D3DXCOLOR LIFE_COLOR = D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f);
-	const D3DXCOLOR LIFE_FRAME_COLOR = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f);
+	const D3DXCOLOR LIFE_FRAME_COLOR = D3DXCOLOR(0.25f, 0.25f, 0.25f, 0.25f);
 	const char* LIFE_FILE_NAME = "data\\TEXTURE\\UI\\life000.png";
 
 	const D3DXVECTOR3 MAGAZINE_POS_PLUS[NUM_PLAYER] =
 	{// äÓèÄÇ©ÇÁâ¡éZï™ÇÃà íu
-		D3DXVECTOR3(-15.0f,  60.0f, 0.0f),
-		D3DXVECTOR3( -5.0f,  60.0f, 0.0f),
-		D3DXVECTOR3(-15.0f, -60.0f, 0.0f),
-		D3DXVECTOR3( -5.0f, -60.0f, 0.0f),
+		D3DXVECTOR3(-15.0f,  110.0f, 0.0f),
+		D3DXVECTOR3( -5.0f,  110.0f, 0.0f),
+		D3DXVECTOR3(-15.0f, -10.0f, 0.0f),
+		D3DXVECTOR3( -5.0f, -10.0f, 0.0f),
 	};
 	const D3DXVECTOR3 MAGAZINE_FRAME_POS_PLUS[NUM_PLAYER] =
 	{// äÓèÄÇ©ÇÁâ¡éZï™ÇÃà íu
@@ -175,7 +175,7 @@ namespace
 	const float MAGAZINE_NUM_WIDTH = MAGAZINE_NUM_SIZE * 1.0f;
 	const float MAGAZINE_NUM_HEIGHT = MAGAZINE_NUM_SIZE * 1.0f;
 	const D3DXCOLOR MAGAZINE_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	const D3DXCOLOR MAGAZINE_FRAME_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.75f);
+	const D3DXCOLOR MAGAZINE_FRAME_COLOR = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f);
 	const D3DXCOLOR MAGAZINE_NUM_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	const char* MAGAZINE_FILE_NAME = "data\\TEXTURE\\UI\\magazin.png";
 }

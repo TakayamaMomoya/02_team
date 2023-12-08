@@ -41,6 +41,7 @@ public:
 	void SetCol(D3DXCOLOR colMagazine, D3DXCOLOR colMagazineFrame, D3DXCOLOR colNum);
 	void SetTexture(const char* pFileName);
 	void SetNumMagazine(void);
+	void SetVtxGage(void);
 
 	D3DXCOLOR GetColMagazine(void) { return m_info.colMagazine; }
 	D3DXCOLOR GetColMagazineFrame(void) { return m_info.colMagazineFrame; }
