@@ -59,6 +59,8 @@ private:
 	void Open(void);
 
 	SInfo m_info;
+	float m_fCtr;
+	bool m_bSound;
 };
 
 #endif

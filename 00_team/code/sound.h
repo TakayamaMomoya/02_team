@@ -40,6 +40,18 @@ public:
 		LABEL_SE_SWING,					// スウィング
 		LABEL_SE_DAMAGE,				// ダメージ
 		LABEL_SE_HIT,					// ヒット
+
+		LABEL_SE_DOOR_TOUCH,			// ドアのインタラクト
+		LABEL_SE_BOX_BROKEN,			// 箱を破壊
+
+		LABEL_SE_RIFT,					// セレクトリフト
+		LABEL_SE_RIFTING,				// 物を持ち上げる
+		LABEL_SE_DOOR_OPEN,				// ドアが開く
+
+		LABEL_SE_PAUSE_MENU,			// ポーズ
+		LABEL_SE_PAUSE_ARROW,			// ポーズ移動
+		LABEL_SE_PAUSE_ENTER,			// ポーズ選択
+
 		LABEL_MAX
 	} LABEL;
 
@@ -115,6 +127,17 @@ private:
 		{ "data/SOUND/SE/swing.wav",0 },				// スウィング
 		{ "data/SOUND/SE/damage.wav",0 },				// ダメージ
 		{ "data/SOUND/SE/hit.wav",0 },					// ヒット
+
+		{ "data/SOUND/SE/door_open.wav",0 },			// ドアのインタラクト
+		{ "data/SOUND/SE/box_broken.wav",0 },			// 箱破壊
+
+		{ "data/SOUND/SE/rift.wav",0 },					// リフト
+		{ "data/SOUND/SE/lifting.wav",0 },				// 持ち上げる
+		{ "data/SOUND/SE/door_enter.wav",0 },			// ドアが開く
+
+		{ "data/SOUND/SE/pause.wav",0 },				// ポーズ
+		{ "data/SOUND/SE/pause_arrow.wav",0 },			// 選択
+		{ "data/SOUND/SE/pause_enter.wav",0 },			// 決定
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ

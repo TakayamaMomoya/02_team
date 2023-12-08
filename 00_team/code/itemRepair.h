@@ -45,6 +45,7 @@ private:
 	void FollowPlayerHand(void);
 
 	bool m_bInRocket;
+	bool m_bSound;
 	float m_fCntRepair;
 	float m_fRepairCounter;
 	CPlayer *m_pPlayer;
