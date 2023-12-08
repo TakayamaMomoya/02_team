@@ -48,8 +48,11 @@ private:	// 自分のみアクセス可能 [アクセス指定子]
 	CMotion* m_apModelEnemy[NUM_ENEMY];			// エネミーモデルのポインタ
 	CObject2D* m_pBlack;						// 黒ポリゴン
 	CObject2D* m_pLogo;							// ゲームオーバー表示
+	CObject2D* m_pContiny;						// コンティニュー表示
 	bool m_bDeathPlayer[NUM_PLAYER];			// 死亡したプレイヤー
+	bool m_bFlash;								// 点滅切り替え
 	float m_fFadeCounter;						// ゆっくり表示する
+	float m_fFlashCounter;						// 点滅させる
 };
 
 #endif

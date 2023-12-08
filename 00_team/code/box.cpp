@@ -19,6 +19,7 @@
 #include "texture.h"
 #include "debrisSpawner.h"
 #include "itemRepair.h"
+#include "sound.h"
 
 //*****************************************************
 // ’è”’è‹`
@@ -167,6 +168,12 @@ void CBox::Hit(float fDamage)
 
 	// ”j•Ð‚Ì•úo
 	CDebrisSpawner::Create(pos,CDebrisSpawner::TYPE::TYPE_WALL);
+	CSound* pSound = CSound::GetInstance();
+
+	if (pSound != nullptr)
+	{
+		pSound->Play(pSound->LABEL_SE_BOX_BROKEN);
+	}
 
 	switch (m_type)
 	{

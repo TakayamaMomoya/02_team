@@ -50,6 +50,7 @@ CItemRepair::CItemRepair(int nPriority) : CGimmick(nPriority)
 	m_bInRocket = false;
 	m_fCntRepair = 0.0f;
 	m_fRepairCounter = 0.0f;
+	m_bSound = false;
 }
 
 //=====================================================
@@ -187,6 +188,8 @@ void CItemRepair::Update(void)
 
 			m_pPlayer = nullptr;
 
+			m_bSound = false;
+
 			SetEnable(true);
 
 			CreateGuide();
@@ -224,11 +227,23 @@ void CItemRepair::Update(void)
 			move.y = 0.0f;
 		}
 
+		m_bSound = false;
 		SetPosition(pos);
 	}
 	else
 	{// Ž‚¿ã‚°‚ç‚ê‚Ä‚¢‚éê‡
 		FollowPlayerHand();
+
+		if (m_bSound == false)
+		{
+			CSound* pSound = CSound::GetInstance();
+
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_RIFTING);
+			}
+			m_bSound = true;
+		}
 	}
 
 	if (m_pGuide != nullptr)

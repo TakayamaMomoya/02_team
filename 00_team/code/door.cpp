@@ -15,6 +15,7 @@
 #include "collision.h"
 #include "universal.h"
 #include "fan3D.h"
+#include "sound.h"
 
 //*****************************************************
 // 定数定義
@@ -35,6 +36,8 @@ namespace
 CDoor::CDoor(int nPriority) : CGimmick(nPriority)
 {
 	ZeroMemory(&m_info, sizeof(SInfo));
+	m_fCtr = 0.0f;
+	m_bSound = false;
 }
 
 //=====================================================
@@ -132,6 +135,7 @@ void CDoor::Update(void)
 			m_info.pGauge->Uninit();
 			m_info.pGauge = nullptr;
 		}
+		m_fCtr = 0.0f;
 	}
 }
 
@@ -140,6 +144,14 @@ void CDoor::Update(void)
 //=====================================================
 void CDoor::Open(void)
 {
+	CSound* pSound = CSound::GetInstance();
+
+	if (pSound != nullptr && m_bSound == false)
+	{
+		pSound->Play(pSound->LABEL_SE_DOOR_OPEN);
+		m_bSound = true;
+	}
+
 	// 差分角度の取得
 	D3DXVECTOR3 rot = GetRot();
 
@@ -150,6 +162,7 @@ void CDoor::Open(void)
 	if (fRotDiff * fRotDiff <= OPEN_LINE * OPEN_LINE)
 	{// 開ききった判定
 		m_info.state = STATE_NONE;
+		m_bSound = false;
 	}
 
 	fRotDiff *= OPEN_SPEED;
@@ -191,6 +204,21 @@ void CDoor::Interact(CObject *pObj)
 				if (bInteract)
 				{// ピッキングを進める
 					proceed();
+
+					float Tick = CManager::GetTick();
+					m_fCtr += Tick;
+
+					if (m_fCtr >= 0.5f)
+					{
+						CSound* pSound = CSound::GetInstance();
+
+						if (pSound != nullptr)
+						{
+							pSound->Play(pSound->LABEL_SE_DOOR_TOUCH);
+						}
+
+						m_fCtr = 0.0f;
+					}
 
 					// プレイヤーのドア入力情報
 					pPlayer->SetDoorPress(true);
