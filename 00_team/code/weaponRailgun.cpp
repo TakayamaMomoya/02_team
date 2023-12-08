@@ -23,6 +23,7 @@
 #include "object3D.h"
 #include "motion.h"
 #include "beam.h"
+#include "inpact.h"
 
 //*****************************************************
 // 定数定義
@@ -200,23 +201,6 @@ void CRailgun::Shot(void)
 			{
 				if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB, nID))
 				{// 射撃
-					// ビームの生成
-					CBeam *pBeam = CBeam::Create();
-
-					if (pBeam != nullptr)
-					{
-						pBeam->SetMtx(mtxMuzzle);
-						pBeam->SetAnimSize(m_info.fWidth, m_info.fLength);
-					}
-
-					// 音の再生
-					CSound* pSound = CSound::GetInstance();
-
-					if (pSound != nullptr)
-					{
-						pSound->Play(pSound->LABEL_SE_GUNSHOT_03);
-					}
-
 					if (nBullet > 0 && nCntShot == 0)
 					{// 弾の発射
 						pEnemy->Hit(info.fDamage);
@@ -259,6 +243,43 @@ void CRailgun::Shot(void)
 		nCntShot = GetRapid();
 
 		SetCntShot(nCntShot);
+
+		// ビームの生成
+		CBeam *pBeam = CBeam::Create();
+
+		if (pBeam != nullptr)
+		{
+			pBeam->SetMtx(mtxMuzzle);
+			pBeam->SetAnimSize(m_info.fWidth, m_info.fLength);
+		}
+
+		// 衝撃波の生成
+		D3DXMATRIX mtxInpact;
+
+		universal::SetOffSet(&mtxInpact, mtxMuzzle, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, -D3DX_PI * 0.5f, 0.0f));
+
+		CInpact *pInpact = CInpact::Create(0.2f, &mtxInpact);
+
+		if (pInpact != nullptr)
+		{
+			pInpact->SetSpeedExpand(25.0f);
+		}
+
+		universal::SetOffSet(&mtxInpact, mtxMuzzle, D3DXVECTOR3(m_info.fLength * -0.5f, 0.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, -D3DX_PI * 0.5f, 0.0f));
+		pInpact = CInpact::Create(0.2f, &mtxInpact);
+
+		if (pInpact != nullptr)
+		{
+			pInpact->SetSpeedExpand(25.0f);
+		}
+
+		// 音の再生
+		CSound* pSound = CSound::GetInstance();
+
+		if (pSound != nullptr)
+		{
+			pSound->Play(pSound->LABEL_SE_GUNSHOT_03);
+		}
 	}
 }
 

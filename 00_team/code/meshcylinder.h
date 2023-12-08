@@ -61,6 +61,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void JustDraw(void);
 	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void) { return m_pVtxBuff; }
 	void SetPosition(D3DXVECTOR3 pos) { m_meshCylinder.pos = pos; }
 	D3DXVECTOR3 GetPosition(void) { return m_meshCylinder.pos; }
@@ -75,6 +76,7 @@ public:
 	MeshCylinder *GetMeshCylinder(void) { return &m_meshCylinder; }
 	void SetCol(D3DXCOLOR col);
 	D3DXCOLOR GetCol(void) { return m_col; }
+	void SetMtx(D3DXMATRIX mtx) { m_meshCylinder.mtxWorld = mtx; }
 
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ

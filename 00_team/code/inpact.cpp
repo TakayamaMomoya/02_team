@@ -10,6 +10,7 @@
 //*****************************************************
 #include "inpact.h"
 #include "manager.h"
+#include "texture.h"
 
 //*****************************************************
 // 定数定義
@@ -19,7 +20,8 @@ namespace
 const int MESH_U = 32;	// 横の分割数
 const int MESH_V = 1;	// 縦の分割数
 const float MESH_HEIGHT = 50.0f;	// メッシュの高さ
-const float INITIAL_LIFE = 0.2f;	// 初期寿命
+const float INITIAL_EXPAND = 15.0f;	// 初期の膨らむ速度
+const char* TEX_PATH = "data\\TEXTURE\\EFFECT\\inpact.png";	// テクスチャパス
 }
 
 //=====================================================
@@ -41,7 +43,7 @@ CInpact::~CInpact()
 //=====================================================
 // 生成処理
 //=====================================================
-CInpact *CInpact::Create(void)
+CInpact *CInpact::Create(float nLife, D3DXMATRIX *pMtx)
 {
 	CInpact *pInpact = nullptr;
 
@@ -51,6 +53,14 @@ CInpact *CInpact::Create(void)
 
 		if (pInpact != nullptr)
 		{
+			if (pMtx != nullptr)
+			{
+				pInpact->SetMtx(*pMtx);
+			}
+
+			pInpact->m_info.fLife = nLife;
+			pInpact->m_info.fLifeInitial = nLife;
+
 			pInpact->Init();
 		}
 	}
@@ -71,11 +81,19 @@ HRESULT CInpact::Init(void)
 	CMeshCylinder::Init();
 
 	m_info.fRadiusDiff = 40.0f;
-	m_info.fLife = INITIAL_LIFE;
-	m_info.fLifeInitial = INITIAL_LIFE;
+	m_info.fSpeedExpand = INITIAL_EXPAND;
 
 	// 頂点位置設定
 	SetVtx();
+
+	// テクスチャの読込
+	CTexture *pTexture = CTexture::GetInstance();
+
+	if (pTexture != nullptr)
+	{
+		int nIdx = pTexture->Regist(TEX_PATH);
+		SetIdxTexture(nIdx);
+	}
 
 	return S_OK;
 }
@@ -188,7 +206,7 @@ void CInpact::ManageLife(void)
 	float fRadius = pMesh->fRadius;
 
 	// 半径を加算する
-	fRadius += 15.0f;
+	fRadius += m_info.fSpeedExpand;
 	SetRadius(fRadius);
 
 	// 寿命を減らす
@@ -216,5 +234,5 @@ void CInpact::ManageLife(void)
 //=====================================================
 void CInpact::Draw(void)
 {
-	CMeshCylinder::Draw();
+	CMeshCylinder::JustDraw();
 }

@@ -44,7 +44,6 @@
 #include "UIManager.h"
 #include "number3D.h"
 #include "UIManager.h"
-#include "inpact.h"
 
 //*****************************************************
 // マクロ定義
@@ -184,8 +183,6 @@ HRESULT CSelect::Init(void)
 	{
 		m_aContainerData[nCnt].fReSpawnTimer = RESPAWN_TIME;
 	}
-
-	CInpact::Create();
 
 	return S_OK;
 }
@@ -424,7 +421,7 @@ void CSelect::Update(void)
 	{
 		//CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		//CParticle::Create({ 0.0f, 300.0f, -400.0f }, CParticle::TYPE::TYPE_INJECTION_FIRE);
-		CInpact::Create();
+		CParticle::Create({ 0.0f, 200.0f, -400.0f }, CParticle::TYPE::TYPE_TOMATO_JUICE);
 	}
 
 	CDebugProc::GetInstance()->Print("\n参加人数[%d]\n", nJoinPlayer);
