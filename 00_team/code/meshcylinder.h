@@ -18,7 +18,7 @@
 //*****************************************************
 namespace meshCylinder
 {
-const float  MESH_RADIUS = 500.0f;	// 半径
+const float  MESH_RADIUS = 100.0f;	// 半径
 const int MESH_U = 16;	// 横の分割数
 const int MESH_V = 1;	// 縦の分割数
 const int SPLIT_TEX_U = 3;	// 横のテクスチャ分割数
@@ -72,6 +72,9 @@ public:
 	void SetIdxTexture(int nIdx) { m_nIdxTexture = nIdx; }
 	void SetNumMeshU(int nNumMesh) { m_meshCylinder.nMeshU = nNumMesh; }
 	void SetNumMeshV(int nNumMesh) { m_meshCylinder.nMeshV = nNumMesh; }
+	MeshCylinder *GetMeshCylinder(void) { return &m_meshCylinder; }
+	void SetCol(D3DXCOLOR col);
+	D3DXCOLOR GetCol(void) { return m_col; }
 
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ

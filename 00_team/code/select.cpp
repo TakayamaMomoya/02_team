@@ -424,7 +424,7 @@ void CSelect::Update(void)
 	{
 		//CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		//CParticle::Create({ 0.0f, 300.0f, -400.0f }, CParticle::TYPE::TYPE_INJECTION_FIRE);
-		CParticle::Create({ 0.0f, 200.0f, -400.0f }, CParticle::TYPE::TYPE_TOMATO_JUICE);
+		CInpact::Create();
 	}
 
 	CDebugProc::GetInstance()->Print("\nQ‰Ál”[%d]\n", nJoinPlayer);

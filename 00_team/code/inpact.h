@@ -28,5 +28,16 @@ public:
 	void Draw(void);
 
 private:
+	struct SInfo
+	{
+		float fRadiusDiff;	// ”¼Œa‚É‚Ç‚ê‚¾‚¯·‚ğ‚Â‚¯‚é‚©
+		float fLife;	// õ–½
+		float fLifeInitial;	// ‰Šúõ–½
+	};
+
+	void SetVtx(void);
+	void ManageLife(void);
+
+	SInfo m_info;
 };
 #endif

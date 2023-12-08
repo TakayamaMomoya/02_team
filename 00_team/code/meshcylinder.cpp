@@ -31,7 +31,7 @@ CMeshCylinder::CMeshCylinder(int nPriority) : CObject(nPriority)
 	ZeroMemory(&m_meshCylinder, sizeof(m_meshCylinder));
 	m_pIdxBuff = nullptr;
 	m_pVtxBuff = nullptr;
-	m_col = { 0.0f,0.0f,0.0f,0.0f };
+	m_col = { 1.0f,1.0f,1.0f,1.0f };
 	m_nIdxTexture = -1;
 }
 
@@ -69,7 +69,7 @@ CMeshCylinder *CMeshCylinder::Create(int nMeshU,int nMeshV,int nTexU,int nTexV)
 }
 
 //=====================================================
-//初期化処理
+// 初期化処理
 //=====================================================
 HRESULT CMeshCylinder::Init(void)
 {
@@ -126,10 +126,6 @@ HRESULT CMeshCylinder::Init(void)
 
 	//最大頂点数計算
 	m_meshCylinder.nNumVtx = (nMeshU + 1) * (nMeshV + 1);
-
-	//変数初期化
-	m_meshCylinder.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_meshCylinder.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	//計算用変数
 	float fRot;
@@ -232,6 +228,34 @@ void CMeshCylinder::Uninit(void)
 void CMeshCylinder::Update(void)
 {
 
+}
+
+//=====================================================
+// 色設定
+//=====================================================
+void CMeshCylinder::SetCol(D3DXCOLOR col)
+{
+	if (m_pVtxBuff == nullptr)
+	{
+		return;
+	}
+
+	m_col = col;
+
+	//頂点情報のポインタ
+	VERTEX_3D *pVtx;
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	for (int nCnt = 0; nCnt < m_meshCylinder.nNumVtx; nCnt++)
+	{
+		//頂点カラーの設定
+		pVtx[nCnt].col = m_col;
+	}
+
+	//頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
 }
 
 //=====================================================

@@ -9,6 +9,7 @@
 // インクルード
 //*****************************************************
 #include "inpact.h"
+#include "manager.h"
 
 //*****************************************************
 // 定数定義
@@ -18,6 +19,7 @@ namespace
 const int MESH_U = 32;	// 横の分割数
 const int MESH_V = 1;	// 縦の分割数
 const float MESH_HEIGHT = 50.0f;	// メッシュの高さ
+const float INITIAL_LIFE = 0.2f;	// 初期寿命
 }
 
 //=====================================================
@@ -25,7 +27,7 @@ const float MESH_HEIGHT = 50.0f;	// メッシュの高さ
 //=====================================================
 CInpact::CInpact(int nPriority) : CMeshCylinder(nPriority)
 {
-
+	ZeroMemory(&m_info, sizeof(SInfo));
 }
 
 //=====================================================
@@ -68,6 +70,13 @@ HRESULT CInpact::Init(void)
 	// 継承クラスの初期化
 	CMeshCylinder::Init();
 
+	m_info.fRadiusDiff = 40.0f;
+	m_info.fLife = INITIAL_LIFE;
+	m_info.fLifeInitial = INITIAL_LIFE;
+
+	// 頂点位置設定
+	SetVtx();
+
 	return S_OK;
 }
 
@@ -85,6 +94,121 @@ void CInpact::Uninit(void)
 void CInpact::Update(void)
 {
 	CMeshCylinder::Update();
+
+	// 体力管理
+	ManageLife();
+
+	// 頂点設定
+	SetVtx();
+}
+
+//=====================================================
+// 頂点位置の設定
+//=====================================================
+void CInpact::SetVtx(void)
+{
+	// 情報取得
+	MeshCylinder *pMesh = GetMeshCylinder();
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff = GetVtxBuff();
+
+	if (pMesh == nullptr || pVtxBuff == nullptr)
+	{
+		return;
+	}
+
+	int nMeshU = pMesh->nMeshU;
+	int nMeshV = pMesh->nMeshV;
+	float fRadius = pMesh->fRadius;
+	float fHeight = pMesh->fHeight;
+
+	//頂点情報のポインタ
+	VERTEX_3D *pVtx;
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//計算用変数
+	float fRot;
+	D3DXVECTOR3 VecRot;
+
+	//頂点情報==================================================================================
+	for (int nCountV = 0; nCountV < nMeshV + 1; nCountV++)
+	{//頂点座標の設定
+		// 半径の設定
+		if (nCountV == 0)
+		{
+			fRadius -= m_info.fRadiusDiff;
+		}
+		else
+		{
+			fRadius += m_info.fRadiusDiff;
+		}
+
+		for (int nCountU = 0; nCountU < nMeshU + 1; nCountU++)
+		{
+			//角度算出
+			fRot = nCountU * (D3DX_PI / nMeshU) * 2;
+
+			pVtx[nCountV * (nMeshU + 1) + nCountU].pos.x = (float)sin(fRot) * fRadius;
+			pVtx[nCountV * (nMeshU + 1) + nCountU].pos.y = (nMeshV - nCountV) * fHeight;
+			pVtx[nCountV * (nMeshU + 1) + nCountU].pos.z = cosf(fRot) * fRadius;
+
+			VecRot = D3DXVECTOR3
+			(
+				pVtx[nCountV * (nMeshU + 1) + nCountU].pos.x,
+				0.0f,
+				pVtx[nCountV * (nMeshU + 1) + nCountU].pos.z
+			);
+
+			//ベクトル正規化
+			D3DXVec3Normalize(&VecRot, &VecRot);
+
+			//法線ベクトルの設定
+			pVtx[nCountV * (nMeshU + 1) + nCountU].nor = VecRot;
+		}
+	}
+
+	//頂点バッファをアンロック
+	pVtxBuff->Unlock();
+}
+
+//=====================================================
+// ライフの管理
+//=====================================================
+void CInpact::ManageLife(void)
+{
+	// 半径取得
+	MeshCylinder *pMesh = GetMeshCylinder();
+
+	if (pMesh == nullptr)
+	{
+		return;
+	}
+
+	float fRadius = pMesh->fRadius;
+
+	// 半径を加算する
+	fRadius += 15.0f;
+	SetRadius(fRadius);
+
+	// 寿命を減らす
+	float fTick = CManager::GetTick();
+
+	m_info.fLife -= fTick;
+
+	// 色の設定
+	float fRate = m_info.fLife / m_info.fLifeInitial;
+
+	D3DXCOLOR col = GetCol();
+
+	col.a = fRate;
+
+	SetCol(col);
+
+	if (m_info.fLife <= 0.0f)
+	{
+		Uninit();
+	}
 }
 
 //=====================================================
