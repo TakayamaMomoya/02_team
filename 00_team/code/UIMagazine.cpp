@@ -9,6 +9,7 @@
 // インクルード
 //*****************************************************
 #include "UIMagazine.h"
+#include "UI.h"
 #include "number.h"
 
 #include "texture.h"
@@ -47,28 +48,44 @@ CUIMagazine::~CUIMagazine()
 //=====================================================
 CUIMagazine* CUIMagazine::Create(int nIdx)
 {
-	CUIMagazine *pUIMagazine = nullptr;
+	CUIMagazine *pMagazine = nullptr;
 
-	pUIMagazine = new CUIMagazine;
+	pMagazine = new CUIMagazine;
 
-	if (pUIMagazine != nullptr)
+	if (pMagazine != nullptr)
 	{
 		// プレイヤー番号を設定
-		pUIMagazine->m_info.nIdxPlayer = nIdx;
+		pMagazine->m_info.nIdxPlayer = nIdx;
+
+		// 装弾数枠の生成処理
+		CUI* pUIMagazineFrame = CUI::Create();
+
+		if (pUIMagazineFrame != nullptr)
+		{
+			pMagazine->m_pUIMagazineFrame = pUIMagazineFrame;
+		}
+
+		// 装弾数の生成処理
+		CUI* pUIMagazine = CUI::Create();
+
+		if (pUIMagazine != nullptr)
+		{
+			pMagazine->m_pUIMagazine = pUIMagazine;
+		}
 
 		// 装弾数（数字）の生成処理
 		CNumber* pDigMag = CNumber::Create(DIG_MAG_NUM, 0);
 
 		if (pDigMag != nullptr)
 		{
-			pUIMagazine->m_pNumDig = pDigMag;
+			pMagazine->m_pNumDig = pDigMag;
 		}
 
 		// 装弾数UIの初期化
-		pUIMagazine->Init();
+		pMagazine->Init();
 	}
 
-	return pUIMagazine;
+	return pMagazine;
 }
 
 //=====================================================
@@ -76,9 +93,15 @@ CUIMagazine* CUIMagazine::Create(int nIdx)
 //=====================================================
 HRESULT CUIMagazine::Init(void)
 {
-	if (m_pNumDig != nullptr)
+	if (m_pNumDig != nullptr &&
+		m_pUIMagazine != nullptr &&
+		m_pUIMagazineFrame != nullptr)
 	{
 		// 初期値設定処理
+		m_pUIMagazineFrame->SetSize(50.0f, 100.0f);
+		m_pUIMagazineFrame->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pUIMagazine->SetSize(50.0f, 100.0f);
+		m_pUIMagazine->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		m_pNumDig->SetSizeAll(50.0f, 100.0f);
 		m_pNumDig->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
@@ -91,8 +114,12 @@ HRESULT CUIMagazine::Init(void)
 //=====================================================
 void CUIMagazine::Uninit(void)
 {
-	if (m_pNumDig != nullptr)
+	if (m_pNumDig != nullptr &&
+		m_pUIMagazine != nullptr &&
+		m_pUIMagazineFrame != nullptr)
 	{
+		m_pUIMagazineFrame->Uninit();
+		m_pUIMagazine->Uninit();
 		m_pNumDig->Uninit();
 	}
 
@@ -121,37 +148,84 @@ void CUIMagazine::Draw(void)
 //=====================================================
 // 位置設定処理
 //=====================================================
-void CUIMagazine::SetPosition(D3DXVECTOR3 pos)
+void CUIMagazine::SetPosition(D3DXVECTOR3 posUIMagazine,D3DXVECTOR3 posUIMagazineFrame,D3DXVECTOR3 posNum)
 {
-	if (m_pNumDig != nullptr)
+	if (m_pNumDig != nullptr &&
+		m_pUIMagazine != nullptr &&
+		m_pUIMagazineFrame != nullptr)
 	{
-		m_info.pos = pos;
-		m_pNumDig->SetPosition(pos);
+		m_info.posUIMagazine = posUIMagazine;
+		m_info.posUIMagazineFrame = posUIMagazineFrame;
+		m_info.posNum = posNum;
+
+		m_pUIMagazine->SetPosition(posUIMagazine);
+		m_pUIMagazineFrame->SetPosition(posUIMagazineFrame);
+		m_pNumDig->SetPosition(posNum);
+
+		m_pUIMagazine->SetVtx();
+		m_pUIMagazineFrame->SetVtx();
 	}
 }
 
 //=====================================================
 // 大きさ設定処理
 //=====================================================
-void CUIMagazine::SetSize(float width, float height)
+void CUIMagazine::SetSize(float width, float height, float widthNum, float heightNum)
 {
 	if (m_pNumDig != nullptr)
 	{
 		m_info.fWidth = width;
 		m_info.fHeight = height;
-		m_pNumDig->SetSizeAll(width, height);
+
+		m_info.fWidthNum = widthNum;
+		m_info.fHeightNum = heightNum;
+
+		m_pUIMagazine->SetSize(width, height);
+		m_pUIMagazineFrame->SetSize(width, height);
+		m_pNumDig->SetSizeAll(widthNum, heightNum);
+
+		m_pUIMagazine->SetVtx();
+		m_pUIMagazineFrame->SetVtx();
 	}
 }
 
 //=====================================================
 // 色設定処理
 //=====================================================
-void CUIMagazine::SetCol(D3DXCOLOR col)
+void CUIMagazine::SetCol(D3DXCOLOR colMagazine, D3DXCOLOR colMagazineFrame, D3DXCOLOR colNum)
 {
 	if (m_pNumDig != nullptr)
 	{
-		m_info.col = col;
-		m_pNumDig->SetColor(col);
+		m_info.colMagazine = colMagazine;
+		m_info.colMagazineFrame = colMagazineFrame;
+		m_info.colNum = colNum;
+
+		m_pUIMagazine->SetCol(colMagazine);
+		m_pUIMagazineFrame->SetCol(colMagazineFrame);
+		m_pNumDig->SetColor(colNum);
+	}
+}
+
+//=====================================================
+// テクスチャ設定処理
+//=====================================================
+void CUIMagazine::SetTexture(const char* pFileName)
+{
+	if (m_pUIMagazine != nullptr &&
+		m_pUIMagazineFrame != nullptr)
+	{
+		CTexture* pTexture = CTexture::GetInstance();
+
+		if (pTexture != nullptr)
+		{
+			m_info.nIdxTexture = pTexture->Regist(pFileName);
+		}
+
+		m_pUIMagazine->SetIdxTexture(m_info.nIdxTexture);
+		m_pUIMagazineFrame->SetIdxTexture(m_info.nIdxTexture);
+
+		m_pUIMagazine->SetVtx();
+		m_pUIMagazineFrame->SetVtx();
 	}
 }
 

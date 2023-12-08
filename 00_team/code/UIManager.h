@@ -44,7 +44,6 @@ public:
 
 private:
 
-	void CreateFrame(int nIdx);
 	void CreateFace(int nIdx);
 	void CreateWeapon(int nIdx);
 	void CreateLife(int nIdx);
@@ -59,9 +58,9 @@ private:
 		CWeapon::TYPE weaponType;	// 武器の種類
 		bool bIsWeaponNull;			// 武器の有無
 
-		CUI *pUiFrame;				// フレームUI
 		CUI *pUiFace;				// 顔のUI			
-		CUI *pUiWeapon;				// 武器のUI			
+		CUI *pUiWeapon;				// 武器のUI
+
 		CLife *pLife;				// ライフUI
 		CUIMagazine* pUIMagazine;	// 装弾数UI
 	};

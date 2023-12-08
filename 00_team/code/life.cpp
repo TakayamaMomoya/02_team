@@ -16,18 +16,13 @@
 #include "player.h"
 #include "playerManager.h"
 
-//*****************************************************
-// 定数定義
-//*****************************************************
-namespace
-{
-}
 //=====================================================
 // コンストラクタ
 //=====================================================
 CLife::CLife(int nPriority) : CObject(nPriority)
 {
-	m_pUi = NULL;
+	m_pUILife = nullptr;
+	m_pUILifeFrame = nullptr;
 	ZeroMemory(&m_info, sizeof(m_info));
 }
 
@@ -44,19 +39,23 @@ CLife::~CLife()
 //=====================================================
 CLife *CLife::Create(int nIdx)
 {
-	CLife *pLife = nullptr;
-
-	pLife = new CLife;
+	CLife *pLife = new CLife;
 
 	if (pLife != nullptr)
 	{
 		// プレイヤー番号を設定
 		pLife->m_info.nIdxPlayer = nIdx;
 
-		if (pLife->m_pUi == NULL)
+		if (pLife->m_pUILifeFrame == nullptr)
 		{
-			// UIオブジェクトの生成処理
-			pLife->m_pUi = CUI::Create();
+			// ライフ枠の生成処理
+			pLife->m_pUILifeFrame = CUI::Create();
+		}
+
+		if (pLife->m_pUILife == nullptr)
+		{
+			// ライフの生成処理
+			pLife->m_pUILife = CUI::Create();
 		}
 
 		// ライフの初期化
@@ -71,11 +70,14 @@ CLife *CLife::Create(int nIdx)
 //=====================================================
 HRESULT CLife::Init(void)
 {
-	if (m_pUi != nullptr)
+	if (m_pUILife != nullptr &&
+		m_pUILifeFrame != nullptr)
 	{
 		// 初期値設定処理
-		m_pUi->SetSize(50.0f, 100.0f);
-		m_pUi->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pUILife->SetSize(50.0f, 100.0f);
+		m_pUILife->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pUILifeFrame->SetSize(50.0f, 100.0f);
+		m_pUILifeFrame->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 
 	return S_OK;
@@ -86,9 +88,11 @@ HRESULT CLife::Init(void)
 //=====================================================
 void CLife::Uninit(void)
 {
-	if (m_pUi != NULL)
+	if (m_pUILife != nullptr &&
+		m_pUILifeFrame != nullptr)
 	{
-		m_pUi->Uninit();
+		m_pUILife->Uninit();
+		m_pUILifeFrame->Uninit();
 	}
 
 	Release();
@@ -137,9 +141,12 @@ void CLife::SetLife(void)
 			float fMaxLife = pPlayerManager->GetPlayerParam().fInitialLife;
 
 			// ゲージの消費量を計算
-			m_info.fHeightSub = (1.0f - (fLife / fMaxLife)) * m_info.fHeight;
+			float fLifeRatio = (1.0f - (fLife / fMaxLife));
+			m_info.fHeightSub = fLifeRatio * m_info.fHeight;
 
+			m_pUILife->SetTex(D3DXVECTOR2(0.0f, fLifeRatio), D3DXVECTOR2(1.0f, 1.0f));
 			SetVtxGage();
+			m_pUILifeFrame->SetVtx();
 		}
 		else
 		{
@@ -150,9 +157,12 @@ void CLife::SetLife(void)
 			float fMaxLife = pPlayerManager->GetPlayerParam().fInitialLife;
 
 			// ゲージの消費量を計算
-			m_info.fHeightSub = (1.0f - (fLife / fMaxLife)) * m_info.fHeight;
+			float fLifeRatio = (1.0f - (fLife / fMaxLife));
+			m_info.fHeightSub = fLifeRatio * m_info.fHeight;
 
+			m_pUILife->SetTex(D3DXVECTOR2(0.0f, fLifeRatio), D3DXVECTOR2(1.0f, 1.0f));
 			SetVtxGage();
+			m_pUILifeFrame->SetVtx();
 		}
 	}
 }
@@ -160,15 +170,20 @@ void CLife::SetLife(void)
 //=====================================================
 // 位置設定処理
 //=====================================================
-void CLife::SetPosition(D3DXVECTOR3 pos)
-{
-	if (m_pUi != nullptr)
-	{
-		m_info.pos = pos;
+void CLife::SetPosition(D3DXVECTOR3 posLife, D3DXVECTOR3 posLifeFrame)
 
-		m_pUi->SetPosition(pos);
+{
+	if (m_pUILife != nullptr &&
+		m_pUILifeFrame != nullptr)
+	{
+		m_info.posLife = posLife;
+		m_info.posLifeFrame = posLifeFrame;
+		
+		m_pUILife->SetPosition(posLife);
+		m_pUILifeFrame->SetPosition(posLifeFrame);
 
 		SetVtxGage();
+		m_pUILifeFrame->SetVtx();
 	}
 }
 
@@ -177,44 +192,59 @@ void CLife::SetPosition(D3DXVECTOR3 pos)
 //=====================================================
 void CLife::SetSize(float width, float height)
 {
-	if (m_pUi != NULL)
+	if (m_pUILife != nullptr &&
+		m_pUILifeFrame != nullptr)
 	{
 		m_info.fWidth = width;
 		m_info.fHeight = height;
 
-		m_pUi->SetSize(width, height);
+		m_pUILife->SetSize(width, height);
+		m_pUILifeFrame->SetSize(width, height);
 
 		SetVtxGage();
+		m_pUILifeFrame->SetVtx();
 	}
 }
 
 //=====================================================
 // 色設定処理
 //=====================================================
-void CLife::SetCol(D3DXCOLOR col)
+void CLife::SetCol(D3DXCOLOR colLife, D3DXCOLOR colLifeFrame)
 {
-	if (m_pUi != NULL)
+	if (m_pUILife != nullptr &&
+		m_pUILifeFrame != nullptr)
 	{
-		m_info.col = col;
+		m_info.colLife = colLife;
+		m_info.colLifeFrame = colLifeFrame;
 
-		m_pUi->SetCol(col);
+		m_pUILife->SetCol(colLife);
+		m_pUILifeFrame->SetCol(colLifeFrame);
 
 		SetVtxGage();
+		m_pUILifeFrame->SetVtx();
 	}
 }
 
 //=====================================================
 // テクスチャ設定処理
 //=====================================================
-void CLife::SetTexture(const char *pFileName)
+void CLife::SetTexture(const char* pFileName)
 {
-	m_info.nIdxTexture = CTexture::GetInstance()->Regist(pFileName);
-
-	if (m_pUi != nullptr)
+	if (m_pUILife != nullptr &&
+		m_pUILifeFrame != nullptr)
 	{
-		m_pUi->SetIdxTexture(m_info.nIdxTexture);
+		CTexture* pTexture = CTexture::GetInstance();
+
+		if (pTexture != nullptr)
+		{
+			m_info.nIdxTexture = pTexture->Regist(pFileName);
+		}
+
+		m_pUILife->SetIdxTexture(m_info.nIdxTexture);
+		m_pUILifeFrame->SetIdxTexture(m_info.nIdxTexture);
 
 		SetVtxGage();
+		m_pUILifeFrame->SetVtx();
 	}
 }
 
@@ -226,12 +256,12 @@ void CLife::SetVtxGage(void)
 	// 頂点情報のポインタ
 	VERTEX_2D* pVtx;
 
-	if (m_pUi != nullptr)
+	if (m_pUILife != nullptr)
 	{
-		if (m_pUi->GetVtxBuff() != nullptr)
+		if (m_pUILife->GetVtxBuff() != nullptr)
 		{
 			// 頂点バッファをロックし、頂点情報へのポインタを取得
-			m_pUi->GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
+			m_pUILife->GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
 
 			// 対角線の角度取得
 			float fAngleUp = atan2f(m_info.fWidth, m_info.fHeight);
@@ -248,31 +278,32 @@ void CLife::SetVtxGage(void)
 			// 頂点座標の設定
 			pVtx[0].pos = D3DXVECTOR3
 			(
-				m_info.pos.x + sinf(0.0f - D3DX_PI + fAngleUp) * fLengthUp,
-				m_info.pos.y + cosf(0.0f - D3DX_PI + fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
+				m_info.posLife.x + sinf(0.0f - D3DX_PI + fAngleUp) * fLengthUp,
+				m_info.posLife.y + cosf(0.0f - D3DX_PI + fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
 				0.0f
 			);
 			pVtx[1].pos = D3DXVECTOR3
 			(
-				m_info.pos.x + sinf(0.0f + D3DX_PI - fAngleUp) * fLengthUp,
-				m_info.pos.y + cosf(0.0f + D3DX_PI - fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
+				m_info.posLife.x + sinf(0.0f + D3DX_PI - fAngleUp) * fLengthUp,
+				m_info.posLife.y + cosf(0.0f + D3DX_PI - fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
 				0.0f
 			);
 			pVtx[2].pos = D3DXVECTOR3
 			(
-				m_info.pos.x + sinf(0.0f - fAngleUp) * fLengthUp,
-				m_info.pos.y + cosf(0.0f - fAngleUp),
+				m_info.posLife.x + sinf(0.0f - fAngleUp) * fLengthUp,
+				m_info.posLife.y + cosf(0.0f - fAngleUp),
 				0.0f
 			);
 			pVtx[3].pos = D3DXVECTOR3
 			(
-				m_info.pos.x + sinf(0.0f + fAngleUp) * fLengthUp,
-				m_info.pos.y + cosf(0.0f + fAngleUp),
+				m_info.posLife.x + sinf(0.0f + fAngleUp) * fLengthUp,
+				m_info.posLife.y + cosf(0.0f + fAngleUp),
 				0.0f
 			);
 
+
 			// 頂点バッファのアンロック
-			m_pUi->GetVtxBuff()->Unlock();
+			m_pUILife->GetVtxBuff()->Unlock();
 		}
 	}
 }
