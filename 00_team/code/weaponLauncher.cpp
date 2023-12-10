@@ -10,7 +10,7 @@
 //*****************************************************
 #include "weaponLauncher.h"
 #include "inputjoypad.h"
-#include "bullet.h"
+#include "missile.h"
 #include "player.h"
 #include "sound.h"
 #include "animEffect3D.h"
@@ -126,7 +126,7 @@ void CLauncher::Attack(void)
 			CWeapon::SInfo info = GetInfo();
 
 			// ’e‚ð”­ŽË
-			CBullet::Create(posMuzzle, -move, info.fLifeBullet, CBullet::TYPE_PLAYER, false, 2.0f, info.fDamage);
+			CMissile::Create(posMuzzle, -move);
 
 			CSound* pSound = CSound::GetInstance();
 

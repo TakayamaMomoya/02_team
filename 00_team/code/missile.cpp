@@ -11,13 +11,16 @@
 #include "missile.h"
 #include "manager.h"
 #include "renderer.h"
+#include "object3D.h"
+#include "objectX.h"
 
 //*****************************************************
 // 定数定義
 //*****************************************************
 namespace
 {
-	const int EDGE_ORBIT = 20;	// 軌跡の辺の数
+	const char* MISSILE_MODEL_PATH = "data\\MODEL\\weapon\\atomic.x";	// ミサイル本体のモデルパス
+	const float INITIAL_LIFE = 1.0f;	// 初期体力
 }
 
 //*****************************************************
@@ -30,13 +33,8 @@ int CMissile::m_nNumAll = 0;	// 総数
 //=====================================================
 CMissile::CMissile(int nPriority) : CObject(nPriority)
 {
-	m_fLife = 0.0f;
-	m_fDamage = 0.0f;
-	m_move = { 0.0f,0.0f,0.0f };
-	m_rot = { 0.0f,0.0f,0.0f };
-	m_pos = { 0.0f,0.0f,0.0f };
-	m_posOld = { 0.0f,0.0f,0.0f };
-	m_pCollisionSphere = nullptr;
+	ZeroMemory(&m_info, sizeof(SInfo));
+	ZeroMemory(&m_infoVisual, sizeof(SInfoVisual));
 
 	// 総数カウントアップ
 	m_nNumAll++;
@@ -55,7 +53,40 @@ CMissile::~CMissile()
 //=====================================================
 HRESULT CMissile::Init(void)
 {
+	// 見た目の生成
+	CreateVisual();
+
+	m_info.fLife = INITIAL_LIFE;
+
 	return S_OK;
+}
+
+//=====================================================
+// 見た目の生成
+//=====================================================
+void CMissile::CreateVisual(void)
+{
+	if (m_infoVisual.pMissile == nullptr)
+	{
+		m_infoVisual.pMissile = CObjectX::Create();
+
+		if (m_infoVisual.pMissile != nullptr)
+		{
+			// モデルの読込
+			int nIdx = CModel::Load((char*)MISSILE_MODEL_PATH);
+			m_infoVisual.pMissile->BindModel(nIdx);
+		}
+	}
+
+	if (m_infoVisual.pBackLight == nullptr)
+	{
+		m_infoVisual.pBackLight = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+		if (m_infoVisual.pBackLight != nullptr)
+		{
+
+		}
+	}
 }
 
 //=====================================================
@@ -63,14 +94,35 @@ HRESULT CMissile::Init(void)
 //=====================================================
 void CMissile::Uninit(void)
 {
-	if (m_pCollisionSphere != nullptr)
-	{// 当たり判定の消去
-		m_pCollisionSphere->Uninit();
+	if (m_info.pCollisionSphere != nullptr)
+	{// 当たり判定の破棄
+		m_info.pCollisionSphere->Uninit();
 
-		m_pCollisionSphere = nullptr;
+		m_info.pCollisionSphere = nullptr;
 	}
 
+	// 見た目の破棄
+	DeleteVisual();
+
 	Release();
+}
+
+//=====================================================
+// 見た目の破棄
+//=====================================================
+void CMissile::DeleteVisual(void)
+{
+	if (m_infoVisual.pMissile != nullptr)
+	{
+		m_infoVisual.pMissile->Uninit();
+		m_infoVisual.pMissile = nullptr;
+	}
+
+	if (m_infoVisual.pBackLight != nullptr)
+	{
+		m_infoVisual.pBackLight->Uninit();
+		m_infoVisual.pBackLight = nullptr;
+	}
 }
 
 //=====================================================
@@ -84,18 +136,21 @@ void CMissile::Update(void)
 	// 寿命減衰
 	float fTIck = CManager::GetTick();
 
-	m_fLife -= fTIck;
+	m_info.fLife -= fTIck;
 
-	m_posOld = m_pos;
+	m_info.posOld = m_info.pos;
 
 	// 位置の更新
-	m_pos += m_move;
+	m_info.pos += m_info.move;
 
-	if (m_pCollisionSphere != nullptr)
+	// 見た目の追従
+	FollowVisual();
+
+	if (m_info.pCollisionSphere != nullptr)
 	{// 当たり判定の管理
 		// 敵との当たり判定
 
-		if (m_pCollisionSphere->TriggerCube(CCollision::TAG_BLOCK))
+		if (m_info.pCollisionSphere->TriggerCube(CCollision::TAG_BLOCK))
 		{// ブロックとの当たり判定
 			Death();
 		}
@@ -103,7 +158,7 @@ void CMissile::Update(void)
 
 	if (bHit == false)
 	{
-		if (m_fLife < 0)
+		if (m_info.fLife < 0)
 		{// 自分の削除
 			Death();
 		}
@@ -111,6 +166,21 @@ void CMissile::Update(void)
 	else
 	{
 		Death();
+	}
+}
+
+//=====================================================
+// 見た目の追従
+//=====================================================
+void CMissile::FollowVisual(void)
+{
+	D3DXVECTOR3 pos = GetPosition();
+	D3DXVECTOR3 rot = m_info.rot;
+
+	if (m_infoVisual.pMissile != nullptr)
+	{
+		m_infoVisual.pMissile->SetPosition(pos);
+		m_infoVisual.pMissile->SetRot(rot);
 	}
 }
 
@@ -134,20 +204,20 @@ void CMissile::Draw(void)
 	D3DXMATRIX mtxRot, mtxTrans;
 
 	//ワールドマトリックス初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
+	D3DXMatrixIdentity(&m_info.mtxWorld);
 
 	//向きを反映
 	D3DXMatrixRotationYawPitchRoll(&mtxRot,
-		m_rot.y, m_rot.x, m_rot.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
+		m_info.rot.y, m_info.rot.x, m_info.rot.z);
+	D3DXMatrixMultiply(&m_info.mtxWorld, &m_info.mtxWorld, &mtxRot);
 
 	//位置を反映
 	D3DXMatrixTranslation(&mtxTrans,
-		m_pos.x, m_pos.y, m_pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+		m_info.pos.x, m_info.pos.y, m_info.pos.z);
+	D3DXMatrixMultiply(&m_info.mtxWorld, &m_info.mtxWorld, &mtxTrans);
 
 	//ワールドマトリックス設定
-	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
+	pDevice->SetTransform(D3DTS_WORLD, &m_info.mtxWorld);
 }
 
 //=====================================================
@@ -163,20 +233,20 @@ CMissile *CMissile::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move)
 
 		if (pMissile != nullptr)
 		{
-			pMissile->m_move = move;
-			pMissile->m_pos = pos;
-			pMissile->m_posOld = pos;
+			pMissile->m_info.move = move;
+			pMissile->m_info.pos = pos;
+			pMissile->m_info.posOld = pos;
 
-			if (pMissile->m_pCollisionSphere == nullptr)
+			if (pMissile->m_info.pCollisionSphere == nullptr)
 			{// 当たり判定生成
-				pMissile->m_pCollisionSphere = CCollisionSphere::Create(CCollision::TAG_PLAYERBULLET, CCollision::TYPE_SPHERE, pMissile);
+				pMissile->m_info.pCollisionSphere = CCollisionSphere::Create(CCollision::TAG_PLAYERBULLET, CCollision::TYPE_SPHERE, pMissile);
 			}
 
-			if (pMissile->m_pCollisionSphere != nullptr)
+			if (pMissile->m_info.pCollisionSphere != nullptr)
 			{
-				pMissile->m_pCollisionSphere->SetPosition(pMissile->m_pos);
+				pMissile->m_info.pCollisionSphere->SetPosition(pMissile->m_info.pos);
 
-				pMissile->m_pCollisionSphere->SetRadius(20.0f);
+				pMissile->m_info.pCollisionSphere->SetRadius(20.0f);
 			}
 
 			// 初期化処理

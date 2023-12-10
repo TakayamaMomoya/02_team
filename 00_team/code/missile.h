@@ -24,6 +24,8 @@
 class CCollisionSphere;
 class COrbit;
 class CCollisionSphere;
+class CObjectX;
+class CObject3D;
 
 //*****************************************************
 // クラスの定義
@@ -40,21 +42,35 @@ public:
 	void Update(void);
 	void Draw(void);
 	static int GetNumAll(void) { return m_nNumAll; }
-	D3DXVECTOR3 GetPosition(void) { return m_pos; }
-	D3DXVECTOR3 GetPositionOld(void) { return m_posOld; }
+	D3DXVECTOR3 GetPosition(void) { return m_info.pos; }
+	D3DXVECTOR3 GetPositionOld(void) { return m_info.posOld; }
 
 private:
+	struct SInfoVisual
+	{
+		CObjectX *pMissile;	// ミサイル本体の見た目
+		CObject3D *pBackLight;	// 後方の光
+	};
+	struct SInfo
+	{
+		D3DXMATRIX mtxWorld;	// ワールドマトリックス
+		D3DXVECTOR3 move;	// 移動量
+		D3DXVECTOR3 rot;	// 向き
+		D3DXVECTOR3 pos;	// 位置
+		D3DXVECTOR3 posOld;	// 前回の位置
+		float fLife;	// 寿命
+		float fSpeed;	// 速度
+		CCollisionSphere *pCollisionSphere;	// 球の当たり判定
+		float fDamage;	// 与ダメージ
+	};
+	void CreateVisual(void);
+	void FollowVisual(void);
 	void Death(void);
+	void DeleteVisual(void);
 
-	D3DXMATRIX m_mtxWorld;	// ワールドマトリックス
-	D3DXVECTOR3 m_move;	// 移動量
-	D3DXVECTOR3 m_rot;	// 向き
-	D3DXVECTOR3 m_pos;	// 位置
-	D3DXVECTOR3 m_posOld;	// 前回の位置
-	float m_fLife;	// 寿命
+	SInfo m_info;	// 情報
+	SInfoVisual m_infoVisual;	// 見た目の情報
 	static int m_nNumAll;	// 総数
-	CCollisionSphere *m_pCollisionSphere;	// 球の当たり判定
-	float m_fDamage;	// 与ダメージ
 };
 
 #endif
