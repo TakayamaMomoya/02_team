@@ -254,7 +254,7 @@ void CMissile::Death(void)
 
 	if (pAnimManager != nullptr)
 	{
-		CAnim3D *pAnim3D = pAnimManager->CreateEffect(pos, CAnimEffect3D::TYPE::TYPE_BLOOD);
+		CAnim3D *pAnim3D = pAnimManager->CreateEffect(pos, CAnimEffect3D::TYPE::TYPE_EXPLOSION);
 
 		if (pAnim3D != nullptr)
 		{
