@@ -286,7 +286,7 @@ void CGoal::DetectPlayer(void)
 
 	if (m_pCollisionGoal != nullptr)
 	{
-		if (m_pCollisionGoal->SphereCollision(CCollision::TAG_PLAYER))
+		if (m_pCollisionGoal->OnEnter(CCollision::TAG_PLAYER))
 		{
 			// ゴールタイマーの生成
 			CGoalTimer::Create();

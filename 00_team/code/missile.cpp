@@ -27,7 +27,9 @@ namespace
 	const float INITIAL_LIFE = 1.0f;	// 初期体力
 	const float INITIAL_SPEED = 12.0f;	// 初期速度
 	const float INITIAL_SPEED_MAX = 12.0f;	// 初期の最大速度
-	const float INITIAL_RADIUS_EXPLOSION = 50.0f;	// 初期爆発半径
+	const float INITIAL_RADIUS_FUZE = 70.0f;	// 初期起爆半径
+	const float INITIAL_RADIUS_EXPLOSION = 200.0f;	// 初期爆発半径
+	const float INITIAL_DAMAGE = 10.0f;	// 初期ダメージ
 }
 
 //*****************************************************
@@ -65,7 +67,13 @@ HRESULT CMissile::Init(void)
 
 	m_info.fLife = INITIAL_LIFE;
 	m_info.fSpeed = INITIAL_SPEED;
-	m_info.fRadiusExplosion = INITIAL_RADIUS_EXPLOSION;
+	m_info.fRadiusExplosion = INITIAL_RADIUS_FUZE;
+	m_info.fDamage = INITIAL_DAMAGE;
+
+	if (m_info.pCollisionSphere != nullptr)
+	{
+		m_info.pCollisionSphere->SetRadius(m_info.fRadiusExplosion);
+	}
 
 	return S_OK;
 }
@@ -164,28 +172,29 @@ void CMissile::Update(void)
 		m_info.pCollisionSphere->SetPosition(pos);
 
 		// 敵との当たり判定
-		if (m_info.pCollisionSphere->SphereCollision(CCollision::TAG_ENEMY))
+		if (m_info.pCollisionSphere->OnEnter(CCollision::TAG_ENEMY))
 		{// 対象との当たり判定
-			CObject *pObj = m_info.pCollisionSphere->GetOther();
+			bHit = true;
 
-			if (pObj != nullptr)
-			{
+			Death();
+		}
+		else
+		{
+			if (m_info.pCollisionSphere->TriggerCube(CCollision::TAG_BLOCK))
+			{// ブロックとの当たり判定
 				bHit = true;
 
-				// 当たったオブジェクトのヒット処理
-				pObj->Hit(m_info.fDamage);
+				Death();
 			}
-		}
-
-		if (m_info.pCollisionSphere->TriggerCube(CCollision::TAG_BLOCK))
-		{// ブロックとの当たり判定
-			Death();
 		}
 	}
 
-	if (m_info.fLife < 0)
-	{// 寿命での削除
-		Death();
+	if (bHit == false)
+	{
+		if (m_info.fLife < 0)
+		{// 寿命での削除
+			Death();
+		}
 	}
 }
 
@@ -249,9 +258,16 @@ void CMissile::Death(void)
 
 		if (pAnim3D != nullptr)
 		{
-			pAnim3D->SetSize(m_info.fRadiusExplosion, m_info.fRadiusExplosion);
+			pAnim3D->SetSize(INITIAL_RADIUS_EXPLOSION, INITIAL_RADIUS_EXPLOSION);
 			pAnim3D->EnableZtest(true);
 		}
+	}
+
+	// 爆発でダメージを与える
+	if (m_info.pCollisionSphere != nullptr)
+	{
+		m_info.pCollisionSphere->SetRadius(INITIAL_RADIUS_EXPLOSION);
+		m_info.pCollisionSphere->DamageAll(CCollision::TAG_ENEMY,m_info.fDamage);
 	}
 
 	// 終了処理

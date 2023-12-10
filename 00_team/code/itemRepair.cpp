@@ -359,7 +359,7 @@ void CItemRepair::CollisionRocket(void)
 
 	if (pCollisionSphere != nullptr)
 	{
-		m_bInRocket = pCollisionSphere->SphereCollision(CCollision::TAG_ROCKET);
+		m_bInRocket = pCollisionSphere->OnEnter(CCollision::TAG_ROCKET);
 
 		if (m_bInRocket)
 		{
