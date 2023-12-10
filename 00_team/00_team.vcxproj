@@ -92,6 +92,7 @@
     <ClCompile Include="code\skybox.cpp" />
     <ClCompile Include="code\sound.cpp" />
     <ClCompile Include="code\lift.cpp" />
+    <ClCompile Include="code\telop.cpp" />
     <ClCompile Include="code\texture.cpp" />
     <ClCompile Include="code\title.cpp" />
     <ClCompile Include="code\tutorial.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="code\skybox.h" />
     <ClInclude Include="code\sound.h" />
     <ClInclude Include="code\lift.h" />
+    <ClInclude Include="code\telop.h" />
     <ClInclude Include="code\texture.h" />
     <ClInclude Include="code\title.h" />
     <ClInclude Include="code\tutorial.h" />
