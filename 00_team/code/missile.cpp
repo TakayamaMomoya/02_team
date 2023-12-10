@@ -15,6 +15,8 @@
 #include "objectX.h"
 #include "particle.h"
 #include "debugproc.h"
+#include "animEffect3D.h"
+#include "anim3D.h"
 
 //*****************************************************
 // 定数定義
@@ -25,6 +27,7 @@ namespace
 	const float INITIAL_LIFE = 1.0f;	// 初期体力
 	const float INITIAL_SPEED = 12.0f;	// 初期速度
 	const float INITIAL_SPEED_MAX = 12.0f;	// 初期の最大速度
+	const float INITIAL_RADIUS_EXPLOSION = 50.0f;	// 初期爆発半径
 }
 
 //*****************************************************
@@ -62,6 +65,7 @@ HRESULT CMissile::Init(void)
 
 	m_info.fLife = INITIAL_LIFE;
 	m_info.fSpeed = INITIAL_SPEED;
+	m_info.fRadiusExplosion = INITIAL_RADIUS_EXPLOSION;
 
 	return S_OK;
 }
@@ -155,7 +159,23 @@ void CMissile::Update(void)
 
 	if (m_info.pCollisionSphere != nullptr)
 	{// 当たり判定の管理
+		D3DXVECTOR3 pos = GetPosition();
+
+		m_info.pCollisionSphere->SetPosition(pos);
+
 		// 敵との当たり判定
+		if (m_info.pCollisionSphere->SphereCollision(CCollision::TAG_ENEMY))
+		{// 対象との当たり判定
+			CObject *pObj = m_info.pCollisionSphere->GetOther();
+
+			if (pObj != nullptr)
+			{
+				bHit = true;
+
+				// 当たったオブジェクトのヒット処理
+				pObj->Hit(m_info.fDamage);
+			}
+		}
 
 		if (m_info.pCollisionSphere->TriggerCube(CCollision::TAG_BLOCK))
 		{// ブロックとの当たり判定
@@ -163,16 +183,8 @@ void CMissile::Update(void)
 		}
 	}
 
-
-	if (bHit == false)
-	{
-		if (m_info.fLife < 0)
-		{// 自分の削除
-			Death();
-		}
-	}
-	else
-	{
+	if (m_info.fLife < 0)
+	{// 寿命での削除
 		Death();
 	}
 }
@@ -224,6 +236,24 @@ void CMissile::FollowVisual(void)
 //=====================================================
 void CMissile::Death(void)
 {
+	D3DXVECTOR3 pos = GetPosition();
+
+	// パーティクルの生成
+
+	// アニメーションエフェクトの生成
+	CAnimEffect3D *pAnimManager = CAnimEffect3D::GetInstance();
+
+	if (pAnimManager != nullptr)
+	{
+		CAnim3D *pAnim3D = pAnimManager->CreateEffect(pos, CAnimEffect3D::TYPE::TYPE_BLOOD);
+
+		if (pAnim3D != nullptr)
+		{
+			pAnim3D->SetSize(m_info.fRadiusExplosion, m_info.fRadiusExplosion);
+			pAnim3D->EnableZtest(true);
+		}
+	}
+
 	// 終了処理
 	Uninit();
 }

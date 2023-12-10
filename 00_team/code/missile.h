@@ -47,6 +47,7 @@ public:
 	void SetPosition(D3DXVECTOR3 pos) { m_info.pos = pos; }
 	void SetMove(D3DXVECTOR3 move) { m_info.move = move; }
 	void SetRot(D3DXVECTOR3 rot) { m_info.rot = rot; }
+	void SetDamage(float fDamage) { m_info.fDamage = fDamage; }
 
 private:
 	struct SInfoVisual
@@ -65,6 +66,7 @@ private:
 		float fSpeed;	// 速度
 		CCollisionSphere *pCollisionSphere;	// 球の当たり判定
 		float fDamage;	// 与ダメージ
+		float fRadiusExplosion;	// 爆発半径
 	};
 	void CreateVisual(void);
 	void ManageMove(void);
