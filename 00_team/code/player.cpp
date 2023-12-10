@@ -929,6 +929,15 @@ void CPlayer::ManageMotion(void)
 				}
 
 				break;
+				// ÉâÉìÉ`ÉÉÅ[
+			case CWeapon::TYPE_LAUNCHER:
+
+				if (nMotionUpper != MOTION_RIFLE_ATTACK)
+				{
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_ATTACK);
+				}
+
+				break;
 			}
 		}
 		// âΩÇ‡Ç»Çµ

@@ -99,6 +99,7 @@
     <ClCompile Include="code\UIManager.cpp" />
     <ClCompile Include="code\universal.cpp" />
     <ClCompile Include="code\weapon.cpp" />
+    <ClCompile Include="code\weaponLauncher.cpp" />
     <ClCompile Include="code\weaponMachinegun.cpp" />
     <ClCompile Include="code\weaponMagnum.cpp" />
     <ClCompile Include="code\weaponManager.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="code\UIManager.h" />
     <ClInclude Include="code\universal.h" />
     <ClInclude Include="code\weapon.h" />
+    <ClInclude Include="code\weaponLauncher.h" />
     <ClInclude Include="code\weaponMachinegun.h" />
     <ClInclude Include="code\weaponMagnum.h" />
     <ClInclude Include="code\weaponManager.h" />

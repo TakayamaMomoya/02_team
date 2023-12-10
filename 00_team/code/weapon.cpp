@@ -14,6 +14,7 @@
 #include "weaponShotgun.h"
 #include "weaponRailgun.h"
 #include "weaponMinigun.h"
+#include "weaponLauncher.h"
 #include "weaponManager.h"
 #include "motion.h"
 #include "player.h"
@@ -96,8 +97,19 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 
 			break;
 		case CWeapon::TYPE_MINIGUN:
-			// レールガンの生成
+			// ミニガンの生成
 			pWeapon = new CMinigun;
+
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+				pSound->Play(pSound->LABEL_SE_GET_RAILGUN);
+			}
+
+			break;
+		case CWeapon::TYPE_LAUNCHER:
+			// ランチャーの生成
+			pWeapon = new CLauncher;
 
 			if (pSound != nullptr)
 			{
@@ -126,6 +138,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 				"data\\MODEL\\weapon\\shotgun.x",
 				"data\\MODEL\\weapon\\railgun.x",
 				"data\\MODEL\\weapon\\minigun_000.x",
+				"data\\MODEL\\weapon\\ak47.x",
 			};
 
 			int nIdx = CModel::Load(apPath[type]);
