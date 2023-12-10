@@ -163,6 +163,23 @@ void CWeaponManager::LoadParam(void)
 				}
 			}
 
+			if (strcmp(cTemp, "MINIGUNSET") == 0)
+			{// パラメーター読込開始
+				while (true)
+				{
+					// 文字読み込み
+					(void)fscanf(pFile, "%s", &cTemp[0]);
+
+					// 基底パラメーター読み込み
+					LoadBaseInfo(pFile, &cTemp[0], CWeapon::TYPE_MINIGUN);
+
+					if (strcmp(cTemp, "END_MINIGUNSET") == 0)
+					{// パラメーター読込終了
+						break;
+					}
+				}
+			}
+
 			if (strcmp(cTemp, "PROBSET") == 0)
 			{// 確率読込開始
 				int nCntProb = 0;

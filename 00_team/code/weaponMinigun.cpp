@@ -17,9 +17,12 @@
 #include "animEffect3D.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define BULLET_SPEED	(10.0f)	// 弾の速度
+namespace
+{
+	const float BULLET_SPEED = 10.0f;	// 弾の速度
+}
 
 //=====================================================
 // コンストラクタ
@@ -72,7 +75,6 @@ void CMinigun::Update(void)
 void CMinigun::Attack(void)
 {
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
-	
 
 	if (pJoypad == nullptr)
 	{
@@ -92,7 +94,7 @@ void CMinigun::Attack(void)
 
 			// マズルの位置を設定
 			D3DXMATRIX mtxMuzzle;
-			universal::SetOffSet(&mtxMuzzle, *pMtx, D3DXVECTOR3(-18.0f, 6.0f, 0.0f));
+			universal::SetOffSet(&mtxMuzzle, *pMtx, D3DXVECTOR3(-95.0f, -15.0f, 0.0f));
 
 			D3DXVECTOR3 posMuzzle =
 			{

@@ -30,6 +30,7 @@ public:
 		TYPE_MACHINEGUN,	// マシンガン
 		TYPE_SHOTGUN,	// ショットガン
 		TYPE_RAILGUN,	// レールガン
+		TYPE_MINIGUN,	// ミニガン
 		TYPE_MAX
 	};
 	struct SInfo

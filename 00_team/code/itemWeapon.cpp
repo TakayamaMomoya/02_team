@@ -80,6 +80,7 @@ void CItemWeapon::Load(void)
 		"data\\MODEL\\weapon\\mac10.x",
 		"data\\MODEL\\weapon\\shotgun.x",
 		"data\\MODEL\\weapon\\railgun.x",
+		"data\\MODEL\\weapon\\minigun_000.x",
 	};
 
 	// ƒ‚ƒfƒ‹‚Ì“Ç

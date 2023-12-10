@@ -13,6 +13,7 @@
 #include "weaponMachinegun.h"
 #include "weaponShotgun.h"
 #include "weaponRailgun.h"
+#include "weaponMinigun.h"
 #include "weaponManager.h"
 #include "motion.h"
 #include "player.h"
@@ -94,6 +95,17 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			}
 
 			break;
+		case CWeapon::TYPE_MINIGUN:
+			// ƒŒ[ƒ‹ƒKƒ“‚Ì¶¬
+			pWeapon = new CMinigun;
+
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
+				pSound->Play(pSound->LABEL_SE_GET_RAILGUN);
+			}
+
+			break;
 		default:
 			break;
 		}
@@ -113,6 +125,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 				"data\\MODEL\\weapon\\mac10.x",
 				"data\\MODEL\\weapon\\shotgun.x",
 				"data\\MODEL\\weapon\\railgun.x",
+				"data\\MODEL\\weapon\\minigun_000.x",
 			};
 
 			int nIdx = CModel::Load(apPath[type]);

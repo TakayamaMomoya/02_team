@@ -882,7 +882,7 @@ void CPlayer::ManageMotion(void)
 		{
 			switch (m_info.pWeapon->GetType())
 			{
-				// マガジン
+				// マグナム
 			case CWeapon::TYPE_MAGNUM:
 
 				if (nMotionUpper != MOTION_MAGNUM_ATTACK)
@@ -913,6 +913,15 @@ void CPlayer::ManageMotion(void)
 				break;
 				// レールガン
 			case CWeapon::TYPE_RAILGUN:
+
+				if (nMotionUpper != MOTION_RIFLE_ATTACK)
+				{
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_ATTACK);
+				}
+
+				break;
+				// ミニガン
+			case CWeapon::TYPE_MINIGUN:
 
 				if (nMotionUpper != MOTION_RIFLE_ATTACK)
 				{
