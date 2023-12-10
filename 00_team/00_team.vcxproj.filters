@@ -187,8 +187,9 @@
     <ClCompile Include="code\weaponLauncher.cpp">
       <Filter>weapon</Filter>
     </ClCompile>
-    <ClCompile Include="code\missile.cpp" />
-    <ClCompile Include="code\telop.cpp" />
+    <ClCompile Include="code\missile.cpp">
+      <Filter>weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -350,7 +351,8 @@
     <ClInclude Include="code\weaponLauncher.h">
       <Filter>weapon</Filter>
     </ClInclude>
-    <ClInclude Include="code\missile.h" />
-    <ClInclude Include="code\telop.h" />
+    <ClInclude Include="code\missile.h">
+      <Filter>weapon</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

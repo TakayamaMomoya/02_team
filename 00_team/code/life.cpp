@@ -16,6 +16,29 @@
 #include "player.h"
 #include "playerManager.h"
 
+#include "UIManager.h"
+
+//*****************************************************
+// 定数定義
+//*****************************************************
+namespace
+{
+	const float LIFE_CHANGE_RATE[CLife::LIFE_STATE_MAX]
+	{
+		1.00f,
+		0.60f,
+		0.25f,
+		0.05f,
+	};
+
+	const D3DXCOLOR LIFE_COLOR[CLife::LIFE_STATE_MAX]
+	{
+		D3DXCOLOR(0.0f,1.0f,0.0f,1.0f),
+		D3DXCOLOR(1.0f,1.0f,0.0f,1.0f),
+		D3DXCOLOR(1.0f,0.0f,0.0f,1.0f),
+		D3DXCOLOR(1.0f,0.0f,0.0f,1.0f),
+	};
+}
 //=====================================================
 // コンストラクタ
 //=====================================================
@@ -134,34 +157,59 @@ void CLife::SetLife(void)
 	{
 		if (pPlayer != nullptr)
 		{
-			// 現在の体力を取得
-			float fLife = pPlayer->GetLife();
+			if (m_info.fLife != pPlayer->GetLife())
+			{
+				// 現在の体力を取得
+				m_info.fLife = pPlayer->GetLife();
 
-			// 体力の初期値を取得
-			float fMaxLife = pPlayerManager->GetPlayerParam().fInitialLife;
+				// 色変更フラグ
+				m_info.bColorChange = true;
 
-			// ゲージの消費量を計算
-			float fLifeRatio = (1.0f - (fLife / fMaxLife));
-			m_info.fHeightSub = fLifeRatio * m_info.fHeight;
+				// 体力の初期値を取得
+				float fMaxLife = pPlayerManager->GetPlayerParam().fInitialLife;
 
-			m_pUILife->SetTex(D3DXVECTOR2(0.0f, fLifeRatio), D3DXVECTOR2(1.0f, 1.0f));
-			SetVtxGage();
-			m_pUILifeFrame->SetVtx();
+				// ゲージの消費量を計算
+				float fLifeRatio = (m_info.fLife / fMaxLife);
+
+				// サイズを変更
+				m_pUILife->SetSize(
+					LIFE::WIDTH_MAX * fLifeRatio,
+					LIFE::HEIGHT_MAX * fLifeRatio);
+
+				// 色を変更
+				for (int nCount = 0; nCount < CLife::LIFE_STATE_MAX; nCount++)
+				{
+					// 現在の体力状況を判定
+					if (m_info.fLife >= fMaxLife * LIFE_CHANGE_RATE[nCount])
+					{
+						m_info.colLife = LIFE_COLOR[nCount];
+						m_pUILife->SetCol(LIFE_COLOR[nCount]);
+
+						break;
+					}
+				}
+
+				m_pUILife->SetVtx();
+				m_pUILifeFrame->SetVtx();
+			}
 		}
 		else
 		{
 			// 体力はない
-			float fLife = 0.0f;
+			m_info.fLife = 0.0f;
 
 			// 体力の初期値を取得
 			float fMaxLife = pPlayerManager->GetPlayerParam().fInitialLife;
 
 			// ゲージの消費量を計算
-			float fLifeRatio = (1.0f - (fLife / fMaxLife));
-			m_info.fHeightSub = fLifeRatio * m_info.fHeight;
+			float fLifeRatio = (m_info.fLife / fMaxLife);
 
-			m_pUILife->SetTex(D3DXVECTOR2(0.0f, fLifeRatio), D3DXVECTOR2(1.0f, 1.0f));
-			SetVtxGage();
+			// サイズを変更
+			m_pUILife->SetSize(
+				LIFE::WIDTH_MAX * fLifeRatio,
+				LIFE::HEIGHT_MAX * fLifeRatio);
+
+			m_pUILife->SetVtx();
 			m_pUILifeFrame->SetVtx();
 		}
 	}
@@ -171,18 +219,16 @@ void CLife::SetLife(void)
 // 位置設定処理
 //=====================================================
 void CLife::SetPosition(D3DXVECTOR3 posLife, D3DXVECTOR3 posLifeFrame)
-
 {
 	if (m_pUILife != nullptr &&
 		m_pUILifeFrame != nullptr)
 	{
 		m_info.posLife = posLife;
-		m_info.posLifeFrame = posLifeFrame;
 		
 		m_pUILife->SetPosition(posLife);
 		m_pUILifeFrame->SetPosition(posLifeFrame);
 
-		SetVtxGage();
+		m_pUILife->SetVtx();
 		m_pUILifeFrame->SetVtx();
 	}
 }
@@ -201,7 +247,7 @@ void CLife::SetSize(float width, float height)
 		m_pUILife->SetSize(width, height);
 		m_pUILifeFrame->SetSize(width, height);
 
-		SetVtxGage();
+		m_pUILife->SetVtx();
 		m_pUILifeFrame->SetVtx();
 	}
 }
@@ -220,7 +266,7 @@ void CLife::SetCol(D3DXCOLOR colLife, D3DXCOLOR colLifeFrame)
 		m_pUILife->SetCol(colLife);
 		m_pUILifeFrame->SetCol(colLifeFrame);
 
-		SetVtxGage();
+		m_pUILife->SetVtx();
 		m_pUILifeFrame->SetVtx();
 	}
 }
@@ -243,67 +289,7 @@ void CLife::SetTexture(const char* pFileName)
 		m_pUILife->SetIdxTexture(m_info.nIdxTexture);
 		m_pUILifeFrame->SetIdxTexture(m_info.nIdxTexture);
 
-		SetVtxGage();
+		m_pUILife->SetVtx();
 		m_pUILifeFrame->SetVtx();
-	}
-}
-
-//=====================================================
-// ゲージ用の頂点情報設定処理
-//=====================================================
-void CLife::SetVtxGage(void)
-{
-	// 頂点情報のポインタ
-	VERTEX_2D* pVtx;
-
-	if (m_pUILife != nullptr)
-	{
-		if (m_pUILife->GetVtxBuff() != nullptr)
-		{
-			// 頂点バッファをロックし、頂点情報へのポインタを取得
-			m_pUILife->GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
-
-			// 対角線の角度取得
-			float fAngleUp = atan2f(m_info.fWidth, m_info.fHeight);
-			// 長さの取得
-			float fLengthUp = sqrtf(m_info.fWidth * m_info.fWidth + m_info.fHeight * m_info.fHeight);
-			float fLengthSub = sqrtf(m_info.fWidthSub * m_info.fWidthSub + m_info.fHeightSub * m_info.fHeightSub);
-
-			if (fLengthUp - fLengthSub <= 1.0f)
-			{
-				fLengthUp = 0.0f;
-				fLengthSub = 0.0f;
-			}
-
-			// 頂点座標の設定
-			pVtx[0].pos = D3DXVECTOR3
-			(
-				m_info.posLife.x + sinf(0.0f - D3DX_PI + fAngleUp) * fLengthUp,
-				m_info.posLife.y + cosf(0.0f - D3DX_PI + fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
-				0.0f
-			);
-			pVtx[1].pos = D3DXVECTOR3
-			(
-				m_info.posLife.x + sinf(0.0f + D3DX_PI - fAngleUp) * fLengthUp,
-				m_info.posLife.y + cosf(0.0f + D3DX_PI - fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
-				0.0f
-			);
-			pVtx[2].pos = D3DXVECTOR3
-			(
-				m_info.posLife.x + sinf(0.0f - fAngleUp) * fLengthUp,
-				m_info.posLife.y + cosf(0.0f - fAngleUp),
-				0.0f
-			);
-			pVtx[3].pos = D3DXVECTOR3
-			(
-				m_info.posLife.x + sinf(0.0f + fAngleUp) * fLengthUp,
-				m_info.posLife.y + cosf(0.0f + fAngleUp),
-				0.0f
-			);
-
-
-			// 頂点バッファのアンロック
-			m_pUILife->GetVtxBuff()->Unlock();
-		}
 	}
 }

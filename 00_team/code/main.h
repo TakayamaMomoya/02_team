@@ -16,6 +16,7 @@
 #include "dinput.h"
 #include "xaudio2.h"
 #include <assert.h>
+#include "universal.h"
 
 //*****************************************************
 // ƒ‰ƒCƒuƒ‰ƒŠ

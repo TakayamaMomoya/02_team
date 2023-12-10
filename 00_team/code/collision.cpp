@@ -404,7 +404,7 @@ void CCollisionSphere::Update(void)
 //=====================================================
 // 球の当たり判定
 //=====================================================
-bool CCollisionSphere::SphereCollision(TAG tag)
+bool CCollisionSphere::OnEnter(TAG tag)
 {
 	bool bHit = false;
 
@@ -443,6 +443,45 @@ bool CCollisionSphere::SphereCollision(TAG tag)
 
 	return bHit;
 }
+
+//=====================================================
+// 当たったオブジェクトすべてにダメージを与える処理
+//=====================================================
+void CCollisionSphere::DamageAll(TAG tag,float fDamage)
+{
+	bool bHit = false;
+
+	CCollision **ppCollision = GetCollision();
+
+	for (int nCnt = 0; nCnt < NUM_OBJECT; nCnt++)
+	{
+		if (ppCollision[nCnt] != nullptr)
+		{
+			if (ppCollision[nCnt]->GetType() == TYPE_SPHERE)
+			{
+				if (tag == TAG_NONE)
+				{
+
+				}
+				else if (ppCollision[nCnt]->GetTag() != tag)
+				{
+					continue;
+				}
+
+				// 差分取得
+				D3DXVECTOR3 vecDiff = ppCollision[nCnt]->GetPosition() - GetPosition();
+
+				float fLength = D3DXVec3Length(&vecDiff);
+
+				if (fLength < ppCollision[nCnt]->GetRadius() + GetRadius())
+				{
+					ppCollision[nCnt]->GetOwner()->Hit(fDamage);
+				}
+			}
+		}
+	}
+}
+
 
 //=====================================================
 // 球を通り抜けた判定

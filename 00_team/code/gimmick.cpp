@@ -209,7 +209,7 @@ void CGimmick::Update(void)
 		m_pCollisionSphere->SetPosition(pos);
 
 		// プレイヤーとの当たり判定
-		if (m_pCollisionSphere->SphereCollision(CCollision::TAG_PLAYER))
+		if (m_pCollisionSphere->OnEnter(CCollision::TAG_PLAYER))
 		{
 			if (m_pInteract == nullptr && m_bEnable == true)
 			{// インタラクト表示生成

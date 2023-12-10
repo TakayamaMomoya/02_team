@@ -25,6 +25,15 @@ class CLife : public CObject
 {
 public:
 
+	enum LIFE_STATE
+	{
+		LIFE_STATE_NORMAL = 0,	// 通常
+		LIFE_STATE_DEC,			// 減っている
+		LIFE_STATE_DEC_VERY,	// とても減っている
+		LIFE_STATE_DEC_PINCH,	// 死にかけ
+		LIFE_STATE_MAX
+	};
+
 	CLife(int nPriority = 7);	// コンストラクタ
 	~CLife();	// デストラクタ
 
@@ -39,25 +48,26 @@ public:
 	void SetSize(float width, float height);
 	void SetCol(D3DXCOLOR colLife, D3DXCOLOR colLifeFrame);
 	void SetTexture(const char* pFileName);
-	void SetVtxGage(void);
 
 	D3DXCOLOR GetColLife(void) { return m_info.colLife; }
 	D3DXCOLOR GetColLifeFrame(void) { return m_info.colLifeFrame; }
+	void SetColorChange(bool bColorChange) { m_info.bColorChange = bColorChange; }
+	bool GetColorChange(void) { return m_info.bColorChange; }
 
 private:
 
 	struct Sinfo
 	{
-		int nIdxPlayer;		// 参照するプレイヤーの番号
+		int nIdxPlayer;				// 参照するプレイヤーの番号
+		float fLife;				// 体力
+		LIFE_STATE state;			// 体力状態
 
 		D3DXVECTOR3 posLife;		// 位置
-		D3DXVECTOR3 posLifeFrame;	// 位置枠
 		float fWidth;				// 横幅
 		float fHeight;				// 縦幅
-		float fWidthSub;			// 減算する横幅
-		float fHeightSub;			// 減算する縦幅
 		D3DXCOLOR colLife;			// 色
 		D3DXCOLOR colLifeFrame;		// 色枠
+		bool bColorChange;			// 色変更フラグ
 
 		int nIdxTexture;					// テクスチャ番号
 		static LPDIRECT3DTEXTURE9 pTexture;	// テクスチャへのポインタ

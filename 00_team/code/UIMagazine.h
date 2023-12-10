@@ -47,11 +47,15 @@ public:
 	D3DXCOLOR GetColMagazineFrame(void) { return m_info.colMagazineFrame; }
 	D3DXCOLOR GetColNum(void) { return m_info.colNum; }
 
+	bool GetColorChange(void) { return m_info.bColorChange; }
+	void SetColorChange(bool bColChange) { m_info.bColorChange = bColChange; }
+
 private:
 
 	struct Sinfo
 	{
 		int nIdxPlayer;		// 参照するプレイヤーの番号
+		int nBullet;		// 残弾数
 
 		D3DXVECTOR3 posUIMagazine;			// 位置装弾数
 		D3DXVECTOR3 posUIMagazineFrame;		// 位置装弾数枠
@@ -65,6 +69,7 @@ private:
 		D3DXCOLOR colMagazine;				// 色装弾数
 		D3DXCOLOR colMagazineFrame;			// 色装弾数枠
 		D3DXCOLOR colNum;					// 色数字
+		bool bColorChange;					// 色変更フラグ
 
 		float fWidthSub;					// 減算する横幅
 		float fHeightSub;					// 減算する縦幅

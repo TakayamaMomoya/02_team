@@ -35,6 +35,7 @@ public:
 		TYPE_BLOOD,	// ŒŒ‚µ‚Ô‚«
 		TYPE_BLOOD1,	// ŒŒ‚µ‚Ô‚«
 		TYPE_BEAM,	// ƒr[ƒ€
+		TYPE_EXPLOSION,	// ”š”­
 		TYPE_MAX
 	};
 

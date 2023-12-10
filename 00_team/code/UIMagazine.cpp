@@ -200,9 +200,11 @@ void CUIMagazine::SetCol(D3DXCOLOR colMagazine, D3DXCOLOR colMagazineFrame, D3DX
 		m_info.colMagazineFrame = colMagazineFrame;
 		m_info.colNum = colNum;
 
-		SetVtxGage();
+		m_pUIMagazine->SetCol(colMagazine);
 		m_pUIMagazineFrame->SetCol(colMagazineFrame);
 		m_pNumDig->SetColor(colNum);
+
+		SetVtxGage();
 	}
 }
 
@@ -239,7 +241,6 @@ void CUIMagazine::SetNumMagazine(void)
 	CPlayer* pPlayer = nullptr;
 	CWeapon* pWeapon = nullptr;
 
-	int nBullet = 0;
 	int nMaxBullet = 0;
 
 	if (pPlayerManager != nullptr)
@@ -256,20 +257,28 @@ void CUIMagazine::SetNumMagazine(void)
 
 	if (pWeapon != nullptr)
 	{
-		// ƒvƒŒƒCƒ„[‚Ì’e‚ðŽæ“¾
-		nBullet = pWeapon->GetBullet();
-		nMaxBullet = pWeapon->GetMaxBullet();
+		if (m_info.nBullet != pWeapon->GetBullet())
+		{
+			// ƒvƒŒƒCƒ„[‚Ì’e‚ðŽæ“¾
+			m_info.nBullet = pWeapon->GetBullet();
+			nMaxBullet = pWeapon->GetMaxBullet();
 
-		float fLifeRatio = (1.0f - ((float)nBullet / (float)nMaxBullet));
-		m_info.fHeightSub = fLifeRatio * m_info.fHeight;
+			m_info.bColorChange = true;
 
-		m_pUIMagazine->SetTex(D3DXVECTOR2(0.0f, fLifeRatio), D3DXVECTOR2(1.0f, 1.0f));
-		SetVtxGage();
-		m_pUIMagazineFrame->SetVtx();
+			float fLifeRatio = (1.0f - ((float)m_info.nBullet / (float)nMaxBullet));
+			m_info.fHeightSub = fLifeRatio * m_info.fHeight;
+
+			m_pUIMagazine->SetTex(D3DXVECTOR2(0.0f, fLifeRatio), D3DXVECTOR2(1.0f, 1.0f));
+			m_pUIMagazine->SetVtx();
+			SetVtxGage();
+			m_pUIMagazineFrame->SetVtx();
+		}
 	}
 	else
 	{
-		float fLifeRatio = (1.0f - ((float)nBullet / (float)nMaxBullet));
+		m_info.nBullet = 0;
+
+		float fLifeRatio = (1.0f - ((float)m_info.nBullet / (float)nMaxBullet));
 		m_info.fHeightSub = fLifeRatio * m_info.fHeight;
 
 		m_pUIMagazine->SetTex(D3DXVECTOR2(0.0f, fLifeRatio), D3DXVECTOR2(1.0f, 1.0f));
@@ -280,7 +289,7 @@ void CUIMagazine::SetNumMagazine(void)
 	if (m_pNumDig != nullptr)
 	{
 		// ’e‚ð”½‰f
-		m_pNumDig->SetValue(nBullet, DIG_MAG_NUM);
+		m_pNumDig->SetValue(m_info.nBullet, DIG_MAG_NUM);
 	}
 }
 
