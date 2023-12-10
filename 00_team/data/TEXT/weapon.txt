@@ -40,6 +40,20 @@ RAILGUNSET
 	LENGTH = 1000.0	# 判定の長さ
 END_RAILGUNSET
 
+MINIGUNSET
+	BULLET = 200	# 弾数
+	DAMAGE = 5.0	# 威力
+	RAPID = 2		# 発射頻度(左のフレーム数ごとに発射できる)
+	BULLET_LIFE = 1.0	# 弾の寿命（秒数）
+END_MINIGUNSET
+
+LAUNCHERSET
+	BULLET = 200	# 弾数
+	DAMAGE = 5.0	# 威力
+	RAPID = 2		# 発射頻度(左のフレーム数ごとに発射できる)
+	BULLET_LIFE = 1.0	# 弾の寿命（秒数）
+END_LAUNCHERSET
+
 #====================================================================
 # 武器の出現確率
 #====================================================================
@@ -47,7 +61,9 @@ PROBSET
 	PROB = 70 # マグナムの確率
 	PROB = 50 # マシンガンの確率
 	PROB = 30 # ショットガンの確率
-	PROB = 1000 # レールガンの確率
+	PROB = 10 # レールガンの確率
+	PROB = 11	# ミニガンの確率
+	PROB = 1000	# ランチャーの確率
 END_PROBSET
 
 END_SCRIPT

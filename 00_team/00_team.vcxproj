@@ -66,6 +66,7 @@
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\manager.cpp" />
     <ClCompile Include="code\meshcylinder.cpp" />
+    <ClCompile Include="code\missile.cpp" />
     <ClCompile Include="code\model.cpp" />
     <ClCompile Include="code\motion.cpp" />
     <ClCompile Include="code\motionDiv.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="code\skybox.cpp" />
     <ClCompile Include="code\sound.cpp" />
     <ClCompile Include="code\lift.cpp" />
+    <ClCompile Include="code\telop.cpp" />
     <ClCompile Include="code\texture.cpp" />
     <ClCompile Include="code\title.cpp" />
     <ClCompile Include="code\tutorial.cpp" />
@@ -99,9 +101,11 @@
     <ClCompile Include="code\UIManager.cpp" />
     <ClCompile Include="code\universal.cpp" />
     <ClCompile Include="code\weapon.cpp" />
+    <ClCompile Include="code\weaponLauncher.cpp" />
     <ClCompile Include="code\weaponMachinegun.cpp" />
     <ClCompile Include="code\weaponMagnum.cpp" />
     <ClCompile Include="code\weaponManager.cpp" />
+    <ClCompile Include="code\weaponMinigun.cpp" />
     <ClCompile Include="code\weaponRailgun.cpp" />
     <ClCompile Include="code\weaponShotgun.cpp" />
   </ItemGroup>
@@ -153,6 +157,7 @@
     <ClInclude Include="code\main.h" />
     <ClInclude Include="code\manager.h" />
     <ClInclude Include="code\meshcylinder.h" />
+    <ClInclude Include="code\missile.h" />
     <ClInclude Include="code\model.h" />
     <ClInclude Include="code\motion.h" />
     <ClInclude Include="code\motionDiv.h" />
@@ -178,6 +183,7 @@
     <ClInclude Include="code\skybox.h" />
     <ClInclude Include="code\sound.h" />
     <ClInclude Include="code\lift.h" />
+    <ClInclude Include="code\telop.h" />
     <ClInclude Include="code\texture.h" />
     <ClInclude Include="code\title.h" />
     <ClInclude Include="code\tutorial.h" />
@@ -186,9 +192,11 @@
     <ClInclude Include="code\UIManager.h" />
     <ClInclude Include="code\universal.h" />
     <ClInclude Include="code\weapon.h" />
+    <ClInclude Include="code\weaponLauncher.h" />
     <ClInclude Include="code\weaponMachinegun.h" />
     <ClInclude Include="code\weaponMagnum.h" />
     <ClInclude Include="code\weaponManager.h" />
+    <ClInclude Include="code\weaponMinigun.h" />
     <ClInclude Include="code\weaponRailgun.h" />
     <ClInclude Include="code\weaponShotgun.h" />
   </ItemGroup>

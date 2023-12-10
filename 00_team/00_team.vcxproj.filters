@@ -181,6 +181,15 @@
     <ClCompile Include="code\beam.cpp" />
     <ClCompile Include="code\meshcylinder.cpp" />
     <ClCompile Include="code\inpact.cpp" />
+    <ClCompile Include="code\weaponMinigun.cpp">
+      <Filter>weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="code\weaponLauncher.cpp">
+      <Filter>weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="code\missile.cpp">
+      <Filter>weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -336,5 +345,14 @@
     <ClInclude Include="code\beam.h" />
     <ClInclude Include="code\meshcylinder.h" />
     <ClInclude Include="code\inpact.h" />
+    <ClInclude Include="code\weaponMinigun.h">
+      <Filter>weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="code\weaponLauncher.h">
+      <Filter>weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="code\missile.h">
+      <Filter>weapon</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

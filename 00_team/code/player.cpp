@@ -294,7 +294,7 @@ void CPlayer::Update(void)
 		// 敵との接触判定
 		m_info.pCollisionSphere->SetPosition(posWaist);
 
-		bool bHit = m_info.pCollisionSphere->SphereCollision(CCollision::TAG_ENEMY);
+		bool bHit = m_info.pCollisionSphere->OnEnter(CCollision::TAG_ENEMY);
 
 		if (bHit)
 		{
@@ -882,7 +882,7 @@ void CPlayer::ManageMotion(void)
 		{
 			switch (m_info.pWeapon->GetType())
 			{
-				// マガジン
+				// マグナム
 			case CWeapon::TYPE_MAGNUM:
 
 				if (nMotionUpper != MOTION_MAGNUM_ATTACK)
@@ -913,6 +913,24 @@ void CPlayer::ManageMotion(void)
 				break;
 				// レールガン
 			case CWeapon::TYPE_RAILGUN:
+
+				if (nMotionUpper != MOTION_RIFLE_ATTACK)
+				{
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_ATTACK);
+				}
+
+				break;
+				// ミニガン
+			case CWeapon::TYPE_MINIGUN:
+
+				if (nMotionUpper != MOTION_RIFLE_ATTACK)
+				{
+					SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_RIFLE_ATTACK);
+				}
+
+				break;
+				// ランチャー
+			case CWeapon::TYPE_LAUNCHER:
 
 				if (nMotionUpper != MOTION_RIFLE_ATTACK)
 				{
@@ -1026,7 +1044,7 @@ void CPlayer::ManageAttack(void)
 				CEffect3D::Create(pos, m_info.pAttackInfo[i].fRadius, 10, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 #endif
 				// 敵との判定
-				bHit = m_info.pClsnAttack->SphereCollision(CCollision::TAG_ENEMY);
+				bHit = m_info.pClsnAttack->OnEnter(CCollision::TAG_ENEMY);
 
 				// 命中したオブジェクトの取得
 				CObject *pObj = m_info.pClsnAttack->GetOther();
@@ -1041,7 +1059,7 @@ void CPlayer::ManageAttack(void)
 				}
 
 				// 木箱との判定
-				bHit = m_info.pClsnAttack->SphereCollision(CCollision::TAG_BOX);
+				bHit = m_info.pClsnAttack->OnEnter(CCollision::TAG_BOX);
 
 				pObj = m_info.pClsnAttack->GetOther();
 
@@ -1051,7 +1069,7 @@ void CPlayer::ManageAttack(void)
 				}
 
 				// プレイヤーとの判定
-				bHit = m_info.pClsnAttack->SphereCollision(CCollision::TAG_PLAYER);
+				bHit = m_info.pClsnAttack->OnEnter(CCollision::TAG_PLAYER);
 
 				pObj = m_info.pClsnAttack->GetOther();
 
