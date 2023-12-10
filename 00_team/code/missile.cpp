@@ -247,8 +247,6 @@ void CMissile::Death(void)
 {
 	D3DXVECTOR3 pos = GetPosition();
 
-	// パーティクルの生成
-
 	// アニメーションエフェクトの生成
 	CAnimEffect3D *pAnimManager = CAnimEffect3D::GetInstance();
 
