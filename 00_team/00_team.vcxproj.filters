@@ -188,6 +188,7 @@
       <Filter>weapon</Filter>
     </ClCompile>
     <ClCompile Include="code\missile.cpp" />
+    <ClCompile Include="code\telop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -350,5 +351,6 @@
       <Filter>weapon</Filter>
     </ClInclude>
     <ClInclude Include="code\missile.h" />
+    <ClInclude Include="code\telop.h" />
   </ItemGroup>
 </Project>
