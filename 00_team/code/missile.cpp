@@ -151,6 +151,7 @@ void CMissile::Update(void)
 
 	// パーティクルの生成
 	CParticle::Create(m_info.pos, CParticle::TYPE_MISSILE_SMOKE);
+	CParticle::Create(m_info.pos, CParticle::TYPE_MISSILE_SPARK);
 
 	if (m_info.pCollisionSphere != nullptr)
 	{// 当たり判定の管理
@@ -161,6 +162,7 @@ void CMissile::Update(void)
 			Death();
 		}
 	}
+
 
 	if (bHit == false)
 	{
