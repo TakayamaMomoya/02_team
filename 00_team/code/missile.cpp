@@ -13,6 +13,8 @@
 #include "renderer.h"
 #include "object3D.h"
 #include "objectX.h"
+#include "particle.h"
+#include "debugproc.h"
 
 //*****************************************************
 // 定数定義
@@ -21,6 +23,8 @@ namespace
 {
 	const char* MISSILE_MODEL_PATH = "data\\MODEL\\weapon\\atomic.x";	// ミサイル本体のモデルパス
 	const float INITIAL_LIFE = 1.0f;	// 初期体力
+	const float INITIAL_SPEED = 12.0f;	// 初期速度
+	const float INITIAL_SPEED_MAX = 12.0f;	// 初期の最大速度
 }
 
 //*****************************************************
@@ -57,6 +61,7 @@ HRESULT CMissile::Init(void)
 	CreateVisual();
 
 	m_info.fLife = INITIAL_LIFE;
+	m_info.fSpeed = INITIAL_SPEED;
 
 	return S_OK;
 }
@@ -80,7 +85,7 @@ void CMissile::CreateVisual(void)
 
 	if (m_infoVisual.pBackLight == nullptr)
 	{
-		m_infoVisual.pBackLight = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		//m_infoVisual.pBackLight = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 		if (m_infoVisual.pBackLight != nullptr)
 		{
@@ -138,13 +143,14 @@ void CMissile::Update(void)
 
 	m_info.fLife -= fTIck;
 
-	m_info.posOld = m_info.pos;
-
-	// 位置の更新
-	m_info.pos += m_info.move;
+	// 移動の管理
+	ManageMove();
 
 	// 見た目の追従
 	FollowVisual();
+
+	// パーティクルの生成
+	CParticle::Create(m_info.pos, CParticle::TYPE_MISSILE_SMOKE);
 
 	if (m_info.pCollisionSphere != nullptr)
 	{// 当たり判定の管理
@@ -167,6 +173,33 @@ void CMissile::Update(void)
 	{
 		Death();
 	}
+}
+
+//=====================================================
+// 移動の管理
+//=====================================================
+void CMissile::ManageMove(void)
+{
+	D3DXVECTOR3 move = m_info.move;
+	D3DXVECTOR3 rot = m_info.rot;
+
+	m_info.posOld = m_info.pos;
+
+	// 移動量の設定
+	move += D3DXVECTOR3
+	{
+		sinf(m_info.rot.y) * m_info.fSpeed,
+		0.0f,
+		cosf(m_info.rot.y) * m_info.fSpeed
+	};
+
+	m_info.move -= move;
+
+	// 速度制限
+	universal::LimitSpeed(&m_info.move, INITIAL_SPEED_MAX);
+
+	// 移動量を加算
+	m_info.pos += m_info.move;
 }
 
 //=====================================================
@@ -218,12 +251,23 @@ void CMissile::Draw(void)
 
 	//ワールドマトリックス設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_info.mtxWorld);
+
+#ifdef _DEBUG
+	CDebugProc* pDebugProc = CDebugProc::GetInstance();
+
+	if (pDebugProc == nullptr)
+	{
+		return;
+	}
+
+	pDebugProc->Print("\nミサイル位置[%f,%f,%f]", m_info.pos.x, m_info.pos.y, m_info.pos.z);
+#endif
 }
 
 //=====================================================
 // 生成処理
 //=====================================================
-CMissile *CMissile::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move)
+CMissile *CMissile::Create(void)
 {
 	CMissile *pMissile = nullptr;
 
@@ -233,10 +277,6 @@ CMissile *CMissile::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move)
 
 		if (pMissile != nullptr)
 		{
-			pMissile->m_info.move = move;
-			pMissile->m_info.pos = pos;
-			pMissile->m_info.posOld = pos;
-
 			if (pMissile->m_info.pCollisionSphere == nullptr)
 			{// 当たり判定生成
 				pMissile->m_info.pCollisionSphere = CCollisionSphere::Create(CCollision::TAG_PLAYERBULLET, CCollision::TYPE_SPHERE, pMissile);

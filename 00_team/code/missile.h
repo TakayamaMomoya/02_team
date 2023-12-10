@@ -36,7 +36,7 @@ public:
 	CMissile(int nPriority = 6);	// コンストラクタ
 	~CMissile();	// デストラクタ
 
-	static CMissile *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move);
+	static CMissile *Create(void);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
@@ -44,6 +44,9 @@ public:
 	static int GetNumAll(void) { return m_nNumAll; }
 	D3DXVECTOR3 GetPosition(void) { return m_info.pos; }
 	D3DXVECTOR3 GetPositionOld(void) { return m_info.posOld; }
+	void SetPosition(D3DXVECTOR3 pos) { m_info.pos = pos; }
+	void SetMove(D3DXVECTOR3 move) { m_info.move = move; }
+	void SetRot(D3DXVECTOR3 rot) { m_info.rot = rot; }
 
 private:
 	struct SInfoVisual
@@ -64,6 +67,7 @@ private:
 		float fDamage;	// 与ダメージ
 	};
 	void CreateVisual(void);
+	void ManageMove(void);
 	void FollowVisual(void);
 	void Death(void);
 	void DeleteVisual(void);

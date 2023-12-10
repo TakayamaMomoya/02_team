@@ -30,6 +30,31 @@ void LimitRot(float *fRot)
 	}
 }
 
+//=========================================
+// 速度の制限
+//=========================================
+void LimitSpeed(D3DXVECTOR3 *pVec, float fSpeedMax)
+{
+	if (pVec == nullptr)
+	{
+		return;
+	}
+
+	// 速度の取得
+	float fSpeed = D3DXVec3Length(pVec);
+
+	if (fSpeed > fSpeedMax)
+	{// 速度の制限
+		D3DXVECTOR3 vecNew = *pVec;
+
+		D3DXVec3Normalize(&vecNew, &vecNew);
+
+		vecNew *= fSpeedMax;
+
+		*pVec = vecNew;
+	}
+}
+
 //========================================
 // オフセット設定処理
 //========================================

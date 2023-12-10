@@ -100,33 +100,26 @@ void CLauncher::Attack(void)
 				mtxMuzzle._43,
 			};
 
-			D3DXVECTOR3 move = { 0.0f,0.0f,0.0f };
-
 			CPlayer* pPlayer = GetPlayer();
+			D3DXVECTOR3 rot = { 0.0f,0.0f,0.0f };
 
 			if (pPlayer != nullptr)
 			{// プレイヤーの向きに移動量を設定
-				D3DXVECTOR3 rot = pPlayer->GetRot();
+				rot = pPlayer->GetRot();
 
-				int nRange = universal::RandRange(10, -10);
+				// 弾を発射
+				CMissile *pMissile = CMissile::Create();
 
-				float fRand = nRange * 0.01f;
-
-				rot.y += fRand;
-
-				move =
+				if (pMissile != nullptr)
 				{
-					sinf(rot.y) * BULLET_SPEED,
-					0.0f,
-					cosf(rot.y) * BULLET_SPEED,
-				};
+					pMissile->SetPosition(posMuzzle);
+					pMissile->SetRot(rot);
+				}
 			}
 
 			// パラメーター取得
 			CWeapon::SInfo info = GetInfo();
 
-			// 弾を発射
-			CMissile::Create(posMuzzle, -move);
 
 			CSound* pSound = CSound::GetInstance();
 

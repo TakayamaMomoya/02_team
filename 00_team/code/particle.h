@@ -27,6 +27,7 @@ public:
 		TYPE_INJECTION_SMOKE,	// 噴射(煙)
 		TYPE_SMOKE,	// 煙
 		TYPE_TOMATO_JUICE,	// トマト汁
+		TYPE_MISSILE_SMOKE,	// ミサイルの煙
 		TYPE_MAX
 	}TYPE;
 
