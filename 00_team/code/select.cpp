@@ -121,8 +121,11 @@ HRESULT CSelect::Init(void)
 	// プレイヤーマネージャーの生成
 	CPlayerManager::Create();
 
+#ifdef _DEBUG
 	// エディットの生成
-	//CEdit::Create();
+	CEdit::Create();
+
+#endif // DEBUG
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
