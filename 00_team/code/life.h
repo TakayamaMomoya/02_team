@@ -44,7 +44,7 @@ public:
 	void Draw(void);
 
 	void SetLife(void);
-	void SetPosition(D3DXVECTOR3 posLife, D3DXVECTOR3 posLifeFrame);
+	void SetPosition(D3DXVECTOR3 pos);
 	void SetSize(float width, float height);
 	void SetCol(D3DXCOLOR colLife, D3DXCOLOR colLifeFrame);
 	void SetTexture(const char* pFileName);

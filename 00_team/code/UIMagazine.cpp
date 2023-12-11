@@ -97,7 +97,7 @@ HRESULT CUIMagazine::Init(void)
 		m_pUIMagazine != nullptr &&
 		m_pUIMagazineFrame != nullptr)
 	{
-		// ‰Šú’lİ’èˆ—
+		// ‰Šú’lİ’èˆ—iİ’è‚µ‚Ä‚È‚©‚Á‚½‚ç‚±‚êj
 		m_pUIMagazineFrame->SetSize(50.0f, 100.0f);
 		m_pUIMagazineFrame->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		m_pUIMagazine->SetSize(50.0f, 100.0f);
@@ -257,30 +257,40 @@ void CUIMagazine::SetNumMagazine(void)
 
 	if (pWeapon != nullptr)
 	{
+		// Œ»İ‚Ì‘•’e”‚Æ‘O‰ñ‚Ì‘•’e”‚ªˆá‚¤
 		if (m_info.nBullet != pWeapon->GetBullet())
 		{
 			// ƒvƒŒƒCƒ„[‚Ì’e‚ğæ“¾
 			m_info.nBullet = pWeapon->GetBullet();
 			nMaxBullet = pWeapon->GetMaxBullet();
 
+			// F•ÏXƒtƒ‰ƒO‚ğƒIƒ“
 			m_info.bColorChange = true;
-
+			
+			// Œ»İ‚Ì‘•’e”‚ÌŠ„‡‚ğZo
 			float fLifeRatio = (1.0f - ((float)m_info.nBullet / (float)nMaxBullet));
+
+			// c•‚ÌŒ¸Z—Ê‚ğZo
 			m_info.fHeightSub = fLifeRatio * m_info.fHeight;
 
+			// İ’èˆ—
 			m_pUIMagazine->SetTex(D3DXVECTOR2(0.0f, fLifeRatio), D3DXVECTOR2(1.0f, 1.0f));
-			m_pUIMagazine->SetVtx();
 			SetVtxGage();
 			m_pUIMagazineFrame->SetVtx();
 		}
 	}
 	else
 	{
+		// ’e‚Í0
 		m_info.nBullet = 0;
 
+		// Œ»İ‚Ì‘•’e”‚ÌŠ„‡‚ğZo
 		float fLifeRatio = (1.0f - ((float)m_info.nBullet / (float)nMaxBullet));
+
+		// c•‚ÌŒ¸Z—Ê‚ğZo
 		m_info.fHeightSub = fLifeRatio * m_info.fHeight;
 
+		// İ’èˆ—
 		m_pUIMagazine->SetTex(D3DXVECTOR2(0.0f, fLifeRatio), D3DXVECTOR2(1.0f, 1.0f));
 		SetVtxGage();
 		m_pUIMagazineFrame->SetVtx();
@@ -312,8 +322,11 @@ void CUIMagazine::SetVtxGage(void)
 			float fAngleUp = atan2f(m_info.fWidth, m_info.fHeight);
 			// ’·‚³‚Ìæ“¾
 			float fLengthUp = sqrtf(m_info.fWidth * m_info.fWidth + m_info.fHeight * m_info.fHeight);
+
+			// Œ¸Z—Ê‚Ì’·‚³‚ğæ“¾
 			float fLengthSub = sqrtf(m_info.fWidthSub * m_info.fWidthSub + m_info.fHeightSub * m_info.fHeightSub);
 
+			// Œë·”ÍˆÍ‚ğÁ‚·
 			if (fLengthUp - fLengthSub <= 1.0f)
 			{
 				fLengthUp = 0.0f;
