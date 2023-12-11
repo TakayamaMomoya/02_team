@@ -154,7 +154,6 @@ void CLauncher::Attack(void)
 		}
 		else
 		{// ’eØ‚ê‚Ìê‡
-
 		}
 	}
 }
