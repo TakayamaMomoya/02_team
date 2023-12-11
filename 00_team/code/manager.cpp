@@ -116,7 +116,12 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	CParticle::Load();
 
 	// êÌê—ÇÃê∂ê¨
-	CRecord::GetInstance();
+	CRecord* pRecord = CRecord::Create();
+
+	if (pRecord == nullptr)
+	{
+		return E_FAIL;
+	}
 
 	SetMode(m_mode);
 
