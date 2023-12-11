@@ -84,6 +84,7 @@ void CShotgun::Update(void)
 void CShotgun::Attack(void)
 {
 	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
+	CSound* pSound = CSound::GetInstance();
 
 	if (pJoypad == nullptr)
 	{
@@ -172,7 +173,7 @@ void CShotgun::Attack(void)
 		}
 		else
 		{// íeêÿÇÍÇÃèÍçá
-
+			
 		}
 	}
 }

@@ -39,6 +39,9 @@ public:
 	CBillboard *GetGuide(void) { return m_pInteract; }
 	CGimmick *GetNext(void) { return m_pNext; }
 
+protected:
+	virtual void Exit(CObject* pObj) {};
+
 private:
 	CCollisionSphere *m_pCollisionSphere;
 	CBillboard *m_pInteract;

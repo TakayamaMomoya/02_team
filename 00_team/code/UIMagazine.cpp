@@ -336,25 +336,25 @@ void CUIMagazine::SetVtxGage(void)
 			// í∏ì_ç¿ïWÇÃê›íË
 			pVtx[0].pos = D3DXVECTOR3
 			(
-				m_info.posUIMagazine.x + sinf(0.0f - D3DX_PI + fAngleUp) * fLengthUp,
-				m_info.posUIMagazine.y + cosf(0.0f - D3DX_PI + fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
+				m_info.posUIMagazine.x - m_info.fWidth,
+				m_info.posUIMagazine.y + cosf(0.0f - D3DX_PI + fAngleUp) * (fLengthUp * 2.0f) + (fLengthSub * 2.0f),
 				0.0f
 			);
 			pVtx[1].pos = D3DXVECTOR3
 			(
-				m_info.posUIMagazine.x + sinf(0.0f + D3DX_PI - fAngleUp) * fLengthUp,
-				m_info.posUIMagazine.y + cosf(0.0f + D3DX_PI - fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
+				m_info.posUIMagazine.x + m_info.fWidth,
+				m_info.posUIMagazine.y + cosf(0.0f + D3DX_PI - fAngleUp) * (fLengthUp * 2.0f) + (fLengthSub * 2.0f),
 				0.0f
 			);
 			pVtx[2].pos = D3DXVECTOR3
 			(
-				m_info.posUIMagazine.x + sinf(0.0f - fAngleUp) * fLengthUp,
+				m_info.posUIMagazine.x - m_info.fWidth,
 				m_info.posUIMagazine.y + cosf(0.0f - fAngleUp),
 				0.0f
 			);
 			pVtx[3].pos = D3DXVECTOR3
 			(
-				m_info.posUIMagazine.x + sinf(0.0f + fAngleUp) * fLengthUp,
+				m_info.posUIMagazine.x + m_info.fWidth,
 				m_info.posUIMagazine.y + cosf(0.0f + fAngleUp),
 				0.0f
 			);
