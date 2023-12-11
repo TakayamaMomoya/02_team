@@ -199,7 +199,7 @@ bool CBullet::BulletHit(CCollision::TAG tag)
 {
 	bool bHit = false;
 
-	if (m_pCollisionSphere->IsTriggerEnter(tag))
+	if (m_pCollisionSphere->OnEnter(tag))
 	{// ‘ÎÛ‚Æ‚Ì“–‚½‚è”»’è
 		CObject *pObj = m_pCollisionSphere->GetOther();
 

@@ -356,21 +356,6 @@ void CSelect::Update(void)
 				bGameStart = true;
 			}
 		}
-
-		// StartUI‚ðŒ©‚¦‚é‚æ‚¤‚É
-		if (m_pStartUI != nullptr)
-		{
-			if (bGameStart == true)
-			{
-				m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-			}
-			else
-			{
-				m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
-			}
-			m_pStartUI->SetVtx();
-		}
-
 	}
 	else
 	{
@@ -383,6 +368,20 @@ void CSelect::Update(void)
 		}
 
 		Rift();
+	}
+
+	// StartUI‚ðŒ©‚¦‚é‚æ‚¤‚É
+	if (m_pStartUI != nullptr)
+	{
+		if (bGameStart == true)
+		{
+			m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		}
+		else if (bGameStart == false)
+		{
+			m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+		}
+		m_pStartUI->SetVtx();
 	}
 
 	for (int nCntPlayer = 0; nCntPlayer < NUM_PLAYER; nCntPlayer++)
