@@ -25,6 +25,7 @@
 #include "enemyManager.h"
 #include "sound.h"
 #include "UIManager.h"
+#include "ghost.h"
 
 //*****************************************************
 // 定数定義
@@ -1227,6 +1228,18 @@ void CPlayer::Hit(float fDamage)
 			}
 
 			Uninit();
+
+			int nIdx = GetID();
+
+			// 幽霊の生成
+			CGhost *pGhost = CGhost::Create(nIdx);
+
+			if (pGhost != nullptr)
+			{
+				D3DXVECTOR3 pos = GetPosition();
+
+				pGhost->SetPosition(pos);
+			}
 		}
 		else
 		{// ダメージ判定

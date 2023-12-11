@@ -114,6 +114,7 @@ public:
 	int GetKey(void) { return m_nKey; }
 	int GetFrame(void) { return m_nCounterMotion; }
 	void SetAllCol(D3DXCOLOR col);
+	D3DXCOLOR GetColor(void) { return m_col; }
 	void ResetAllCol(void);
 	void InitPose(int nMotion);
 	void EnableShadow(bool bShadow) { m_bShadow = bShadow; }
@@ -138,6 +139,7 @@ private:
 	D3DXVECTOR3 m_move;	// 移動量
 	D3DXVECTOR3 m_rot;	//向き
 	D3DXMATRIX m_mtxWorld;	// マトリックス
+	D3DXCOLOR m_col;	// 色
 	bool m_bFinish;	// モーションが終わったかどうか
 	bool m_bShadow;	// 影を描画するかどうか
 	bool m_bInde;	// 分離しているかどうか

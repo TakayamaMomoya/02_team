@@ -10,6 +10,7 @@
 //*****************************************************
 #include "ghost.h"
 #include "debugproc.h"
+#include "manager.h"
 
 //*****************************************************
 // 定数定義
@@ -23,6 +24,8 @@ const char* BODY_PATH[NUM_PLAYER] =
 	"data\\MOTION\\motionPotatoman03.txt",
 	"data\\MOTION\\motionPotatoman04.txt",
 };
+const float SPEED_UP = 1.0f;	// 上昇速度
+const float TIME_DEATH = 3.0f;	// 消えるまでの時間
 }
 
 //=====================================================
@@ -92,6 +95,31 @@ void CGhost::Update(void)
 {
 	// 継承クラスの更新
 	CMotion::Update();
+
+	// 上昇
+	D3DXVECTOR3 pos = GetPosition();
+
+	pos.y += SPEED_UP;
+
+	SetPosition(pos);
+
+	// 色の変化
+	D3DXCOLOR col = GetColor();
+
+	float fTick = CManager::GetTick();
+
+	float fRate = fTick / TIME_DEATH;
+
+	col.a -= fRate;
+
+	if (col.a <= 0.0f)
+	{
+		col.a = 0.0f;
+
+		Uninit();
+	}
+
+	SetAllCol(col);
 }
 
 //=====================================================
