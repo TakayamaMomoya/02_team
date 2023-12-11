@@ -182,6 +182,17 @@ void CBlock::Hit(float fDamage)
 	if (m_fLife <= 0.0f)
 	{// îjâÛîªíË
 		Delete(m_nID);
+
+		float fRotY = (rand() % 628 - 314) / 100.0f;
+		
+		// ä¢‚IÇÃê∂ê¨
+		CObjectX* pObjX = CObjectX::Create(GetPosition(), D3DXVECTOR3(GetRot().x, fRotY, GetRot().z));
+		if (pObjX != nullptr)
+		{
+			pObjX->BindModel(CModel::Load("data\\MODEL\\block\\woodRubble.x"));
+		}
+
+		// îjï–ÇÃê∂ê¨
 		CDebrisSpawner::Create(D3DXVECTOR3(GetPosition().x, GetPosition().y + 50.0f, GetPosition().z), CDebrisSpawner::TYPE::TYPE_WALL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 }
