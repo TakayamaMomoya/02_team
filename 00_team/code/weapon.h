@@ -44,6 +44,8 @@ public:
 		int nCntShot;	// 連射カウンタ
 		int nIdxHand;	// 手の番号
 		int nIdxJoypad;	// コントローラー番号
+		float fVibPower;	// コントローラーの振動の強さ
+		int nVibTime;		// コントローラーの振動時間
 		bool bEnable;	// 使用できるかどうか
 		CPlayer *pPlayer;	// 所持してるプレイヤー
 		TYPE type;	// 種類
@@ -70,6 +72,8 @@ public:
 	void SetCntShot(int nCntShot) { m_info.nCntShot = nCntShot; }
 	int GetCntShot(void) { return m_info.nCntShot; }
 	void FollowPlayerHand(void);
+	void SetVibPower(float fVib) { m_info.fVibPower = fVib; }
+	void SetVibTime(int nTime) { m_info.nVibTime = nTime; }
 	void SetEnable(bool bEnable);
 	bool IsEnable(void) { return m_info.bEnable; }
 	void SetDamage(float fDamage) { m_info.fDamage = fDamage; }

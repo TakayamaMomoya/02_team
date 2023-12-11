@@ -169,6 +169,8 @@ HRESULT CWeapon::Init(void)
 		SetRapid(info.nRapid);
 		SetDamage(info.fDamage);
 		SetBulletLife(info.fLifeBullet);
+		SetVibPower(info.fVibPower);
+		SetVibTime(info.nVibTime);
 	}
 
 	return S_OK;
@@ -295,6 +297,7 @@ void CWeapon::SetPlayer(CPlayer *pPlayer)
 void CWeapon::SetBullet(int nBullet)
 {
 	CSound* pSound = CSound::GetInstance();
+
 	m_info.nNumBullet = nBullet;
 
 	if (m_info.nNumBullet <= 0)
