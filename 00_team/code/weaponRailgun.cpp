@@ -205,6 +205,8 @@ void CRailgun::Shot(void)
 					if (nBullet > 0 && nCntShot == 0)
 					{// ’e‚Ì”­ŽË
 						pEnemy->Hit(info.fDamage);
+
+						// ‚±‚±‚Å“G‚ªŽ€‚ñ‚¾‚Æ‚«‚Ì”»’èˆ—‚ð’Ç‰Á‚µ‚Ü‚·B
 					}
 					else
 					{// ’eØ‚ê‚Ìê‡

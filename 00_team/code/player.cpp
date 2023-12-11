@@ -25,6 +25,7 @@
 #include "enemyManager.h"
 #include "sound.h"
 #include "UIManager.h"
+#include "record.h"
 
 //*****************************************************
 // ’è”’è‹`
@@ -1058,6 +1059,9 @@ void CPlayer::ManageAttack(void)
 
 					// ƒqƒbƒgˆ—
 					pObj->Hit(m_param.fDamagePunch);
+
+					// “G‚ÌŽ€–S‚Ì”»’è
+					CheckDeathEnemy(pObj);
 				}
 
 				// –Ø” ‚Æ‚Ì”»’è
@@ -1169,6 +1173,43 @@ void CPlayer::BlowPlayer(CObject *pObj)
 				pPlayer->SetState(STATE_BLOW);
 			}
 		}
+	}
+}
+
+//=====================================================
+// “G‚ÌŽ€–S‚Ì—L–³‚ð”»’è
+//=====================================================
+void CPlayer::CheckDeathEnemy(CObject* pObj)
+{
+	CEnemyManager* pEnemyManager = CEnemyManager::GetInstance();
+
+	if (pEnemyManager == nullptr || pObj == nullptr)
+	{
+		return;
+	}
+
+	CEnemy* pEnemy = pEnemyManager->GetHead();
+
+	while (pEnemy != nullptr)
+	{
+		CEnemy* pEnemyNext = pEnemy->GetNext();
+
+		if ((CObject*)pEnemy == pObj)
+		{
+			// “G‚Ì—L–³‚ð”»’è
+			if (pEnemy->GetState() == CEnemy::STATE_DEATH)
+			{
+				CRecord* pRecord = CRecord::GetInstance();
+
+				if (pRecord != nullptr)
+				{
+					// Œ»Ý‚ÌƒvƒŒƒCƒ„[‚Ì”j‰ó”‚ð‰ÁŽZ
+					pRecord->AddDestroy(m_info.nID);
+				}
+			}
+		}
+
+		pEnemy = pEnemyNext;
 	}
 }
 
