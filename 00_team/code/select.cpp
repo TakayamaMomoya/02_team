@@ -238,7 +238,7 @@ void CSelect::StartInit(void)
 
 	if (m_pStartUI != nullptr)
 	{
-		m_pStartUI->SetPosition(D3DXVECTOR3(1100.0f, 650.0f, 0.0f));
+		m_pStartUI->SetPosition(D3DXVECTOR3(1030.0f, 660.0f, 0.0f));
 		m_pStartUI->SetSize(150.0f, 50.0f);
 		m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 
