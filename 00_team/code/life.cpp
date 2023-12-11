@@ -96,7 +96,7 @@ HRESULT CLife::Init(void)
 	if (m_pUILife != nullptr &&
 		m_pUILifeFrame != nullptr)
 	{
-		// 初期値設定処理
+		// 初期値設定処理（設定してなかったらこれ）
 		m_pUILife->SetSize(50.0f, 100.0f);
 		m_pUILife->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		m_pUILifeFrame->SetSize(50.0f, 100.0f);
@@ -157,6 +157,7 @@ void CLife::SetLife(void)
 	{
 		if (pPlayer != nullptr)
 		{
+			// 現在の体力と前の体力が違う
 			if (m_info.fLife != pPlayer->GetLife())
 			{
 				// 現在の体力を取得
@@ -182,6 +183,7 @@ void CLife::SetLife(void)
 					// 現在の体力状況を判定
 					if (m_info.fLife >= fMaxLife * LIFE_CHANGE_RATE[nCount])
 					{
+						// 色を設定
 						m_info.colLife = LIFE_COLOR[nCount];
 						m_pUILife->SetCol(LIFE_COLOR[nCount]);
 
@@ -218,15 +220,15 @@ void CLife::SetLife(void)
 //=====================================================
 // 位置設定処理
 //=====================================================
-void CLife::SetPosition(D3DXVECTOR3 posLife, D3DXVECTOR3 posLifeFrame)
+void CLife::SetPosition(D3DXVECTOR3 pos)
 {
 	if (m_pUILife != nullptr &&
 		m_pUILifeFrame != nullptr)
 	{
-		m_info.posLife = posLife;
+		m_info.posLife = pos;
 		
-		m_pUILife->SetPosition(posLife);
-		m_pUILifeFrame->SetPosition(posLifeFrame);
+		m_pUILife->SetPosition(pos);
+		m_pUILifeFrame->SetPosition(pos);
 
 		m_pUILife->SetVtx();
 		m_pUILifeFrame->SetVtx();
