@@ -41,6 +41,28 @@ CTelop::~CTelop()
 }
 
 //*****************************************************
+// ¶¬ˆ—
+//*****************************************************
+CTelop* CTelop::Create(D3DXVECTOR3 pos)
+{
+	CTelop* pTelop = nullptr;
+
+	if (pTelop == nullptr)
+	{
+		pTelop = new CTelop;
+
+		if (pTelop != nullptr)
+		{
+			pTelop->m_pos = pos;
+
+			pTelop->Init();
+		}
+	}
+
+	return pTelop;
+}
+
+//*****************************************************
 // ‰Šú‰»ˆ—
 //*****************************************************
 HRESULT CTelop::Init(void)
@@ -51,6 +73,7 @@ HRESULT CTelop::Init(void)
 	{
 		m_pObjet2D->SetSize(INIT_SIZE.x, INIT_SIZE.y);
 		m_pObjet2D->SetCol({ 1.0f, 1.0f, 1.0f, 0.0f });
+		m_pObjet2D->SetPosition(m_pos);
 
 		int nIdx = CTexture::GetInstance()->Regist(TEX_PATH);
 		m_pObjet2D->SetIdxTexture(nIdx);
@@ -61,6 +84,8 @@ HRESULT CTelop::Init(void)
 	m_fTimer = TIMER;
 	m_state = STATE_INIT;
 
+	EnableNotStop(true);
+
 	return S_OK;
 }
 
@@ -70,6 +95,8 @@ HRESULT CTelop::Init(void)
 void CTelop::Uninit(void)
 {
 	m_pObjet2D->Uninit();
+
+	Release();
 }
 
 //*****************************************************
@@ -146,26 +173,4 @@ void CTelop::Update(void)
 void CTelop::Draw(void)
 {
 	
-}
-
-//*****************************************************
-// ¶¬ˆ—
-//*****************************************************
-CTelop* CTelop::Create(D3DXVECTOR3 pos)
-{
-	CTelop* pTelop = nullptr;
-
-	if (pTelop == nullptr)
-	{
-		pTelop = new CTelop;
-
-		if (pTelop != nullptr)
-		{
-			pTelop->m_pos = pos;
-
-			pTelop->Init();
-		}
-	}
-
-	return pTelop;
 }

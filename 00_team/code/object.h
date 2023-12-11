@@ -51,6 +51,7 @@ public:
 	virtual void Draw(void) {};	// 描画処理
 	static void ReleaseAll(void);	// 全てリリース
 	static void UpdateAll(void);	// 全て更新
+	static void UpdateNotStop(void);	// 動かないオブジェクトの更新
 	static void DrawAll(void);	// 全て描画
 	virtual void Hit(float fDamage){}	// ヒット処理
 	void SetType(TYPE type);
@@ -64,6 +65,7 @@ public:
 	static int GetNumAll(void) { return m_nNumAll; }
 	bool IsDeath(void) { return m_bDeath; }
 	void EnableZtest(bool bZtest) { m_bZtest = bZtest; }
+	void EnableNotStop(bool bNotStop);
 
 protected:
 	void Release(void);	// 個別リリース処理
@@ -82,6 +84,8 @@ private:
 	bool m_bDeath;	// 死亡フラグ
 	bool m_bWire;	// ワイヤーフレームで表示するかどうか
 	bool m_bZtest;	// Zテストで前に出すかどうか
+	bool m_bNotStop;	// 止まらないオブジェクトかどうか
+	static CObject *m_apNotStop[NUM_OBJECT];	// 停止中にも動くオブジェクトの配列
 };
 
 #endif
