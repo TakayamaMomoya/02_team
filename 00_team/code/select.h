@@ -73,7 +73,7 @@ private:
 	// プレイヤー情報の構造体
 	struct PlayerInfo
 	{
-		CPlayer* pPlayer;	// プライヤー
+		CPlayer* pPlayer;	// プレイヤー
 		CObjectX* pLeaf;	// 葉っぱ
 		PLAYER_STATE state;	// 状態
 	};
@@ -104,7 +104,7 @@ private:
 	PlayerInfo m_apPlayerData[NUM_PLAYER];	// プレイヤー情報
 	CContainerInfo m_aContainerData[NUM_PLAYER];	// コンテナ
 	CLift* m_pLift;	// リフト
-	CNumber3D* m_apNumber[2];
+	CNumber3D* m_apNumber[2];	// 何人リフトに乗ってるかのテクスチャ
 	CBillboard* m_pSlash;
 	SELECT_STATE m_selectState;	// 人数選択の状態
 	bool m_abEntry[NUM_PLAYER];	// 参加したかどうか
