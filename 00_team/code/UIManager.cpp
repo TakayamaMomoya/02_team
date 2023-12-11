@@ -101,6 +101,18 @@ namespace
 		D3DXVECTOR3(0.0f, -20.0f, 0.0f),
 		D3DXVECTOR3(0.0f, 20.0f, 0.0f),
 		D3DXVECTOR3(0.0f, 20.0f, 0.0f),
+
+		// ミニガン
+		D3DXVECTOR3(0.0f, -20.0f, 0.0f),
+		D3DXVECTOR3(0.0f, -20.0f, 0.0f),
+		D3DXVECTOR3(0.0f,  20.0f, 0.0f),
+		D3DXVECTOR3(0.0f,  20.0f, 0.0f),
+
+		// ランチャー
+		D3DXVECTOR3(0.0f, -20.0f, 0.0f),
+		D3DXVECTOR3(0.0f, -20.0f, 0.0f),
+		D3DXVECTOR3(0.0f, 20.0f, 0.0f),
+		D3DXVECTOR3(0.0f, 20.0f, 0.0f),
 	};
 	const float WEAPON_SIZE[CWeapon::TYPE_MAX] =
 	{// 位置（基礎から加算） [プレイヤー番号]
@@ -108,6 +120,8 @@ namespace
 		50.0f,		// マシンガン
 		50.0f,		// ショットガン
 		35.0f,		// レールガン
+		80.0f,		// ミニガン
+		80.0f,		// ランチャー
 	};
 	const float WEAPON_WIDTH[CWeapon::TYPE_MAX] =
 	{// 位置（基礎から加算） [武器種]
@@ -115,6 +129,8 @@ namespace
 		0.6f * WEAPON_SIZE[CWeapon::TYPE_MACHINEGUN],
 		1.0f * WEAPON_SIZE[CWeapon::TYPE_SHOTGUN],
 		1.4f * WEAPON_SIZE[CWeapon::TYPE_RAILGUN],
+		0.7f * WEAPON_SIZE[CWeapon::TYPE_MINIGUN],
+		0.7f * WEAPON_SIZE[CWeapon::TYPE_LAUNCHER],
 	};
 	const float WEAPON_HEIGHT[CWeapon::TYPE_MAX] =
 	{// 位置（基礎から加算） [武器種]
@@ -122,6 +138,8 @@ namespace
 		0.7f * WEAPON_SIZE[CWeapon::TYPE_MACHINEGUN],
 		0.2f * WEAPON_SIZE[CWeapon::TYPE_SHOTGUN],
 		0.4f * WEAPON_SIZE[CWeapon::TYPE_RAILGUN],
+		0.3f * WEAPON_SIZE[CWeapon::TYPE_MINIGUN],
+		0.2f * WEAPON_SIZE[CWeapon::TYPE_LAUNCHER],
 	};
 	const D3DXCOLOR WEAPON_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	const char* WEAPON_FILE_NAME[CWeapon::TYPE_MAX] =
@@ -130,6 +148,8 @@ namespace
 		"data\\TEXTURE\\UI\\weapon_mac10.png",
 		"data\\TEXTURE\\UI\\weapon_shotgun.png",
 		"data\\TEXTURE\\UI\\weapon_railgun.png",
+		"data\\TEXTURE\\UI\\weapon_minigun.png",
+		"data\\TEXTURE\\UI\\weapon_launcher.png",
 	};
 
 	// 体力表示の情報

@@ -75,6 +75,7 @@ void CMinigun::Update(void)
 void CMinigun::Attack(void)
 {
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
+	CSound* pSound = CSound::GetInstance();
 
 	if (pJoypad == nullptr)
 	{
@@ -131,8 +132,6 @@ void CMinigun::Attack(void)
 			// ’e‚ğ”­Ë
 			CBullet::Create(posMuzzle, -move, info.fLifeBullet, CBullet::TYPE_PLAYER, false,6.0f, info.fDamage);
 
-			CSound* pSound = CSound::GetInstance();
-
 			if (pSound != nullptr)
 			{
 				// ƒ}ƒOƒiƒ€”­–C‰¹
@@ -158,7 +157,7 @@ void CMinigun::Attack(void)
 		}
 		else
 		{// ’eØ‚ê‚Ìê‡
-
+			
 		}
 	}
 }
