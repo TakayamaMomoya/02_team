@@ -15,8 +15,8 @@
 //*****************************************************
 namespace
 {
-	const char* TEX_PATH = "data\\TEXTURE\\UI\\telop.jpg";
-	const D3DXVECTOR2 INIT_SIZE = { 400.0f, 200.0f };	// 初期サイズ
+	const char* TEX_PATH = "data\\TEXTURE\\UI\\caution.png";
+	const D3DXVECTOR2 INIT_SIZE = { 430.0f, 200.0f };	// 初期サイズ
 	const D3DXVECTOR2 END_SIZE = { 200.0f, 80.0f };	// 終了サイズ
 	const float SPEED = 0.2f;
 	const float TIMER = 5.0f;
