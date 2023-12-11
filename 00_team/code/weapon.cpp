@@ -103,7 +103,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			if (pSound != nullptr)
 			{
 				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
-				pSound->Play(pSound->LABEL_SE_GET_RAILGUN);
+				pSound->Play(pSound->LABEL_SE_GET_MINIGUN);
 			}
 
 			break;
@@ -114,7 +114,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 			if (pSound != nullptr)
 			{
 				pSound->Play(pSound->LABEL_SE_GET_WEAPON);
-				pSound->Play(pSound->LABEL_SE_GET_RAILGUN);
+				pSound->Play(pSound->LABEL_SE_GET_LUNCHER);
 			}
 
 			break;
