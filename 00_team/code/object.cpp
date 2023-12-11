@@ -36,6 +36,7 @@ CObject::CObject(int nPriority)
 	m_bWire = false;
 	m_bZtest = false;
 	m_bNotStop = false;
+	m_bLighting = true;
 	m_type = TYPE::TYPE_NONE;
 	m_nID = -1;
 
@@ -302,6 +303,12 @@ void CObject::DrawAll(void)
 				pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 			}
 
+			if (pObject->m_bLighting == false)
+			{
+				// ライティングを無効化
+				pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+			}
+
 			// 描画処理
 			pObject->Draw();
 
@@ -314,6 +321,12 @@ void CObject::DrawAll(void)
 			{// Zテストの設定
 				pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
 				pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+			}
+
+			if (pObject->m_bLighting == false)
+			{
+				// ライティングを無効化
+				pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 			}
 
 			// 次のアドレスを代入

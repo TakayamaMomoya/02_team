@@ -30,6 +30,7 @@
 #include "fade.h"
 #include "inputManager.h"
 #include "block.h"
+#include "record.h"
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -114,6 +115,14 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	// パーティクルの読込
 	CParticle::Load();
 
+	// 戦績の生成
+	CRecord* pRecord = CRecord::Create();
+
+	if (pRecord == nullptr)
+	{
+		return E_FAIL;
+	}
+
 	SetMode(m_mode);
 
 	return S_OK;
@@ -139,6 +148,14 @@ void CManager::Uninit(void)
 
 	// パーティクル情報破棄
 	CParticle::Unload();
+
+	// 戦績の終了処理
+	CRecord* pRecord = CRecord::GetInstance();
+
+	if (pRecord != NULL)
+	{
+		pRecord->Uninit();
+	}
 
 	// レンダラー終了
 	CRenderer *pRenderer = CRenderer::GetInstance();

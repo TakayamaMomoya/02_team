@@ -20,6 +20,8 @@
 #include "motion.h"
 #include "itemRepair.h"
 #include "telop.h"
+#include "object3D.h"
+#include "texture.h"
 
 //*****************************************************
 // 定数定義
@@ -33,7 +35,8 @@ const float LIMID_RANGE_LEFT = -460.0f;
 const float LIMID_RANGE_RIGHT = 460.0f;
 const float LIMID_RANGE_UP = 460.0f;
 const float LIMID_RANGE_DOWN = -460.0f;
-
+const char* CAUTION_PATH = "data\\TEXTURE\\UI\\steal.png";	// 警告表示のテクスチャパス
+const D3DXVECTOR3 POS_CAUTION = { 0.0f,150.0f,100.0f };	// 警告の位置
 }
 
 //=====================================================
@@ -43,6 +46,7 @@ CEnemyThief::CEnemyThief()
 {
 	m_bTakeRepair = false;
 	m_state = STATE_NONE;
+	m_pCaution = nullptr;
 }
 
 //=====================================================
@@ -83,8 +87,11 @@ HRESULT CEnemyThief::Init(void)
 //=====================================================
 void CEnemyThief::Uninit(void)
 {
-	// いない状態に設定する
-	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
+	if (m_pCaution != nullptr)
+	{
+		m_pCaution->Uninit();
+		m_pCaution = nullptr;
+	}
 
 	// 継承クラスの終了
 	CEnemy::Uninit();
@@ -138,6 +145,15 @@ void CEnemyThief::Update(void)
 	{
 		// 更新処理の分岐
 		SwitchUpdate();
+	}
+
+	if (m_pCaution != nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+
+		pos += POS_CAUTION;
+
+		m_pCaution->SetPosition(pos);
 	}
 }
 
@@ -262,6 +278,27 @@ void CEnemyThief::CollisionRocket(void)
 
 		// テロップの生成
 		CTelop::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f));
+
+		if (m_pCaution == nullptr)
+		{// 警告の生成
+			D3DXVECTOR3 pos = GetPosition();
+
+			pos += POS_CAUTION;
+
+			m_pCaution = CObject3D::Create(pos);
+
+			if (m_pCaution != nullptr)
+			{
+				int nIdx = CTexture::GetInstance()->Regist(CAUTION_PATH);
+				m_pCaution->SetIdxTexture(nIdx);
+
+				m_pCaution->SetSize(100.0f, 50.0f);
+				m_pCaution->EnableBillboard(true);
+				m_pCaution->EnableZtest(true);
+				m_pCaution->EnableLighting(false);
+				m_pCaution->SetVtx();
+			}
+		}
 	}
 }
 

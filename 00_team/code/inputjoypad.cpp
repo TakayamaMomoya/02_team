@@ -28,8 +28,7 @@ CInputJoypad::CInputJoypad()
 	ZeroMemory(&m_aStateRepeat, sizeof(m_aStateRepeat));
 	ZeroMemory(&m_aVibration, sizeof(m_aVibration));
 	ZeroMemory(&m_aVibState,sizeof(m_aVibState));
-
-	m_nVibTimer = 0;
+	ZeroMemory(&m_aVibTimer, sizeof(m_aVibTimer));
 }
 
 //====================================================
@@ -114,18 +113,18 @@ void CInputJoypad::Update(void)
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
-		if (m_nVibTimer > 0)
+		if (m_aVibTimer[nCntPlayer] > 0)
 		{
-			m_nVibTimer--;
+			m_aVibTimer[nCntPlayer]--;
 		}
-		else if (m_nVibTimer <= 0)
+		else if (m_aVibTimer[nCntPlayer] <= 0)
 		{
 			memset(&m_aVibState[nCntPlayer], 0, sizeof(PADVIB));
 			m_aVibration[nCntPlayer].wLeftMotorSpeed = 0;
 			m_aVibration[nCntPlayer].wRightMotorSpeed = 0;
 			//U“®ó‘Ô‚ð“`’B
 			XInputSetState(nCntPlayer, &m_aVibration[nCntPlayer]);
-			m_nVibTimer = 0;
+			m_aVibTimer[nCntPlayer] = 0;
 		}
 
 		if (m_aVibration[nCntPlayer].wLeftMotorSpeed < 0 ||
@@ -286,20 +285,20 @@ int CInputJoypad::GetRepeat(PADBUTTOS nKey, int nPlayer)
 //====================================================
 // ƒoƒCƒuî•ñÝ’è
 //====================================================
-void CInputJoypad::Vibration(int nPlayer, PADVIB state, short sVib,int nTime)
+void CInputJoypad::Vibration(int nPlayer, PADVIB state, float fVib,int nTime)
 {
 	switch (state)
 	{
 	case PADVIB_USE:
-		m_aVibration[nPlayer].wLeftMotorSpeed = sVib;
-		m_aVibration[nPlayer].wRightMotorSpeed = sVib;
+		m_aVibration[nPlayer].wLeftMotorSpeed = (WORD)(USHRT_MAX * fVib);
+		m_aVibration[nPlayer].wRightMotorSpeed = (WORD)(USHRT_MAX * fVib);
 		m_aVibState[nPlayer] = state;
 		break;
 	default:
 		break;
 	}
 
-	m_nVibTimer = nTime;
+	m_aVibTimer[nPlayer] = nTime;
 
 	//U“®ó‘Ô‚ð“`’B
 	XInputSetState(nPlayer, &m_aVibration[nPlayer]);

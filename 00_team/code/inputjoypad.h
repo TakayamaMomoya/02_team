@@ -76,7 +76,7 @@ public:
 	float GetJoyStickRY(int nPlayer);
 	bool GetLStickTrigger(DIRECTION direction,int nPlayer);
 	D3DXVECTOR3 GetVecStickL(void);
-	void Vibration(int nPlayer, PADVIB state, short sVib, int nTime);
+	void Vibration(int nPlayer, PADVIB state, float fVib, int nTime);
 	static CInputJoypad *GetInstance(void) { return m_pJoyPad; }
 
 private:
@@ -88,7 +88,7 @@ private:
 	XINPUT_STATE m_aStateRepeat[MAX_PLAYER];			//ゲームパッドのリピート情報
 	XINPUT_VIBRATION m_aVibration[MAX_PLAYER];		//ゲームパッドの振動情報
 	PADVIB m_aVibState[MAX_PLAYER];					//振動の状態
-	int m_nVibTimer;		// バイブレーションのタイマー
+	int m_aVibTimer[MAX_PLAYER];		// バイブレーションのタイマー
 	int m_aCntRepeat[MAX_PLAYER][PADBUTTONS_MAX];	// リピートカウンター
 	bool m_abTrigggerLStick[MAX_PLAYER][DIRECTION_MAX];	// スティックのトリガー判定
 

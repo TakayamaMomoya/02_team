@@ -65,6 +65,7 @@ public:
 	static int GetNumAll(void) { return m_nNumAll; }
 	bool IsDeath(void) { return m_bDeath; }
 	void EnableZtest(bool bZtest) { m_bZtest = bZtest; }
+	void EnableLighting(bool bLighting) { m_bLighting = bLighting; }
 	void EnableNotStop(bool bNotStop);
 
 protected:
@@ -84,6 +85,7 @@ private:
 	bool m_bDeath;	// 死亡フラグ
 	bool m_bWire;	// ワイヤーフレームで表示するかどうか
 	bool m_bZtest;	// Zテストで前に出すかどうか
+	bool m_bLighting;	// ライティングを有効化するかどうか
 	bool m_bNotStop;	// 止まらないオブジェクトかどうか
 	static CObject *m_apNotStop[NUM_OBJECT];	// 停止中にも動くオブジェクトの配列
 };

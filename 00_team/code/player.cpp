@@ -1256,7 +1256,7 @@ void CPlayer::Hit(float fDamage)
 			{
 				int nIdxJoypad = GetIDJoypad();
 
-				pJoypad->Vibration(nIdxJoypad,CInputJoypad::PADVIB::PADVIB_USE,1000,10);
+				pJoypad->Vibration(nIdxJoypad,CInputJoypad::PADVIB::PADVIB_USE,1.0f,20);
 			}
 		}
 	}
