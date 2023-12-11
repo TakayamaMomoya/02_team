@@ -39,6 +39,7 @@
 #include "box.h"
 #include "gameover.h"
 #include "enemyThief.h"
+#include "ghost.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
@@ -144,6 +145,8 @@ HRESULT CGame::Init(void)
 	{
 		pRenderer->EnableFog(true);
 	}
+
+	CGhost::Create(0);
 
 	return S_OK;
 }
