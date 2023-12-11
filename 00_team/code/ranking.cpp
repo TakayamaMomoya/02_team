@@ -18,6 +18,7 @@
 #include "object.h"
 #include "manager.h"
 #include "texture.h"
+#include "record.h"
 
 //*****************************************************
 // マクロ定義
@@ -98,6 +99,14 @@ HRESULT CRanking::Init(void)
 //=====================================================
 void CRanking::Uninit(void)
 {
+	// 戦績の終了処理
+	CRecord* pRecord = CRecord::GetInstance();
+
+	if (pRecord != nullptr)
+	{
+		pRecord->Uninit();
+	}
+
 	CObject::ReleaseAll();
 }
 

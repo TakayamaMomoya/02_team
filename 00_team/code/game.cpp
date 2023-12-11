@@ -39,6 +39,7 @@
 #include "box.h"
 #include "gameover.h"
 #include "enemyThief.h"
+#include "record.h"
 
 //*****************************************************
 // É}ÉNÉçíËã`
@@ -130,6 +131,14 @@ HRESULT CGame::Init(void)
 	if (pSound != nullptr)
 	{
 		pSound->Play(pSound->LABEL_BGM_GAME);
+	}
+
+	// êÌê—ÇÃê∂ê¨
+	CRecord* pRecord = CRecord::Create();
+
+	if (pRecord == nullptr)
+	{
+		return E_FAIL;
 	}
 
 #ifdef _DEBUG
