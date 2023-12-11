@@ -117,6 +117,11 @@ void CTexture::Unload(void)
 //=====================================================
 int CTexture::Regist(const char *pFileName)
 {
+	if (pFileName == nullptr)
+	{
+		return -1;
+	}
+
 	for (int nCntTex = 0; nCntTex < MAX_TEX; nCntTex++)
 	{
 		if (m_apFilename[nCntTex] != nullptr)

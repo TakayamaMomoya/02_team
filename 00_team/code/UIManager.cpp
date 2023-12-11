@@ -26,7 +26,6 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define TIME_PENALTY	(15)	// タイムペナルティ
 
 //*****************************************************
 // 定数定義
@@ -128,10 +127,10 @@ namespace
 
 	const D3DXVECTOR3 LIFE_POS_PLUS[NUM_PLAYER] =
 	{// 基準から加算分の位置
-		D3DXVECTOR3( 30.0f, -40.0f, 0.0f),
-		D3DXVECTOR3(-30.0f, -40.0f, 0.0f),
-		D3DXVECTOR3( 30.0f,  80.0f, 0.0f),
-		D3DXVECTOR3(-30.0f,  80.0f, 0.0f),
+		D3DXVECTOR3(30.0f, -60.0f, 0.0f),
+		D3DXVECTOR3(-30.0f, -60.0f, 0.0f),
+		D3DXVECTOR3(30.0f,  60.0f, 0.0f),
+		D3DXVECTOR3(-30.0f,  60.0f, 0.0f),
 	};
 	const D3DXVECTOR3 LIFE_FRAME_POS_PLUS[NUM_PLAYER] =
 	{// 基準から加算分の位置
@@ -140,19 +139,19 @@ namespace
 		D3DXVECTOR3( 30.0f,  60.0f, 0.0f),
 		D3DXVECTOR3(-30.0f,  60.0f, 0.0f),
 	};
-	const float LIFE_SIZE = 30.0f;
-	const float LIFE_WIDTH = 0.8f * LIFE_SIZE;
-	const float LIFE_HEIGHT = 0.7f * LIFE_SIZE;
+	const float LIFE_SIZE = LIFE::MAX_SIZE;
+	const float LIFE_WIDTH = LIFE::WIDTH_MAX;
+	const float LIFE_HEIGHT = LIFE::HEIGHT_MAX;
 	const D3DXCOLOR LIFE_COLOR = D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f);
-	const D3DXCOLOR LIFE_FRAME_COLOR = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f);
+	const D3DXCOLOR LIFE_FRAME_COLOR = D3DXCOLOR(0.25f, 0.25f, 0.25f, 0.5f);
 	const char* LIFE_FILE_NAME = "data\\TEXTURE\\UI\\life000.png";
 
 	const D3DXVECTOR3 MAGAZINE_POS_PLUS[NUM_PLAYER] =
 	{// 基準から加算分の位置
-		D3DXVECTOR3(-15.0f,  60.0f, 0.0f),
-		D3DXVECTOR3( -5.0f,  60.0f, 0.0f),
-		D3DXVECTOR3(-15.0f, -60.0f, 0.0f),
-		D3DXVECTOR3( -5.0f, -60.0f, 0.0f),
+		D3DXVECTOR3(-15.0f,  110.0f, 0.0f),
+		D3DXVECTOR3( -5.0f,  110.0f, 0.0f),
+		D3DXVECTOR3(-15.0f, -10.0f, 0.0f),
+		D3DXVECTOR3( -5.0f, -10.0f, 0.0f),
 	};
 	const D3DXVECTOR3 MAGAZINE_FRAME_POS_PLUS[NUM_PLAYER] =
 	{// 基準から加算分の位置
@@ -175,9 +174,13 @@ namespace
 	const float MAGAZINE_NUM_WIDTH = MAGAZINE_NUM_SIZE * 1.0f;
 	const float MAGAZINE_NUM_HEIGHT = MAGAZINE_NUM_SIZE * 1.0f;
 	const D3DXCOLOR MAGAZINE_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	const D3DXCOLOR MAGAZINE_FRAME_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.75f);
+	const D3DXCOLOR MAGAZINE_FRAME_COLOR = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f);
 	const D3DXCOLOR MAGAZINE_NUM_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	const char* MAGAZINE_FILE_NAME = "data\\TEXTURE\\UI\\magazin.png";
+
+	const int COL_CHANGE_COUNT = 180;							// 色を変えるまでのカウント
+	const float COL_CHANGE_MAX_SUB = 0.25f;						// 色の最大減算量
+	const float COL_CHANGE_SUB = 0.05f * COL_CHANGE_MAX_SUB;	// 色の減算量割合
 }
 
 //*****************************************************
@@ -247,7 +250,10 @@ void CUIManager::Update(void)
 	UpdateUIWeapon();
 
 	// 色切り替え処理
-	UpdateUIColor();
+	UpdateUISubColor();
+
+	// 色切り替え処理
+	UpdateUIChangeColor();
 
 	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
 
@@ -378,10 +384,10 @@ void CUIManager::CreateUIMagazine(int nIdx)
 	if (pUIMagazine != nullptr &&
 		m_aInfo[nIdx].pUIMagazine == nullptr)
 	{
-		// ライフのポインタを代入
+		// 装弾数UIのポインタを代入
 		m_aInfo[nIdx].pUIMagazine = pUIMagazine;
 
-		// ライフの設定
+		// 装弾数UIの設定
 		m_aInfo[nIdx].pUIMagazine->SetPosition(
 			FRAME_POS[nIdx] + MAGAZINE_POS_PLUS[nIdx],
 			FRAME_POS[nIdx] + MAGAZINE_FRAME_POS_PLUS[nIdx], 
@@ -444,19 +450,22 @@ void CUIManager::UpdateUIWeapon(void)
 				}
 				else
 				{
-					m_aInfo[nIdx].bIsWeaponNull = true;
-
-					m_aInfo[nIdx].pUiWeapon->SetPosition(FRAME_POS[nIdx] + WEAPON_NULL_POS_PLUS[nIdx]);
-					m_aInfo[nIdx].pUiWeapon->SetSize(WEAPON_NULL_WIDTH, WEAPON_NULL_HEIGHT);
-					m_aInfo[nIdx].pUiWeapon->SetCol(WEAPON_NULL_COLOR);
-
-					CTexture* pTexture = CTexture::GetInstance();
-
-					if (pTexture != nullptr)
+					if (m_aInfo[nIdx].bIsWeaponNull == false)
 					{
-						int nTexIdx = pTexture->Regist(WEAPON_NULL_FILE_NAME);
-						m_aInfo[nIdx].pUiWeapon->SetIdxTexture(nTexIdx);
-						m_aInfo[nIdx].pUiWeapon->SetVtx();
+						m_aInfo[nIdx].bIsWeaponNull = true;
+
+						m_aInfo[nIdx].pUiWeapon->SetPosition(FRAME_POS[nIdx] + WEAPON_NULL_POS_PLUS[nIdx]);
+						m_aInfo[nIdx].pUiWeapon->SetSize(WEAPON_NULL_WIDTH, WEAPON_NULL_HEIGHT);
+						m_aInfo[nIdx].pUiWeapon->SetCol(WEAPON_NULL_COLOR);
+
+						CTexture* pTexture = CTexture::GetInstance();
+
+						if (pTexture != nullptr)
+						{
+							int nTexIdx = pTexture->Regist(WEAPON_NULL_FILE_NAME);
+							m_aInfo[nIdx].pUiWeapon->SetIdxTexture(nTexIdx);
+							m_aInfo[nIdx].pUiWeapon->SetVtx();
+						}
 					}
 				}
 			}
@@ -465,47 +474,126 @@ void CUIManager::UpdateUIWeapon(void)
 }
 
 //=====================================================
-// UIの色変更処理
+// UIの色減算処理
 //=====================================================
-void CUIManager::UpdateUIColor(void)
+void CUIManager::UpdateUISubColor(void)
 {
 	for (int nIdx = 0; nIdx < NUM_PLAYER; nIdx++)
 	{
-		if (m_aInfo[nIdx].fUIColorAlpha >= 1.0f)
+		if (m_aInfo[nIdx].nCntColorChange <= COL_CHANGE_COUNT)
 		{
-			m_aInfo[nIdx].fUIColorAlpha -= 0.01f;
+			// 色変更までのカウントを加算
+			m_aInfo[nIdx].nCntColorChange++;
+		}
+		else
+		{
+			if (m_aInfo[nIdx].fUIColorAlpha >= COL_CHANGE_MAX_SUB)
+			{
+				m_aInfo[nIdx].fUIColorAlpha -= COL_CHANGE_SUB;
 
-			if (m_aInfo[nIdx].pUiFace != NULL)
-			{
-				D3DXCOLOR col = m_aInfo[nIdx].pUiFace->GetCol();
-				col.a = m_aInfo[nIdx].fUIColorAlpha;
-				m_aInfo[nIdx].pUiFace->SetCol(col);
-			}
-			if (m_aInfo[nIdx].pUiWeapon != NULL)
-			{
-				D3DXCOLOR col = m_aInfo[nIdx].pUiWeapon->GetCol();
-				col.a = m_aInfo[nIdx].fUIColorAlpha;
-				m_aInfo[nIdx].pUiWeapon->SetCol(col);
-			}
-			if (m_aInfo[nIdx].pLife != NULL)
-			{
-				D3DXCOLOR colLife = m_aInfo[nIdx].pLife->GetColLife();
-				D3DXCOLOR colLifeFrame = m_aInfo[nIdx].pLife->GetColLifeFrame();
-				colLife.a = m_aInfo[nIdx].fUIColorAlpha;
-				colLifeFrame.a = m_aInfo[nIdx].fUIColorAlpha;
-				m_aInfo[nIdx].pLife->SetCol(colLife, colLifeFrame);
-			}
-			if (m_aInfo[nIdx].pUIMagazine != NULL)
-			{
-				D3DXCOLOR colMagazine = m_aInfo[nIdx].pUIMagazine->GetColMagazine();
-				D3DXCOLOR colMagazineFrame = m_aInfo[nIdx].pUIMagazine->GetColMagazineFrame();
-				D3DXCOLOR colNum = m_aInfo[nIdx].pUIMagazine->GetColNum();
+				if (m_aInfo[nIdx].pUiFace != NULL)
+				{
+					D3DXCOLOR col = m_aInfo[nIdx].pUiFace->GetCol();
+					col.a = m_aInfo[nIdx].fUIColorAlpha;
+					m_aInfo[nIdx].pUiFace->SetCol(col);
+				}
+				if (m_aInfo[nIdx].pUiWeapon != NULL)
+				{
+					D3DXCOLOR col = m_aInfo[nIdx].pUiWeapon->GetCol();
+					col.a = m_aInfo[nIdx].fUIColorAlpha;
+					m_aInfo[nIdx].pUiWeapon->SetCol(col);
+				}
+				if (m_aInfo[nIdx].pLife != NULL)
+				{
+					D3DXCOLOR colLife = m_aInfo[nIdx].pLife->GetColLife();
+					D3DXCOLOR colLifeFrame = m_aInfo[nIdx].pLife->GetColLifeFrame();
 
-				colMagazine.a = m_aInfo[nIdx].fUIColorAlpha;
-				colMagazineFrame.a = m_aInfo[nIdx].fUIColorAlpha;
-				colNum.a = m_aInfo[nIdx].fUIColorAlpha;
+					colLife.a = m_aInfo[nIdx].fUIColorAlpha;
+					colLifeFrame.a = m_aInfo[nIdx].fUIColorAlpha;
 
-				m_aInfo[nIdx].pUIMagazine->SetCol(colMagazine, colMagazineFrame, colNum);
+					m_aInfo[nIdx].pLife->SetCol(colLife, colLifeFrame);
+				}
+				if (m_aInfo[nIdx].pUIMagazine != NULL)
+				{
+					D3DXCOLOR colMagazine = m_aInfo[nIdx].pUIMagazine->GetColMagazine();
+					D3DXCOLOR colMagazineFrame = m_aInfo[nIdx].pUIMagazine->GetColMagazineFrame();
+					D3DXCOLOR colNum = m_aInfo[nIdx].pUIMagazine->GetColNum();
+
+					colMagazine.a = m_aInfo[nIdx].fUIColorAlpha;
+					colMagazineFrame.a = m_aInfo[nIdx].fUIColorAlpha;
+					colNum.a = m_aInfo[nIdx].fUIColorAlpha;
+
+					m_aInfo[nIdx].pUIMagazine->SetCol(colMagazine, colMagazineFrame, colNum);
+				}
+			}
+		}
+	}
+}
+
+//=====================================================
+// UIの色を戻す
+//=====================================================
+void CUIManager::UpdateUIChangeColor(void)
+{
+	for (int nIdx = 0; nIdx < NUM_PLAYER; nIdx++)
+	{
+		if (m_aInfo[nIdx].pLife != NULL &&
+			m_aInfo[nIdx].pUIMagazine != NULL)
+		{
+			bool bChange = false;
+
+			if (m_aInfo[nIdx].pLife->GetColorChange())
+			{
+				bChange = true;
+				m_aInfo[nIdx].nCntColorChange = 0;
+				m_aInfo[nIdx].pLife->SetColorChange(false);
+			}
+
+			if (m_aInfo[nIdx].pUIMagazine->GetColorChange())
+			{
+				bChange = true;
+				m_aInfo[nIdx].nCntColorChange = 0;
+				m_aInfo[nIdx].pUIMagazine->SetColorChange(false);
+			}
+
+			if (bChange)
+			{
+				m_aInfo[nIdx].fUIColorAlpha = 1.0f;
+
+				if (m_aInfo[nIdx].pUiFace != NULL)
+				{
+					D3DXCOLOR col = m_aInfo[nIdx].pUiFace->GetCol();
+					col.a = m_aInfo[nIdx].fUIColorAlpha;
+					m_aInfo[nIdx].pUiFace->SetCol(col);
+				}
+				if (m_aInfo[nIdx].pUiWeapon != NULL)
+				{
+					D3DXCOLOR col = m_aInfo[nIdx].pUiWeapon->GetCol();
+					col.a = m_aInfo[nIdx].fUIColorAlpha;
+					m_aInfo[nIdx].pUiWeapon->SetCol(col);
+				}
+				if (m_aInfo[nIdx].pLife != NULL)
+				{
+					D3DXCOLOR colLife = m_aInfo[nIdx].pLife->GetColLife();
+					D3DXCOLOR colLifeFrame = m_aInfo[nIdx].pLife->GetColLifeFrame();
+
+					colLife.a = m_aInfo[nIdx].fUIColorAlpha;
+					colLifeFrame.a = m_aInfo[nIdx].fUIColorAlpha;
+
+					m_aInfo[nIdx].pLife->SetCol(colLife, colLifeFrame);
+				}
+				if (m_aInfo[nIdx].pUIMagazine != NULL)
+				{
+					D3DXCOLOR colMagazine = m_aInfo[nIdx].pUIMagazine->GetColMagazine();
+					D3DXCOLOR colMagazineFrame = m_aInfo[nIdx].pUIMagazine->GetColMagazineFrame();
+					D3DXCOLOR colNum = m_aInfo[nIdx].pUIMagazine->GetColNum();
+
+					colMagazine.a = m_aInfo[nIdx].fUIColorAlpha;
+					colMagazineFrame.a = m_aInfo[nIdx].fUIColorAlpha;
+					colNum.a = m_aInfo[nIdx].fUIColorAlpha;
+
+					m_aInfo[nIdx].pUIMagazine->SetCol(colMagazine, colMagazineFrame, colNum);
+				}
 			}
 		}
 	}

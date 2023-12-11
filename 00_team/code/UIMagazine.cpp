@@ -162,7 +162,7 @@ void CUIMagazine::SetPosition(D3DXVECTOR3 posUIMagazine,D3DXVECTOR3 posUIMagazin
 		m_pUIMagazineFrame->SetPosition(posUIMagazineFrame);
 		m_pNumDig->SetPosition(posNum);
 
-		m_pUIMagazine->SetVtx();
+		SetVtxGage();
 		m_pUIMagazineFrame->SetVtx();
 	}
 }
@@ -184,7 +184,7 @@ void CUIMagazine::SetSize(float width, float height, float widthNum, float heigh
 		m_pUIMagazineFrame->SetSize(width, height);
 		m_pNumDig->SetSizeAll(widthNum, heightNum);
 
-		m_pUIMagazine->SetVtx();
+		SetVtxGage();
 		m_pUIMagazineFrame->SetVtx();
 	}
 }
@@ -203,6 +203,8 @@ void CUIMagazine::SetCol(D3DXCOLOR colMagazine, D3DXCOLOR colMagazineFrame, D3DX
 		m_pUIMagazine->SetCol(colMagazine);
 		m_pUIMagazineFrame->SetCol(colMagazineFrame);
 		m_pNumDig->SetColor(colNum);
+
+		SetVtxGage();
 	}
 }
 
@@ -224,7 +226,7 @@ void CUIMagazine::SetTexture(const char* pFileName)
 		m_pUIMagazine->SetIdxTexture(m_info.nIdxTexture);
 		m_pUIMagazineFrame->SetIdxTexture(m_info.nIdxTexture);
 
-		m_pUIMagazine->SetVtx();
+		SetVtxGage();
 		m_pUIMagazineFrame->SetVtx();
 	}
 }
@@ -239,7 +241,7 @@ void CUIMagazine::SetNumMagazine(void)
 	CPlayer* pPlayer = nullptr;
 	CWeapon* pWeapon = nullptr;
 
-	int nBullet = 0;
+	int nMaxBullet = 0;
 
 	if (pPlayerManager != nullptr)
 	{
@@ -255,13 +257,98 @@ void CUIMagazine::SetNumMagazine(void)
 
 	if (pWeapon != nullptr)
 	{
-		// プレイヤーの弾を取得
-		nBullet = pWeapon->GetBullet();
+		if (m_info.nBullet != pWeapon->GetBullet())
+		{
+			// プレイヤーの弾を取得
+			m_info.nBullet = pWeapon->GetBullet();
+			nMaxBullet = pWeapon->GetMaxBullet();
+
+			m_info.bColorChange = true;
+
+			float fLifeRatio = (1.0f - ((float)m_info.nBullet / (float)nMaxBullet));
+			m_info.fHeightSub = fLifeRatio * m_info.fHeight;
+
+			m_pUIMagazine->SetTex(D3DXVECTOR2(0.0f, fLifeRatio), D3DXVECTOR2(1.0f, 1.0f));
+			m_pUIMagazine->SetVtx();
+			SetVtxGage();
+			m_pUIMagazineFrame->SetVtx();
+		}
+	}
+	else
+	{
+		m_info.nBullet = 0;
+
+		float fLifeRatio = (1.0f - ((float)m_info.nBullet / (float)nMaxBullet));
+		m_info.fHeightSub = fLifeRatio * m_info.fHeight;
+
+		m_pUIMagazine->SetTex(D3DXVECTOR2(0.0f, fLifeRatio), D3DXVECTOR2(1.0f, 1.0f));
+		SetVtxGage();
+		m_pUIMagazineFrame->SetVtx();
 	}
 
 	if (m_pNumDig != nullptr)
 	{
 		// 弾を反映
-		m_pNumDig->SetValue(nBullet, DIG_MAG_NUM);
+		m_pNumDig->SetValue(m_info.nBullet, DIG_MAG_NUM);
+	}
+}
+
+//=====================================================
+// ゲージ用の頂点情報設定処理
+//=====================================================
+void CUIMagazine::SetVtxGage(void)
+{
+	// 頂点情報のポインタ
+	VERTEX_2D* pVtx;
+
+	if (m_pUIMagazine != nullptr)
+	{
+		if (m_pUIMagazine->GetVtxBuff() != nullptr)
+		{
+			// 頂点バッファをロックし、頂点情報へのポインタを取得
+			m_pUIMagazine->GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
+
+			// 対角線の角度取得
+			float fAngleUp = atan2f(m_info.fWidth, m_info.fHeight);
+			// 長さの取得
+			float fLengthUp = sqrtf(m_info.fWidth * m_info.fWidth + m_info.fHeight * m_info.fHeight);
+			float fLengthSub = sqrtf(m_info.fWidthSub * m_info.fWidthSub + m_info.fHeightSub * m_info.fHeightSub);
+
+			if (fLengthUp - fLengthSub <= 1.0f)
+			{
+				fLengthUp = 0.0f;
+				fLengthSub = 0.0f;
+			}
+
+			// 頂点座標の設定
+			pVtx[0].pos = D3DXVECTOR3
+			(
+				m_info.posUIMagazine.x + sinf(0.0f - D3DX_PI + fAngleUp) * fLengthUp,
+				m_info.posUIMagazine.y + cosf(0.0f - D3DX_PI + fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
+				0.0f
+			);
+			pVtx[1].pos = D3DXVECTOR3
+			(
+				m_info.posUIMagazine.x + sinf(0.0f + D3DX_PI - fAngleUp) * fLengthUp,
+				m_info.posUIMagazine.y + cosf(0.0f + D3DX_PI - fAngleUp) * ((fLengthUp * 2.0f) - (fLengthSub * 2.0f)),
+				0.0f
+			);
+			pVtx[2].pos = D3DXVECTOR3
+			(
+				m_info.posUIMagazine.x + sinf(0.0f - fAngleUp) * fLengthUp,
+				m_info.posUIMagazine.y + cosf(0.0f - fAngleUp),
+				0.0f
+			);
+			pVtx[3].pos = D3DXVECTOR3
+			(
+				m_info.posUIMagazine.x + sinf(0.0f + fAngleUp) * fLengthUp,
+				m_info.posUIMagazine.y + cosf(0.0f + fAngleUp),
+				0.0f
+			);
+
+
+			// 頂点バッファのアンロック
+			m_pUIMagazine->GetVtxBuff()->Unlock();
+		}
 	}
 }

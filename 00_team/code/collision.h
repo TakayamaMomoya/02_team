@@ -101,13 +101,14 @@ public:
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
-	bool SphereCollision(TAG tag);
+	bool OnEnter(TAG tag);
 	float GetRadius(void) { return m_fRadius; }
 	static CCollisionSphere *Create(TAG tag, TYPE type, CObject *obj);
 	void SetRadius(float fRadius) { m_fRadius = fRadius; }
 	bool IsTriggerExit(TAG tag);
 	bool IsTriggerEnter(TAG tag);
 	void PushCollision(D3DXVECTOR3 *pPos,TAG tag);
+	void DamageAll(TAG tag, float fDamage);
 
 private:
 	float m_fRadius;
