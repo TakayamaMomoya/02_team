@@ -17,6 +17,7 @@
 // ‘O•ûéŒ¾
 //*****************************************************
 class CCollisionCube;
+class CPlayer;
 class CFan3D;
 
 //*****************************************************
@@ -55,8 +56,9 @@ private:
 		float rotDestY;	// –Ú•W‚ÌYŒü‚«
 	};
 	void Interact(CObject* pObj);
-	void proceed(void);
+	void proceed(CPlayer *pPlayer);
 	void Open(void);
+	void Exit(CObject* pObj);
 
 	SInfo m_info;
 	float m_fCtr;

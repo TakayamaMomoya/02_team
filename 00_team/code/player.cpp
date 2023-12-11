@@ -880,6 +880,8 @@ void CPlayer::ManageMotion(void)
 		// 所有武器
 		else if (m_info.pWeapon != nullptr)
 		{
+			m_info.pWeapon->SetEnable(true);
+
 			switch (m_info.pWeapon->GetType())
 			{
 				// マグナム

@@ -20,8 +20,11 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define SPEED_MOVE	(1.0f)	// 移動速度
-#define MAP_FILE	"data\\MAP\\map00.bin"	// マップのファイルパス
+namespace
+{
+	const float SPEED_MOVE(1.0f);	// 移動速度
+	const char* MAP_FILE = "data\\MAP\\map00.bin";	// マップのファイルパス
+}
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -189,7 +192,21 @@ void CBlock::Hit(float fDamage)
 		CObjectX* pObjX = CObjectX::Create(GetPosition(), D3DXVECTOR3(GetRot().x, fRotY, GetRot().z));
 		if (pObjX != nullptr)
 		{
-			pObjX->BindModel(CModel::Load("data\\MODEL\\block\\woodRubble.x"));
+			int nRand = rand() % 2;
+			
+			if (nRand == 0)
+			{
+				pObjX->BindModel(CModel::Load("data\\MODEL\\block\\woodRubble00.x"));
+			}
+			else if (nRand == 1)
+			{
+				pObjX->BindModel(CModel::Load("data\\MODEL\\block\\woodRubble01.x"));
+			}
+			else
+			{
+				assert(("えらー", false));
+				//pObjX->BindModel(CModel::Load("data\\MODEL\\block\\woodRubble00.x"));
+			}
 		}
 
 		// 破片の生成
