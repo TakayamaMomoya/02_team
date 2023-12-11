@@ -1095,7 +1095,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TEXTURE\\MATERIAL\\28154953_s.jpg";
+    "data\\TEXTURE\\MATERIAL\\DirtyConcrete_00.jpg";
    }
   }
   Material {

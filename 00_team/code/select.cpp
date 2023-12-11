@@ -121,8 +121,11 @@ HRESULT CSelect::Init(void)
 	// プレイヤーマネージャーの生成
 	CPlayerManager::Create();
 
+#ifdef _DEBUG
 	// エディットの生成
 	//CEdit::Create();
+
+#endif // DEBUG
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
@@ -328,6 +331,7 @@ void CSelect::Update(void)
 	CInputMouse* pMouse = CInputMouse::GetInstance();
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
 
+	bool bGameStart = false;
 	int nJoinPlayer = 0;
 
 	// シーンの更新
@@ -349,21 +353,24 @@ void CSelect::Update(void)
 					m_bOk = true;
 				}
 
-				// StartUIを見えるように
-				if (m_pStartUI != nullptr)
-				{
-					if (m_selectState != STATE_GO)
-					{
-						m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-					}
-					else
-					{
-						m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
-					}
-					m_pStartUI->SetVtx();
-				}
+				bGameStart = true;
 			}
 		}
+
+		// StartUIを見えるように
+		if (m_pStartUI != nullptr)
+		{
+			if (bGameStart == true)
+			{
+				m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			}
+			else
+			{
+				m_pStartUI->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+			}
+			m_pStartUI->SetVtx();
+		}
+
 	}
 	else
 	{
