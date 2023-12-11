@@ -10,6 +10,8 @@
 //*****************************************************
 #include "record.h"
 
+#include "playerManager.h"
+
 //*****************************************************
 // 静的メンバ変数宣言
 //*****************************************************
@@ -53,6 +55,9 @@ CRecord* CRecord::Create(void)
 //=====================================================
 HRESULT CRecord::Init(void)
 {
+	// プレイヤー数の設定処理
+	SetNumPlayer();
+
 	return S_OK;
 }
 
@@ -67,16 +72,21 @@ void CRecord::Uninit(void)
 }
 
 //=====================================================
-// プレイヤーの数を加算
+// プレイヤーの数を設定処理
 //=====================================================
-void CRecord::SetPlayer(void)
+void CRecord::SetNumPlayer(void)
 {
-	// 最大生存者数
-	m_nNumSuvived++;
+	CPlayerManager* pPlayerMagazine = CPlayerManager::GetInstance();
+
+	if (pPlayerMagazine != nullptr)
+	{
+		// 最大生存者数を設定
+		m_nNumSuvived = pPlayerMagazine->GetNumPlayer();
+	}
 }
 
 //=====================================================
-// 敵の破壊数を加算
+// 敵の破壊数を加算処理
 //=====================================================
 void CRecord::AddDestroy(int nIdx)
 {

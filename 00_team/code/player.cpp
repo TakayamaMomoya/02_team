@@ -407,7 +407,7 @@ void CPlayer::Update(void)
 	// プレイヤーを死亡させます
 	if (pPlayerManager != nullptr && pKeyboard != nullptr)
 	{
-		if (pKeyboard->GetTrigger(DIK_F5))
+		if (pKeyboard->GetTrigger(DIK_F6))
 		{
 			float fDamage = pPlayerManager->GetPlayerParam().fInitialLife;	// プレイヤーの初期体力を取得
 
