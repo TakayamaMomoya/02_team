@@ -52,6 +52,9 @@ public:
 		LABEL_SE_PAUSE_ARROW,			// ポーズ移動
 		LABEL_SE_PAUSE_ENTER,			// ポーズ選択
 
+		LABEL_SE_GET_MINIGUN,			// ミニガン取得
+		LABEL_SE_GET_LUNCHER,			// ロケラン取得
+
 		LABEL_MAX
 	} LABEL;
 
@@ -138,6 +141,9 @@ private:
 		{ "data/SOUND/SE/pause.wav",0 },				// ポーズ
 		{ "data/SOUND/SE/pause_arrow.wav",0 },			// 選択
 		{ "data/SOUND/SE/pause_enter.wav",0 },			// 決定
+
+		{ "data/SOUND/SE/get_minigun.wav",0 },			// ミニガン取得
+		{ "data/SOUND/SE/get_luncher.wav",0 },			// ロケラン取得
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ

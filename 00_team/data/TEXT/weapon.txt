@@ -9,7 +9,7 @@
 # 武器のパラメーター
 #====================================================================
 MAGNUMSET
-	BULLET = 23	# 弾数
+	BULLET = 25	# 弾数
 	DAMAGE = 10.0	# 威力
 	RAPID = 10	# 発射頻度(左のフレーム数ごとに発射できる)
 	BULLET_LIFE = 1.0	# 弾の寿命（秒数）
@@ -17,7 +17,7 @@ END_MAGNUMSET
 
 MACHINEGUNSET
 	BULLET = 100	# 弾数
-	DAMAGE = 2.6	# 威力
+	DAMAGE = 3.0	# 威力
 	RAPID = 6		# 発射頻度(左のフレーム数ごとに発射できる)
 	BULLET_LIFE = 0.65	# 弾の寿命（秒数）
 END_MACHINEGUNSET
@@ -28,7 +28,7 @@ SHOTGUNSET
 	NUM_PELLET = 20	# 一度に発射する弾の数
 	ANGLE_DIFFUSE = 50	# 弾の拡散角度
 	RAPID = 60	# 発射頻度(左のフレーム数ごとに発射できる)
-	BULLET_LIFE = 0.3	# 弾の寿命（秒数）
+	BULLET_LIFE = 0.4	# 弾の寿命（秒数）
 END_SHOTGUNSET
 
 RAILGUNSET
@@ -43,14 +43,14 @@ END_RAILGUNSET
 MINIGUNSET
 	BULLET = 200	# 弾数
 	DAMAGE = 5.0	# 威力
-	RAPID = 2		# 発射頻度(左のフレーム数ごとに発射できる)
+	RAPID = 1		# 発射頻度(左のフレーム数ごとに発射できる)
 	BULLET_LIFE = 1.0	# 弾の寿命（秒数）
 END_MINIGUNSET
 
 LAUNCHERSET
 	BULLET = 200	# 弾数
 	DAMAGE = 5.0	# 威力
-	RAPID = 2		# 発射頻度(左のフレーム数ごとに発射できる)
+	RAPID = 60		# 発射頻度(左のフレーム数ごとに発射できる)
 	BULLET_LIFE = 1.0	# 弾の寿命（秒数）
 END_LAUNCHERSET
 
@@ -61,9 +61,9 @@ PROBSET
 	PROB = 70 # マグナムの確率
 	PROB = 50 # マシンガンの確率
 	PROB = 30 # ショットガンの確率
-	PROB = 10 # レールガンの確率
-	PROB = 11	# ミニガンの確率
-	PROB = 1000	# ランチャーの確率
+	PROB = 8  # レールガンの確率
+	PROB = 9  # ミニガンの確率
+	PROB = 10 # ランチャーの確率
 END_PROBSET
 
 END_SCRIPT

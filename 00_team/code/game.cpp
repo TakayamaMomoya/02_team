@@ -38,6 +38,7 @@
 #include "pause.h"
 #include "box.h"
 #include "gameover.h"
+#include "enemyThief.h"
 
 //*****************************************************
 // マクロ定義
@@ -111,6 +112,8 @@ HRESULT CGame::Init(void)
 
 	// 敵マネージャーの生成
 	CEnemyManager *pEnemyManager = CEnemyManager::Create();
+
+	pEnemyManager->CreateEnemy(D3DXVECTOR3(500.0f, 0.0f, 0.0f), CEnemy::TYPE::TYPE_THIEF);
 
 	// ロケットの生成
 	CRocket::Create();
@@ -190,6 +193,9 @@ void CGame::Update(void)
 	}
 	else
 	{
+		// 停止しないオブジェクトの更新
+		CObject::UpdateNotStop();
+
 		// エディットの更新
 		CEdit* pEdit = CEdit::GetInstatnce();
 
