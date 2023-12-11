@@ -20,7 +20,7 @@
 class CFan3D	: public CObject
 {
 public:
-	CFan3D(int nPriority = 7);
+	CFan3D(int nPriority = 6);
 	~CFan3D();	//	デストラクタ
 
 	static CFan3D *Create(int nPriority = 3,int nNumVtx = 16);	// 生成処理

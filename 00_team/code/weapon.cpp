@@ -294,6 +294,7 @@ void CWeapon::SetPlayer(CPlayer *pPlayer)
 //=====================================================
 void CWeapon::SetBullet(int nBullet)
 {
+	CSound* pSound = CSound::GetInstance();
 	m_info.nNumBullet = nBullet;
 
 	if (m_info.nNumBullet <= 0)
@@ -301,6 +302,10 @@ void CWeapon::SetBullet(int nBullet)
 		if (m_info.pPlayer != nullptr)
 		{
 			m_info.pPlayer->ReleaseWeapon();
+		}
+		if (pSound != nullptr)
+		{
+			pSound->Play(pSound->LABEL_SE_WEAPON_LOST);
 		}
 
 		Uninit();
