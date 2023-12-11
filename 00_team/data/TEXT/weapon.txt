@@ -42,14 +42,14 @@ END_RAILGUNSET
 
 MINIGUNSET
 	BULLET = 200	# 弾数
-	DAMAGE = 5.0	# 威力
+	DAMAGE = 1.0	# 威力
 	RAPID = 3		# 発射頻度(左のフレーム数ごとに発射できる)
 	BULLET_LIFE = 1.0	# 弾の寿命（秒数）
 END_MINIGUNSET
 
 LAUNCHERSET
-	BULLET = 200	# 弾数
-	DAMAGE = 5.0	# 威力
+	BULLET = 4	# 弾数
+	DAMAGE = 10.0	# 威力
 	RAPID = 60		# 発射頻度(左のフレーム数ごとに発射できる)
 	BULLET_LIFE = 1.0	# 弾の寿命（秒数）
 END_LAUNCHERSET
