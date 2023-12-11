@@ -99,13 +99,13 @@ namespace
 	const D3DXVECTOR3 LOGO_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f - 100.0f, 0.0f);
 
 	// コンティニューのテクスチャのパス
-	const char* CONTINY_PATH = "data\\TEXTURE\\UI\\gamestart.png";
+	const char* CONTINY_PATH = "data\\TEXTURE\\UI\\pressAbutton.png";
 
 	// コンティニューの横幅
-	const float CONTINY_WIDTH = 240.0f;
+	const float CONTINY_WIDTH = 322.0f;
 
 	// コンティニューの縦幅
-	const float CONTINY_HEIGHT = 70.0f;
+	const float CONTINY_HEIGHT = 30.0f;
 
 	// コンティニューの位置
 	const D3DXVECTOR3 CONTINY_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f + 250.0f, 0.0f);
