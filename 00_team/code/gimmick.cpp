@@ -240,6 +240,17 @@ void CGimmick::Update(void)
 				m_pInteract = nullptr;
 			}
 		}
+
+		if (m_pCollisionSphere != nullptr)
+		{
+			if (m_pCollisionSphere->IsTriggerExit(CCollision::TAG_PLAYER))
+			{
+				// 当たったオブジェクトの取得
+				CObject *pObj = m_pCollisionSphere->GetOther();
+
+				Exit(pObj);
+			}
+		}
 	}
 
 	if (m_pInteract != nullptr && m_bEnable == false)

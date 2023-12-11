@@ -203,8 +203,18 @@ void CDoor::Interact(CObject *pObj)
 
 				if (bInteract)
 				{// ピッキングを進める
-					proceed();
+					CWeapon *pWeapon = pPlayer->GetWeapon();
 
+					if (pWeapon != nullptr)
+					{
+						bool bEnable = pWeapon->IsEnable();
+
+						if (bEnable)
+						{
+							pWeapon->SetEnable(false);
+						}
+					}
+						
 					float Tick = CManager::GetTick();
 					m_fCtr += Tick;
 
@@ -222,6 +232,59 @@ void CDoor::Interact(CObject *pObj)
 
 					// プレイヤーのドア入力情報
 					pPlayer->SetDoorPress(true);
+
+					proceed(pPlayer);
+				}
+				else
+				{
+					CWeapon *pWeapon = pPlayer->GetWeapon();
+
+					if (pWeapon != nullptr)
+					{
+						bool bEnable = pWeapon->IsEnable();
+
+						if (bEnable == false)
+						{
+							pWeapon->SetEnable(true);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+//=====================================================
+// プレイヤーが出た検出
+//=====================================================
+void CDoor::Exit(CObject* pObj)
+{
+	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
+
+	if (pObj == nullptr || pPlayerManager == nullptr)
+	{
+		return;
+	}
+
+	// プレイヤー取得
+	for (int i = 0; i < NUM_PLAYER; i++)
+	{
+		CPlayer *pPlayer = pPlayerManager->GetPlayer(i);
+
+		if (pPlayer != nullptr)
+		{
+			if ((CObject*)pPlayer == pObj)
+			{// プレイヤーの検出
+				CWeapon *pWeapon = pPlayer->GetWeapon();
+
+				if (pWeapon != nullptr)
+				{
+					bool bEnable = pWeapon->IsEnable();
+
+					if (bEnable == false)
+					{
+						pWeapon->SetEnable(true);
+					}
 				}
 			}
 		}
@@ -231,7 +294,7 @@ void CDoor::Interact(CObject *pObj)
 //=====================================================
 // ピッキングを進める
 //=====================================================
-void CDoor::proceed(void)
+void CDoor::proceed(CPlayer *pPlayer)
 {
 	if (m_info.pGauge == nullptr)
 	{// ゲージの生成
@@ -268,6 +331,18 @@ void CDoor::proceed(void)
 		{// 当たり判定の削除
 			m_info.pCollisionCube->Uninit();
 			m_info.pCollisionCube = nullptr;
+		}
+
+		CWeapon *pWeapon = pPlayer->GetWeapon();
+
+		if (pWeapon != nullptr)
+		{
+			bool bEnable = pWeapon->IsEnable();
+
+			if (bEnable == false)
+			{
+				pWeapon->SetEnable(true);
+			}
 		}
 	}
 }
