@@ -136,7 +136,7 @@ void CMinigun::Attack(void)
 			if (pSound != nullptr)
 			{
 				// ƒ}ƒOƒiƒ€”­–C‰¹
-				pSound->Play(pSound->LABEL_SE_GUNSHOT_01);
+				pSound->Play(pSound->LABEL_SE_GUNSHOT_04);
 			}
 
 			// ’e‚ðŒ¸‚ç‚·

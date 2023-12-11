@@ -72,6 +72,7 @@ void CLauncher::Update(void)
 void CLauncher::Attack(void)
 {
 	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
+	CSound* pSound = CSound::GetInstance();
 
 	if (pJoypad == nullptr)
 	{
@@ -88,6 +89,11 @@ void CLauncher::Attack(void)
 		if (nBullet > 0 && nCntShot == 0)
 		{// ’e‚Ì”­ŽË
 			D3DXMATRIX* pMtx = GetMatrix();
+
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_GUNSHOT_04);
+			}
 
 			// ƒ}ƒYƒ‹‚ÌˆÊ’u‚ðÝ’è
 			D3DXMATRIX mtxMuzzle;

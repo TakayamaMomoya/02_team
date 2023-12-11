@@ -54,6 +54,7 @@ public:
 
 		LABEL_SE_GET_MINIGUN,			// ミニガン取得
 		LABEL_SE_GET_LUNCHER,			// ロケラン取得
+		LABEL_SE_GUNSHOT_04,			// ロケラン射撃
 
 		LABEL_MAX
 	} LABEL;
@@ -144,6 +145,8 @@ private:
 
 		{ "data/SOUND/SE/get_minigun.wav",0 },			// ミニガン取得
 		{ "data/SOUND/SE/get_luncher.wav",0 },			// ロケラン取得
+		{ "data/SOUND/SE/gunshot_sound_05.wav",0 },		// ロケラン取得
+
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ
