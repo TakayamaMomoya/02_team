@@ -129,7 +129,7 @@ void CMinigun::Attack(void)
 			CWeapon::SInfo info = GetInfo();
 
 			// ’e‚ð”­ŽË
-			CBullet::Create(posMuzzle, -move, info.fLifeBullet, CBullet::TYPE_PLAYER, false,2.0f, info.fDamage);
+			CBullet::Create(posMuzzle, -move, info.fLifeBullet, CBullet::TYPE_PLAYER, false,6.0f, info.fDamage);
 
 			CSound* pSound = CSound::GetInstance();
 
