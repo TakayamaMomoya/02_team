@@ -19,6 +19,7 @@
 //*****************************************************
 CObject *CObject::m_apTop[NUM_PRIORITY] = {};	// 先頭のオブジェクトのポインタ
 CObject *CObject::m_apCur[NUM_PRIORITY] = {};	// 最後尾のオブジェクトのポインタ
+CObject *CObject::m_apNotStop[NUM_OBJECT] = {};	// 停止中も動くオブジェクトの配列
 int CObject::m_nNumAll = 0;	// 総数
 
 //=====================================================
@@ -34,11 +35,9 @@ CObject::CObject(int nPriority)
 	m_bDeath = false;
 	m_bWire = false;
 	m_bZtest = false;
-
-	if (nPriority == 7)
-	{
-		int n = 10;
-	}
+	m_bNotStop = false;
+	m_type = TYPE::TYPE_NONE;
+	m_nID = -1;
 
 	m_nPriority = nPriority;
 
@@ -78,6 +77,16 @@ void CObject::Release(void)
 {
 	// 死亡フラグを立てる
 	m_bDeath = true;
+
+	for (int i = 0; i < NUM_OBJECT; i++)
+	{// 停止しないオブジェクトの削除
+		if (m_apNotStop[i] == this)
+		{
+			m_apNotStop[i] = nullptr;
+
+			break;
+		}
+	}
 }
 
 //=====================================================
@@ -220,6 +229,43 @@ void CObject::UpdateAll(void)
 }
 
 //=====================================================
+// 止まらないオブジェクトの更新処理
+//=====================================================
+void CObject::UpdateNotStop(void)
+{
+	// 更新処理
+	for (int i = 0; i < NUM_OBJECT; i++)
+	{
+		if (m_apNotStop[i] != nullptr)
+		{
+			m_apNotStop[i]->Update();
+		}
+	}
+
+	// 死亡フラグの立っているオブジェクトの削除
+	for (int nCntPri = 0; nCntPri < NUM_PRIORITY; nCntPri++)
+	{
+		// 先頭オブジェクトを代入
+		CObject *pObject = m_apTop[nCntPri];
+
+		while (pObject != nullptr)
+		{
+			// 次のアドレスを保存
+			CObject *pObjectNext = pObject->m_pNext;
+
+			if (pObject->m_bDeath)
+			{
+				// 終了処理
+				pObject->Delete();
+			}
+
+			// 次のアドレスを代入
+			pObject = pObjectNext;
+		}
+	}
+}
+
+//=====================================================
 // 全描画処理
 //=====================================================
 void CObject::DrawAll(void)
@@ -293,6 +339,40 @@ void CObject::DrawAll(void)
 
 			// 次のアドレスを代入
 			pObject = pObjectNext;
+		}
+	}
+}
+
+//=====================================================
+// 停止しないオブジェクトに設定する
+//=====================================================
+void CObject::EnableNotStop(bool bNotStop)
+{
+	m_bNotStop = bNotStop;
+
+	if (bNotStop)
+	{// 止めないオブジェクトに設定
+
+		for (int i = 0; i < NUM_OBJECT; i++)
+		{
+			if (m_apNotStop[i] == nullptr)
+			{
+				m_apNotStop[i] = this;
+
+				break;
+			}
+		}
+	}
+	else
+	{// 止めないオブジェクトから削除
+		for (int i = 0; i < NUM_OBJECT; i++)
+		{
+			if (m_apNotStop[i] == this)
+			{
+				m_apNotStop[i] = nullptr;
+
+				break;
+			}
 		}
 	}
 }

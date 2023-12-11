@@ -19,6 +19,7 @@
 #include "rocket.h"
 #include "motion.h"
 #include "itemRepair.h"
+#include "telop.h"
 
 //*****************************************************
 // 定数定義
@@ -258,6 +259,9 @@ void CEnemyThief::CollisionRocket(void)
 
 			pGame->SetEventCamera(TIME_CAMERAEVENT, posOwn, posV);
 		}
+
+		// テロップの生成
+		CTelop::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f));
 	}
 }
 
