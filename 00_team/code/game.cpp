@@ -39,6 +39,7 @@
 #include "box.h"
 #include "gameover.h"
 #include "enemyThief.h"
+#include "ghost.h"
 #include "record.h"
 
 //*****************************************************
@@ -60,14 +61,6 @@ CGame::CGame()
 	m_nCntState = 0;
 	m_bStop = false;
 	m_bGameover = false;
-}
-
-//=====================================================
-// デストラクタ
-//=====================================================
-CGame::~CGame()
-{
-
 }
 
 //=====================================================
@@ -153,6 +146,8 @@ HRESULT CGame::Init(void)
 	{
 		pRenderer->EnableFog(true);
 	}
+
+	CGhost::Create(0);
 
 	return S_OK;
 }

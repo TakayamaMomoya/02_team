@@ -72,7 +72,6 @@ void CMagnum::Update(void)
 void CMagnum::Attack(void)
 {
 	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
-	CSound* pSound = CSound::GetInstance();
 
 	if (pJoypad == nullptr)
 	{
@@ -129,10 +128,17 @@ void CMagnum::Attack(void)
 			// ’e‚ð”­ŽË
 			CBullet::Create(posMuzzle, -move, info.fLifeBullet, CBullet::TYPE_PLAYER, false, 2.0f, info.fDamage);
 
+			CSound* pSound = CSound::GetInstance();
+
 			if (pSound != nullptr)
 			{
 				// ƒ}ƒOƒiƒ€”­–C‰¹
 				pSound->Play(pSound->LABEL_SE_GUNSHOT_00);
+			}
+
+			if (pJoypad != nullptr)
+			{// ƒRƒ“ƒgƒ[ƒ‰[‚ÌU“®
+				pJoypad->Vibration(nID, CInputJoypad::PADVIB::PADVIB_USE, info.fVibPower, info.nVibTime);
 			}
 
 			// ’e‚ðŒ¸‚ç‚·

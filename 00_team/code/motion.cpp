@@ -46,6 +46,7 @@ CMotion::CMotion(int nPriority) : CObject(nPriority)
 	m_posOld = { 0.0f,0.0f,0.0f };
 	m_posShadow = { 0.0f,0.0f,0.0f };
 	m_move = { 0.0f,0.0f,0.0f };
+	m_col = { 1.0f,1.0f,1.0f,1.0f };
 	m_bInde = false;
 }
 
@@ -836,6 +837,8 @@ void CMotion::SetAfterImage(D3DXCOLOR col, int m_nLife)
 //=====================================================
 void CMotion::SetAllCol(D3DXCOLOR col)
 {
+	m_col = col;
+
 	for (int i = 0; i < m_nNumParts; i++)
 	{
 		if (m_apParts[i] != nullptr)

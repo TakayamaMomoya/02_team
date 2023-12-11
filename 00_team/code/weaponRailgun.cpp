@@ -287,6 +287,14 @@ void CRailgun::Shot(void)
 		{
 			pSound->Play(pSound->LABEL_SE_GUNSHOT_03);
 		}
+
+		// パラメーター取得
+		CWeapon::SInfo info = GetInfo();
+
+		if (pJoypad != nullptr)
+		{// コントローラーの振動
+			pJoypad->Vibration(nID, CInputJoypad::PADVIB::PADVIB_USE, info.fVibPower, info.nVibTime);
+		}
 	}
 }
 

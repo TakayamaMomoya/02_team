@@ -85,7 +85,7 @@ void CShotgun::Attack(void)
 {
 	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
 	CSound* pSound = CSound::GetInstance();
-
+	
 	if (pJoypad == nullptr)
 	{
 		return;
@@ -143,13 +143,15 @@ void CShotgun::Attack(void)
 					// 弾を発射
 					CBullet::Create(posMuzzle, -move, info.fLifeBullet, CBullet::TYPE_PLAYER, false, 2.0f, info.fDamage);
 
-					// サウンドのインスタンスを取得
-					CSound* pSound = CSound::GetInstance();
-
 					if (pSound != nullptr)
 					{
 						// ショットガン発砲音
 						pSound->Play(pSound->LABEL_SE_GUNSHOT_02);
+					}
+
+					if (pJoypad != nullptr)
+					{// コントローラーの振動
+						pJoypad->Vibration(nID, CInputJoypad::PADVIB::PADVIB_USE, info.fVibPower, info.nVibTime);
 					}
 
 					// 連射カウンターのリセット
@@ -173,7 +175,7 @@ void CShotgun::Attack(void)
 		}
 		else
 		{// 弾切れの場合
-			
+
 		}
 	}
 }

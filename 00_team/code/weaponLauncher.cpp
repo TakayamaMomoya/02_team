@@ -89,10 +89,16 @@ void CLauncher::Attack(void)
 		if (nBullet > 0 && nCntShot == 0)
 		{// 弾の発射
 			D3DXMATRIX* pMtx = GetMatrix();
+			CWeapon::SInfo info = GetInfo();
 
 			if (pSound != nullptr)
 			{
 				pSound->Play(pSound->LABEL_SE_GUNSHOT_04);
+			}
+
+			if (pJoypad != nullptr)
+			{// コントローラーの振動
+				pJoypad->Vibration(nID, CInputJoypad::PADVIB::PADVIB_USE, info.fVibPower, info.nVibTime);
 			}
 
 			// マズルの位置を設定
@@ -123,10 +129,6 @@ void CLauncher::Attack(void)
 				}
 			}
 
-			// パラメーター取得
-			CWeapon::SInfo info = GetInfo();
-
-
 			CSound* pSound = CSound::GetInstance();
 
 			if (pSound != nullptr)
@@ -154,6 +156,7 @@ void CLauncher::Attack(void)
 		}
 		else
 		{// 弾切れの場合
+
 		}
 	}
 }
