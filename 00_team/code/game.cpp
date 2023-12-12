@@ -181,6 +181,7 @@ void CGame::Update(void)
 {
 	CFade *pFade = CFade::GetInstance();
 	CInputManager *pInputManager = CInputManager::GetInstance();
+	CSound* pSound = CSound::GetInstance();
 
 	if (m_bStop == false)
 	{
@@ -251,6 +252,12 @@ void CGame::Update(void)
 			{
 				CGameover::Create();
 				m_bGameover = true;
+
+				if (pSound != nullptr)
+				{
+					pSound->Play(pSound->LABEL_SE_GAMEOVER);
+				}
+
 				//pFade->SetFade(CScene::MODE_RANKING);
 			}
 		}
