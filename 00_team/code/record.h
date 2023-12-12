@@ -13,6 +13,7 @@
 //*****************************************************
 
 #include "object.h"
+#include "collision.h"
 
 //*****************************************************
 // ƒNƒ‰ƒX‚Ì’è‹`
@@ -26,14 +27,17 @@ public:
 	static CRecord* Create(void);
 	HRESULT Init(void);
 	void Uninit(void);
+	void Update(void);
 
 	void AddDestroy(int nIdx);
 	void CheckDeathEnemy(CObject* pObj, int nIdx);
+	void CheckDeathEnemyAll(CCollision** ppCollsionMissile, D3DXVECTOR3 posMissile, float fRadiusMissile, int nIdx);
 
 	static CRecord* GetInstance(void) { return m_pRecord; }
 
 private:
 
+	void Debug(void);
 	void SetNumPlayer(void);
 
 	struct SInfo

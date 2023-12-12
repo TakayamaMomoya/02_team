@@ -216,6 +216,14 @@ void CGame::Update(void)
 		}
 	}
 
+	// íÑ‚ÌŽæ“¾
+	CRecord* pRecord = CRecord::Create();
+
+	if (pRecord != nullptr)
+	{
+		pRecord->Update();
+	}
+
 	CGameover* pGameover = CGameover::GetInstance();
 
 	if (pGameover != nullptr)
