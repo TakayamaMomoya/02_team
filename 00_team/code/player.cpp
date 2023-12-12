@@ -161,7 +161,7 @@ HRESULT CPlayer::Init(void)
 
 		if (m_info.pCollisionSphere != nullptr)
 		{
-			m_info.pCollisionSphere->SetRadius(5.0f);
+			m_info.pCollisionSphere->SetRadius(20.0f);
 		}
 	}
 
