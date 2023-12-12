@@ -171,6 +171,7 @@ private:
 	void BlowPlayer(CObject *pObj);
 	void CheckDeathEnemy(CObject* pObj);
 	void LimidPostion();
+	void BoardingRocket(void);
 	void Debug(void);
 
 	SInfo m_info;	// ©g‚Ìî•ñ
