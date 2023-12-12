@@ -824,6 +824,7 @@ void CPlayer::ManageMotion(void)
 
 		if (m_info.motionInfo.bEmote)
 		{// エモートの他に通らない
+
 		}
 		else if (m_info.motionInfo.bDoorPress)
 		{// ドア開けるモーション
