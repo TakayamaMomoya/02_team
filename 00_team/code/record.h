@@ -14,6 +14,7 @@
 
 #include "object.h"
 #include "collision.h"
+#include "number.h"
 
 //*****************************************************
 // クラスの定義
@@ -21,6 +22,13 @@
 class CRecord
 {
 public:
+
+	enum GENRE_TYPE
+	{
+		GENRE_TYPE_DESTROY = 0,
+		GENRE_TYPE_MAX
+	};
+
 	CRecord();	// コンストラクタ
 	~CRecord();	// デストラクタ
 

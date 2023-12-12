@@ -11,13 +11,15 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include"scene.h"
-#include "number.h"
+
+#include "scene.h"
 
 //*****************************************************
-// マクロ定義
+// 前方宣言
 //*****************************************************
-#define NUM_RANK	(5) // ランキングの数
+
+class CObject2D;
+class CNumber;
 
 //*****************************************************
 // クラスの定義
@@ -25,13 +27,6 @@
 class CRanking : public CScene
 {
 public:
-	//ニューレコード文字の状態
-	typedef enum
-	{
-		STATE_NORMAL = 0,					//通常状態
-		STATE_DIFF,							//色が変わっている状態
-		STATE_MAX
-	}STATE;
 
 	CRanking();	// コンストラクタ
 	~CRanking();	// デストラクタ
@@ -41,21 +36,19 @@ public:
 	void Update(void);
 	void Draw(void);
 
-	void Reset(void);
-	void Set(int nScore);
-	void Save(void);
-	void Load(void);
-
 private:
-	void Sort(void);
 
-	int m_nScore;	// スコアの値
-	int m_nRankUpdate = -1;	// 更新ランクNo.
-	int m_aScore[NUM_RANK];	// ランキングスコア
-	STATE m_state = STATE_NORMAL;	// ニューレコードの点滅状態
-	int m_nCntState;	// 状態遷移カウンタ
-	int m_nTimerTrans;	// 画面遷移カウンター
-	CNumber *m_apNumber[NUM_RANK];	// ランキングの数字
+	struct SInfoVisual
+	{
+		CObject2D* pRecordText;		// レコードのテキスト
+		CObject2D* pGenreText;		// 種類のテキスト
+		CObject2D* pGenreIcon;		// 種類のアイコン 
+
+		CObject2D* apFace[NUM_PLAYER];	// 各プレイヤーの顔
+		CNumber* apNumber[NUM_PLAYER];	// 各プレイヤーの戦績
+	};
+
+	SInfoVisual m_infoVisual;	// 見た目関連の情報
 };
 
 #endif
