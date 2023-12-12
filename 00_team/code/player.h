@@ -126,6 +126,11 @@ private:
 		MOTION_ITEM_WALK_RIGHT,		// 物持ち右歩き
 		MOTION_ITEM_WALK_LEFT,		// 物持ち左歩き
 
+		MOTION_EMOTE00,		// 固有エモート
+		MOTION_EMOTE01,		// 固有エモート
+		MOTION_EMOTE02,		// 固有エモート
+		MOTION_EMOTE_UNIQUE,		// 固有エモート
+
 		MOTION_MAX
 	};
 	struct SMotionInfo
@@ -133,6 +138,7 @@ private:
 		bool bDoorPress;		// ドアへの入力情報
 		bool bItemTrigger;		// 物への入力情報
 		bool bPunch;	// パンチの入力情報
+		bool bEmote;	// エモート
 		float bRunawayProtect;	// 暴走入力防止
 	};
 	struct SInfo
@@ -156,6 +162,7 @@ private:
 	void Input(void);
 	void InputMove(void);
 	void InputAttack(void);
+	void InputEmote(void);
 	void Aim(void);
 	void ManageState(void);
 	void ManageMotion(void);
