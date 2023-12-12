@@ -29,6 +29,7 @@
 #include "ghost.h"
 #include "rocket.h"
 #include "goal.h"
+#include "animEffect3D.h"
 
 //*****************************************************
 // 定数定義
@@ -1153,6 +1154,14 @@ void CPlayer::ManageAttack(void)
 
 				if (bHit == true && pObj != nullptr)
 				{// 敵のヒット処理
+					// アニメーションエフェクトの生成
+					CAnimEffect3D *pAnimManager = CAnimEffect3D::GetInstance();
+
+					if (pAnimManager != nullptr)
+					{
+						pAnimManager->CreateEffect(pos, CAnimEffect3D::TYPE::TYPE_HIT00);
+					}
+
 					// 敵をノックバックさせる
 					BlowEnemy(pObj);
 
@@ -1186,6 +1195,14 @@ void CPlayer::ManageAttack(void)
 
 				if (bHit == true && pObj != nullptr)
 				{// プレイヤーを吹き飛ばす
+					// アニメーションエフェクトの生成
+					CAnimEffect3D *pAnimManager = CAnimEffect3D::GetInstance();
+
+					if (pAnimManager != nullptr)
+					{
+						pAnimManager->CreateEffect(pos, CAnimEffect3D::TYPE::TYPE_HIT00);
+					}
+
 					BlowPlayer(pObj);
 				}
 			}
