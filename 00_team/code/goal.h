@@ -38,6 +38,7 @@ public:
 	void DeadLine(void);
 	bool IsFinish(void) { return m_bFinish; }
 	void SetResult(void);
+	float GetRadius(void) { return m_fRadius; }
 
 private:
 	void Load(void);
