@@ -58,6 +58,7 @@ private:
 	bool m_bTakeRepair;
 	STATE m_state;
 	CObject3D *m_pCaution;
+	bool m_bSound;
 };
 
 #endif
