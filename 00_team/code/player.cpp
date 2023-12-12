@@ -560,6 +560,7 @@ void CPlayer::InputEmote(void)
 	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_UP, nID))
 	{// 上ボタンのモーション
 		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE00);
+		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE00);
 
 		m_info.motionInfo.bEmote = true;
 
@@ -572,6 +573,7 @@ void CPlayer::InputEmote(void)
 	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_LEFT, nID))
 	{// 左ボタンのモーション
 		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE01);
+		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE01);
 
 		m_info.motionInfo.bEmote = true;
 
@@ -584,6 +586,7 @@ void CPlayer::InputEmote(void)
 	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_RIGHT, nID))
 	{// 右ボタンのモーション
 		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE02);
+		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE02);
 
 		m_info.motionInfo.bEmote = true;
 
@@ -596,6 +599,7 @@ void CPlayer::InputEmote(void)
 	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_DOWN, nID))
 	{// 下ボタンの固有エモート
 		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE_UNIQUE);
+		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE_UNIQUE);
 
 		m_info.motionInfo.bEmote = true;
 
@@ -820,15 +824,6 @@ void CPlayer::ManageMotion(void)
 
 		if (m_info.motionInfo.bEmote)
 		{// エモートの他に通らない
-			if (bFinish)
-			{
-				m_info.motionInfo.bEmote = false;
-
-				if (m_info.pWeapon != nullptr)
-				{
-					m_info.pWeapon->SetEnable(true);
-				}
-			}
 		}
 		else if (m_info.motionInfo.bDoorPress)
 		{// ドア開けるモーション
@@ -890,8 +885,20 @@ void CPlayer::ManageMotion(void)
 		int nKey = GetBody()->GetKey(CCharacterDiv::PARTS_UPPER);
 		int nNumKey = GetBody()->GetMotionInfo(CCharacterDiv::PARTS_UPPER, nMotionUpper).nNumKey;
 
+		if (m_info.motionInfo.bEmote)
+		{// エモートの他に通らない
+			if (bFinish)
+			{
+				m_info.motionInfo.bEmote = false;
+
+				if (m_info.pWeapon != nullptr)
+				{
+					m_info.pWeapon->SetEnable(true);
+				}
+			}
+		}
 		// ドア開けるモーション
-		if (m_info.motionInfo.bDoorPress)
+		else if (m_info.motionInfo.bDoorPress)
 		{
 			if (nMotionUpper != MOTION_OPEN_DOOR)
 			{
