@@ -111,7 +111,6 @@ void CLift::Update(void)
 			GetPosition().z - 100.0f <= pPlayer->GetPosition().z)
 		{
 			D3DXVECTOR3 playerPos = pPlayer->GetPosition();
-			//playerPos.y = playerPos.y;
 			pPlayer->SetPosition(playerPos);
 			m_abJoin[nCnt] = true;
 
@@ -123,10 +122,13 @@ void CLift::Update(void)
 		}
 	}
 
+	// 範囲内プレイヤーのカウント
 	m_nInCnt = nInPlayer;
 
+#ifdef _DEBUG
 	CDebugProc::GetInstance()->Print("\n開始場所\n");
 	CDebugProc::GetInstance()->Print("範囲内プレイヤー[%d]\n", nInPlayer);
+#endif
 }
 
 //=====================================================
@@ -169,6 +171,9 @@ HRESULT CLift::Load(void)
 	return S_OK;
 }
 
+//=====================================================
+// 範囲内にいるプレイヤーのカウント
+//=====================================================
 int CLift::GetInPlayer(void)
 {
 	return m_nInCnt;

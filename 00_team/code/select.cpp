@@ -416,21 +416,6 @@ void CSelect::Update(void)
 	ReSetContainer();
 
 #ifdef _DEBUG
-	CCamera* pCamera = CManager::GetCamera();
-
-	if (pCamera != nullptr)
-	{
-		// ‘€ì
-		pCamera->Control();
-	}
-
-	if (pKeyboard->GetTrigger(DIK_RETURN))
-	{
-		//CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-		//CParticle::Create({ 0.0f, 300.0f, -400.0f }, CParticle::TYPE::TYPE_INJECTION_FIRE);
-		CParticle::Create({ 0.0f, 200.0f, -400.0f }, CParticle::TYPE::TYPE_TOMATO_JUICE);
-	}
-
 	CDebugProc::GetInstance()->Print("\nŽQ‰Ál”[%d]\n", nJoinPlayer);
 #endif
 }
@@ -567,6 +552,7 @@ void CSelect::EntryInput(int nPlayer)
 		D3DXVECTOR3 move = { 0.0f,POW_JUMP,0.0f };
 		m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 
+		// “y‚Ì¶¬
 		CDebrisSpawner::Create(D3DXVECTOR3(
 			m_aJoinUiData[nPlayer].pUi2D->GetPosition().x,
 			50.0f,
@@ -651,9 +637,8 @@ void CSelect::MoveLimit(int nPlayer)
 		}
 	}
 
-	//î•ñ‚Ì”½‰f
+	// î•ñ‚Ì”½‰f
 	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
-	//m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 }
 
 //=====================================================
