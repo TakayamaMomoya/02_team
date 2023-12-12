@@ -27,6 +27,9 @@
 #include "UIManager.h"
 #include "record.h"
 #include "ghost.h"
+#include "rocket.h"
+#include "goal.h"
+#include "animEffect3D.h"
 
 //*****************************************************
 // 定数定義
@@ -159,7 +162,7 @@ HRESULT CPlayer::Init(void)
 
 		if (m_info.pCollisionSphere != nullptr)
 		{
-			m_info.pCollisionSphere->SetRadius(5.0f);
+			m_info.pCollisionSphere->SetRadius(20.0f);
 		}
 	}
 
@@ -273,6 +276,9 @@ void CPlayer::Update(void)
 {
 	// 継承クラスの更新
 	CCharacterDiv::Update();
+
+	// ロケットに乗り込む
+	BoardingRocket();
 
 	// 入力
 	Input();
@@ -1148,6 +1154,14 @@ void CPlayer::ManageAttack(void)
 
 				if (bHit == true && pObj != nullptr)
 				{// 敵のヒット処理
+					// アニメーションエフェクトの生成
+					CAnimEffect3D *pAnimManager = CAnimEffect3D::GetInstance();
+
+					if (pAnimManager != nullptr)
+					{
+						pAnimManager->CreateEffect(pos, CAnimEffect3D::TYPE::TYPE_HIT00);
+					}
+
 					// 敵をノックバックさせる
 					BlowEnemy(pObj);
 
@@ -1181,6 +1195,14 @@ void CPlayer::ManageAttack(void)
 
 				if (bHit == true && pObj != nullptr)
 				{// プレイヤーを吹き飛ばす
+					// アニメーションエフェクトの生成
+					CAnimEffect3D *pAnimManager = CAnimEffect3D::GetInstance();
+
+					if (pAnimManager != nullptr)
+					{
+						pAnimManager->CreateEffect(pos, CAnimEffect3D::TYPE::TYPE_HIT00);
+					}
+
 					BlowPlayer(pObj);
 				}
 			}
@@ -1413,6 +1435,78 @@ void CPlayer::LimidPostion(void)
 			}
 
 			pPlayer->SetPosition(pos);
+		}
+	}
+}
+
+//=====================================================
+// ロケットに乗り込む
+//=====================================================
+void CPlayer::BoardingRocket(void)
+{
+	// インスタンスを取得
+	CGame* pGame = CGame::GetInstance();
+	CRocket* pRocket = CRocket::GetInstance();
+	CGoal* pGoal = CGoal::GetInstance();
+
+	if (pGoal != nullptr)
+	{// ゴール内にプレイヤーがいるか
+		// 座標の差分から距離を計算
+		D3DXVECTOR3 pos = GetPosition();
+		D3DXVECTOR3 posGoal = pGoal->GetPosition();
+		D3DXVECTOR3 vecDiff = pos - posGoal;
+		float fDiff = D3DXVec3Length(&vecDiff);
+		float fRadius = pGoal->GetRadius();
+
+		if (fDiff < fRadius)
+		{
+			if (pGame != nullptr)
+			{
+				CGame::STATE state = pGame->GetState();
+
+				if (state == CGame::STATE_ESCAPE)
+				{// 脱出状態
+					if (pRocket != nullptr)
+					{
+						// 位置を取得
+						D3DXVECTOR3 posRocket = pRocket->GetPosition();
+						D3DXVECTOR3 posPlayer = GetPosition();
+
+						// ロケットとプレイヤーの位置から差分を計算
+						D3DXVECTOR3 posDiff = posRocket - posPlayer;
+						posDiff.y = posRocket.y + 400.0f - posPlayer.y;
+
+						posPlayer += posDiff * 0.08f;	// 位置を補正
+
+						// 向きを取得
+						D3DXVECTOR3 rotPlayer = GetRot();
+						D3DXVECTOR3 rotRocket = pRocket->GetRot();
+
+						float fRotDiff = posRocket.y - posPlayer.y;	// 目的の向きまでの差分
+
+						// 角度の値の補正
+						if (fRotDiff > D3DX_PI)
+						{
+							fRotDiff += -D3DX_PI * 2.0f;
+						}
+						else if (fRotDiff < -D3DX_PI)
+						{
+							fRotDiff += D3DX_PI * 2.0f;
+						}
+
+						rotPlayer.y = fRotDiff;
+
+						SetPosition(posPlayer);
+						SetRot(rotPlayer);
+					}
+
+					if (m_info.pArrow != nullptr)
+					{// 矢印の削除
+						m_info.pArrow->Uninit();
+						m_info.pArrow = nullptr;
+					}
+				}
+			}
 		}
 	}
 }

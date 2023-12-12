@@ -22,6 +22,7 @@
 #include "telop.h"
 #include "object3D.h"
 #include "texture.h"
+#include "sound.h"
 
 //*****************************************************
 // 定数定義
@@ -47,6 +48,7 @@ CEnemyThief::CEnemyThief()
 	m_bTakeRepair = false;
 	m_state = STATE_NONE;
 	m_pCaution = nullptr;
+	m_bSound = false;
 }
 
 //=====================================================
@@ -278,6 +280,14 @@ void CEnemyThief::CollisionRocket(void)
 
 		// テロップの生成
 		CTelop::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f));
+
+		CSound* pSound = CSound::GetInstance();
+
+		if (pSound != nullptr && m_bSound == false)
+		{
+			pSound->Play(pSound->LABEL_SE_STAMP);
+			m_bSound = true;
+		}
 
 		if (m_pCaution == nullptr)
 		{// 警告の生成
