@@ -76,6 +76,8 @@ HRESULT CGhost::Init(void)
 	// Œp³ƒNƒ‰ƒX‚Ì‰Šú‰»
 	CMotion::Init();
 
+	SetMotion(2);
+
 	return S_OK;
 }
 
