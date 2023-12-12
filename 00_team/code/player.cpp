@@ -437,11 +437,17 @@ void CPlayer::Input(void)
 		}
 	}
 
-	// 移動処理
-	InputMove();
+	if (m_info.motionInfo.bEmote == false)
+	{// エモート中は操作できない
+		// 移動処理
+		InputMove();
 
-	// 攻撃処理
-	InputAttack();
+		// 攻撃処理
+		InputAttack();
+
+		// エモートの操作
+		InputEmote();
+	}
 
 	// エイミングの処理
 	Aim();
@@ -533,6 +539,73 @@ void CPlayer::InputAttack(void)
 			{
 				m_info.pWeapon->Attack();
 			}
+		}
+	}
+}
+
+//=====================================================
+// エモートの操作
+//=====================================================
+void CPlayer::InputEmote(void)
+{
+	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+
+	if (pJoyPad == nullptr)
+	{
+		return;
+	}
+
+	int nID = m_info.nIDJoypad;
+
+	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_UP, nID))
+	{// 上ボタンのモーション
+		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE00);
+		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE00);
+
+		m_info.motionInfo.bEmote = true;
+
+		if (m_info.pWeapon != nullptr)
+		{
+			m_info.pWeapon->SetEnable(false);
+		}
+	}
+
+	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_LEFT, nID))
+	{// 左ボタンのモーション
+		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE01);
+		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE01);
+
+		m_info.motionInfo.bEmote = true;
+
+		if (m_info.pWeapon != nullptr)
+		{
+			m_info.pWeapon->SetEnable(false);
+		}
+	}
+
+	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_RIGHT, nID))
+	{// 右ボタンのモーション
+		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE02);
+		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE02);
+
+		m_info.motionInfo.bEmote = true;
+
+		if (m_info.pWeapon != nullptr)
+		{
+			m_info.pWeapon->SetEnable(false);
+		}
+	}
+
+	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_DOWN, nID))
+	{// 下ボタンの固有エモート
+		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE_UNIQUE);
+		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE_UNIQUE);
+
+		m_info.motionInfo.bEmote = true;
+
+		if (m_info.pWeapon != nullptr)
+		{
+			m_info.pWeapon->SetEnable(false);
 		}
 	}
 }
@@ -747,9 +820,14 @@ void CPlayer::ManageMotion(void)
 
 	// 下半身のモーション
 	{
-		// ドア開けるモーション
-		if (m_info.motionInfo.bDoorPress)
-		{
+		bool bFinish = GetBody()->IsFinish(CCharacterDiv::PARTS_LOWER);
+
+		if (m_info.motionInfo.bEmote)
+		{// エモートの他に通らない
+
+		}
+		else if (m_info.motionInfo.bDoorPress)
+		{// ドア開けるモーション
 			if (nMotionLower != MOTION_OPEN_DOOR)
 			{
 				SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_OPEN_DOOR);
@@ -808,8 +886,20 @@ void CPlayer::ManageMotion(void)
 		int nKey = GetBody()->GetKey(CCharacterDiv::PARTS_UPPER);
 		int nNumKey = GetBody()->GetMotionInfo(CCharacterDiv::PARTS_UPPER, nMotionUpper).nNumKey;
 
+		if (m_info.motionInfo.bEmote)
+		{// エモートの他に通らない
+			if (bFinish)
+			{
+				m_info.motionInfo.bEmote = false;
+
+				if (m_info.pWeapon != nullptr)
+				{
+					m_info.pWeapon->SetEnable(true);
+				}
+			}
+		}
 		// ドア開けるモーション
-		if (m_info.motionInfo.bDoorPress)
+		else if (m_info.motionInfo.bDoorPress)
 		{
 			if (nMotionUpper != MOTION_OPEN_DOOR)
 			{
@@ -882,7 +972,10 @@ void CPlayer::ManageMotion(void)
 		// 所有武器
 		else if (m_info.pWeapon != nullptr)
 		{
-			m_info.pWeapon->SetEnable(true);
+			if (m_info.motionInfo.bEmote == false)
+			{
+				m_info.pWeapon->SetEnable(true);
+			}
 
 			switch (m_info.pWeapon->GetType())
 			{

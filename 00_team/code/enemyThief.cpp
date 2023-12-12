@@ -401,7 +401,7 @@ void CEnemyThief::LimidPostion(void)
 	{
 		pos.x = LIMID_RANGE_RIGHT;
 	}
-	else if (pos.z >= LIMID_RANGE_UP)
+	if (pos.z >= LIMID_RANGE_UP)
 	{
 		pos.z = LIMID_RANGE_UP;
 	}
