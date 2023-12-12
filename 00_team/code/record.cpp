@@ -9,6 +9,7 @@
 // インクルード
 //*****************************************************
 #include "record.h"
+#include "debugproc.h"
 
 #include "playerManager.h"
 #include "enemyManager.h"
