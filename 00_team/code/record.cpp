@@ -11,6 +11,8 @@
 #include "record.h"
 
 #include "playerManager.h"
+#include "enemyManager.h"
+#include "enemy.h"
 
 //*****************************************************
 // Ã“Iƒƒ“ƒo•Ï”éŒ¾
@@ -95,5 +97,42 @@ void CRecord::AddDestroy(int nIdx)
 	{
 		// ”j‰ó”‚ð‰ÁŽZ
 		m_aInfo[nIdx].nDestroy++;
+	}
+}
+
+//=====================================================
+// “G‚ÌŽ€–S‚Ì—L–³‚ð”»’è
+//=====================================================
+void CRecord::CheckDeathEnemy(CObject* pObj,int nIdx)
+{
+	CEnemyManager* pEnemyManager = CEnemyManager::GetInstance();
+
+	if (pEnemyManager == nullptr || pObj == nullptr)
+	{
+		return;
+	}
+
+	CEnemy* pEnemy = pEnemyManager->GetHead();
+
+	while (pEnemy != nullptr)
+	{
+		CEnemy* pEnemyNext = pEnemy->GetNext();
+
+		if ((CObject*)pEnemy == pObj)
+		{
+			// “G‚Ì—L–³‚ð”»’è
+			if (pEnemy->GetState() == CEnemy::STATE_DEATH)
+			{
+				CRecord* pRecord = CRecord::GetInstance();
+
+				if (pRecord != nullptr)
+				{
+					// Œ»Ý‚ÌƒvƒŒƒCƒ„[‚Ì”j‰ó”‚ð‰ÁŽZ
+					pRecord->AddDestroy(nIdx);
+				}
+			}
+		}
+
+		pEnemy = pEnemyNext;
 	}
 }
