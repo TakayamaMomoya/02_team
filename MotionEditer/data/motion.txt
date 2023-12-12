@@ -9,41 +9,43 @@ SCRIPT
 #====================================================================
 # モデル数
 #====================================================================
-NUM_MODEL = 13
+NUM_MODEL = 15
 
 #====================================================================
 # モデルファイル名
 #====================================================================
-MODEL_FILENAME = data/MODEL/potatoman_00/lower_body.x
-MODEL_FILENAME = data/MODEL/potatoman_00/upper_body.x
-MODEL_FILENAME = data/MODEL/potatoman_00/upper_arm_l.x
-MODEL_FILENAME = data/MODEL/potatoman_00/fore_arm_l.x
-MODEL_FILENAME = data/MODEL/potatoman_00/upper_arm_r.x
-MODEL_FILENAME = data/MODEL/potatoman_00/fore_arm_r.x
-MODEL_FILENAME = data/MODEL/potatoman_00/shin_l.x
-MODEL_FILENAME = data/MODEL/potatoman_00/thigh_l.x
-MODEL_FILENAME = data/MODEL/potatoman_00/foot_l.x
-MODEL_FILENAME = data/MODEL/potatoman_00/shin_r.x
-MODEL_FILENAME = data/MODEL/potatoman_00/thigh_r.x
-MODEL_FILENAME = data/MODEL/potatoman_00/foot_r.x
-MODEL_FILENAME = data/MODEL/potatoman_00/joint_body.x
+MODEL_FILENAME = data/MODEL/potatoman_01/lower_body.x
+MODEL_FILENAME = data/MODEL/potatoman_01/upper_body.x
+MODEL_FILENAME = data/MODEL/potatoman_01/upper_arm_l.x
+MODEL_FILENAME = data/MODEL/potatoman_01/fore_arm_l.x
+MODEL_FILENAME = data/MODEL/potatoman_01/hand_l.x
+MODEL_FILENAME = data/MODEL/potatoman_01/upper_arm_r.x
+MODEL_FILENAME = data/MODEL/potatoman_01/fore_arm_r.x
+MODEL_FILENAME = data/MODEL/potatoman_01/hand_r.x
+MODEL_FILENAME = data/MODEL/potatoman_01/thigh_l.x
+MODEL_FILENAME = data/MODEL/potatoman_01/shin_l.x
+MODEL_FILENAME = data/MODEL/potatoman_01/foot_l.x
+MODEL_FILENAME = data/MODEL/potatoman_01/thigh_r.x
+MODEL_FILENAME = data/MODEL/potatoman_01/shin_r.x
+MODEL_FILENAME = data/MODEL/potatoman_01/foot_r.x
+MODEL_FILENAME = data/MODEL/potatoman_01/joint_body.x
 
 #====================================================================
 # キャラクター情報
 #====================================================================
 CHARACTERSET
-    NUM_PARTS = 13
+    NUM_PARTS = 15
 
     PARTSSET
         INDEX = 0
         PARENT = -1
-        POS = 0.0 27.7 0.0
+        POS = 0.0 37.0 0.0
         ROT = 0.0 0.0 0.0
     END_PARTSSET
     PARTSSET
         INDEX = 1
         PARENT = 0
-        POS = 0.0 9.9 0.0
+        POS = 0.2 9.5 0.0
         ROT = 0.0 0.0 0.0
     END_PARTSSET
     PARTSSET
@@ -60,54 +62,66 @@ CHARACTERSET
     END_PARTSSET
     PARTSSET
         INDEX = 4
+        PARENT = 3
+        POS = 11.2 0.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 5
         PARENT = 1
         POS = -11.0 0.0 0.0
         ROT = 0.0 0.0 0.0
     END_PARTSSET
     PARTSSET
-        INDEX = 5
-        PARENT = 4
-        POS = -18.0 0.0 0.0
-        ROT = 0.0 0.0 0.0
-    END_PARTSSET
-    PARTSSET
         INDEX = 6
-        PARENT = 0
-        POS = 6.6 -10.0 0.0
+        PARENT = 5
+        POS = -18.0 0.0 0.0
         ROT = 0.0 0.0 0.0
     END_PARTSSET
     PARTSSET
         INDEX = 7
         PARENT = 6
-        POS = 0.0 -7.1 0.0
+        POS = -11.2 0.0 0.0
         ROT = 0.0 0.0 0.0
     END_PARTSSET
     PARTSSET
         INDEX = 8
-        PARENT = 7
-        POS = -0.0 -5.4 0.5
+        PARENT = 0
+        POS = 6.6 -10.0 0.0
         ROT = 0.0 0.0 0.0
     END_PARTSSET
     PARTSSET
         INDEX = 9
-        PARENT = 0
-        POS = -7.7 -10.0 0.0
+        PARENT = 8
+        POS = 0.0 -7.1 0.0
         ROT = 0.0 0.0 0.0
     END_PARTSSET
     PARTSSET
         INDEX = 10
         PARENT = 9
-        POS = 0.0 -7.1 0.0
+        POS = 0.0 -5.4 0.5
         ROT = 0.0 0.0 0.0
     END_PARTSSET
     PARTSSET
         INDEX = 11
-        PARENT = 10
-        POS = -0.0 -5.4 0.5
+        PARENT = 0
+        POS = -7.7 -10.0 0.0
         ROT = 0.0 0.0 0.0
     END_PARTSSET
     PARTSSET
         INDEX = 12
+        PARENT = 11
+        POS = 0.0 -7.1 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 13
+        PARENT = 12
+        POS = 0.0 -5.4 0.5
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 14
         PARENT = 0
         POS = 0.0 0.0 0.0
         ROT = 0.0 0.0 0.0
@@ -178,6 +192,14 @@ MOTIONSET
             POS = 0.00 0.00 0.00
             ROT = 0.31 -0.35 0.06
         END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
     END_KEYSET
     KEYSET     #---<< 1 / 2 >>
         FRAME = 0
@@ -232,6 +254,14 @@ MOTIONSET
         KEY # -----[12]----
             POS = 0.00 0.00 0.00
             ROT = 0.31 -0.35 0.06
+        END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
         END_KEY
     END_KEYSET
 END_MOTIONSET
@@ -296,6 +326,14 @@ MOTIONSET
             POS = 0.00 0.00 0.00
             ROT = -1.04 0.00 0.00
         END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
     END_KEYSET
     KEYSET     #---<< 1 / 6 >>
         FRAME = 0
@@ -350,6 +388,14 @@ MOTIONSET
         KEY # -----[12]----
             POS = 0.00 0.00 0.00
             ROT = -0.25 0.00 0.00
+        END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
         END_KEY
     END_KEYSET
     KEYSET     #---<< 2 / 6 >>
@@ -406,6 +452,14 @@ MOTIONSET
             POS = 0.00 0.00 0.00
             ROT = 1.16 0.00 0.00
         END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
     END_KEYSET
     KEYSET     #---<< 3 / 6 >>
         FRAME = 0
@@ -460,6 +514,14 @@ MOTIONSET
         KEY # -----[12]----
             POS = 0.00 0.00 0.00
             ROT = 0.94 0.00 0.00
+        END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
         END_KEY
     END_KEYSET
     KEYSET     #---<< 4 / 6 >>
@@ -516,6 +578,14 @@ MOTIONSET
             POS = 0.00 0.00 0.00
             ROT = 0.72 0.00 0.00
         END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
     END_KEYSET
     KEYSET     #---<< 5 / 6 >>
         FRAME = 0
@@ -570,6 +640,14 @@ MOTIONSET
         KEY # -----[12]----
             POS = 0.00 0.00 0.00
             ROT = -0.16 0.00 0.00
+        END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
         END_KEY
     END_KEYSET
 END_MOTIONSET
@@ -634,6 +712,14 @@ MOTIONSET
             POS = 0.00 0.00 0.00
             ROT = 0.31 -0.35 0.06
         END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
     END_KEYSET
     KEYSET     #---<< 1 / 4 >>
         FRAME = 0
@@ -688,6 +774,14 @@ MOTIONSET
         KEY # -----[12]----
             POS = 0.00 0.00 0.00
             ROT = 0.31 -0.35 0.06
+        END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
         END_KEY
     END_KEYSET
     KEYSET     #---<< 2 / 4 >>
@@ -744,6 +838,14 @@ MOTIONSET
             POS = 0.00 0.00 0.00
             ROT = 0.31 -0.35 0.06
         END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
     END_KEYSET
     KEYSET     #---<< 3 / 4 >>
         FRAME = 0
@@ -798,6 +900,14 @@ MOTIONSET
         KEY # -----[12]----
             POS = 0.00 0.00 0.00
             ROT = 0.31 -0.35 0.06
+        END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
         END_KEY
     END_KEYSET
 END_MOTIONSET
@@ -862,6 +972,14 @@ MOTIONSET
             POS = 0.00 0.00 0.00
             ROT = 0.00 0.00 0.00
         END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
     END_KEYSET
     KEYSET     #---<< 1 / 4 >>
         FRAME = 0
@@ -914,6 +1032,14 @@ MOTIONSET
             ROT = 0.00 0.00 0.00
         END_KEY
         KEY # -----[12]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
             POS = 0.00 0.00 0.00
             ROT = 0.00 0.00 0.00
         END_KEY
@@ -972,6 +1098,14 @@ MOTIONSET
             POS = 0.00 0.00 0.00
             ROT = 0.00 0.00 0.00
         END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
     END_KEYSET
     KEYSET     #---<< 3 / 4 >>
         FRAME = 0
@@ -1024,6 +1158,14 @@ MOTIONSET
             ROT = 0.00 0.00 0.00
         END_KEY
         KEY # -----[12]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
             POS = 0.00 0.00 0.00
             ROT = 0.00 0.00 0.00
         END_KEY
@@ -1090,6 +1232,14 @@ MOTIONSET
             POS = 0.00 0.00 0.00
             ROT = 0.00 0.00 0.00
         END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
     END_KEYSET
     KEYSET     #---<< 1 / 2 >>
         FRAME = 0
@@ -1142,6 +1292,14 @@ MOTIONSET
             ROT = 0.00 0.00 0.00
         END_KEY
         KEY # -----[12]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
             POS = 0.00 0.00 0.00
             ROT = 0.00 0.00 0.00
         END_KEY
@@ -1205,6 +1363,14 @@ MOTIONSET
             ROT = 0.00 0.00 0.00
         END_KEY
         KEY # -----[12]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[13]----
+            POS = 0.00 0.00 0.00
+            ROT = 0.00 0.00 0.00
+        END_KEY
+        KEY # -----[14]----
             POS = 0.00 0.00 0.00
             ROT = 0.00 0.00 0.00
         END_KEY
