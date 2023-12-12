@@ -1465,9 +1465,10 @@ void CPlayer::BoardingRocket(void)
 				CGame::STATE state = pGame->GetState();
 
 				if (state == CGame::STATE_ESCAPE)
-				{
+				{// 脱出状態
 					if (pRocket != nullptr)
 					{
+						// 位置を取得
 						D3DXVECTOR3 posRocket = pRocket->GetPosition();
 						D3DXVECTOR3 posPlayer = GetPosition();
 
@@ -1477,7 +1478,26 @@ void CPlayer::BoardingRocket(void)
 
 						posPlayer += posDiff * 0.08f;	// 位置を補正
 
+						// 向きを取得
+						D3DXVECTOR3 rotPlayer = GetRot();
+						D3DXVECTOR3 rotRocket = pRocket->GetRot();
+
+						float fRotDiff = posRocket.y - posPlayer.y;	// 目的の向きまでの差分
+
+						// 角度の値の補正
+						if (fRotDiff > D3DX_PI)
+						{
+							fRotDiff += -D3DX_PI * 2.0f;
+						}
+						else if (fRotDiff < -D3DX_PI)
+						{
+							fRotDiff += D3DX_PI * 2.0f;
+						}
+
+						rotPlayer.y = fRotDiff;
+
 						SetPosition(posPlayer);
+						SetRot(rotPlayer);
 					}
 
 					if (m_info.pArrow != nullptr)
