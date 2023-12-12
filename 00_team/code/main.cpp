@@ -38,6 +38,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 	//乱数シード値の設定
 	srand((unsigned int)time(0));
 
+	ShowCursor(false);
+
 	// マネージャーの宣言
 	CManager *pManager = nullptr;
 	
