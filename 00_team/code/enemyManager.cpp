@@ -211,7 +211,7 @@ void CEnemyManager::Update(void)
 	// ’Êí“G‚ÌƒXƒ|[ƒ“
 	m_nCntSpawn++;
 
-	if (m_nCntSpawn >= 60)
+	if (m_nCntSpawn >= 50)
 	{
 		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
 

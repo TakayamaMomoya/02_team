@@ -24,6 +24,7 @@
 #include "motion.h"
 #include "beam.h"
 #include "inpact.h"
+#include "record.h"
 
 //*****************************************************
 // 定数定義
@@ -177,61 +178,70 @@ void CRailgun::Shot(void)
 	// 敵との接触を判定する
 	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
 
-	if (pEnemyManager == nullptr)
+	if (pEnemyManager != nullptr)
 	{
-		return;
-	}
+		// 先頭オブジェクトを代入
+		CEnemy* pEnemy = pEnemyManager->GetHead();
 
-	// 先頭オブジェクトを代入
-	CEnemy* pEnemy = pEnemyManager->GetHead();
-
-	while (pEnemy != nullptr)
-	{
-		// 次のアドレスを保存
-		CEnemy* pEnemyNext = pEnemy->GetNext();
-
-		if (pEnemy != nullptr)
+		while (pEnemy != nullptr)
 		{
-			D3DXVECTOR3 posEnemy = pEnemy->GetPosition();
+			// 次のアドレスを保存
+			CEnemy* pEnemyNext = pEnemy->GetNext();
 
-			bool bHit = universal::CubeCrossProduct(aPosVtx[0], aPosVtx[1], aPosVtx[2], aPosVtx[3], posEnemy);
-
-			CWeapon::SInfo info = GetInfo();
-
-			if (bHit)
+			if (pEnemy != nullptr)
 			{
-				if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB, nID))
-				{// 射撃
-					if (nBullet > 0 && nCntShot == 0)
-					{// 弾の発射
-						pEnemy->Hit(info.fDamage);
-					}
-					else
-					{// 弾切れの場合
+				D3DXVECTOR3 posEnemy = pEnemy->GetPosition();
 
+				bool bHit = universal::CubeCrossProduct(aPosVtx[0], aPosVtx[1], aPosVtx[2], aPosVtx[3], posEnemy);
+
+				CWeapon::SInfo info = GetInfo();
+
+				if (bHit)
+				{
+					if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB, nID))
+					{// 射撃
+						if (nBullet > 0 && nCntShot == 0)
+						{// 弾の発射
+							pEnemy->Hit(info.fDamage);
+
+							// 情報取得処理
+							CPlayer* pPlayer = GetPlayer();
+							CRecord* pRecord = CRecord::GetInstance();
+
+							// 破壊数の戦績加算処理
+							if (pPlayer != nullptr &&
+								pRecord != nullptr)
+							{
+								pRecord->CheckDeathEnemy(pEnemy, pPlayer->GetID());
+							}
+						}
+						else
+						{// 弾切れの場合
+
+						}
+					}
+
+					CMotion *pBody = pEnemy->GetBody();
+
+					if (pBody != nullptr)
+					{
+						pBody->SetAllCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 					}
 				}
-
-				CMotion *pBody = pEnemy->GetBody();
-
-				if (pBody != nullptr)
+				else
 				{
-					pBody->SetAllCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+					CMotion *pBody = pEnemy->GetBody();
+
+					if (pBody != nullptr)
+					{
+						pBody->ResetAllCol();
+					}
 				}
 			}
-			else
-			{
-				CMotion *pBody = pEnemy->GetBody();
 
-				if (pBody != nullptr)
-				{
-					pBody->ResetAllCol();
-				}
-			}
+			// 次のアドレスを代入
+			pEnemy = pEnemyNext;
 		}
-
-		// 次のアドレスを代入
-		pEnemy = pEnemyNext;
 	}
 
 	if (pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RB, nID))
@@ -284,6 +294,14 @@ void CRailgun::Shot(void)
 		if (pSound != nullptr)
 		{
 			pSound->Play(pSound->LABEL_SE_GUNSHOT_03);
+		}
+
+		// パラメーター取得
+		CWeapon::SInfo info = GetInfo();
+
+		if (pJoypad != nullptr)
+		{// コントローラーの振動
+			pJoypad->Vibration(nID, CInputJoypad::PADVIB::PADVIB_USE, info.fVibPower, info.nVibTime);
 		}
 	}
 }

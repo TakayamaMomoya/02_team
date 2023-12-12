@@ -72,7 +72,7 @@ void CMachinegun::Update(void)
 void CMachinegun::Attack(void)
 {
 	CInputJoypad* pJoypad = CInputJoypad::GetInstance();
-	CSound* pSound = CSound::GetInstance();
+	
 
 	if (pJoypad == nullptr)
 	{
@@ -129,10 +129,17 @@ void CMachinegun::Attack(void)
 			// 弾を発射
 			CBullet::Create(posMuzzle, -move, info.fLifeBullet, CBullet::TYPE_PLAYER, false,2.0f, info.fDamage);
 
+			CSound* pSound = CSound::GetInstance();
+
 			if (pSound != nullptr)
 			{
 				// マグナム発砲音
 				pSound->Play(pSound->LABEL_SE_GUNSHOT_01);
+			}
+
+			if (pJoypad != nullptr)
+			{// コントローラーの振動
+				pJoypad->Vibration(nID, CInputJoypad::PADVIB::PADVIB_USE, info.fVibPower, info.nVibTime);
 			}
 
 			// 弾を減らす
@@ -154,7 +161,7 @@ void CMachinegun::Attack(void)
 		}
 		else
 		{// 弾切れの場合
-			
+
 		}
 	}
 }

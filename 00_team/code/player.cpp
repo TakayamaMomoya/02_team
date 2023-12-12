@@ -25,6 +25,8 @@
 #include "enemyManager.h"
 #include "sound.h"
 #include "UIManager.h"
+#include "record.h"
+#include "ghost.h"
 
 //*****************************************************
 // 定数定義
@@ -407,7 +409,7 @@ void CPlayer::Update(void)
 	// プレイヤーを死亡させます
 	if (pPlayerManager != nullptr && pKeyboard != nullptr)
 	{
-		if (pKeyboard->GetTrigger(DIK_F5))
+		if (pKeyboard->GetTrigger(DIK_F6))
 		{
 			float fDamage = pPlayerManager->GetPlayerParam().fInitialLife;	// プレイヤーの初期体力を取得
 
@@ -1058,6 +1060,15 @@ void CPlayer::ManageAttack(void)
 
 					// ヒット処理
 					pObj->Hit(m_param.fDamagePunch);
+
+					// 戦績の取得処理
+					CRecord* pRecord = CRecord::GetInstance();
+
+					// 破壊数の戦績加算処理
+					if (pRecord != nullptr)
+					{
+						pRecord->CheckDeathEnemy(pObj, GetID());
+					}
 				}
 
 				// 木箱との判定
@@ -1227,6 +1238,18 @@ void CPlayer::Hit(float fDamage)
 			}
 
 			Uninit();
+
+			int nIdx = GetID();
+
+			// 幽霊の生成
+			CGhost *pGhost = CGhost::Create(nIdx);
+
+			if (pGhost != nullptr)
+			{
+				D3DXVECTOR3 pos = GetPosition();
+
+				pGhost->SetPosition(pos);
+			}
 		}
 		else
 		{// ダメージ判定

@@ -9,6 +9,11 @@
 // ƒCƒ“ƒNƒ‹[ƒh
 //*****************************************************
 #include "record.h"
+#include "debugproc.h"
+
+#include "playerManager.h"
+#include "enemyManager.h"
+#include "enemy.h"
 
 //*****************************************************
 // Ã“Iƒƒ“ƒo•Ï”éŒ¾
@@ -53,6 +58,9 @@ CRecord* CRecord::Create(void)
 //=====================================================
 HRESULT CRecord::Init(void)
 {
+	// ƒvƒŒƒCƒ„[”‚ÌÝ’èˆ—
+	SetNumPlayer();
+
 	return S_OK;
 }
 
@@ -67,16 +75,21 @@ void CRecord::Uninit(void)
 }
 
 //=====================================================
-// ƒvƒŒƒCƒ„[‚Ì”‚ð‰ÁŽZ
+// ƒvƒŒƒCƒ„[‚Ì”‚ðÝ’èˆ—
 //=====================================================
-void CRecord::SetPlayer(void)
+void CRecord::SetNumPlayer(void)
 {
-	// Å‘å¶‘¶ŽÒ”
-	m_nNumSuvived++;
+	CPlayerManager* pPlayerMagazine = CPlayerManager::GetInstance();
+
+	if (pPlayerMagazine != nullptr)
+	{
+		// Å‘å¶‘¶ŽÒ”‚ðÝ’è
+		m_nNumSuvived = pPlayerMagazine->GetNumPlayer();
+	}
 }
 
 //=====================================================
-// “G‚Ì”j‰ó”‚ð‰ÁŽZ
+// “G‚Ì”j‰ó”‚ð‰ÁŽZˆ—
 //=====================================================
 void CRecord::AddDestroy(int nIdx)
 {
@@ -85,5 +98,42 @@ void CRecord::AddDestroy(int nIdx)
 	{
 		// ”j‰ó”‚ð‰ÁŽZ
 		m_aInfo[nIdx].nDestroy++;
+	}
+}
+
+//=====================================================
+// “G‚ÌŽ€–S‚Ì—L–³‚ð”»’è
+//=====================================================
+void CRecord::CheckDeathEnemy(CObject* pObj,int nIdx)
+{
+	CEnemyManager* pEnemyManager = CEnemyManager::GetInstance();
+
+	if (pEnemyManager == nullptr || pObj == nullptr)
+	{
+		return;
+	}
+
+	CEnemy* pEnemy = pEnemyManager->GetHead();
+
+	while (pEnemy != nullptr)
+	{
+		CEnemy* pEnemyNext = pEnemy->GetNext();
+
+		if ((CObject*)pEnemy == pObj)
+		{
+			// “G‚Ì—L–³‚ð”»’è
+			if (pEnemy->GetState() == CEnemy::STATE_DEATH)
+			{
+				CRecord* pRecord = CRecord::GetInstance();
+
+				if (pRecord != nullptr)
+				{
+					// Œ»Ý‚ÌƒvƒŒƒCƒ„[‚Ì”j‰ó”‚ð‰ÁŽZ
+					pRecord->AddDestroy(nIdx);
+				}
+			}
+		}
+
+		pEnemy = pEnemyNext;
 	}
 }

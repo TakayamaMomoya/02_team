@@ -162,6 +162,7 @@ private:
 	void ManageAttack(void);
 	void BlowEnemy(CObject *pObj);
 	void BlowPlayer(CObject *pObj);
+	void CheckDeathEnemy(CObject* pObj);
 	void LimidPostion();
 	void Debug(void);
 

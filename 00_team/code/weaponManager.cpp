@@ -270,6 +270,20 @@ void CWeaponManager::LoadBaseInfo(FILE* pFile, char* pTemp, int nCntParam)
 
 		(void)fscanf(pFile, "%f", &m_aInfo[nCntParam].fLifeBullet);
 	}
+
+	if (strcmp(pTemp, "VIB_POWER") == 0)
+	{// コントローラーの振動の強さ
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_aInfo[nCntParam].fVibPower);
+	}
+
+	if (strcmp(pTemp, "VIB_TIME") == 0)
+	{// コントローラーの振動時間
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%d", &m_aInfo[nCntParam].nVibTime);
+	}
 }
 
 //=====================================================

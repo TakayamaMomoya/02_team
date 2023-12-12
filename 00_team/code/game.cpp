@@ -39,6 +39,8 @@
 #include "box.h"
 #include "gameover.h"
 #include "enemyThief.h"
+#include "ghost.h"
+#include "record.h"
 
 //*****************************************************
 // マクロ定義
@@ -59,14 +61,6 @@ CGame::CGame()
 	m_nCntState = 0;
 	m_bStop = false;
 	m_bGameover = false;
-}
-
-//=====================================================
-// デストラクタ
-//=====================================================
-CGame::~CGame()
-{
-
 }
 
 //=====================================================
@@ -132,6 +126,14 @@ HRESULT CGame::Init(void)
 		pSound->Play(pSound->LABEL_BGM_GAME);
 	}
 
+	// 戦績の生成
+	CRecord* pRecord = CRecord::Create();
+
+	if (pRecord == nullptr)
+	{
+		return E_FAIL;
+	}
+
 #ifdef _DEBUG
 	// エディットの生成
 	//CEdit::Create();
@@ -144,6 +146,8 @@ HRESULT CGame::Init(void)
 	{
 		pRenderer->EnableFog(true);
 	}
+
+	CGhost::Create(0);
 
 	return S_OK;
 }

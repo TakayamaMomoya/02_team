@@ -138,6 +138,11 @@ void CMinigun::Attack(void)
 				pSound->Play(pSound->LABEL_SE_GUNSHOT_04);
 			}
 
+			if (pJoypad != nullptr)
+			{// コントローラーの振動
+				pJoypad->Vibration(nID, CInputJoypad::PADVIB::PADVIB_USE, info.fVibPower, info.nVibTime);
+			}
+
 			// 弾を減らす
 			nBullet--;
 			SetBullet(nBullet);
@@ -157,7 +162,7 @@ void CMinigun::Attack(void)
 		}
 		else
 		{// 弾切れの場合
-			
+
 		}
 	}
 }

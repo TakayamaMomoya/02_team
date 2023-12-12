@@ -26,12 +26,15 @@ public:
 	static CRecord* Create(void);
 	HRESULT Init(void);
 	void Uninit(void);
-	void SetPlayer(void);
+
 	void AddDestroy(int nIdx);
+	void CheckDeathEnemy(CObject* pObj, int nIdx);
 
 	static CRecord* GetInstance(void) { return m_pRecord; }
 
 private:
+
+	void SetNumPlayer(void);
 
 	struct SInfo
 	{
