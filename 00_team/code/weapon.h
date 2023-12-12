@@ -87,6 +87,8 @@ protected:
 	virtual void ToggleEnable(bool bEnable) {};
 
 private:
+	void Break(void);
+
 	SInfo m_info;
 };
 

@@ -16,11 +16,15 @@
 #include "weaponMinigun.h"
 #include "weaponLauncher.h"
 #include "weaponManager.h"
+#include "inputjoypad.h"
 #include "motion.h"
 #include "player.h"
 #include "universal.h"
 #include "debugproc.h"
 #include "sound.h"
+#include "animEffect3D.h"
+#include "anim3D.h"
+#include "particle.h"
 
 #include "motionDiv.h"
 
@@ -296,27 +300,67 @@ void CWeapon::SetPlayer(CPlayer *pPlayer)
 //=====================================================
 void CWeapon::SetBullet(int nBullet)
 {
-	CSound* pSound = CSound::GetInstance();
-
 	m_info.nNumBullet = nBullet;
 
 	if (m_info.nNumBullet <= 0)
 	{// 弾切れした場合、破棄
-		if (m_info.pPlayer != nullptr)
-		{
-			m_info.pPlayer->ReleaseWeapon();
-		}
-		if (pSound != nullptr)
-		{
-			pSound->Play(pSound->LABEL_SE_WEAPON_LOST);
-		}
-
-		Uninit();
+		Break();
 	}
 	else if (m_info.nNumBullet > m_info.nMaxBullet)
 	{// 最大数を越えた場合の補正
 		m_info.nNumBullet = m_info.nMaxBullet;
 	}
+}
+
+//=====================================================
+// 壊れる処理
+//=====================================================
+void CWeapon::Break(void)
+{
+	CSound* pSound = CSound::GetInstance();
+
+	// プレイヤーから破棄
+	if (m_info.pPlayer != nullptr)
+	{
+		m_info.pPlayer->ReleaseWeapon();
+	}
+
+	// サウンド再生
+	if (pSound != nullptr)
+	{
+		pSound->Play(pSound->LABEL_SE_WEAPON_LOST);
+	}
+
+	// コントローラー振動
+	CInputJoypad *pJoypad = CInputJoypad::GetInstance();
+
+	if (pJoypad != nullptr)
+	{
+		int nIdx = m_info.pPlayer->GetIDJoypad();
+
+		pJoypad->Vibration(nIdx, CInputJoypad::PADVIB_USE, 1.0f, 40);
+	}
+
+	// アニメーションエフェクトの生成
+	D3DXMATRIX mtx = *GetMatrix();
+	D3DXVECTOR3 pos = { mtx._41,mtx._42,mtx._43 };
+
+	CAnimEffect3D *pAnimManager = CAnimEffect3D::GetInstance();
+
+	if (pAnimManager != nullptr)
+	{
+		CAnim3D *pAnim3D = pAnimManager->CreateEffect(pos, CAnimEffect3D::TYPE::TYPE_HIT00);
+
+		if (pAnim3D != nullptr)
+		{
+			pAnim3D->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		}
+	}
+
+	// パーティクルの生成
+	CParticle::Create(pos, CParticle::TYPE::TYPE_BREAK_WEAPON);
+
+	Uninit();
 }
 
 //=====================================================
