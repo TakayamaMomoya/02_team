@@ -28,6 +28,7 @@ public:
 	void Uninit(void);
 
 	void AddDestroy(int nIdx);
+	void CheckDeathEnemy(CObject* pObj, int nIdx);
 
 	static CRecord* GetInstance(void) { return m_pRecord; }
 
