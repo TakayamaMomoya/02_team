@@ -25,7 +25,7 @@ CRecord* CRecord::m_pRecord = nullptr;	// ©g‚Ìƒ|ƒCƒ“ƒ^
 //=====================================================
 CRecord::CRecord()
 {
-	ZeroMemory(&m_aInfo[0],sizeof(m_aInfo));
+	ZeroMemory(&m_aInfo[0], sizeof(m_aInfo));
 	m_nNumSuvived = 0;
 }
 
@@ -196,7 +196,7 @@ void CRecord::Debug(void)
 	}
 
 	pDebugProc->Print("\nP1‚Ì“G‚Ì”j‰ó”[%d]", m_aInfo[0].nDestroy);
-	pDebugProc->Print("\nP1‚Ì“G‚Ì”j‰ó”[%d]", m_aInfo[1].nDestroy);
+	pDebugProc->Print("\nP2‚Ì“G‚Ì”j‰ó”[%d]", m_aInfo[1].nDestroy);
 }
 
 //=====================================================

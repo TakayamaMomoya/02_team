@@ -1,53 +1,145 @@
 //*****************************************************
 //
 // ランキングの処理[Ranking.cpp]
-//Author:髙山桃也
+// Author:酒井南勝
 //
 //*****************************************************
 
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "main.h"
+
 #include "ranking.h"
-#include "inputkeyboard.h"
-#include "inputmouse.h"
-#include "inputjoypad.h"
-#include "fade.h"
-#include <stdio.h>
-#include "object.h"
-#include "manager.h"
-#include "texture.h"
+#include "main.h"
+
+#include "object2D.h"
+#include "number.h"
 #include "record.h"
+
+#include "texture.h"
+#include "inputkeyboard.h"
+#include "inputjoypad.h"
+#include "inputmouse.h"
+
+#include "fade.h"
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define NUM_PLACE					(6)										// スコアの桁数
-#define TIMER_TRANS					(360)									// 遷移時間
-#define RANKING_WIDTH			(80)	// 横幅
-#define RANKING_HEIGHT			(80)	// 高さ
 
-#define FLASH_SPEED					(10)	// 点滅スピード
+//*****************************************************
+// 定数定義
+//*****************************************************
+namespace
+{
+	// 戦績文
+	const D3DXVECTOR3 RECORD_TEXT_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.85f, 0.0f);	// 戦績文の位置
+	const float RECORD_TEXT_SIZE = 200.0f;								// 戦績文の大きさ
+	const float RECORD_TEXT_WIDTH = 1.0f * RECORD_TEXT_SIZE;			// 戦績文の幅
+	const float RECORD_TEXT_HEIGHT = 0.2f * RECORD_TEXT_SIZE;			// 戦績文の高さ
+	const char* RECORD_TEXT_TEX = "data\\TEXTURE\\UI\\gamestart.png";	// 戦績文のパス
 
-#define RANKING_BIN_FILE			"data\\BINARY\\ranking"								// ランキングファイル名
+	// 戦績種類アイコン
+	const D3DXVECTOR3 GENRE_ICON_POS[CRecord::GENRE_TYPE_MAX] =
+	{// 位置[種類]
+		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+	};
+	const float GENRE_ICON_SIZE[NUM_PLAYER] =
+	{// 大きさ[種類]
+		250.0f,
+	};
+	const float GENRE_ICON_WIDTH[NUM_PLAYER] =
+	{// 横幅[種類]
+		1.0f * GENRE_ICON_SIZE[NUM_PLAYER],
+	};
+	const float GENRE_ICON_HEIGHT[NUM_PLAYER] =
+	{// 縦幅[種類]
+		0.2f * GENRE_ICON_SIZE[NUM_PLAYER],
+	};
+	const char* GENRE_ICON_TEX[NUM_PLAYER] =
+	{// テクスチャのパス[種類]
+		"data\\TEXTURE\\UI\\GenreIcon000",
+	};
 
-#define RANKING_TEX_FILE			"data\\TEXTURE\\UI\\Number000.png"		// ランキングテクスチャ名
-#define BG_TEX_FILE					"data\\TEXTURE\\BG\\ResultBg000.png"	// ランキング背景テクスチャ名
-#define RANKING_PATH	"data\\TEXTURE\\UI\\ranking.png"	// 項目テクスチャ名
+	// 戦績種類文
+	const D3DXVECTOR3 GENRE_TEXT_POS[CRecord::GENRE_TYPE_MAX] =
+	{// 位置[種類]
+		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+	};
+	const float GENRE_TEXT_SIZE[NUM_PLAYER] =
+	{// 大きさ[種類]
+		250.0f,
+	};
+	const float GENRE_TEXT_WIDTH[NUM_PLAYER] =
+	{// 横幅[種類]
+		1.0f * GENRE_TEXT_SIZE[NUM_PLAYER],
+	};
+	const float GENRE_TEXT_HEIGHT[NUM_PLAYER] =
+	{// 縦幅[種類]
+		0.2f * GENRE_TEXT_SIZE[NUM_PLAYER],
+	};
+	const char* GENRE_TEXT_TEX[NUM_PLAYER] =
+	{// テクスチャのパス[種類]
+		"data\\TEXTURE\\UI\\GenreIcon000",
+	};
+
+	// 顔表示
+	const D3DXVECTOR3 FACE_POS[NUM_PLAYER] =
+	{// 位置[プレイヤー番号]
+		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+	};
+	const float FACE_SIZE[NUM_PLAYER] =
+	{// 大きさ[プレイヤー番号]
+		250.0f,
+		250.0f,
+		250.0f,
+		250.0f,
+	};
+	const float FACE_WIDTH[NUM_PLAYER] =
+	{// 横幅[プレイヤー番号]
+		1.0f * FACE_SIZE[NUM_PLAYER],
+		1.0f * FACE_SIZE[NUM_PLAYER],
+		1.0f * FACE_SIZE[NUM_PLAYER],
+		1.0f * FACE_SIZE[NUM_PLAYER],
+	};
+	const float FACE_HEIGHT[NUM_PLAYER] =
+	{// 縦幅[プレイヤー番号]
+		0.2f * FACE_SIZE[NUM_PLAYER],
+		0.2f * FACE_SIZE[NUM_PLAYER],
+		0.2f * FACE_SIZE[NUM_PLAYER],
+		0.2f * FACE_SIZE[NUM_PLAYER],
+	};
+	const char* FACE_TEX[NUM_PLAYER] =
+	{// テクスチャのパス[プレイヤー番号]
+		"data\\TEXTURE\\UI\\GenreIcon000",
+		"data\\TEXTURE\\UI\\GenreIcon000",
+		"data\\TEXTURE\\UI\\GenreIcon000",
+		"data\\TEXTURE\\UI\\GenreIcon000",
+	};
+
+	// 数字
+	const D3DXVECTOR3 NUMBER_POS[NUM_PLAYER] =
+	{// 位置[プレイヤー番号]
+		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+	};
+	const float NUMBER_SIZE = 250.0f;
+	const float NUMBER_WIDTH = 1.0f * NUMBER_SIZE;
+	const float NUMBER_HEIGHT = 0.2f * NUMBER_SIZE;
+	const char* NUMBER_TEX = "data\\TEXTURE\\UI\\GenreIcon000";
+}
 
 //=====================================================
 // コンストラクタ
 //=====================================================
 CRanking::CRanking()
 {
-	ZeroMemory(&m_apNumber[0],sizeof(m_apNumber));
-	m_nCntState = 0;
-	m_nRankUpdate = -1;
-	m_nScore = 0;
-	m_nTimerTrans = 0;
-	ZeroMemory(&m_aScore[0],sizeof(int) * NUM_RANK);
-	m_state = STATE_NORMAL;
+	m_infoVisual = {};
 }
 
 //=====================================================
@@ -63,33 +155,113 @@ CRanking::~CRanking()
 //=====================================================
 HRESULT CRanking::Init(void)
 {
-	// 項目の生成
-	CObject2D *pObject2D = CObject2D::Create();
-	pObject2D->SetSize(300.0f,90.0f);
-	pObject2D->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 100.0f, 0.0f));
+	// テクスチャのポインタを取得
+	//CTexture* pTexture = CTexture::GetInstance();
+	CTexture* pTexture = nullptr;
 
-	int nIdx = CTexture::GetInstance()->Regist(RANKING_PATH);
-	pObject2D->SetIdxTexture(nIdx);
-	pObject2D->SetVtx();
+	// レコードテキストの生成
+	m_infoVisual.pRecordText = CObject2D::Create(7);
 
-	// 数字の生成
-	for (int nCnt = 0; nCnt < NUM_RANK; nCnt++)
+	if (m_infoVisual.pRecordText != nullptr)
 	{
-		m_apNumber[nCnt] = CNumber::Create(NUM_PLACE, 0);
+		m_infoVisual.pRecordText->SetPosition(RECORD_TEXT_POS);
+		m_infoVisual.pRecordText->SetSize(RECORD_TEXT_WIDTH,RECORD_TEXT_HEIGHT);
+		
+		if (pTexture != nullptr)
+		{
+			int nIdx = pTexture->Regist(RECORD_TEXT_TEX);
+			m_infoVisual.pRecordText->SetIdxTexture(nIdx);
+			m_infoVisual.pRecordText->SetVtx();
+		}
+	}
+	if (m_infoVisual.pRecordText == nullptr)
+	{
+		return E_FAIL;
 	}
 
-	// 初期設定
-	Reset();
-	Sort();
+	// 種類アイコンの生成
+	m_infoVisual.pGenreIcon = CObject2D::Create(7);
 
-	// スコアの取得
-	int nScore = CManager::GetScore();
+	if (m_infoVisual.pGenreIcon != nullptr)
+	{
+		m_infoVisual.pGenreIcon->SetPosition(GENRE_ICON_POS[CRecord::GENRE_TYPE_DESTROY]);
+		m_infoVisual.pGenreIcon->SetSize(GENRE_ICON_WIDTH[CRecord::GENRE_TYPE_DESTROY],GENRE_ICON_HEIGHT[CRecord::GENRE_TYPE_DESTROY]);
 
-	// 取得したスコアでランキング設定
-	Set(nScore);
+		if (pTexture != nullptr)
+		{
+			int nIdx = pTexture->Regist(GENRE_ICON_TEX[CRecord::GENRE_TYPE_DESTROY]);
+			m_infoVisual.pGenreIcon->SetIdxTexture(nIdx);
+			m_infoVisual.pGenreIcon->SetVtx();
+		}
+	}
+	if (m_infoVisual.pGenreIcon == nullptr)
+	{
+		return E_FAIL;
+	}
 
-	// 保存
-	Save();
+	// 種類のテキストの生成
+	m_infoVisual.pGenreText = CObject2D::Create(7);
+
+	if (m_infoVisual.pGenreText != nullptr)
+	{
+		m_infoVisual.pGenreText->SetPosition(GENRE_TEXT_POS[CRecord::GENRE_TYPE_DESTROY]);
+		m_infoVisual.pGenreText->SetSize(GENRE_TEXT_WIDTH[CRecord::GENRE_TYPE_DESTROY],GENRE_TEXT_HEIGHT[CRecord::GENRE_TYPE_DESTROY]);
+
+		if (pTexture != nullptr)
+		{
+			int nIdx = pTexture->Regist(GENRE_TEXT_TEX[CRecord::GENRE_TYPE_DESTROY]);
+			m_infoVisual.pGenreText->SetIdxTexture(nIdx);
+			m_infoVisual.pGenreText->SetVtx();
+		}
+	}
+	if (m_infoVisual.pGenreText == nullptr)
+	{
+		return E_FAIL;
+
+	}
+
+	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+	{
+		// プレイヤー顔の生成
+		m_infoVisual.apFace[nCount] = CObject2D::Create(7);
+
+		if (m_infoVisual.apFace[nCount] != nullptr)
+		{
+			m_infoVisual.apFace[nCount]->SetPosition(FACE_POS[nCount]);
+			m_infoVisual.apFace[nCount]->SetSize(FACE_WIDTH[nCount],FACE_HEIGHT[nCount]);
+
+			if (pTexture != nullptr)
+			{
+				int nIdx = pTexture->Regist(FACE_TEX[nCount]);
+				m_infoVisual.apFace[nCount]->SetIdxTexture(nIdx);
+				m_infoVisual.apFace[nCount]->SetVtx();
+			}
+		}
+		if (m_infoVisual.apFace[nCount] == nullptr)
+		{
+			return E_FAIL;
+		}
+
+		// 数字の生成
+		m_infoVisual.apNumber[nCount] = CNumber::Create(4,0);
+
+		if (m_infoVisual.apNumber[nCount] != nullptr)
+		{
+			m_infoVisual.apNumber[nCount]->SetPosition(NUMBER_POS[nCount]);
+			m_infoVisual.apNumber[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_WIDTH);
+
+			if (pTexture != nullptr)
+			{
+				//int nIdx = pTexture->Regist();
+				//m_infoVisual.apNumber[nCount]->SetIdxTexture(nIdx);
+				//m_infoVisual.apNumber[nCount]->SetVtx();
+			}
+		}
+		if (m_infoVisual.apNumber[nCount] == nullptr)
+		{
+			return E_FAIL;
+		}
+	}
 
 	return S_OK;
 }
@@ -125,47 +297,6 @@ void CRanking::Update(void)
 	// シーンの更新
 	CScene::Update();
 
-	// カウントアップ
-	m_nCntState++;
-
-	if (m_nRankUpdate != -1)
-	{// ランキングが更新された
-		// 該当のランクを点滅==================================
-		
-		if (m_nCntState >= FLASH_SPEED)
-		{// カウンタが一定の値に達したら
-			switch (m_state)
-			{
-			case STATE_NORMAL:
-				m_state = STATE_DIFF;
-				break;
-			case STATE_DIFF:
-				m_state = STATE_NORMAL;
-				break;
-			}
-
-			m_nCntState = 0;
-		}
-
-		// 変数宣言
-		D3DXCOLOR colRanking = {0.0f,0.0f,0.0f,0.0f};
-
-		switch (m_state)
-		{// 状態による分岐
-		case STATE_NORMAL:
-			colRanking = { 1.0f,1.0f,1.0f,1.0f};
-			break;
-		case STATE_DIFF:
-			colRanking = { 0.5f,1.0f,0.5f,1.0f };
-			break;
-		}
-
-		if (m_apNumber[m_nRankUpdate] != nullptr)
-		{
-			m_apNumber[m_nRankUpdate]->SetColor(colRanking);
-		}
-	}
-
 	// 画面遷移==========================================
 	if (pKeyboard->GetTrigger(DIK_RETURN) ||
 		pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
@@ -177,9 +308,6 @@ void CRanking::Update(void)
 			pFade->SetFade(CScene::MODE_TITLE);
 		}
 	}
-
-	// 遷移タイマー進行
-	m_nTimerTrans++;
 }
 
 //=====================================================
@@ -188,173 +316,4 @@ void CRanking::Update(void)
 void CRanking::Draw(void)
 {
 
-}
-
-//=====================================================
-// 設定処理
-//=====================================================
-void CRanking::Set(int nScore)
-{
-	// 変数宣言
-	D3DXVECTOR3 pos;
-	char *apPath[NUM_RANK] = 
-	{
-		"data\\TEXTURE\\UI\\1st.png",
-		"data\\TEXTURE\\UI\\2nd.png",
-		"data\\TEXTURE\\UI\\3rd.png",
-		"data\\TEXTURE\\UI\\4th.png",
-		"data\\TEXTURE\\UI\\5th.png",
-	};
-
-	// ソート
-	Sort();
-
-	if (nScore > m_aScore[NUM_RANK - 1])
-	{// 最小値を越したら代入
-		m_aScore[NUM_RANK - 1] = nScore;
-
-		// 再ソート
-		Sort();
-
-		for (int nCnt = 0; nCnt < NUM_RANK; nCnt++)
-		{// 足した値と合致する記録を探す
-			if (nScore == m_aScore[nCnt])
-			{// ニューレコード番号を記録
-				m_nRankUpdate = nCnt;
-			}
-		}
-	}
-
-	if (m_aScore != nullptr)
-	{
-		// 数字の設定
-		for (int nCnt = 0; nCnt < NUM_RANK; nCnt++)
-		{
-			if (m_apNumber[nCnt] != nullptr)
-			{
-				// 値の設定
-				m_apNumber[nCnt]->SetValue(m_aScore[nCnt], NUM_PLACE);
-
-				// 位置の設定
-				pos = D3DXVECTOR3{ 450.0f,250.0f + RANKING_HEIGHT * nCnt,0.0f };
-
-				m_apNumber[nCnt]->SetPosition(pos);
-
-				pos = m_apNumber[nCnt]->GetPosition();
-
-				m_apNumber[nCnt]->SetSizeAll(RANKING_WIDTH * 0.5f, RANKING_HEIGHT * 0.5f);
-
-				// 順位の生成
-				CObject2D *pObject2D = CObject2D::Create();
-				pObject2D->SetSize(60.0f, 40.0f);
-				pos.x -= 100 + RANKING_WIDTH * 0.5f;
-
-				pObject2D->SetPosition(pos);
-
-				int nIdx = CTexture::GetInstance()->Regist(apPath[nCnt]);
-				pObject2D->SetIdxTexture(nIdx);
-				pObject2D->SetVtx();
-			}
-		}
-	}
-
-	// 保存処理
-#ifndef _DEBUG
-	Save();
-#endif
-}
-
-//=====================================================
-// ランキングソート
-//=====================================================
-void CRanking::Sort(void)
-{
-	for (int nCntRanking = 0; nCntRanking < NUM_RANK - 1; nCntRanking++)
-	{//ランキングをソート
-	 //左端の値を最大値とする
-		int nTop = nCntRanking;
-
-		for (int nCount2 = nCntRanking + 1; nCount2 < NUM_RANK; nCount2++)
-		{//左の値と対象の値を比較
-			if (m_aScore[nTop] < m_aScore[nCount2])
-			{//もし比較した数字が小さかったら
-				nTop = nCount2;
-			}
-		}
-
-		//要素の入れ替え
-		int nTemp = m_aScore[nCntRanking];
-		m_aScore[nCntRanking] = m_aScore[nTop];
-		m_aScore[nTop] = nTemp;
-	}
-}
-
-//=====================================================
-// ランキング情報リセット
-//=====================================================
-void CRanking::Reset(void)
-{
-	//外部ファイル読み込み
-	Load();
-
-#if 0		
-	//ランキング初期設定
-	m_aScore[0] = 32;
-	m_aScore[1] = 31;
-	m_aScore[2] = 30;
-	m_aScore[3] = 29;
-	m_aScore[4] = 28;
-#endif
-}
-
-//=====================================================
-// ランキング情報保存
-//=====================================================
-void CRanking::Save(void)
-{
-	//ポインタ宣言
-	FILE *pFile;
-
-	//ファイルを開く
-	pFile = fopen(RANKING_BIN_FILE, "wb");
-
-	if (pFile != NULL)
-	{//ファイルが開けた場合
-
-	    //バイナリファイルに書き込む
-		fwrite(&m_aScore[0], sizeof(int), NUM_RANK, pFile);
-
-		//ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{//ファイルが開けなかった場合
-		assert(("ランキング保存に失敗", false));
-	}
-}
-
-//=====================================================
-//ランキング情報読み込み
-//=====================================================
-void CRanking::Load(void)
-{
-	//ポインタ宣言
-	FILE *pFile;
-
-	//ファイルを開く
-	pFile = fopen(RANKING_BIN_FILE, "rb");
-
-	if (pFile != NULL)
-	{//ファイルが開けた場合
-
-	    //バイナリファイルから読み込む
-		fread(&m_aScore[0], sizeof(int), NUM_RANK, pFile);
-
-		//ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{//ファイルが開けなかった場合
-		assert(("ランキング読み込みに失敗", false));
-	}
 }
