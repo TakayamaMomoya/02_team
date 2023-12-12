@@ -18,6 +18,7 @@
 #include "collision.h"
 #include "orbit.h"
 #include "universal.h"
+#include "record.h"
 
 //*****************************************************
 // 定数定義
@@ -49,6 +50,7 @@ CBullet::CBullet(int nPriority) : CObject(nPriority)
 	m_col = { 0.0f,0.0f,0.0f,0.0f };
 	m_pCollisionSphere = nullptr;
 	m_pOrbit = nullptr;
+	m_nIdxPlayer = -1;
 
 	// 総数カウントアップ
 	m_nNumAll++;
@@ -209,6 +211,15 @@ bool CBullet::BulletHit(CCollision::TAG tag)
 
 			// 当たったオブジェクトのヒット処理
 			pObj->Hit(m_fDamage);
+
+			// 戦績の取得処理
+			CRecord* pRecord = CRecord::GetInstance();
+
+			// 破壊数の戦績加算処理
+			if (pRecord != nullptr)
+			{
+				pRecord->CheckDeathEnemy(pObj, m_nIdxPlayer);
+			}
 		}
 	}
 

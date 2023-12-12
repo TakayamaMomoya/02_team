@@ -17,6 +17,7 @@
 #include "debugproc.h"
 #include "animEffect3D.h"
 #include "anim3D.h"
+#include "record.h"
 
 //*****************************************************
 // 定数定義
@@ -44,6 +45,8 @@ CMissile::CMissile(int nPriority) : CObject(nPriority)
 {
 	ZeroMemory(&m_info, sizeof(SInfo));
 	ZeroMemory(&m_infoVisual, sizeof(SInfoVisual));
+
+	m_info.nIdxPlayer = -1;
 
 	// 総数カウントアップ
 	m_nNumAll++;
@@ -265,6 +268,18 @@ void CMissile::Death(void)
 	if (m_info.pCollisionSphere != nullptr)
 	{
 		m_info.pCollisionSphere->SetRadius(INITIAL_RADIUS_EXPLOSION);
+
+		CRecord* pRecord = CRecord::GetInstance();
+
+		if (pRecord != nullptr)
+		{
+			pRecord->CheckDeathEnemyAll(
+				m_info.pCollisionSphere->GetCollision(),
+				m_info.pCollisionSphere->GetPosition(),
+				m_info.pCollisionSphere->GetRadius(),
+				m_info.nIdxPlayer);
+		}
+
 		m_info.pCollisionSphere->DamageAll(CCollision::TAG_ENEMY,m_info.fDamage);
 	}
 

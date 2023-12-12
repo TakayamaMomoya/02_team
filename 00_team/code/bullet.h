@@ -51,6 +51,8 @@ public:
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }
 	D3DXVECTOR3 GetPositionOld(void) { return m_posOld; }
 
+	void SetIdxPlayer(int nIdx) { m_nIdxPlayer = nIdx; }
+
 private:
 	bool BulletHit(CCollision::TAG tag);
 	void Death(void);
@@ -69,6 +71,7 @@ private:
 	D3DXCOLOR m_col;	// 色
 	float m_fDamage;	// 与ダメージ
 	float m_fSize;	// 弾のサイズ
+	int m_nIdxPlayer;	// プレイヤー番号
 };
 
 #endif

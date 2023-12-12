@@ -49,6 +49,8 @@ public:
 	void SetRot(D3DXVECTOR3 rot) { m_info.rot = rot; }
 	void SetDamage(float fDamage) { m_info.fDamage = fDamage; }
 
+	void SetIdxPlayer(int nIdx) { m_info.nIdxPlayer = nIdx; }
+
 private:
 	struct SInfoVisual
 	{
@@ -67,6 +69,7 @@ private:
 		CCollisionSphere *pCollisionSphere;	// 球の当たり判定
 		float fDamage;	// 与ダメージ
 		float fRadiusExplosion;	// 爆発半径
+		int nIdxPlayer;			// プレイヤー番号
 	};
 	void CreateVisual(void);
 	void ManageMove(void);

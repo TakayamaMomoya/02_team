@@ -56,6 +56,8 @@ public:
 		LABEL_SE_GET_LUNCHER,			// ロケラン取得
 		LABEL_SE_GUNSHOT_04,			// ロケラン射撃
 		LABEL_SE_WEAPON_LOST,			// 武器を失う
+		LABEL_SE_STAMP,					// スタンプ
+		LABEL_SE_GAMEOVER,				// ゲームオーバー
 
 		LABEL_MAX
 	} LABEL;
@@ -148,6 +150,9 @@ private:
 		{ "data/SOUND/SE/get_luncher.wav",0 },			// ロケラン取得
 		{ "data/SOUND/SE/gunshot_sound_05.wav",0 },		// ロケラン取得
 		{ "data/SOUND/SE/weapon_lost.wav",0 },			// 武器失う
+		{ "data/SOUND/SE/stamp.wav",0 },				// スタンプ
+		{ "data/SOUND/SE/fail.wav",0},					// ゲームオーバー
+	
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ

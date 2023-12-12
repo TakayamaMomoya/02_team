@@ -78,7 +78,16 @@ void CEnemyNormal::Update(void)
 
 	if (pBlock != nullptr)
 	{
-		pBlock->Hit(5.0f);
+		// 生存チェック
+		CBlock **ppBlock = CBlock::GetBlock();
+
+		for (int i = 0; i < NUM_OBJECT; i++)
+		{
+			if (ppBlock[i] == pBlock)
+			{
+				pBlock->Hit(5.0f);
+			}
+		}
 	}
 
 	CEnemy::STATE state = GetState();

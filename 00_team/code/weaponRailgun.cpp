@@ -25,6 +25,7 @@
 #include "beam.h"
 #include "inpact.h"
 #include "record.h"
+#include "texture.h"
 
 //*****************************************************
 // ’è”’è‹`
@@ -77,6 +78,8 @@ HRESULT CRailgun::Init(void)
 		m_pRange = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		m_pRange->SetSize(0.0f, 0.0f);
 		m_pRange->SetColor(COL_RANGE);
+		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\range.png");
+		m_pRange->SetIdxTexture(nIdx);
 	}
 
 	return S_OK;
@@ -356,6 +359,9 @@ void CRailgun::ToggleEnable(bool bEnable)
 			m_pRange = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			m_pRange->SetSize(0.0f, 0.0f);
 			m_pRange->SetColor(COL_RANGE);
+
+			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\range.png");
+			m_pRange->SetIdxTexture(nIdx);
 		}
 	}
 	else

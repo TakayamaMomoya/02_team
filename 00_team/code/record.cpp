@@ -25,7 +25,7 @@ CRecord* CRecord::m_pRecord = nullptr;	// 自身のポインタ
 //=====================================================
 CRecord::CRecord()
 {
-	ZeroMemory(&m_aInfo[0],sizeof(m_aInfo));
+	ZeroMemory(&m_aInfo[0], sizeof(m_aInfo));
 	m_nNumSuvived = 0;
 }
 
@@ -75,17 +75,12 @@ void CRecord::Uninit(void)
 }
 
 //=====================================================
-// プレイヤーの数を設定処理
+// 更新処理
 //=====================================================
-void CRecord::SetNumPlayer(void)
+void CRecord::Update(void)
 {
-	CPlayerManager* pPlayerMagazine = CPlayerManager::GetInstance();
-
-	if (pPlayerMagazine != nullptr)
-	{
-		// 最大生存者数を設定
-		m_nNumSuvived = pPlayerMagazine->GetNumPlayer();
-	}
+	// デバック処理
+	Debug();
 }
 
 //=====================================================
@@ -102,7 +97,7 @@ void CRecord::AddDestroy(int nIdx)
 }
 
 //=====================================================
-// 敵の死亡の有無を判定
+// 敵の死亡判定処理
 //=====================================================
 void CRecord::CheckDeathEnemy(CObject* pObj,int nIdx)
 {
@@ -135,5 +130,85 @@ void CRecord::CheckDeathEnemy(CObject* pObj,int nIdx)
 		}
 
 		pEnemy = pEnemyNext;
+	}
+}
+
+//=====================================================
+// 当たったすべての敵の死亡判定処理
+//=====================================================
+void CRecord::CheckDeathEnemyAll(CCollision** ppCollsionMissile,D3DXVECTOR3 posMissile,float fRadiusMissile, int nIdx)
+{
+	bool bHit = false;
+
+	CCollision** ppCollision = ppCollsionMissile;
+
+	for (int nCnt = 0; nCnt < NUM_OBJECT; nCnt++)
+	{
+		if (ppCollision[nCnt] != nullptr)
+		{
+			if (ppCollision[nCnt]->GetType() == CCollision::TYPE_SPHERE)
+			{
+				if (CCollision::TAG_ENEMY == CCollision::TAG_NONE)
+				{
+
+				}
+				else if (ppCollision[nCnt]->GetTag() != CCollision::TAG_ENEMY)
+				{
+					continue;
+				}
+
+				// 差分取得
+				D3DXVECTOR3 vecDiff = ppCollision[nCnt]->GetPosition() - posMissile;
+
+				float fLength = D3DXVec3Length(&vecDiff);
+
+				if (fLength < ppCollision[nCnt]->GetRadius() + fRadiusMissile)
+				{
+					CRecord* pRecord = CRecord::GetInstance();
+
+					if (pRecord != nullptr)
+					{
+						// 現在のプレイヤーの破壊数を加算
+						pRecord->AddDestroy(nIdx);
+					}
+				}
+			}
+		}
+	}
+}
+
+//=====================================================
+// デバッグ表示
+//=====================================================
+void CRecord::Debug(void)
+{
+#ifndef _DEBUG
+
+	return;
+
+#endif
+
+	CDebugProc* pDebugProc = CDebugProc::GetInstance();
+
+	if (pDebugProc == nullptr)
+	{
+		return;
+	}
+
+	pDebugProc->Print("\nP1の敵の破壊数[%d]", m_aInfo[0].nDestroy);
+	pDebugProc->Print("\nP2の敵の破壊数[%d]", m_aInfo[1].nDestroy);
+}
+
+//=====================================================
+// プレイヤーの数を設定処理
+//=====================================================
+void CRecord::SetNumPlayer(void)
+{
+	CPlayerManager* pPlayerMagazine = CPlayerManager::GetInstance();
+
+	if (pPlayerMagazine != nullptr)
+	{
+		// 最大生存者数を設定
+		m_nNumSuvived = pPlayerMagazine->GetNumPlayer();
 	}
 }

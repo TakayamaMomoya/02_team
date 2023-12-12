@@ -130,7 +130,18 @@ void CMinigun::Attack(void)
 			CWeapon::SInfo info = GetInfo();
 
 			// ’e‚ð”­ŽË
-			CBullet::Create(posMuzzle, -move, info.fLifeBullet, CBullet::TYPE_PLAYER, false,6.0f, info.fDamage);
+			CBullet* pBullet = CBullet::Create(posMuzzle, -move, info.fLifeBullet, CBullet::TYPE_PLAYER, false,6.0f, info.fDamage);
+
+			// ’e‚ÌƒvƒŒƒCƒ„[”Ô†Ý’èˆ—
+			if (pBullet != nullptr)
+			{
+				CPlayer* pPlayer = GetPlayer();
+
+				if (pPlayer != nullptr)
+				{
+					pBullet->SetIdxPlayer(pPlayer->GetID());
+				}
+			}
 
 			if (pSound != nullptr)
 			{

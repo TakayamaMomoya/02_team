@@ -126,6 +126,7 @@ void CLauncher::Attack(void)
 				{
 					pMissile->SetPosition(posMuzzle);
 					pMissile->SetRot(rot);
+					pMissile->SetIdxPlayer(pPlayer->GetID());
 				}
 			}
 
