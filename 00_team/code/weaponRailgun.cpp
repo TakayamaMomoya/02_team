@@ -24,6 +24,7 @@
 #include "motion.h"
 #include "beam.h"
 #include "inpact.h"
+#include "record.h"
 
 //*****************************************************
 // ’è”’è‹`
@@ -203,7 +204,16 @@ void CRailgun::Shot(void)
 						{// ’e‚Ì”­Ë
 							pEnemy->Hit(info.fDamage);
 
-							// ‚±‚±‚Å“G‚ª€‚ñ‚¾‚Æ‚«‚Ì”»’èˆ—‚ğ’Ç‰Á‚µ‚Ü‚·B
+							// î•ñæ“¾ˆ—
+							CPlayer* pPlayer = GetPlayer();
+							CRecord* pRecord = CRecord::GetInstance();
+
+							// ”j‰ó”‚ÌíÑ‰ÁZˆ—
+							if (pPlayer != nullptr &&
+								pRecord != nullptr)
+							{
+								pRecord->CheckDeathEnemy(pEnemy, pPlayer->GetID());
+							}
 						}
 						else
 						{// ’eØ‚ê‚Ìê‡
