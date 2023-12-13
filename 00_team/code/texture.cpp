@@ -66,7 +66,7 @@ HRESULT CTexture::Load(void)
 	{
 		"data\\TEXTURE\\EFFECT\\muzzleFlush.png",
 		"data\\TEXTURE\\EFFECT\\beam.png",
-		"data\\TEXTURE\\EFFECT\\attack00.png",
+		"data\\TEXTURE\\EFFECT\\hit00.png",
 		"data\\TEXTURE\\UI\\pause_quit.png",
 		"data\\TEXTURE\\UI\\pause_restart.png",
 		"data\\TEXTURE\\UI\\pause_resume.png",
