@@ -22,7 +22,7 @@
 //*****************************************************
 class CLift : public CObjectX
 {
-private:
+public:
 	enum STATE
 	{
 		STATE_NONE = 0,

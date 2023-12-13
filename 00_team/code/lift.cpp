@@ -24,6 +24,7 @@
 //*****************************************************
 namespace
 {
+	const float UP = 2.0f;
 	const float RANGE(100.0f);
 }
 
@@ -84,15 +85,27 @@ void CLift::Update(void)
 	// 継承クラスの更新
 	CObjectX::Update();
 
+	// 情報取得
 	CFade* pFade = CFade::GetInstance();
 	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
 	CPlayer* pPlayer = nullptr;
-	int nInPlayer = 0;
 
+	// 変数宣言
+	int nInPlayer = 0;	// 範囲内プレイヤーカウント用
+
+	// リフト位置の取得
 	D3DXVECTOR3 pos = GetPosition();
+
+	if (m_state == STATE_UP)
+	{
+		pos.y += UP;
+	}
+
+	SetPosition(pos);
 
 	for (int nCnt = 0; nCnt < NUM_PLAYER; nCnt++)
 	{
+		// プレイヤーマネージャから情報を取得
 		pPlayer = pPlayerManager->GetPlayer(nCnt);
 
 		if (pPlayer == nullptr)
@@ -100,24 +113,26 @@ void CLift::Update(void)
 			continue;
 		}
 
-		//対象のオブジェクトろの距離を求める
-		float fLength = sqrtf(
-			(pPlayer->GetPosition().x - GetPosition().x) * (pPlayer->GetPosition().x - GetPosition().x) + 
-			(pPlayer->GetPosition().z - GetPosition().z) * (pPlayer->GetPosition().z - GetPosition().z));
-
+		// リフト範囲の設定
 		if (GetPosition().x + 100.0f >= pPlayer->GetPosition().x &&
 			GetPosition().x - 100.0f <= pPlayer->GetPosition().x &&
 			GetPosition().z + 100.0f >= pPlayer->GetPosition().z &&
 			GetPosition().z - 100.0f <= pPlayer->GetPosition().z)
 		{
+			// プレイヤー位置の取得
 			D3DXVECTOR3 playerPos = pPlayer->GetPosition();
-			pPlayer->SetPosition(playerPos);
-			m_abJoin[nCnt] = true;
 
-			nInPlayer++;
+			// 位置の設定
+			pPlayer->SetPosition(D3DXVECTOR3(playerPos.x, pos.y, playerPos.z));
+
+			// 参加
+			m_abJoin[nCnt] = true;	
+
+			nInPlayer++;	// 範囲内プレイヤーのカウントアップ
 		}
 		else
 		{
+			// 不参加
 			m_abJoin[nCnt] = false;
 		}
 	}
@@ -145,22 +160,22 @@ void CLift::Draw(void)
 //=====================================================
 CLift* CLift::Create(D3DXVECTOR3 pos,int nPriority)
 {
-	CLift* pMeetingPlace = nullptr;
+	CLift* pLift = nullptr;
 
-	if (pMeetingPlace == nullptr)
+	if (pLift == nullptr)
 	{// インスタンス生成
-		pMeetingPlace = new CLift(nPriority);
+		pLift = new CLift(nPriority);
 
-		if (pMeetingPlace != nullptr)
+		if (pLift != nullptr)
 		{
-			pMeetingPlace->SetPosition(pos);
+			pLift->SetPosition(pos);
 
 			// 初期化処理
-			pMeetingPlace->Init();
+			pLift->Init();
 		}
 	}
 
-	return pMeetingPlace;
+	return pLift;
 }
 
 //=====================================================

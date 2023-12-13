@@ -95,7 +95,7 @@ private:
 	void MoveLimit(int nPlayer);	// 行動制限
 	void PlayerShowUp(int nPlayer);	// プレイヤーの登場
 
-	void Rift(void);	// リフトの設定
+	void Lift(void);	// リフトの設定
 
 	void LiftInNumberUi(int nPlayer);
 
@@ -108,7 +108,7 @@ private:
 	CBillboard* m_pSlash;
 	SELECT_STATE m_selectState;	// 人数選択の状態
 	bool m_abEntry[NUM_PLAYER];	// 参加したかどうか
-	bool m_bRiftCamera;
+	bool m_bLiftCamera;
 	bool m_bOk;
 	bool m_bSound;
 };
