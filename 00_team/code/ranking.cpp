@@ -37,7 +37,7 @@ namespace
 	const float RECORD_TEXT_SIZE = 200.0f;								// 戦績文の大きさ
 	const float RECORD_TEXT_WIDTH = 1.0f * RECORD_TEXT_SIZE;			// 戦績文の幅
 	const float RECORD_TEXT_HEIGHT = 0.2f * RECORD_TEXT_SIZE;			// 戦績文の高さ
-	const char* RECORD_TEXT_TEX = "data\\TEXTURE\\UI\\gamestart.png";	// 戦績文のパス
+	const char* RECORD_TEXT_TEX = "data\\TEXTURE\\UI\\renk_text_record.png";	// 戦績文のパス
 
 	// 戦績種類アイコン
 	const D3DXVECTOR3 GENRE_ICON_POS[CRecord::GENRE_TYPE_MAX] =
@@ -58,7 +58,7 @@ namespace
 	};
 	const char* GENRE_ICON_TEX[NUM_PLAYER] =
 	{// テクスチャのパス[種類]
-		"data\\TEXTURE\\UI\\GenreIcon000",
+		nullptr,
 	};
 
 	// 戦績種類文
@@ -80,7 +80,7 @@ namespace
 	};
 	const char* GENRE_TEXT_TEX[NUM_PLAYER] =
 	{// テクスチャのパス[種類]
-		"data\\TEXTURE\\UI\\GenreIcon000",
+		"data\\TEXTURE\\UI\\rank_text_destroyer",
 	};
 
 	// 顔表示
@@ -114,10 +114,10 @@ namespace
 	};
 	const char* FACE_TEX[NUM_PLAYER] =
 	{// テクスチャのパス[プレイヤー番号]
-		"data\\TEXTURE\\UI\\GenreIcon000",
-		"data\\TEXTURE\\UI\\GenreIcon000",
-		"data\\TEXTURE\\UI\\GenreIcon000",
-		"data\\TEXTURE\\UI\\GenreIcon000",
+		nullptr,
+		nullptr,
+		nullptr,
+		nullptr,
 	};
 
 	// 数字
@@ -129,9 +129,9 @@ namespace
 		D3DXVECTOR3(SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.80f, 0.0f),
 	};
 	const float NUMBER_SIZE = 25.0f;
-	const float ICON_WIDTH = 1.0f * NUMBER_SIZE;
-	const float ICON_HEIGHT = 1.0f * NUMBER_SIZE;
-	const char* NUMBER_TEX = "data\\TEXTURE\\UI\\GenreIcon000";
+	const float NUMBER_WIDTH = 1.0f * NUMBER_SIZE;
+	const float NUMBER_HEIGHT = 1.0f * NUMBER_SIZE;
+	const char* NUMBER_TEX = nullptr;
 }
 
 //=====================================================
@@ -156,8 +156,10 @@ CRanking::~CRanking()
 HRESULT CRanking::Init(void)
 {
 	// テクスチャのポインタを取得
-	//CTexture* pTexture = CTexture::GetInstance();
-	CTexture* pTexture = nullptr;
+	CTexture* pTexture = CTexture::GetInstance();
+
+	// 戦績のポインタを取得
+	CRecord* pRecord = CRecord::GetInstance();
 
 	// レコードテキストの生成
 	m_infoVisual.pRecordText = CObject2D::Create(7);
@@ -223,7 +225,6 @@ HRESULT CRanking::Init(void)
 	if (m_infoVisual.pGenreText == nullptr)
 	{
 		return E_FAIL;
-
 	}
 
 	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
@@ -255,7 +256,12 @@ HRESULT CRanking::Init(void)
 		if (m_infoVisual.apNumber[nCount] != nullptr)
 		{
 			m_infoVisual.apNumber[nCount]->SetPosition(NUMBER_POS[nCount]);
-			m_infoVisual.apNumber[nCount]->SetSizeAll(ICON_WIDTH, ICON_WIDTH);
+			m_infoVisual.apNumber[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_WIDTH);
+
+			if (pRecord != nullptr)
+			{
+				m_infoVisual.apNumber[nCount]->SetValue(pRecord->GetDestroy(nCount),4);
+			}
 
 			if (pTexture != nullptr)
 			{

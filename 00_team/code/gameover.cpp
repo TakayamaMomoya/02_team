@@ -259,7 +259,7 @@ HRESULT CGameover::Init()
 				// プレイヤーの情報の設定
 				m_apModelPlayer[nCntPlayer]->SetPosition(PLAYER_POS[nCntPlayer]);	// 位置
 				m_apModelPlayer[nCntPlayer]->SetRot(PLAYER_ROT[nCntPlayer]);		// 向き
-				m_apModelPlayer[nCntPlayer]->SetMotion(3);							// モーション
+				m_apModelPlayer[nCntPlayer]->SetMotion(5);							// モーション
 			}
 		}
 	}
