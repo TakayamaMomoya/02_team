@@ -38,7 +38,7 @@ namespace
 {
 const char* BODY_PATH_LOWER[NUM_PLAYER] =
 {// 下半身のパス
-	"data\\MOTION\\motionPotatoman02_lower.txt",
+	"data\\MOTION\\motionPotatoman01_lower.txt",
 	"data\\MOTION\\motionPotatoman02_lower.txt",
 	"data\\MOTION\\motionPotatoman03_lower.txt",
 	"data\\MOTION\\motionPotatoman04_lower.txt",
@@ -46,7 +46,7 @@ const char* BODY_PATH_LOWER[NUM_PLAYER] =
 
 const char* BODY_PATH_UPPER[NUM_PLAYER] =
 {// 上半身のパス
-	"data\\MOTION\\motionPotatoman02_upper.txt",
+	"data\\MOTION\\motionPotatoman01_upper.txt",
 	"data\\MOTION\\motionPotatoman02_upper.txt",
 	"data\\MOTION\\motionPotatoman03_upper.txt",
 	"data\\MOTION\\motionPotatoman04_upper.txt",
