@@ -23,6 +23,16 @@
 class CLift : public CObjectX
 {
 public:
+	enum STATE
+	{
+		STATE_NONE = 0,
+		STATE_IN,
+		STATE_UP,
+		STATE_END,
+		STATE_MAX
+	};
+
+public:
 	CLift(int nPriority = 6);	// コンストラクタ
 	~CLift();	// デストラクタ
 
@@ -34,20 +44,13 @@ public:
 	static HRESULT Load(void);	// 読込
 
 	static void SetjoinPlayer(int nPlayer) { m_nNumJoinPlayer = nPlayer; }
+	STATE GetState(void) { return m_state; }
+	void SetState(STATE state) { m_state = state; }
 
 	static int GetInPlayer(void);
 	static bool GetIsIn(void);
 
 private:
-
-	enum STATE
-	{
-		STATE_NONE = 0,
-		STATE_IN,
-		STATE_END,
-		STATE_MAX
-	};
-
 	D3DXVECTOR3 m_pos;
 	static int m_nNumJoinPlayer;
 	static int m_nInCnt;

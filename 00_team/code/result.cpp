@@ -28,13 +28,13 @@ namespace
 	const float RESULT_HEIGHT = 178.0f * 0.4f;	// 結果の高さ
 	const char* RESULT_PATH = "data\\TEXTURE\\UI\\result.png";	// 結果のパス
 
-	const float CAPTION_WIDTH = 150.0f;	// キャプションの幅
-	const float CAPTION_HEIGHT = 55.0f;	// キャプションの高さ
+	const float CAPTION_WIDTH = 100.0f;	// キャプションの幅
+	const float CAPTION_HEIGHT = 35.0f;	// キャプションの高さ
 	const char* CAPTION_PATH = "data\\TEXTURE\\UI\\caption.png";	// キャプションのパス
 
 	const int NUM_PLACE = 1;	// 桁数
-	const float NUMBER_WIDTH = 25.0f;	// 数字の幅
-	const float NUMBER_HEIGHT = 55.0f;	// 数字の高さ
+	const float NUMBER_WIDTH = 15.0f;	// 数字の幅
+	const float NUMBER_HEIGHT = 35.0f;	// 数字の高さ
 }
 
 //====================================================
@@ -219,7 +219,7 @@ void CResult::Draw(void)
 //====================================================
 void CResult::SetSurvived(CPlayer *pPlayer)
 {
-	if (m_nNumSuvived == NUM_PLAYER - 1)
+	if (m_nNumSuvived == NUM_PLAYER)
 	{// 最大に達していた場合のエラー
 		return;
 	}
