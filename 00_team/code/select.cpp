@@ -65,9 +65,6 @@ namespace
 	const D3DXVECTOR3 CONTAINER_SPACE({ 400.0, 0.0, -70.0f });	// コンテナ間の広さ
 	const float RESPAWN_TIME(10.0f);	// コンテナ復活の時間
 
-	const float RIFT_IN(100.0f);	// リフトの範囲
-	const float LIFT_UP(2.0f);	// リフト上昇速度
-
 	const float GO_GAME_POSy(250.0f);	// 遷移する高さ
 
 	const float POW_JUMP = 25.0f;	// エントリー時のジャンプ力
@@ -85,7 +82,7 @@ CSelect::CSelect()
 	m_pStartUI = nullptr;
 	m_pLift = nullptr;
 	m_pSlash = nullptr;
-	m_bRiftCamera = false;
+	m_bLiftCamera = false;
 	m_bOk = false;
 	m_bSound = false;
 	m_selectState = SELECT_STATE::STATE_BEFORE;
@@ -344,9 +341,18 @@ void CSelect::Update(void)
 			if (CLift::GetIsIn() == true)
 			{// 参加中の全員が範囲内に入ったという判定を貰ったら
 
+				for (int i = 0; i < NUM_PLAYER; i++)
+				{
+					if (m_abEntry[i] == true && pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, i))
+					{// リフトが上がる処理
+						m_pSlash->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+						m_selectState = STATE_GO;
+						m_bOk = true;
+					}
+				}
+
 				if (pKeyboard->GetTrigger(DIK_RETURN) ||
-					pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
-					pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
+					pMouse->GetTrigger(CInputMouse::BUTTON_LMB))
 				{// フェード
 					m_pSlash->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 					m_selectState = STATE_GO;
@@ -367,7 +373,7 @@ void CSelect::Update(void)
 			}
 		}
 
-		Rift();
+		Lift();
 	}
 
 	// StartUIを見えるように
@@ -416,21 +422,6 @@ void CSelect::Update(void)
 	ReSetContainer();
 
 #ifdef _DEBUG
-	CCamera* pCamera = CManager::GetCamera();
-
-	if (pCamera != nullptr)
-	{
-		// 操作
-		pCamera->Control();
-	}
-
-	if (pKeyboard->GetTrigger(DIK_RETURN))
-	{
-		//CDebrisSpawner::Create(D3DXVECTOR3(0.0f, 10.0f, -400.0f), CDebrisSpawner::TYPE::TYPE_SOIL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-		//CParticle::Create({ 0.0f, 300.0f, -400.0f }, CParticle::TYPE::TYPE_INJECTION_FIRE);
-		CParticle::Create({ 0.0f, 200.0f, -400.0f }, CParticle::TYPE::TYPE_TOMATO_JUICE);
-	}
-
 	CDebugProc::GetInstance()->Print("\n参加人数[%d]\n", nJoinPlayer);
 #endif
 }
@@ -567,6 +558,7 @@ void CSelect::EntryInput(int nPlayer)
 		D3DXVECTOR3 move = { 0.0f,POW_JUMP,0.0f };
 		m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 
+		// 土の生成
 		CDebrisSpawner::Create(D3DXVECTOR3(
 			m_aJoinUiData[nPlayer].pUi2D->GetPosition().x,
 			50.0f,
@@ -651,9 +643,8 @@ void CSelect::MoveLimit(int nPlayer)
 		}
 	}
 
-	//情報の反映
+	// 情報の反映
 	m_apPlayerData[nPlayer].pPlayer->SetPosition(pos);
-	//m_apPlayerData[nPlayer].pPlayer->SetMove(move);
 }
 
 //=====================================================
@@ -684,23 +675,25 @@ void CSelect::PlayerShowUp(int nPlayer)
 //=====================================================
 // リフト
 //=====================================================
-void CSelect::Rift(void)
+void CSelect::Lift(void)
 {
 	if (m_bOk == true)
 	{
 		CCamera* pCamera = CManager::GetCamera();
 
-		D3DXVECTOR3 rift = m_pLift->GetPosition();
-		rift.y += LIFT_UP;
-		m_pLift->SetPosition(rift);
+		D3DXVECTOR3 lift = m_pLift->GetPosition();
 
-		if (m_bRiftCamera == false)
+		// 状態の変更
+		m_pLift->SetState(m_pLift->STATE_UP);
+
+		if (m_bLiftCamera == false)
 		{
 			pCamera->SetLift();
-			m_bRiftCamera = true;
+			m_bLiftCamera = true;
 		}
 		else
 		{
+			// 上昇カメラアングル
 			pCamera->SetUpLift();
 		}
 
@@ -708,6 +701,7 @@ void CSelect::Rift(void)
 		{
 			if (m_abEntry[nCnt] == true)
 			{// リフトが上がる処理
+				// サウンドの再生
 				if (m_bSound == false)
 				{
 					CSound* pSound = CSound::GetInstance();
@@ -718,26 +712,20 @@ void CSelect::Rift(void)
 					}
 					m_bSound = true;
 				}
-
-				D3DXVECTOR3 pos = m_apPlayerData[nCnt].pPlayer->GetPosition();
-				D3DXVECTOR3 move = m_apPlayerData[nCnt].pPlayer->GetMove();
-
-				m_apPlayerData[nCnt].pPlayer->SetMove({ move.x, 0.0f, move.z });
-
-				pos = m_apPlayerData[nCnt].pPlayer->GetPosition();
-				pos.y += LIFT_UP;
-				m_apPlayerData[nCnt].pPlayer->SetPosition(pos);
 			}
 		}
 
 		CFade* pFade = CFade::GetInstance();
 
-		if (rift.y > GO_GAME_POSy)
+		if (lift.y > GO_GAME_POSy)
 		{// リフトが一定の高さに行くとゲームへ
 
-			if (pFade != nullptr && m_abEntry[0] != false)
+			for (int i = 0; i < NUM_PLAYER; i++)
 			{
-				pFade->SetFade(CScene::MODE_GAME);
+				if (pFade != nullptr)
+				{
+					pFade->SetFade(CScene::MODE_GAME);
+				}
 			}
 		}
 	}
