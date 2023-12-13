@@ -338,7 +338,7 @@ void CWeapon::Break(void)
 	{
 		int nIdx = m_info.pPlayer->GetIDJoypad();
 
-		pJoypad->Vibration(nIdx, CInputJoypad::PADVIB_USE, 1.0f, 40);
+		pJoypad->Vibration(nIdx, CInputJoypad::PADVIB_USE, 1.0f, 60);
 	}
 
 	// アニメーションエフェクトの生成
