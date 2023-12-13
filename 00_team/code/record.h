@@ -43,6 +43,7 @@ public:
 
 	static CRecord* GetInstance(void) { return m_pRecord; }
 
+	int GetDestroy(int nIdx) { return m_aInfo[nIdx].nDestroy; }
 private:
 
 	void Debug(void);
