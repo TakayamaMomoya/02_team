@@ -129,8 +129,8 @@ namespace
 		D3DXVECTOR3(SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.80f, 0.0f),
 	};
 	const float NUMBER_SIZE = 25.0f;
-	const float NUMBER_WIDTH = 1.0f * NUMBER_SIZE;
-	const float NUMBER_HEIGHT = 1.0f * NUMBER_SIZE;
+	const float ICON_WIDTH = 1.0f * NUMBER_SIZE;
+	const float ICON_HEIGHT = 1.0f * NUMBER_SIZE;
 	const char* NUMBER_TEX = "data\\TEXTURE\\UI\\GenreIcon000";
 }
 
@@ -255,7 +255,7 @@ HRESULT CRanking::Init(void)
 		if (m_infoVisual.apNumber[nCount] != nullptr)
 		{
 			m_infoVisual.apNumber[nCount]->SetPosition(NUMBER_POS[nCount]);
-			m_infoVisual.apNumber[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_WIDTH);
+			m_infoVisual.apNumber[nCount]->SetSizeAll(ICON_WIDTH, ICON_WIDTH);
 
 			if (pTexture != nullptr)
 			{

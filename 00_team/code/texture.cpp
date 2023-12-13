@@ -146,7 +146,6 @@ int CTexture::Regist(const char *pFileName)
 	m_apFilename[m_nNumAll] = new char[MAX_STRING];
 
 	// ƒtƒ@ƒCƒ‹–¼‚Ì•Û‘¶
-	strcpy(m_apFilename[m_nNumAll], "\0");
 	strcpy(m_apFilename[m_nNumAll], pFileName);
 
 	// Œ»İ‚Ì”Ô†‚ğ•Û‘¶
