@@ -26,9 +26,12 @@ namespace
 
 	D3DXCOLOR WeponCol[CWeapon::TYPE_MAX] =
 	{// 武器ごとのエフェクトの色
-		{1.0f, 0.0f, 0.0f, 0.5f},	// マグナム
-		{0.8f, 0.6f, 0.1f, 0.5f},	// マシンガン
-		{0.8f, 0.6f, 0.1f, 0.5f},	// ショットガン
+		{1.0f, 1.0f, 1.0f, 0.35f},	// マグナム
+		{1.0f, 1.0f, 1.0f, 0.35f},	// マシンガン
+		{1.0f, 0.8f, 0.0f, 0.35f},	// ショットガン
+		{1.0f, 0.0f, 0.0f, 0.35f},	// レールガン
+		{1.0f, 0.0f, 0.0f, 0.35f},	// ミニガン
+		{1.0f, 0.0f, 0.0f, 0.35f},	// ロケラン
 	};
 }
 
@@ -81,7 +84,7 @@ void CItemWeapon::Load(void)
 		"data\\MODEL\\weapon\\shotgun.x",
 		"data\\MODEL\\weapon\\railgun.x",
 		"data\\MODEL\\weapon\\minigun_000.x",
-		"data\\MODEL\\weapon\\ak47.x",
+		"data\\MODEL\\weapon\\launcher.x",
 	};
 
 	// モデルの読込
