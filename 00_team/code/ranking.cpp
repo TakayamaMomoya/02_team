@@ -42,7 +42,7 @@ namespace
 	// 戦績種類アイコン
 	const D3DXVECTOR3 GENRE_ICON_POS[CRecord::GENRE_TYPE_MAX] =
 	{// 位置[種類]
-		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.1f, 0.0f),
 	};
 	const float GENRE_ICON_SIZE[NUM_PLAYER] =
 	{// 大きさ[種類]
@@ -64,7 +64,7 @@ namespace
 	// 戦績種類文
 	const D3DXVECTOR3 GENRE_TEXT_POS[CRecord::GENRE_TYPE_MAX] =
 	{// 位置[種類]
-		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.3f, 0.0f),
 	};
 	const float GENRE_TEXT_SIZE[NUM_PLAYER] =
 	{// 大きさ[種類]
@@ -123,14 +123,14 @@ namespace
 	// 数字
 	const D3DXVECTOR3 NUMBER_POS[NUM_PLAYER] =
 	{// 位置[プレイヤー番号]
-		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
-		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
-		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
-		D3DXVECTOR3(SCREEN_WIDTH * 0.7f, SCREEN_HEIGHT * 0.85f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.50f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.60f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.70f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.6f, SCREEN_HEIGHT * 0.80f, 0.0f),
 	};
-	const float NUMBER_SIZE = 250.0f;
+	const float NUMBER_SIZE = 25.0f;
 	const float NUMBER_WIDTH = 1.0f * NUMBER_SIZE;
-	const float NUMBER_HEIGHT = 0.2f * NUMBER_SIZE;
+	const float NUMBER_HEIGHT = 1.0f * NUMBER_SIZE;
 	const char* NUMBER_TEX = "data\\TEXTURE\\UI\\GenreIcon000";
 }
 
@@ -173,6 +173,8 @@ HRESULT CRanking::Init(void)
 			m_infoVisual.pRecordText->SetIdxTexture(nIdx);
 			m_infoVisual.pRecordText->SetVtx();
 		}
+
+		m_infoVisual.pRecordText->SetVtx();
 	}
 	if (m_infoVisual.pRecordText == nullptr)
 	{
@@ -193,6 +195,8 @@ HRESULT CRanking::Init(void)
 			m_infoVisual.pGenreIcon->SetIdxTexture(nIdx);
 			m_infoVisual.pGenreIcon->SetVtx();
 		}
+
+		m_infoVisual.pGenreIcon->SetVtx();
 	}
 	if (m_infoVisual.pGenreIcon == nullptr)
 	{
@@ -213,6 +217,8 @@ HRESULT CRanking::Init(void)
 			m_infoVisual.pGenreText->SetIdxTexture(nIdx);
 			m_infoVisual.pGenreText->SetVtx();
 		}
+
+		m_infoVisual.pGenreText->SetVtx();
 	}
 	if (m_infoVisual.pGenreText == nullptr)
 	{
@@ -241,6 +247,7 @@ HRESULT CRanking::Init(void)
 		{
 			return E_FAIL;
 		}
+		m_infoVisual.apFace[nCount]->SetVtx();
 
 		// 数字の生成
 		m_infoVisual.apNumber[nCount] = CNumber::Create(4,0);
