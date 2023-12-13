@@ -36,45 +36,45 @@
 //*****************************************************
 namespace
 {
-	const char* BODY_PATH_LOWER[NUM_PLAYER] =
-	{// 下半身のパス
-		"data\\MOTION\\motionPotatoman01_lower.txt",
-		"data\\MOTION\\motionPotatoman02_lower.txt",
-		"data\\MOTION\\motionPotatoman03_lower.txt",
-		"data\\MOTION\\motionPotatoman04_lower.txt",
-	};
+const char* BODY_PATH_LOWER[NUM_PLAYER] =
+{// 下半身のパス
+	"data\\MOTION\\motionPotatoman02_lower.txt",
+	"data\\MOTION\\motionPotatoman02_lower.txt",
+	"data\\MOTION\\motionPotatoman03_lower.txt",
+	"data\\MOTION\\motionPotatoman04_lower.txt",
+};
 
-	const char* BODY_PATH_UPPER[NUM_PLAYER] =
-	{// 上半身のパス
-		"data\\MOTION\\motionPotatoman01_upper.txt",
-		"data\\MOTION\\motionPotatoman02_upper.txt",
-		"data\\MOTION\\motionPotatoman03_upper.txt",
-		"data\\MOTION\\motionPotatoman04_upper.txt",
-	};
+const char* BODY_PATH_UPPER[NUM_PLAYER] =
+{// 上半身のパス
+	"data\\MOTION\\motionPotatoman02_upper.txt",
+	"data\\MOTION\\motionPotatoman02_upper.txt",
+	"data\\MOTION\\motionPotatoman03_upper.txt",
+	"data\\MOTION\\motionPotatoman04_upper.txt",
+};
 
-	const D3DXCOLOR COL_ARROW[NUM_PLAYER] =
-	{// 矢印の色
-		D3DXCOLOR(1.0f,1.0f,1.0f,1.0f),
-		D3DXCOLOR(0.0f,1.0f,1.0f,1.0f),
-		D3DXCOLOR(1.0f,0.0f,1.0f,1.0f),
-		D3DXCOLOR(1.0f,1.0f,0.0f,1.0f),
-	};	// 矢印の色
+const D3DXCOLOR COL_ARROW[NUM_PLAYER] =
+{// 矢印の色
+	D3DXCOLOR(1.0f,1.0f,1.0f,1.0f),
+	D3DXCOLOR(0.0f,1.0f,1.0f,1.0f),
+	D3DXCOLOR(1.0f,0.0f,1.0f,1.0f),
+	D3DXCOLOR(1.0f,1.0f,0.0f,1.0f),
+};	// 矢印の色
 
-	const float MOVE_LINE = 0.2f;		// 動いている判断のしきい値
-	const float ARROW_POSY = 5.0f;	// 矢印の位置の高さ
-	const float ARROW_WIDTH = 30.0f;	// 矢印の幅
-	const float ARROW_HEIGHT = 50.0f;	// 矢印の高さ
-	const float GRAVITY = 1.58f;	// 重力
-	const float POW_PUNCH_UP = 15.0f;	// パンチで飛び上がるジャンプ量
+const float MOVE_LINE = 0.2f;		// 動いている判断のしきい値
+const float ARROW_POSY = 5.0f;	// 矢印の位置の高さ
+const float ARROW_WIDTH = 30.0f;	// 矢印の幅
+const float ARROW_HEIGHT = 50.0f;	// 矢印の高さ
+const float GRAVITY = 1.58f;	// 重力
+const float POW_PUNCH_UP = 15.0f;	// パンチで飛び上がるジャンプ量
 
-	const int HAND_PARTS_NUM = 6;				// 手の番号
-	const float MOTION_STICK_RUNAWAY = 0.1f;	// スティックの暴走判定
+const int HAND_PARTS_NUM = 6;				// 手の番号
+const float MOTION_STICK_RUNAWAY = 0.1f;	// スティックの暴走判定
 
-	const float LIMID_RANGE_LEFT = -460.0f;
-	const float LIMID_RANGE_RIGHT = 460.0f;
-	const float LIMID_RANGE_UP = 460.0f;
-	const float LIMID_RANGE_DOWN = -460.0f;
-}	
+const float LIMID_RANGE_LEFT = -460.0f;
+const float LIMID_RANGE_RIGHT = 460.0f;
+const float LIMID_RANGE_UP = 460.0f;
+const float LIMID_RANGE_DOWN = -460.0f;
+}
 
 //=====================================================
 // 優先順位を決めるコンストラクタ

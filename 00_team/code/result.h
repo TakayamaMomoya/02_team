@@ -47,7 +47,7 @@ private:
 	struct SInfoSuvived
 	{// 生存者情報
 		CPlayer *pSuvived;	// 生存者のポインタ
-		CNumber *pNumber;	// IDを表示する数字
+		CObject2D *pIcon;	// プレイヤーのアイコン
 		CObject2D *pCaption;	// キャプション
 	};
 

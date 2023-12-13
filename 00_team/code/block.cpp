@@ -198,14 +198,9 @@ void CBlock::Hit(float fDamage)
 			{
 				pObjX->BindModel(CModel::Load("data\\MODEL\\block\\woodRubble00.x"));
 			}
-			else if (nRand == 1)
-			{
-				pObjX->BindModel(CModel::Load("data\\MODEL\\block\\woodRubble01.x"));
-			}
 			else
 			{
-				assert(("‚¦‚ç[", false));
-				//pObjX->BindModel(CModel::Load("data\\MODEL\\block\\woodRubble00.x"));
+				pObjX->BindModel(CModel::Load("data\\MODEL\\block\\woodRubble01.x"));
 			}
 		}
 

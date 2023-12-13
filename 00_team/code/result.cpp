@@ -28,13 +28,21 @@ namespace
 	const float RESULT_HEIGHT = 178.0f * 0.4f;	// 結果の高さ
 	const char* RESULT_PATH = "data\\TEXTURE\\UI\\result.png";	// 結果のパス
 
-	const float CAPTION_WIDTH = 150.0f;	// キャプションの幅
-	const float CAPTION_HEIGHT = 55.0f;	// キャプションの高さ
+	const float CAPTION_WIDTH = 100.0f;	// キャプションの幅
+	const float CAPTION_HEIGHT = 35.0f;	// キャプションの高さ
 	const char* CAPTION_PATH = "data\\TEXTURE\\UI\\caption.png";	// キャプションのパス
 
 	const int NUM_PLACE = 1;	// 桁数
-	const float NUMBER_WIDTH = 25.0f;	// 数字の幅
-	const float NUMBER_HEIGHT = 55.0f;	// 数字の高さ
+	const float ICON_WIDTH = 40.0f;	// 数字の幅
+	const float ICON_HEIGHT = 40.0f;	// 数字の高さ
+
+	const char* ICON_PATH[NUM_PLAYER] =
+	{// プレイヤーアイコンのパス
+		"data\\TEXTURE\\UI\\player01.png",
+		"data\\TEXTURE\\UI\\player02.png",
+		"data\\TEXTURE\\UI\\player03.png",
+		"data\\TEXTURE\\UI\\player04.png"
+	};
 }
 
 //====================================================
@@ -219,7 +227,7 @@ void CResult::Draw(void)
 //====================================================
 void CResult::SetSurvived(CPlayer *pPlayer)
 {
-	if (m_nNumSuvived == NUM_PLAYER - 1)
+	if (m_nNumSuvived == NUM_PLAYER)
 	{// 最大に達していた場合のエラー
 		return;
 	}
@@ -251,14 +259,21 @@ void CResult::DispSuvived(SInfoSuvived *pInfo)
 	{
 		int nID = pInfo->pSuvived->GetID();
 
-		if (pInfo->pNumber == nullptr)
-		{// ID表示の数字を生成
-			pInfo->pNumber = CNumber::Create(NUM_PLACE, nID + 1);
+		if (pInfo->pIcon == nullptr)
+		{// アイコンの生成
+			pInfo->pIcon = CObject2D::Create(7);
 
-			if (pInfo->pNumber != nullptr)
+			if (pInfo->pIcon != nullptr)
 			{
-				pInfo->pNumber->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.6f + NUMBER_HEIGHT * nIdx * 2, 0.0f));
-				pInfo->pNumber->SetSizeAll(NUMBER_WIDTH, NUMBER_HEIGHT);
+				D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.6f + ICON_HEIGHT * nIdx * 2, 0.0f);
+
+				pInfo->pIcon->SetPosition(pos);
+				pInfo->pIcon->SetSize(ICON_WIDTH, ICON_HEIGHT);
+
+				int nIdx = CTexture::GetInstance()->Regist(ICON_PATH[nID]);
+				pInfo->pIcon->SetIdxTexture(nIdx);
+				
+				pInfo->pIcon->SetVtx();
 			}
 		}
 		
@@ -269,7 +284,7 @@ void CResult::DispSuvived(SInfoSuvived *pInfo)
 			if (pInfo->pCaption != nullptr)
 			{
 				pInfo->pCaption->SetSize(CAPTION_WIDTH, CAPTION_HEIGHT);
-				pInfo->pCaption->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.35f + NUMBER_WIDTH + CAPTION_WIDTH, SCREEN_HEIGHT * 0.6f + NUMBER_HEIGHT * nIdx * 2, 0.0f));
+				pInfo->pCaption->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.35f + ICON_WIDTH + CAPTION_WIDTH, SCREEN_HEIGHT * 0.6f + ICON_HEIGHT * nIdx * 2, 0.0f));
 
 				int nIdx = CTexture::GetInstance()->Regist(CAPTION_PATH);
 				pInfo->pCaption->SetIdxTexture(nIdx);
