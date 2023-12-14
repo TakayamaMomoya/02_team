@@ -180,6 +180,27 @@ void CRecord::CheckDeathEnemyAll(CCollision** ppCollsionMissile,D3DXVECTOR3 posM
 //=====================================================
 // デバッグ表示
 //=====================================================
+void CRecord::AllSort(void)
+{
+	// 敵の破壊数のソート
+	for (int nCutRank = 0; nCutRank < NUM_PLAYER; nCutRank++)
+	{
+		//置き換え番号に要素1のデータ番号を代入
+		for (int nCutScoreRank = 0; nCutScoreRank < NUM_PLAYER; nCutScoreRank++)
+		{
+			//要素2に仮の数値を代入
+			if (m_aInfo[nCutRank].nDestroy < m_aInfo[nCutScoreRank].nDestroy)
+			{
+				// 置き換え番号より数値が低い場合順位を下げる
+				m_aInfo[nCutRank].nDestroyRank++;
+			}
+		}
+	}
+}
+
+//=====================================================
+// デバッグ表示
+//=====================================================
 void CRecord::Debug(void)
 {
 #ifndef _DEBUG

@@ -1,7 +1,7 @@
 //*****************************************************
 //
 // ランキングの処理[Ranking.h]
-// Author:髙山桃也
+// Author:酒井南勝
 //
 //*****************************************************
 
@@ -30,6 +30,28 @@ class CMotion;
 class CRanking : public CScene
 {
 public:
+	
+	// 演出の種類
+	enum DIRECTION_TYPE
+	{
+		DIRECTION_TYPE_MARCH = 0,	// 行進
+		DIRECTION_TYPE_RUN_AWAY,	// 逃げる
+		DIRECTION_TYPE_CHASE,		// 追いかける
+		DIRECTION_TYPE_MAX
+	};
+
+	// 役者の種類
+	enum ACTOR_TYPE
+	{
+		ACTOR_TYPE_PLAYER_ONE = 0,	// プレイヤー01
+		ACTOR_TYPE_PLAYER_TWO,		// プレイヤー02
+		ACTOR_TYPE_PLAYER_THREE,	// プレイヤー03
+		ACTOR_TYPE_PLAYER_FOUR,		// プレイヤー04
+		ACTOR_TYPE_ENEMY_ONE,		// 敵01
+		ACTOR_TYPE_ENEMY_TWO,		// 敵02
+		ACTOR_TYPE_ENEMY_THREE,		// 敵03
+		ACTOR_TYPE_MAX
+	};
 
 	CRanking();	// コンストラクタ
 	~CRanking();	// デストラクタ
@@ -41,6 +63,9 @@ public:
 
 	HRESULT InitUi(void);
 	HRESULT InitObj(void);
+
+	void UpdateDirection(void);
+	HRESULT SetDirection(DIRECTION_TYPE type);
 
 private:
 
@@ -57,11 +82,14 @@ private:
 	struct SInfoVisualObj
 	{
 		CObject3D* pField;				// 地面
-		CMotion* apModelPlayer[NUM_PLAYER];	// プレイヤー
+		CObject3D* pWall;				// 壁
+		CMotion* apModelActor[ACTOR_TYPE_MAX];	// プレイヤー
 	};
 
 	SInfoVisualUi m_infoVisualUi;	// UIの見た目関連の情報
 	SInfoVisualObj m_infoVisualObj;	// オブジェクトの見た目関連の処理
+	DIRECTION_TYPE m_typeDirection;	// 演出の種類
+	int m_nDirectionCnt;			// 演出カウント
 };
 
 #endif
