@@ -14,8 +14,9 @@
 #include "playerManager.h"
 #include "weapon.h"
 #include "player.h"
-
-#include "effect3D.h"
+#include "debugproc.h"
+#include "object3D.h"
+#include "texture.h"
 
 //*****************************************************
 // 定数定義
@@ -24,7 +25,7 @@ namespace
 {
 	const float GRAVITY = 0.3f;	// 重力
 
-	D3DXCOLOR WeponCol[CWeapon::TYPE_MAX] =
+	D3DXCOLOR WEPONCOL[CWeapon::TYPE_MAX] =
 	{// 武器ごとのエフェクトの色
 		{1.0f, 1.0f, 1.0f, 0.35f},	// マグナム
 		{1.0f, 1.0f, 1.0f, 0.35f},	// マシンガン
@@ -33,6 +34,15 @@ namespace
 		{1.0f, 0.0f, 0.0f, 0.35f},	// ミニガン
 		{1.0f, 0.0f, 0.0f, 0.35f},	// ロケラン
 	};
+
+	const float SPEED_SCALING = 0.1f;	// スケールが大きくなる速度
+	const float INITIAL_DESTSCALE = 1.5f;	// 初期の目標スケール
+	const float INITIAL_HEIGHT_BASE = 150.0f;	// 初期の基準高さ
+	const float RANGE_FLOAT = 50.0f;	// 浮き沈みする範囲
+	const float SPEED_ROTATE = 0.01f;	// 回転速度
+	const float SPEED_MOVE = 0.2f;	// 追従速度
+	const float SPEED_FLOAT = 0.03f;	// 浮き沈みする速度
+	const float SIZE_LIGHT = 50.0f;	// 光のサイズ
 }
 
 //=====================================================
@@ -41,6 +51,7 @@ namespace
 CItemWeapon::CItemWeapon(int nPriority) : CGimmick(nPriority)
 {
 	m_type = CWeapon::TYPE_MAGNUM;
+	ZeroMemory(&m_info, sizeof(SInfo));
 }
 
 //=====================================================
@@ -62,12 +73,35 @@ HRESULT CItemWeapon::Init(void)
 	// 読み込み
 	Load();
 
+	// スケール初期設定
+	SetScale(0.0f);
+
 	// 横向きにする
 	D3DXVECTOR3 rot = GetRot();
 
 	rot.x = D3DX_PI * 0.5f;
 
 	SetRot(rot);
+
+	m_info.fScaleDest = INITIAL_DESTSCALE;
+
+	// 光の生成
+	if (m_info.pLight == nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+
+		m_info.pLight = CObject3D::Create(pos);
+
+		if (m_info.pLight != nullptr)
+		{
+			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\EFFECT\\effect000.png");
+			m_info.pLight->SetIdxTexture(nIdx);
+
+			m_info.pLight->SetColor(WEPONCOL[m_type]);
+			m_info.pLight->SetSize(SIZE_LIGHT, SIZE_LIGHT);
+			m_info.pLight->EnableAdd(true);
+		}
+	}
 
 	return S_OK;
 }
@@ -98,6 +132,12 @@ void CItemWeapon::Load(void)
 //=====================================================
 void CItemWeapon::Uninit(void)
 {
+	if (m_info.pLight != nullptr)
+	{
+		m_info.pLight->Uninit();
+		m_info.pLight = nullptr;
+	}
+
 	// 継承クラスの終了
 	CGimmick::Uninit();
 }
@@ -110,39 +150,65 @@ void CItemWeapon::Update(void)
 	// 継承クラスの更新
 	CGimmick::Update();
 
-	// 移動量を位置に反映
-	D3DXVECTOR3 pos = GetPosition();
-	D3DXVECTOR3 move = GetMove();
+	// スケールの管理
+	ManageScale();
 
-	// エフェクト設定
-	BindEffect(pos, move);
+	// 回す処理
+	ManageTransform();
 
-	move.y -= GRAVITY;
+	// 光の追従
+	if (m_info.pLight != nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+		pos.y = 1.0f;
 
-	pos += move;
-	SetPosition(pos);
-	SetMove(move);
-
-	// 床との当たり判定
-	CollisionField();
+		m_info.pLight->SetPosition(pos);
+	}
 }
 
 //=====================================================
-// 床との当たり判定
+// スケールの管理
 //=====================================================
-void CItemWeapon::CollisionField(void)
+void CItemWeapon::ManageScale(void)
 {
-	D3DXVECTOR3 pos = GetPosition();
-	D3DXVECTOR3 move = GetMove();
+	float fScale = GetScale();
 
-	if (pos.y <= 0.0f)
-	{
-		pos.y = 0.0f;
-		move.y = 0.0f;
-	}
+	fScale += (m_info.fScaleDest - fScale) * SPEED_SCALING;
+
+	SetScale(fScale);
+}
+
+//=====================================================
+// トランスフォームの管理
+//=====================================================
+void CItemWeapon::ManageTransform(void)
+{
+	// 回転
+	D3DXVECTOR3 rot = GetRot();
+
+	rot.y += SPEED_ROTATE;
+
+	universal::LimitRot(&rot.y);
+
+	SetRot(rot);
+
+	// 目標位置に移動
+	D3DXVECTOR3 pos = GetPosition();
+	pos.y = 0.0f;
+	D3DXVECTOR3 posDest = m_info.posDest + pos;
+
+	pos += (posDest - pos) * SPEED_MOVE;
 
 	SetPosition(pos);
-	SetMove(move);
+
+	// 浮き沈みさせる
+	m_info.fTimer += SPEED_FLOAT;
+
+	universal::LimitRot(&m_info.fTimer);
+
+	float fDiff = sinf(m_info.fTimer) * RANGE_FLOAT;
+
+	m_info.posDest.y = INITIAL_HEIGHT_BASE + fDiff;
 }
 
 //=====================================================
@@ -191,14 +257,6 @@ void CItemWeapon::ApplyEffect(CPlayer* pPlayer)
 	}
 
 	pPlayer->SetWeapon(m_type);
-}
-
-//=====================================================
-// エフェクトの割り当て
-//=====================================================
-void CItemWeapon::BindEffect(D3DXVECTOR3 pos, D3DXVECTOR3 move)
-{
-	CEffect3D::Create(pos, 50.0f, 10, WeponCol[m_type], move, 0.0f, true, 0.0f, nullptr, 6, false);
 }
 
 //=====================================================

@@ -15,6 +15,11 @@
 #include "weapon.h"
 
 //*****************************************************
+// 前方宣言
+//*****************************************************
+class CObject3D;
+
+//*****************************************************
 // クラスの定義
 //*****************************************************
 class CItemWeapon : public CGimmick
@@ -30,13 +35,22 @@ public:
 	static CItemWeapon *Create(CWeapon::TYPE type);
 
 private:
+	struct SInfo
+	{
+		D3DXVECTOR3 posDest;	// 目標位置
+		float fScaleDest;	// 目標スケール
+		float fTimer;	// タイマー
+		CObject3D *pLight;	// 光
+	};
+
 	void Load(void);
 	void Interact(CObject* pObj);
 	void ApplyEffect(CPlayer *pPlayer);
-	void CollisionField(void);
-	void BindEffect(D3DXVECTOR3 pos, D3DXVECTOR3 move);
+	void ManageScale(void);
+	void ManageTransform(void);
 
 	CWeapon::TYPE m_type;
+	SInfo m_info;
 };
 
 #endif

@@ -41,6 +41,7 @@
 #include "enemyThief.h"
 #include "ghost.h"
 #include "record.h"
+#include "containerManager.h"
 
 //*****************************************************
 // マクロ定義
@@ -156,6 +157,9 @@ HRESULT CGame::Init(void)
 	{
 		pRenderer->EnableFog(true);
 	}
+
+	// コンテナマネージャーの生成
+	CContainerManager::Create();
 
 	return S_OK;
 }

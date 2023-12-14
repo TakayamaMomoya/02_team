@@ -12,6 +12,7 @@
 #include "enemyManager.h"
 #include "enemyNormal.h"
 #include "enemyThief.h"
+#include "playerManager.h"
 #include "manager.h"
 #include "camera.h"
 #include "universal.h"
@@ -42,11 +43,12 @@ CEnemyManager *CEnemyManager::m_pEnemyManager = nullptr;	// 自身のポインタ
 //=====================================================
 CEnemyManager::CEnemyManager()
 {
-	m_nCntSpawn = 0;
+	m_fTimerSpawn = 0;
 	m_nMinTimeSpawnThief = 0;
 	m_nMaxTimeSpawnThief = 0;
 	m_fTimerThief = 0.0f;
 	m_fTimeSpawnThief = 0.0f;
+	ZeroMemory(&m_afTime[0], sizeof(float) * NUM_PLAYER);
 
 	m_pHead = nullptr;
 	m_pTail = nullptr;
@@ -145,7 +147,7 @@ void CEnemyManager::Load(void)
 {
 	// 変数宣言
 	char cTemp[256];
-	int nCntAttack = 0;
+	int nCntTime = 0;
 
 	// ファイルから読み込む
 	FILE *pFile = fopen("data\\TEXT\\enemy.txt", "r");
@@ -158,11 +160,20 @@ void CEnemyManager::Load(void)
 			(void)fscanf(pFile, "%s", &cTemp[0]);
 
 			if (strcmp(cTemp, "TIME_SPAWN_THIEF") == 0)
-			{// 初期体力
+			{// 泥棒出現時間
 				(void)fscanf(pFile, "%s", &cTemp[0]);
 
 				(void)fscanf(pFile, "%d", &m_nMinTimeSpawnThief);
 				(void)fscanf(pFile, "%d", &m_nMaxTimeSpawnThief);
+			}
+
+			if (strcmp(cTemp, "TIME_SPAWN") == 0)
+			{// 出現時間
+				(void)fscanf(pFile, "%s", &cTemp[0]);
+				
+				(void)fscanf(pFile, "%f", &m_afTime[nCntTime]);
+
+				nCntTime++;
 			}
 
 			if (strcmp(cTemp, "END_SCRIPT") == 0)
@@ -208,10 +219,25 @@ void CEnemyManager::Update(void)
 		}
 	}
 
-	// 通常敵のスポーン
-	m_nCntSpawn++;
+	// プレイヤー数の取得
+	int nIdx = 1;
 
-	if (m_nCntSpawn >= 50)
+	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
+
+	if (pPlayerManager != nullptr)
+	{
+		nIdx = pPlayerManager->GetNumPlayer() - 1;
+	}
+
+	// 時間の加算
+	float fTick = CManager::GetTick();
+
+	m_fTimerSpawn += fTick;
+
+	// スポーン時間の設定
+	float fTime = m_afTime[nIdx];
+
+	if (m_fTimerSpawn >= fTime)
 	{
 		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
 
@@ -226,7 +252,7 @@ void CEnemyManager::Update(void)
 		// 敵スポーン
 		CreateEnemy(posCenter, CEnemy::TYPE::TYPE_NORMAL);
 
-		m_nCntSpawn = 0;
+		m_fTimerSpawn = 0.0f;
 	}
 
 	// 泥棒敵のスポーン
