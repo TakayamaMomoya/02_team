@@ -15,7 +15,8 @@
 #include "weapon.h"
 #include "player.h"
 #include "debugproc.h"
-#include "effect3D.h"
+#include "object3D.h"
+#include "texture.h"
 
 //*****************************************************
 // 定数定義
@@ -41,6 +42,7 @@ namespace
 	const float SPEED_ROTATE = 0.01f;	// 回転速度
 	const float SPEED_MOVE = 0.2f;	// 追従速度
 	const float SPEED_FLOAT = 0.03f;	// 浮き沈みする速度
+	const float SIZE_LIGHT = 50.0f;	// 光のサイズ
 }
 
 //=====================================================
@@ -83,6 +85,24 @@ HRESULT CItemWeapon::Init(void)
 
 	m_info.fScaleDest = INITIAL_DESTSCALE;
 
+	// 光の生成
+	if (m_info.pLight == nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+
+		m_info.pLight = CObject3D::Create(pos);
+
+		if (m_info.pLight != nullptr)
+		{
+			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\EFFECT\\effect000.png");
+			m_info.pLight->SetIdxTexture(nIdx);
+
+			m_info.pLight->SetColor(WEPONCOL[m_type]);
+			m_info.pLight->SetSize(SIZE_LIGHT, SIZE_LIGHT);
+			m_info.pLight->EnableAdd(true);
+		}
+	}
+
 	return S_OK;
 }
 
@@ -112,6 +132,12 @@ void CItemWeapon::Load(void)
 //=====================================================
 void CItemWeapon::Uninit(void)
 {
+	if (m_info.pLight != nullptr)
+	{
+		m_info.pLight->Uninit();
+		m_info.pLight = nullptr;
+	}
+
 	// 継承クラスの終了
 	CGimmick::Uninit();
 }
@@ -129,6 +155,15 @@ void CItemWeapon::Update(void)
 
 	// 回す処理
 	ManageTransform();
+
+	// 光の追従
+	if (m_info.pLight != nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+		pos.y = 1.0f;
+
+		m_info.pLight->SetPosition(pos);
+	}
 }
 
 //=====================================================
@@ -231,15 +266,6 @@ void CItemWeapon::Draw(void)
 {
 	// 継承クラスの描画
 	CGimmick::Draw();
-
-	CDebugProc *pDebugProc = CDebugProc::GetInstance();
-
-	if (pDebugProc == nullptr)
-	{
-		return;
-	}
-
-	pDebugProc->Print("\nアイテムの目標位置[%f,%f,%f]", m_info.posDest.x, m_info.posDest.y, m_info.posDest.z);
 }
 
 //=====================================================

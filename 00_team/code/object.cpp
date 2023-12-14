@@ -37,6 +37,7 @@ CObject::CObject(int nPriority)
 	m_bZtest = false;
 	m_bNotStop = false;
 	m_bLighting = true;
+	m_bAdd = false;
 	m_type = TYPE::TYPE_NONE;
 	m_nID = -1;
 
@@ -309,6 +310,14 @@ void CObject::DrawAll(void)
 				pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 			}
 
+			if (pObject->m_bAdd)
+			{
+				// 加算合成かどうか
+				pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+				pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+				pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+			}
+
 			// 描画処理
 			pObject->Draw();
 
@@ -325,8 +334,16 @@ void CObject::DrawAll(void)
 
 			if (pObject->m_bLighting == false)
 			{
-				// ライティングを無効化
+				// ライティングを有効化
 				pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+			}
+
+			if (pObject->m_bAdd)
+			{
+				// 加算合成を戻す
+				pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+				pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+				pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 			}
 
 			// 次のアドレスを代入
