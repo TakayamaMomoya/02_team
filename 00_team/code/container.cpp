@@ -8,7 +8,8 @@
 //*****************************************************
 // インクルード
 //*****************************************************
-#include "Container.h"
+#include "container.h"
+#include "containerManager.h"
 #include "manager.h"
 #include "renderer.h"
 #include "playerManager.h"
@@ -116,6 +117,16 @@ void CContainer::Load(void)
 //=====================================================
 void CContainer::Uninit(void)
 {
+	// スポーン情報の保存
+	CContainerManager *pContainerManager = CContainerManager::GetInstance();
+
+	if (pContainerManager != nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+
+		pContainerManager->SavePosition(pos);
+	}
+
 	if (m_info.pCap != nullptr)
 	{
 		m_info.pCap->Uninit();

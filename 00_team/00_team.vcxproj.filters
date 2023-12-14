@@ -193,6 +193,9 @@
     <ClCompile Include="code\telop.cpp" />
     <ClCompile Include="code\record.cpp" />
     <ClCompile Include="code\ghost.cpp" />
+    <ClCompile Include="code\containerManager.cpp">
+      <Filter>gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -360,5 +363,8 @@
     <ClInclude Include="code\telop.h" />
     <ClInclude Include="code\record.h" />
     <ClInclude Include="code\ghost.h" />
+    <ClInclude Include="code\containerManager.h">
+      <Filter>gimmick</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
