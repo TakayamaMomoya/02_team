@@ -301,11 +301,11 @@ void CGame::UpdateCamera(void)
 	}
 	else
 	{
-		// ‘€ì
-		pCamera->Control();
+		//// ‘€ì
+		//pCamera->Control();
 	}
 
-	//pCamera->MoveDist(0.05f);
+	pCamera->MoveDist(0.05f);
 }
 
 //=====================================================
