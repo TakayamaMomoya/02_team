@@ -201,9 +201,6 @@ HRESULT CGameover::Init()
 			// 次のアドレスを保存
 			CEnemy* pEnemyNext = pEnemy->GetNext();
 
-			// エフェクトを生成
-			//CParticle::Create(pEnemy->GetPosition(), CParticle::TYPE_EXPLOSION);
-
 			// 終了処理
 			pEnemy->Uninit();
 

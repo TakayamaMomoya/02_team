@@ -232,6 +232,21 @@ void CCamera::SetSelect(void)
 }
 
 //====================================================
+// ランキングの設定
+//====================================================
+void CCamera::SetRanking(void)
+{
+	D3DXVECTOR3 posV = { 0.0f,50.0f,-500.0f };
+	D3DXVECTOR3 posR = { 0.0f,150.0f,0.0f };
+
+	m_camera.posV = posV;
+	m_camera.posVDest = posV;
+
+	m_camera.posR = posR;
+	m_camera.posRDest = posR;
+}
+
+//====================================================
 // リフトの初期位置
 //====================================================
 void CCamera::SetLift(void)

@@ -24,7 +24,7 @@ namespace
 {
 	const float GRAVITY = 0.3f;	// 重力
 
-	D3DXCOLOR WeponCol[CWeapon::TYPE_MAX] =
+	D3DXCOLOR WEPONCOL[CWeapon::TYPE_MAX] =
 	{// 武器ごとのエフェクトの色
 		{1.0f, 1.0f, 1.0f, 0.35f},	// マグナム
 		{1.0f, 1.0f, 1.0f, 0.35f},	// マシンガン
@@ -41,6 +41,7 @@ namespace
 CItemWeapon::CItemWeapon(int nPriority) : CGimmick(nPriority)
 {
 	m_type = CWeapon::TYPE_MAGNUM;
+	ZeroMemory(&m_info, sizeof(SInfo));
 }
 
 //=====================================================
@@ -109,40 +110,6 @@ void CItemWeapon::Update(void)
 {
 	// 継承クラスの更新
 	CGimmick::Update();
-
-	// 移動量を位置に反映
-	D3DXVECTOR3 pos = GetPosition();
-	D3DXVECTOR3 move = GetMove();
-
-	// エフェクト設定
-	BindEffect(pos, move);
-
-	move.y -= GRAVITY;
-
-	pos += move;
-	SetPosition(pos);
-	SetMove(move);
-
-	// 床との当たり判定
-	CollisionField();
-}
-
-//=====================================================
-// 床との当たり判定
-//=====================================================
-void CItemWeapon::CollisionField(void)
-{
-	D3DXVECTOR3 pos = GetPosition();
-	D3DXVECTOR3 move = GetMove();
-
-	if (pos.y <= 0.0f)
-	{
-		pos.y = 0.0f;
-		move.y = 0.0f;
-	}
-
-	SetPosition(pos);
-	SetMove(move);
 }
 
 //=====================================================
@@ -191,14 +158,6 @@ void CItemWeapon::ApplyEffect(CPlayer* pPlayer)
 	}
 
 	pPlayer->SetWeapon(m_type);
-}
-
-//=====================================================
-// エフェクトの割り当て
-//=====================================================
-void CItemWeapon::BindEffect(D3DXVECTOR3 pos, D3DXVECTOR3 move)
-{
-	CEffect3D::Create(pos, 50.0f, 10, WeponCol[m_type], move, 0.0f, true, 0.0f, nullptr, 6, false);
 }
 
 //=====================================================
