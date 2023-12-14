@@ -83,6 +83,7 @@ CPlayer::CPlayer(int nPriority)
 {
 	ZeroMemory(&m_info, sizeof(CPlayer::SInfo));
 	ZeroMemory(&m_param, sizeof(CPlayer::SParam));
+	m_bSound = false;
 }
 
 //=====================================================
@@ -541,10 +542,23 @@ void CPlayer::InputAttack(void)
 		{// 武器の攻撃
 			bool bEnable = m_info.pWeapon->IsEnable();
 
+			if (m_info.pItemRepair != nullptr)
+			{// 修理部品を手放す
+				if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_RB, GetIDJoypad()))
+				{
+					m_info.pItemRepair->Detatch();
+
+					// 武器を有効化
+					m_info.pWeapon->SetEnable(true);
+				}
+			}
+
 			if (bEnable)
 			{
 				m_info.pWeapon->Attack();
 			}
+
+			
 		}
 	}
 }
@@ -555,20 +569,28 @@ void CPlayer::InputAttack(void)
 void CPlayer::InputEmote(void)
 {
 	CInputJoypad *pJoyPad = CInputJoypad::GetInstance();
+	CSound* pSound = CSound::GetInstance();
 
 	if (pJoyPad == nullptr)
 	{
 		return;
 	}
-
 	int nID = m_info.nIDJoypad;
 
 	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_UP, nID))
 	{// 上ボタンのモーション
+		if (pSound != nullptr && m_bSound == false)
+		{
+			pSound->Play(pSound->LABEL_SE_EMOTE_UP);
+
+			m_bSound = true;
+		}
+
 		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE00);
 		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE00);
 
 		m_info.motionInfo.bEmote = true;
+		m_bSound = false;
 
 		if (m_info.pWeapon != nullptr)
 		{
@@ -578,10 +600,18 @@ void CPlayer::InputEmote(void)
 
 	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_LEFT, nID))
 	{// 左ボタンのモーション
+		if (pSound != nullptr && m_bSound == false)
+		{
+			pSound->Play(pSound->LABEL_SE_EMOTE_LEFT);
+
+			m_bSound = true;
+		}
+
 		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE01);
 		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE01);
 
 		m_info.motionInfo.bEmote = true;
+		m_bSound = false;
 
 		if (m_info.pWeapon != nullptr)
 		{
@@ -591,10 +621,18 @@ void CPlayer::InputEmote(void)
 
 	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_RIGHT, nID))
 	{// 右ボタンのモーション
+		if (pSound != nullptr && m_bSound == false)
+		{
+			pSound->Play(pSound->LABEL_SE_EMOTE_RIGHT);
+
+			m_bSound = true;
+		}
+
 		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE02);
 		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE02);
 
 		m_info.motionInfo.bEmote = true;
+		m_bSound = false;
 
 		if (m_info.pWeapon != nullptr)
 		{
@@ -604,10 +642,18 @@ void CPlayer::InputEmote(void)
 
 	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_DOWN, nID))
 	{// 下ボタンの固有エモート
+		if (pSound != nullptr && m_bSound == false)
+		{
+			pSound->Play(pSound->LABEL_SE_EMOTE_DOWN);
+
+			m_bSound = true;
+		}
+
 		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE_UNIQUE);
 		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE_UNIQUE);
 
 		m_info.motionInfo.bEmote = true;
+		m_bSound = false;
 
 		if (m_info.pWeapon != nullptr)
 		{

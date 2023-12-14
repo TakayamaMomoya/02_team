@@ -168,6 +168,26 @@ void CItemRepair::Uninit(void)
 }
 
 //=====================================================
+// 切り離す処理
+//=====================================================
+void CItemRepair::Detatch(void)
+{
+	// 武器を有効化する
+	m_pPlayer->EnableWeapon(true);
+
+	// プレイヤーの修理アイテムポインタを初期化
+	m_pPlayer->ReleaseItemRepair();
+
+	m_pPlayer = nullptr;
+
+	m_bSound = false;
+
+	SetEnable(true);
+
+	CreateGuide();
+}
+
+//=====================================================
 // 更新処理
 //=====================================================
 void CItemRepair::Update(void)
@@ -180,19 +200,7 @@ void CItemRepair::Update(void)
 
 		if (bRelease)
 		{// 手放す
-			// 武器を有効化する
-			m_pPlayer->EnableWeapon(true);
-			
-			// プレイヤーの修理アイテムポインタを初期化
-			m_pPlayer->ReleaseItemRepair();
-
-			m_pPlayer = nullptr;
-
-			m_bSound = false;
-
-			SetEnable(true);
-
-			CreateGuide();
+			Detatch();
 		}
 		else
 		{

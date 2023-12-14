@@ -19,6 +19,7 @@
 #include "goal.h"
 #include "inputkeyboard.h"
 #include "particle.h"
+#include "enemyManager.h"
 
 //*****************************************************
 // 定数定義
@@ -316,6 +317,14 @@ void CRocket::AddProgress(int nProgress)
 	if (m_state != STATE_NORMAL)
 	{// 通常状態のみ進行可能
 		return;
+	}
+
+	// 敵の出現頻度変更
+	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
+
+	if (pEnemyManager != nullptr)
+	{
+		pEnemyManager->ProgressTimeSpawn();
 	}
 
 	// 進行状況加算
