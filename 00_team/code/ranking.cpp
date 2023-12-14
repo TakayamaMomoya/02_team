@@ -238,6 +238,8 @@ namespace
 		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
 		D3DXVECTOR3(4.0f, 0.0f, 0.0f),
 	};
+
+	const int CHANGE_COUNT = 300;
 }
 
 //=====================================================
@@ -417,59 +419,64 @@ HRESULT CRanking::InitUi(void)
 		return E_FAIL;
 	}
 
-	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+	if (pRecord != nullptr)
 	{
-		// プレイヤー顔の生成
-		m_infoVisualUi.apFace[nCount] = CObject2D::Create(7);
+		int nMaxPlayer = pRecord->GetNumSuvived();
 
-		if (m_infoVisualUi.apFace[nCount] != nullptr)
+		for (int nCount = 0; nCount < nMaxPlayer; nCount++)
 		{
-			if (pRecord != nullptr)
-			{
-				int nRankNum = pRecord->GetDestroyRank(nCount);
+			// プレイヤー顔の生成
+			m_infoVisualUi.apFace[nCount] = CObject2D::Create(7);
 
-				m_infoVisualUi.apFace[nCount]->SetPosition(FACE_POS[nRankNum]);
-				m_infoVisualUi.apFace[nCount]->SetSize(FACE_WIDTH, FACE_HEIGHT);
+			if (m_infoVisualUi.apFace[nCount] != nullptr)
+			{
+				if (pRecord != nullptr)
+				{
+					int nRankNum = pRecord->GetDestroyRank(nCount);
+
+					m_infoVisualUi.apFace[nCount]->SetPosition(FACE_POS[nRankNum]);
+					m_infoVisualUi.apFace[nCount]->SetSize(FACE_WIDTH, FACE_HEIGHT);
+				}
+
+				if (pTexture != nullptr)
+				{
+					int nIdx = pTexture->Regist(FACE_FILE_NAME[nCount]);
+					m_infoVisualUi.apFace[nCount]->SetIdxTexture(nIdx);
+				}
+
+				m_infoVisualUi.apFace[nCount]->SetVtx();
+			}
+			if (m_infoVisualUi.apFace[nCount] == nullptr)
+			{
+				return E_FAIL;
 			}
 
-			if (pTexture != nullptr)
+			// 数字の生成
+			m_infoVisualUi.apNumber[nCount] = CNumber::Create(4, 0);
+
+			if (m_infoVisualUi.apNumber[nCount] != nullptr)
 			{
-				int nIdx = pTexture->Regist(FACE_FILE_NAME[nCount]);
-				m_infoVisualUi.apFace[nCount]->SetIdxTexture(nIdx);
+				if (pRecord != nullptr)
+				{
+					int nRankNum = pRecord->GetDestroyRank(nCount);
+
+					m_infoVisualUi.apNumber[nCount]->SetPosition(NUMBER_POS[nRankNum]);
+					m_infoVisualUi.apNumber[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_WIDTH);
+				}
+
+				m_infoVisualUi.apNumber[nCount]->SetValue(pRecord->GetDestroy(nCount), 4);
+
+				if (pTexture != nullptr)
+				{
+					//int nIdx = pTexture->Regist();
+					//m_infoVisualUi.apNumber[nCount]->SetIdxTexture(nIdx);
+					//m_infoVisualUi.apNumber[nCount]->SetVtx();
+				}
 			}
-
-			m_infoVisualUi.apFace[nCount]->SetVtx();
-		}
-		if (m_infoVisualUi.apFace[nCount] == nullptr)
-		{
-			return E_FAIL;
-		}
-
-		// 数字の生成
-		m_infoVisualUi.apNumber[nCount] = CNumber::Create(4, 0);
-
-		if (m_infoVisualUi.apNumber[nCount] != nullptr)
-		{
-			if (pRecord != nullptr)
+			if (m_infoVisualUi.apNumber[nCount] == nullptr)
 			{
-				int nRankNum = pRecord->GetDestroyRank(nCount);
-
-				m_infoVisualUi.apNumber[nCount]->SetPosition(NUMBER_POS[nRankNum]);
-				m_infoVisualUi.apNumber[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_WIDTH);
+				return E_FAIL;
 			}
-
-			m_infoVisualUi.apNumber[nCount]->SetValue(pRecord->GetDestroy(nCount), 4);
-
-			if (pTexture != nullptr)
-			{
-				//int nIdx = pTexture->Regist();
-				//m_infoVisualUi.apNumber[nCount]->SetIdxTexture(nIdx);
-				//m_infoVisualUi.apNumber[nCount]->SetVtx();
-			}
-		}
-		if (m_infoVisualUi.apNumber[nCount] == nullptr)
-		{
-			return E_FAIL;
 		}
 	}
 
@@ -549,7 +556,7 @@ HRESULT CRanking::InitObj(void)
 //=====================================================
 void CRanking::UpdateDirection(void)
 {
-	if (m_nDirectionCnt <= 300)
+	if (m_nDirectionCnt <= CHANGE_COUNT)
 	{
 		m_nDirectionCnt++;
 	}

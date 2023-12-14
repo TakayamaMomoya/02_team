@@ -203,8 +203,6 @@ void CRecord::AllSort(void)
 			}
 		}
 	}
-
-	int nData = m_aInfo[0].nDestroyRank;
 }
 
 //=====================================================
