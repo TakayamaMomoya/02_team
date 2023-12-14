@@ -185,17 +185,26 @@ void CRecord::AllSort(void)
 	// 敵の破壊数のソート
 	for (int nCutRank = 0; nCutRank < NUM_PLAYER; nCutRank++)
 	{
-		//置き換え番号に要素1のデータ番号を代入
+		// 置き換え番号
 		for (int nCutScoreRank = 0; nCutScoreRank < NUM_PLAYER; nCutScoreRank++)
 		{
-			//要素2に仮の数値を代入
+			// 置き換え番号より数値が低い
 			if (m_aInfo[nCutRank].nDestroy < m_aInfo[nCutScoreRank].nDestroy)
+			{
+				// 順位を下げる
+				m_aInfo[nCutRank].nDestroyRank++;
+			}
+			// 破壊数が同数 and 置き換え番号の方が大きい場合
+			else if (m_aInfo[nCutRank].nDestroy == m_aInfo[nCutScoreRank].nDestroy &&
+					 nCutRank > nCutScoreRank)
 			{
 				// 置き換え番号より数値が低い場合順位を下げる
 				m_aInfo[nCutRank].nDestroyRank++;
 			}
 		}
 	}
+
+	int nData = m_aInfo[0].nDestroyRank;
 }
 
 //=====================================================
