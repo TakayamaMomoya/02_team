@@ -33,6 +33,12 @@ namespace
 		{1.0f, 0.0f, 0.0f, 0.35f},	// ミニガン
 		{1.0f, 0.0f, 0.0f, 0.35f},	// ロケラン
 	};
+
+	const float SPEED_SCALING = 0.1f;	// スケールが大きくなる速度
+	const float INITIAL_DESTSCALE = 1.5f;	// 初期の目標スケール
+	const float SPEED_ROTATE = 0.01f;	// 回転速度
+	const float SPEED_MOVE = 0.2f;	// 追従速度
+	const float SPEED_FLOAT = 0.2f;	// 浮き沈みする速度
 }
 
 //=====================================================
@@ -72,6 +78,8 @@ HRESULT CItemWeapon::Init(void)
 	rot.x = D3DX_PI * 0.5f;
 
 	SetRot(rot);
+
+	m_info.fScaleDest = INITIAL_DESTSCALE;
 
 	return S_OK;
 }
@@ -116,6 +124,9 @@ void CItemWeapon::Update(void)
 
 	// スケールの管理
 	ManageScale();
+
+	// 回す処理
+	ManageTransform();
 }
 
 //=====================================================
@@ -125,7 +136,35 @@ void CItemWeapon::ManageScale(void)
 {
 	float fScale = GetScale();
 
-	fScale;
+	fScale += (m_info.fScaleDest - fScale) * SPEED_SCALING;
+
+	SetScale(fScale);
+}
+
+//=====================================================
+// トランスフォームの管理
+//=====================================================
+void CItemWeapon::ManageTransform(void)
+{
+	// 回転
+	D3DXVECTOR3 rot = GetRot();
+
+	rot.y += SPEED_ROTATE;
+
+	universal::LimitRot(&rot.y);
+
+	SetRot(rot);
+
+	// 目標位置に移動
+	D3DXVECTOR3 pos = GetPosition();
+	D3DXVECTOR3 posDest = m_info.posDest + pos;
+
+	pos += (posDest - pos) * SPEED_MOVE;
+
+	SetPosition(pos);
+
+	// 浮き沈みさせる
+
 }
 
 //=====================================================

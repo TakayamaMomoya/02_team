@@ -34,12 +34,16 @@ private:
 	{
 		D3DXVECTOR3 posDest;	// 目標位置
 		float fScaleDest;	// 目標スケール
+		float fHeightBase;	// 基準の高さ
+		float fHeightDiff;	// 差分の高さ
+		float fTimer;	// タイマー
 	};
 
 	void Load(void);
 	void Interact(CObject* pObj);
 	void ApplyEffect(CPlayer *pPlayer);
 	void ManageScale(void);
+	void ManageTransform(void);
 
 	CWeapon::TYPE m_type;
 	SInfo m_info;
