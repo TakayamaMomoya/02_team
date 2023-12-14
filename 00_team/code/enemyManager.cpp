@@ -405,11 +405,18 @@ void CEnemyManager::SpawnThief(void)
 //=====================================================
 // スポーン時間の進行
 //=====================================================
-void CEnemyManager::ProgressTimeSpawn(void)
+void CEnemyManager::ProgressTimeSpawn(bool bAdd)
 {
 	for (int i = 0; i < NUM_PLAYER; i++)
 	{
-		m_afTime[i] *= m_fRateProgress;
+		if (bAdd)
+		{
+			m_afTime[i] += m_fRateProgress * m_afTime[i];
+		}
+		else
+		{
+			m_afTime[i] *= m_fRateProgress;
+		}
 	}
 }
 

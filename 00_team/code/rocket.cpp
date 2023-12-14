@@ -324,7 +324,14 @@ void CRocket::AddProgress(int nProgress)
 
 	if (pEnemyManager != nullptr)
 	{
-		pEnemyManager->ProgressTimeSpawn();
+		if (nProgress > 0)
+		{
+			pEnemyManager->ProgressTimeSpawn(false);
+		}
+		else
+		{
+			pEnemyManager->ProgressTimeSpawn(true);
+		}
 	}
 
 	// isó‹µ‰ÁZ
