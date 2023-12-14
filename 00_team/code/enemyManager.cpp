@@ -51,6 +51,7 @@ CEnemyManager::CEnemyManager()
 	m_fTimeSpawnThief = 0.0f;
 	m_fDistSpawn = 0.0f;
 	m_fRateProgress = 0.0f;
+	m_fScaleSpawnTime = 0.0f;
 	ZeroMemory(&m_afTime[0], sizeof(float) * NUM_PLAYER);
 	m_nMaxEnemy = 0;
 
@@ -140,6 +141,9 @@ HRESULT CEnemyManager::Init(void)
 
 	// 最初の出現時間設定
 	m_fTimeSpawnThief = (float)universal::RandRange(m_nMaxTimeSpawnThief, m_nMinTimeSpawnThief);
+
+	// スケールのリセット
+	m_fScaleSpawnTime = 1.0f;
 
 	return S_OK;
 }
@@ -314,6 +318,8 @@ void CEnemyManager::Update(void)
 
 	// スポーン時間の設定
 	float fTime = m_afTime[nIdx];
+
+	fTime *= m_fScaleSpawnTime;
 
 	if (m_fTimerSpawn >= fTime)
 	{// 通常敵のスポーン

@@ -11,6 +11,7 @@
 #include "enemyEvent.h"
 #include "manager.h"
 #include "light.h"
+#include "enemyManager.h"
 
 //*****************************************************
 // 定数定義
@@ -76,7 +77,12 @@ HRESULT CEnemyEvent::Init(void)
 	}
 
 	// 敵の出現頻度を変更
+	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
 
+	if (pEnemyManager != nullptr)
+	{
+		pEnemyManager->SetTimeScale(0.5f);
+	}
 
 	return S_OK;
 }
@@ -95,6 +101,12 @@ void CEnemyEvent::Uninit(void)
 	}
 
 	// 敵の出現頻度を戻す
+	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
+
+	if (pEnemyManager != nullptr)
+	{
+		pEnemyManager->SetTimeScale(1.0f);
+	}
 
 	// 自身の破棄
 	Release();
