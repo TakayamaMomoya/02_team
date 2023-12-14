@@ -38,15 +38,16 @@ public:
 private:
 	void Load(void);
 	void SpawnThief(void);
-	void LimidPostion(void);
 
 	CEnemy *m_pHead;	// 先頭のアドレス
 	CEnemy *m_pTail;	// 最後尾のアドレス
-	int m_nCntSpawn;	// 通常敵スポーンカウンター
+	float m_fTimerSpawn;	// 通常敵スポーンカウンター
 	float m_fTimerThief;	// 泥棒敵スポーンタイマー
 	float m_fTimeSpawnThief;	// 泥棒敵がスポーンするまでの時間
 	int m_nMinTimeSpawnThief;	// 泥棒敵のスポーンタイマーの最小
 	int m_nMaxTimeSpawnThief;	// 泥棒敵のスポーンタイマーの最大
+	float m_fTimePlayer;	// プレイヤー一人当たりに対して減る出現頻度
+	float m_fBaseTimeSpawnEnemy;	// 敵が出現する基本の頻度
 
 	static CEnemyManager *m_pEnemyManager;	// 自身のポインタ
 };

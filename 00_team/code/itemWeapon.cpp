@@ -63,6 +63,9 @@ HRESULT CItemWeapon::Init(void)
 	// 読み込み
 	Load();
 
+	// スケール初期設定
+	SetScale(0.0f);
+
 	// 横向きにする
 	D3DXVECTOR3 rot = GetRot();
 
@@ -110,6 +113,19 @@ void CItemWeapon::Update(void)
 {
 	// 継承クラスの更新
 	CGimmick::Update();
+
+	// スケールの管理
+	ManageScale();
+}
+
+//=====================================================
+// スケールの管理
+//=====================================================
+void CItemWeapon::ManageScale(void)
+{
+	float fScale = GetScale();
+
+	fScale;
 }
 
 //=====================================================
