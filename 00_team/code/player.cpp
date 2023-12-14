@@ -1520,36 +1520,37 @@ void CPlayer::BoardingRocket(void)
 				{// 脱出状態
 					if (pRocket != nullptr)
 					{
-						// 位置を取得
+						// 移動量の設定
 						D3DXVECTOR3 posRocket = pRocket->GetPosition();
-						D3DXVECTOR3 posPlayer = GetPosition();
+						D3DXVECTOR3 vecDiff = posRocket - pos;
 
-						// ロケットとプレイヤーの位置から差分を計算
-						D3DXVECTOR3 posDiff = posRocket - posPlayer;
-						posDiff.y = posRocket.y + 400.0f - posPlayer.y;
+						pos.x += vecDiff.x * 0.08f;
+						pos.z += vecDiff.z * 0.08f;
+						//pos.y = posRocket.y + 400.0f - pos.y;
 
-						posPlayer += posDiff * 0.08f;	// 位置を補正
+						D3DXVec3Normalize(&vecDiff, &vecDiff);
 
-						// 向きを取得
-						D3DXVECTOR3 rotPlayer = GetRot();
-						D3DXVECTOR3 rotRocket = pRocket->GetRot();
+						vecDiff *= 0.08f;
 
-						float fRotDiff = posRocket.y - posPlayer.y;	// 目的の向きまでの差分
+						SetPosition(pos);
 
-						// 角度の値の補正
-						if (fRotDiff > D3DX_PI)
-						{
-							fRotDiff += -D3DX_PI * 2.0f;
+						// 向きを目標方向に補正
+						float fAngleDist = atan2f(vecDiff.x, vecDiff.z);
+						D3DXVECTOR3 rot = GetRot();
+
+						fAngleDist += D3DX_PI;
+
+						universal::FactingRot(&rot.y, fAngleDist, 0.1f);
+
+						SetRot(rot);
+
+						D3DXVECTOR3 vecDiffDelete = pos - posRocket;
+						float fLenth = D3DXVec3Length(&vecDiffDelete);
+
+						if (fLenth < 50.0f)
+						{// ロケットに近い
+							SetPosition({ pos.x, -500.0f, pos.z });		// 埋める
 						}
-						else if (fRotDiff < -D3DX_PI)
-						{
-							fRotDiff += D3DX_PI * 2.0f;
-						}
-
-						rotPlayer.y = fRotDiff;
-
-						SetPosition(posPlayer);
-						SetRot(rotPlayer);
 					}
 
 					if (m_info.pArrow != nullptr)
