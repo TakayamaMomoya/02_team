@@ -41,9 +41,12 @@ public:
 	void CheckDeathEnemy(CObject* pObj, int nIdx);
 	void CheckDeathEnemyAll(CCollision** ppCollsionMissile, D3DXVECTOR3 posMissile, float fRadiusMissile, int nIdx);
 
+	void AllSort(void);
+
 	static CRecord* GetInstance(void) { return m_pRecord; }
 
 	int GetDestroy(int nIdx) { return m_aInfo[nIdx].nDestroy; }
+	int GetDestroyRank(int nIdx) { return m_aInfo[nIdx].nDestroyRank; }
 private:
 
 	void Debug(void);
@@ -51,7 +54,8 @@ private:
 
 	struct SInfo
 	{
-		int nDestroy;	// “G‚Ì”j‰ó”
+		int nDestroy;		// “G‚Ì”j‰ó”
+		int nDestroyRank;	// “G‚Ì”j‰ó”‚Ì‡ˆÊ
 	};
 
 	static CRecord* m_pRecord;	// ©g‚Ìƒ|ƒCƒ“ƒ^

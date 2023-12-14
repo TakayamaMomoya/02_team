@@ -236,8 +236,8 @@ void CCamera::SetSelect(void)
 //====================================================
 void CCamera::SetRanking(void)
 {
-	D3DXVECTOR3 posV = { 0.0f,50.0f,-500.0f };
-	D3DXVECTOR3 posR = { 0.0f,150.0f,0.0f };
+	D3DXVECTOR3 posV = { 0.0f,175.0f,-500.0f };
+	D3DXVECTOR3 posR = { 0.0f,175.0f,0.0f };
 
 	m_camera.posV = posV;
 	m_camera.posVDest = posV;

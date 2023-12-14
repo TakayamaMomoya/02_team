@@ -123,37 +123,121 @@ namespace
 
 	// フィールド
 	const float FIELD_WIDTH = 1000.0f;		// フィールドの幅
-	const float FIELD_HEIGHT = 500.0f;	// フィールドの高さ
-	const char* FIELD_FILE_NAME = "data\\TEXTURE\\MATERIAL\\WodenWall_00.jpg";	// 戦績文のパス
+	const float FIELD_HEIGHT = 500.0f;		// フィールドの高さ
+	const char* FIELD_FILE_NAME = "data\\TEXTURE\\MATERIAL\\WodenWall_00.jpg";	// フィールドのパス
+
+	// WALL
+	const float WALL_WIDTH = 800.0f;		// ウォールの幅
+	const float WALL_HEIGHT = 500.0f;		// ウォールの高さ
+	const char* WALL_FILE_NAME = "data\\TEXTURE\\MATERIAL\\concrete_00.jpg";	// ウォールのパス
 
 	const D3DXVECTOR3 CAMERA_POS_V = D3DXVECTOR3(0.0f, 200.0f, -800.0f);
 	const D3DXVECTOR3 CAMERA_POS_R = D3DXVECTOR3(0.0f, 100.0f, 0.0f);
 	const D3DXVECTOR3 CAMERA_MOVE = D3DXVECTOR3(0.0f, 0.0f, 7.0f);
 
 	// プレイヤーの生成処理
-	const char* PLAYER_BODY_PATH[NUM_PLAYER] =
-	{// 敵の体のパス
-		"data\\MOTION\\motionTitle01.txt",
-		"data\\MOTION\\motionTitle02.txt",
-		"data\\MOTION\\motionTitle03.txt",
-		"data\\MOTION\\motionTitle04.txt",
+	const char* PLAYER_BODY_PATH[CRanking::ACTOR_TYPE_MAX] =
+	{// 敵の体のパス[プレイヤー番号]
+		"data\\MOTION\\motionRanking01.txt",
+		"data\\MOTION\\motionRanking02.txt",
+		"data\\MOTION\\motionRanking03.txt",
+		"data\\MOTION\\motionRanking04.txt",
+		"data\\MOTION\\motionEnemy00.txt",
+		"data\\MOTION\\motionEnemy00.txt",
+		"data\\MOTION\\motionEnemy00.txt",
 	};
-	const D3DXVECTOR3 PLAYER_POS[NUM_PLAYER] =
-	{// プレイヤーの位置
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+	const D3DXVECTOR3 PLAYER_POS[CRanking::DIRECTION_TYPE_MAX][CRanking::ACTOR_TYPE_MAX] =
+	{// プレイヤーの位置[プレイヤー番号][演出番号]
+
+		// 行進
+		D3DXVECTOR3(500.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(600.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(700.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(800.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(1000.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(1000.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(1000.0f, 0.0f, 0.0f),	// 出番なし
+
+		// 逃げる
+		D3DXVECTOR3(500.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(1000.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(1000.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(1000.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(600.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(650.0f, 0.0f, 30.0f),
+		D3DXVECTOR3(675.0f, 0.0f, -30.0f),
+
+		// 追いかける
+		D3DXVECTOR3(-600.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(1000.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(1000.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(1000.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(1000.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(1050.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(-500.0f, 0.0f,  0.0f),
+
 	};
-	const D3DXVECTOR3 PLAYER_ROT[NUM_PLAYER] =
-	{// プレイヤーの向き
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+	const D3DXVECTOR3 PLAYER_ROT[CRanking::DIRECTION_TYPE_MAX][CRanking::ACTOR_TYPE_MAX] =
+	{// プレイヤーの向き[プレイヤー番号][演出番号]
+
+		// 行進
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f),
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+
+		// 逃げる
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f),
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f),
+
+		// 追いかける
+		D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f),
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f),
+
 	};
-	const D3DXVECTOR3 PLAYER_ESC_MOVE = D3DXVECTOR3(0.0f, 0.0f, 8.0f);		// プレイヤーの逃げるときの移動量 
-	const D3DXVECTOR3 PLAYER_ESC_ROT = D3DXVECTOR3(0.0f, D3DX_PI, 0.0f);	// プレイヤーの逃げるときの向き
+	const D3DXVECTOR3 PLAYER_MOVE[CRanking::DIRECTION_TYPE_MAX][CRanking::ACTOR_TYPE_MAX] =
+	{// プレイヤーの移動量[プレイヤー番号][演出番号]
+
+		// 行進
+		D3DXVECTOR3(-4.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-4.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-4.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-4.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+
+		// 逃げる
+		D3DXVECTOR3(-4.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(-4.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-4.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-4.0f, 0.0f, 0.0f),
+
+		// 追いかける
+		D3DXVECTOR3(4.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),	// 出番なし
+		D3DXVECTOR3(4.0f, 0.0f, 0.0f),
+	};
 }
 
 //=====================================================
@@ -163,6 +247,8 @@ CRanking::CRanking()
 {
 	m_infoVisualUi = {};
 	m_infoVisualObj = {};
+	m_typeDirection = (DIRECTION_TYPE)0;
+	m_nDirectionCnt = 0;
 }
 
 //=====================================================
@@ -178,6 +264,15 @@ CRanking::~CRanking()
 //=====================================================
 HRESULT CRanking::Init(void)
 {
+	// 戦績のポインタを取得
+	CRecord* pRecord = CRecord::GetInstance();
+
+	if (pRecord != nullptr)
+	{
+		// 戦績のソート
+		pRecord->AllSort();
+	}
+
 	// UIの初期化処理
 	if (InitUi() != S_OK)
 	{
@@ -223,6 +318,9 @@ void CRanking::Update(void)
 
 	// シーンの更新
 	CScene::Update();
+
+	// 演出の更新
+	UpdateDirection();
 
 	// 画面遷移==========================================
 	if (pKeyboard->GetTrigger(DIK_RETURN) ||
@@ -403,17 +501,90 @@ HRESULT CRanking::InitObj(void)
 		return E_FAIL;
 	}
 
-	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
-	{
-		m_infoVisualObj.apModelPlayer[nCount] = CMotion::Create((char*)PLAYER_BODY_PATH[nCount]);
+	// 地面の生成
+	m_infoVisualObj.pWall = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-		if (m_infoVisualObj.apModelPlayer[nCount] != nullptr)
+	if (m_infoVisualObj.pWall != nullptr)
+	{
+		m_infoVisualObj.pWall->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 200.0f));
+		m_infoVisualObj.pWall->SetSize(WALL_WIDTH, WALL_HEIGHT);
+		m_infoVisualObj.pWall->SetRot(D3DXVECTOR3(D3DX_PI * -0.5f, 0.0f, 0.0f));
+		int nIdx = CTexture::GetInstance()->Regist(WALL_FILE_NAME);
+		m_infoVisualObj.pWall->SetIdxTexture(nIdx);
+	}
+	else if (m_infoVisualObj.pWall == nullptr)
+	{
+		return E_FAIL;
+	}
+
+	for (int nCount = 0; nCount < ACTOR_TYPE_MAX; nCount++)
+	{
+		// 役者の生成
+		m_infoVisualObj.apModelActor[nCount] = CMotion::Create((char*)PLAYER_BODY_PATH[nCount]);
+
+		if (m_infoVisualObj.apModelActor[nCount] != nullptr)
 		{
-			m_infoVisualObj.apModelPlayer[nCount]->SetPosition(PLAYER_POS[nCount]);
-			m_infoVisualObj.apModelPlayer[nCount]->SetRot(PLAYER_ROT[nCount]);
-			m_infoVisualObj.apModelPlayer[nCount]->SetMotion(0);
+			m_infoVisualObj.apModelActor[nCount]->SetPosition(PLAYER_POS[m_typeDirection][nCount]);
+			m_infoVisualObj.apModelActor[nCount]->SetRot(PLAYER_ROT[m_typeDirection][nCount]);
+			m_infoVisualObj.apModelActor[nCount]->SetMotion(1);
 		}
-		else if (m_infoVisualObj.apModelPlayer[nCount] == nullptr)
+		else if (m_infoVisualObj.apModelActor[nCount] == nullptr)
+		{
+			return E_FAIL;
+		}
+	}
+
+	return S_OK;
+}
+
+//=====================================================
+// 演出の更新
+//=====================================================
+void CRanking::UpdateDirection(void)
+{
+	if (m_nDirectionCnt <= 300)
+	{
+		m_nDirectionCnt++;
+	}
+	else
+	{
+		m_nDirectionCnt = 0;
+
+		m_typeDirection = (DIRECTION_TYPE)(m_typeDirection + 1);
+
+		if (m_typeDirection >= DIRECTION_TYPE_MAX)
+		{
+			m_typeDirection = (DIRECTION_TYPE)0;
+		}
+
+		SetDirection(m_typeDirection);
+	}
+
+	for (int nCount = 0; nCount < ACTOR_TYPE_MAX; nCount++)
+	{
+		D3DXVECTOR3 playerMove = m_infoVisualObj.apModelActor[nCount]->GetPosition() + PLAYER_MOVE[m_typeDirection][nCount];
+
+		m_infoVisualObj.apModelActor[nCount]->SetPosition(playerMove);
+	}
+}
+
+//=====================================================
+// 演出の初期化処理
+//=====================================================
+HRESULT CRanking::SetDirection(DIRECTION_TYPE type)
+{
+	// 演出種類番号を設定
+	m_typeDirection = type;
+
+	for (int nCount = 0; nCount < ACTOR_TYPE_MAX; nCount++)
+	{
+		if (m_infoVisualObj.apModelActor[nCount] != nullptr)
+		{
+			m_infoVisualObj.apModelActor[nCount]->SetPosition(PLAYER_POS[m_typeDirection][nCount]);
+			m_infoVisualObj.apModelActor[nCount]->SetRot(PLAYER_ROT[m_typeDirection][nCount]);
+			m_infoVisualObj.apModelActor[nCount]->SetMotion(1);
+		}
+		else if (m_infoVisualObj.apModelActor[nCount] == nullptr)
 		{
 			return E_FAIL;
 		}
