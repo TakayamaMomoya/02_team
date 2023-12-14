@@ -390,7 +390,7 @@ void CEnemyManager::SpawnThief(void)
 
 		// 位置の正規化
 		D3DXVec3Normalize(&posCenter, &posCenter);
-		posCenter *= RAND_SPAWN;
+		posCenter *= m_fDistSpawn;
 
 		// 敵スポーン
 		CreateEnemy(posCenter, CEnemy::TYPE::TYPE_THIEF);

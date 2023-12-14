@@ -1,32 +1,35 @@
 //*****************************************************
 //
-// ライトの処理[light.h]
+// 敵イベントの処理[enemyEvent.h]
 // Author:髙山桃也
 //
 //*****************************************************
 
-#ifndef _LIGHT_H_
-#define _LIGHT_H_
+#ifndef _ENEMYEVENT_H_
+#define _ENEMYEVENT_H_
 
 //*****************************************************
-// マクロ定義
+// インクルード
 //*****************************************************
-#define MAX_LIGHT				(3)			//ライトの最大数
+#include "object.h"
 
 //*****************************************************
-// クラス定義
+// クラスの定義
 //*****************************************************
-class CLight
+class CEnemyEvent : public CObject
 {
 public:
+	CEnemyEvent(int nPriority = 6);	// コンストラクタ
+	~CEnemyEvent();	// デストラクタ
+
+	static CEnemyEvent *Create(void);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
-	void SetColor(int nIdx, D3DXCOLOR col);
+	void Draw(void);
 
 private:
-	D3DLIGHT9 m_aLight[MAX_LIGHT];
-	int m_nCurrent;
+	float m_fLife;	// 寿命
 };
 
 #endif
