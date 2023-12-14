@@ -50,6 +50,7 @@ CEnemyManager::CEnemyManager()
 	m_fTimerThief = 0.0f;
 	m_fTimeSpawnThief = 0.0f;
 	m_fDistSpawn = 0.0f;
+	m_fRateProgress = 0.0f;
 	ZeroMemory(&m_afTime[0], sizeof(float) * NUM_PLAYER);
 
 	m_pHead = nullptr;
@@ -183,6 +184,13 @@ void CEnemyManager::Load(void)
 				(void)fscanf(pFile, "%s", &cTemp[0]);
 
 				(void)fscanf(pFile, "%f", &m_fDistSpawn);
+			}
+
+			if (strcmp(cTemp, "PROGRESS_TIME") == 0)
+			{// 進行度合いの割合
+				(void)fscanf(pFile, "%s", &cTemp[0]);
+
+				(void)fscanf(pFile, "%f", &m_fRateProgress);
 			}
 
 			if (strcmp(cTemp, "NUM_SPAWN_ANGLE") == 0)
@@ -369,6 +377,17 @@ void CEnemyManager::SpawnThief(void)
 
 		// 次に出現する時間を設定
 		m_fTimeSpawnThief = (float)universal::RandRange(m_nMaxTimeSpawnThief,m_nMinTimeSpawnThief);
+	}
+}
+
+//=====================================================
+// スポーン時間の進行
+//=====================================================
+void CEnemyManager::ProgressTimeSpawn(void)
+{
+	for (int i = 0; i < NUM_PLAYER; i++)
+	{
+		m_afTime[i] *= m_fRateProgress;
 	}
 }
 

@@ -542,10 +542,23 @@ void CPlayer::InputAttack(void)
 		{// •Ší‚ÌUŒ‚
 			bool bEnable = m_info.pWeapon->IsEnable();
 
+			if (m_info.pItemRepair != nullptr)
+			{// C—•”•i‚ðŽè•ú‚·
+				if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_RB, GetIDJoypad()))
+				{
+					m_info.pItemRepair->Detatch();
+
+					// •Ší‚ð—LŒø‰»
+					m_info.pWeapon->SetEnable(true);
+				}
+			}
+
 			if (bEnable)
 			{
 				m_info.pWeapon->Attack();
 			}
+
+			
 		}
 	}
 }
