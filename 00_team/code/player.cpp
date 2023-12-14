@@ -1160,6 +1160,9 @@ void CPlayer::ManageAttack(void)
 		return;
 	}
 
+	// 戦績の取得処理
+	CRecord* pRecord = CRecord::GetInstance();
+
 	for (int i = 0; i < m_info.nNumAttack; i++)
 	{
 		if (pBody->GetMotion(CCharacterDiv::PARTS_UPPER) == m_info.pAttackInfo[i].nIdxMotion)
@@ -1214,9 +1217,6 @@ void CPlayer::ManageAttack(void)
 					// ヒット処理
 					pObj->Hit(m_param.fDamagePunch);
 
-					// 戦績の取得処理
-					CRecord* pRecord = CRecord::GetInstance();
-
 					// 破壊数の戦績加算処理
 					if (pRecord != nullptr)
 					{
@@ -1243,6 +1243,12 @@ void CPlayer::ManageAttack(void)
 				{// プレイヤーを吹き飛ばす
 					// アニメーションエフェクトの生成
 					CAnimEffect3D *pAnimManager = CAnimEffect3D::GetInstance();
+
+					// 破壊数の戦績加算処理
+					if (pRecord != nullptr)
+					{
+						pRecord->AddMedman(GetID());
+					}
 
 					if (pAnimManager != nullptr)
 					{
