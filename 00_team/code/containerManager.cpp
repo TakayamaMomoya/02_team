@@ -80,7 +80,7 @@ void CContainerManager::Load(void)
 			(void)fscanf(pFile, "%s", &cTemp[0]);
 
 			if (strcmp(cTemp, "TIME_SPAWN") == 0)
-			{// 泥棒出現時間
+			{// リスポーン時間
 				(void)fscanf(pFile, "%s", &cTemp[0]);
 
 				(void)fscanf(pFile, "%f", &m_fTimeSpawm);
