@@ -720,12 +720,9 @@ void CSelect::Lift(void)
 		if (lift.y > GO_GAME_POSy)
 		{// リフトが一定の高さに行くとゲームへ
 
-			for (int i = 0; i < NUM_PLAYER; i++)
+			if (pFade != nullptr)
 			{
-				if (pFade != nullptr)
-				{
-					pFade->SetFade(CScene::MODE_GAME);
-				}
+				pFade->SetFade(CScene::MODE_GAME);
 			}
 		}
 	}

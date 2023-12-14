@@ -142,7 +142,7 @@ CWeapon *CWeapon::Create(CWeapon::TYPE type, int nIdxhand)
 				"data\\MODEL\\weapon\\shotgun.x",
 				"data\\MODEL\\weapon\\railgun.x",
 				"data\\MODEL\\weapon\\minigun_000.x",
-				"data\\MODEL\\weapon\\ak47.x",
+				"data\\MODEL\\weapon\\launcher.x",
 			};
 
 			int nIdx = CModel::Load(apPath[type]);

@@ -87,6 +87,18 @@ HRESULT CGame::Init(void)
 		pObject->SetTex(D3DXVECTOR2(10.0f,10.0f), D3DXVECTOR2(0.0f, 0.0f));
 	}
 
+	// 外の地面生成
+	CObject3D *pObjectOut = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	if (pObjectOut != nullptr)
+	{
+		int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\BG\\field00.jpg");
+		pObjectOut->SetPosition(D3DXVECTOR3(0.0f, -5.0f, 0.0f));
+		pObjectOut->SetIdxTexture(nIdx);
+		pObjectOut->SetTex(D3DXVECTOR2(10.0f, 10.0f), D3DXVECTOR2(0.0f, 0.0f));
+		pObjectOut->SetSize(5000.0f, 5000.0f);
+	}
+
 	// スカイボックスの生成
 	CSkybox::Create();
 
