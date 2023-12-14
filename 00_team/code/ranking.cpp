@@ -246,7 +246,7 @@ namespace
 CRanking::CRanking()
 {
 	ZeroMemory(&m_infoVisualUi, sizeof(m_infoVisualUi));
-	ZeroMemory(&m_infoVisualObj,sizeof(m_infoVisualObj));
+	ZeroMemory(&m_infoVisualObj,sizeof(m_infoVisualObj)); 
 	m_typeDirection = (DIRECTION_TYPE)0;
 	m_nDirectionCnt = 0;
 }
@@ -424,8 +424,13 @@ HRESULT CRanking::InitUi(void)
 
 		if (m_infoVisualUi.apFace[nCount] != nullptr)
 		{
-			m_infoVisualUi.apFace[nCount]->SetPosition(FACE_POS[nCount]);
-			m_infoVisualUi.apFace[nCount]->SetSize(FACE_WIDTH, FACE_HEIGHT);
+			if (pRecord != nullptr)
+			{
+				int nRankNum = pRecord->GetDestroyRank(nCount);
+
+				m_infoVisualUi.apFace[nCount]->SetPosition(FACE_POS[nRankNum]);
+				m_infoVisualUi.apFace[nCount]->SetSize(FACE_WIDTH, FACE_HEIGHT);
+			}
 
 			if (pTexture != nullptr)
 			{
@@ -445,13 +450,15 @@ HRESULT CRanking::InitUi(void)
 
 		if (m_infoVisualUi.apNumber[nCount] != nullptr)
 		{
-			m_infoVisualUi.apNumber[nCount]->SetPosition(NUMBER_POS[nCount]);
-			m_infoVisualUi.apNumber[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_WIDTH);
-
 			if (pRecord != nullptr)
 			{
-				m_infoVisualUi.apNumber[nCount]->SetValue(pRecord->GetDestroy(nCount), 4);
+				int nRankNum = pRecord->GetDestroyRank(nCount);
+
+				m_infoVisualUi.apNumber[nCount]->SetPosition(NUMBER_POS[nRankNum]);
+				m_infoVisualUi.apNumber[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_WIDTH);
 			}
+
+			m_infoVisualUi.apNumber[nCount]->SetValue(pRecord->GetDestroy(nCount), 4);
 
 			if (pTexture != nullptr)
 			{
