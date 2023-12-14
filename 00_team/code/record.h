@@ -45,6 +45,7 @@ public:
 
 	static CRecord* GetInstance(void) { return m_pRecord; }
 
+	int GetNumSuvived(void) { return m_nNumSuvived; }
 	int GetDestroy(int nIdx) { return m_aInfo[nIdx].nDestroy; }
 	int GetDestroyRank(int nIdx) { return m_aInfo[nIdx].nDestroyRank; }
 private:
