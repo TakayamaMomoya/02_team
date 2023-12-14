@@ -183,12 +183,7 @@ void CContainer::UpdateOpen(void)
 				D3DXVECTOR3 pos = GetPosition();
 
 				m_info.pWeapon->SetPosition(pos);
-
-				D3DXVECTOR3 move = { 0.0f,WEAPON_JUMP,0.0f };
-
-				m_info.pWeapon->SetMove(move);
 			}
-
 		}
 	}
 
