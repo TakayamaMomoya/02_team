@@ -37,6 +37,7 @@ public:
 
 private:
 	void Load(void);
+	void SpawnNormal(void);
 	void SpawnThief(void);
 
 	CEnemy *m_pHead;	// 先頭のアドレス
@@ -47,6 +48,9 @@ private:
 	int m_nMinTimeSpawnThief;	// 泥棒敵のスポーンタイマーの最小
 	int m_nMaxTimeSpawnThief;	// 泥棒敵のスポーンタイマーの最大
 	float m_afTime[NUM_PLAYER];	// 敵が出現する頻度
+	float m_fDistSpawn;	// スポーン距離
+	float *m_pAngleSpawn;	// スポーン角度のポインタ
+	int m_nNumSpawnAngle;	// スポーン角度の数
 
 	static CEnemyManager *m_pEnemyManager;	// 自身のポインタ
 };

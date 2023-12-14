@@ -25,12 +25,13 @@
 //*****************************************************
 namespace
 {
-const int RAND_SPAWN = 1000;	// スポーン範囲
+const int RAND_SPAWN = 400;	// スポーン範囲
 
 const float LIMID_RANGE_LEFT = -460.0f;
 const float LIMID_RANGE_RIGHT = 460.0f;
 const float LIMID_RANGE_UP = 460.0f;
 const float LIMID_RANGE_DOWN = -460.0f;
+const int NUM_SPAWNANGLE = 3;	// スポーン角度の数
 }
 
 //*****************************************************
@@ -48,6 +49,7 @@ CEnemyManager::CEnemyManager()
 	m_nMaxTimeSpawnThief = 0;
 	m_fTimerThief = 0.0f;
 	m_fTimeSpawnThief = 0.0f;
+	m_fDistSpawn = 0.0f;
 	ZeroMemory(&m_afTime[0], sizeof(float) * NUM_PLAYER);
 
 	m_pHead = nullptr;
@@ -176,6 +178,66 @@ void CEnemyManager::Load(void)
 				nCntTime++;
 			}
 
+			if (strcmp(cTemp, "DIST_SPAWN") == 0)
+			{// 出現距離
+				(void)fscanf(pFile, "%s", &cTemp[0]);
+
+				(void)fscanf(pFile, "%f", &m_fDistSpawn);
+			}
+
+			if (strcmp(cTemp, "NUM_SPAWN_ANGLE") == 0)
+			{// 出現角度読込
+				int nCntAngle = 0;
+
+				// 出現角度数読込
+				(void)fscanf(pFile, "%s", &cTemp[0]);
+
+				(void)fscanf(pFile, "%d", &m_nNumSpawnAngle);
+
+				if (m_pAngleSpawn == nullptr)
+				{// 判定情報の生成
+					m_pAngleSpawn = new float[m_nNumSpawnAngle];
+
+					for (int i = 0; i < m_nNumSpawnAngle; i++)
+					{// 情報のクリア
+						m_pAngleSpawn[i] = 0.0f;
+					}
+				}
+				else
+				{
+					break;
+				}
+
+				if (m_pAngleSpawn == nullptr)
+				{// 生成できなかった場合
+					assert(("敵出現角度数読込に失敗", false));
+				}
+
+				while (true)
+				{
+					// 文字読み込み
+					(void)fscanf(pFile, "%s", &cTemp[0]);
+
+					if (strcmp(cTemp, "ANGLE") == 0)
+					{// 角度読込
+						float fAngle;
+
+						(void)fscanf(pFile, "%s", &cTemp[0]);
+
+						(void)fscanf(pFile, "%f", &fAngle);
+
+						m_pAngleSpawn[nCntAngle] = D3DXToRadian(fAngle);
+
+						nCntAngle++;
+					}
+
+					if (m_nNumSpawnAngle <= nCntAngle)
+					{
+						break;
+					}
+				}
+			}
+
 			if (strcmp(cTemp, "END_SCRIPT") == 0)
 			{
 				break;
@@ -238,21 +300,8 @@ void CEnemyManager::Update(void)
 	float fTime = m_afTime[nIdx];
 
 	if (m_fTimerSpawn >= fTime)
-	{
-		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
-
-		// 出現する座標を設定
-		posCenter.x = (float)universal::RandRange(RAND_SPAWN, -RAND_SPAWN);
-		posCenter.z = (float)universal::RandRange(RAND_SPAWN, -RAND_SPAWN);
-
-		// 位置の正規化
-		D3DXVec3Normalize(&posCenter, &posCenter);
-		posCenter *= RAND_SPAWN;
-
-		// 敵スポーン
-		CreateEnemy(posCenter, CEnemy::TYPE::TYPE_NORMAL);
-
-		m_fTimerSpawn = 0.0f;
+	{// 通常敵のスポーン
+		SpawnNormal();
 	}
 
 	// 泥棒敵のスポーン
@@ -267,6 +316,30 @@ void CEnemyManager::Update(void)
 			SpawnThief();
 		}
 	}
+}
+
+//=====================================================
+// 通常敵のスポーン
+//=====================================================
+void CEnemyManager::SpawnNormal(void)
+{
+	if (m_pAngleSpawn == nullptr)
+	{
+		return;
+	}
+
+	int nIdxAngle = universal::RandRange(m_nNumSpawnAngle, 0);
+
+	D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
+
+	// 出現する座標を設定
+	posCenter.x = sinf(m_pAngleSpawn[nIdxAngle]) * m_fDistSpawn;
+	posCenter.z = cosf(m_pAngleSpawn[nIdxAngle]) * m_fDistSpawn;
+
+	// 敵スポーン
+	CreateEnemy(posCenter, CEnemy::TYPE::TYPE_NORMAL);
+
+	m_fTimerSpawn = 0.0f;
 }
 
 //=====================================================
