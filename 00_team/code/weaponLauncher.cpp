@@ -130,14 +130,6 @@ void CLauncher::Attack(void)
 				}
 			}
 
-			CSound* pSound = CSound::GetInstance();
-
-			if (pSound != nullptr)
-			{
-				// ƒ}ƒOƒiƒ€”­–C‰¹
-				pSound->Play(pSound->LABEL_SE_GUNSHOT_00);
-			}
-
 			// ’e‚ðŒ¸‚ç‚·
 			nBullet--;
 			SetBullet(nBullet);
