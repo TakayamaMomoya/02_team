@@ -245,8 +245,8 @@ namespace
 //=====================================================
 CRanking::CRanking()
 {
-	m_infoVisualUi = {};
-	m_infoVisualObj = {};
+	ZeroMemory(&m_infoVisualUi, sizeof(m_infoVisualUi));
+	ZeroMemory(&m_infoVisualObj,sizeof(m_infoVisualObj));
 	m_typeDirection = (DIRECTION_TYPE)0;
 	m_nDirectionCnt = 0;
 }
