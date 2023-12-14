@@ -171,6 +171,8 @@ void CContainerManager::SavePosition(D3DXVECTOR3 pos)
 			m_apInfoSave[i]->pos = pos;
 
 			m_apInfoSave[i]->fTimeSpawn = m_fTimeSpawm;
+
+			break;
 		}
 	}
 }
