@@ -33,11 +33,13 @@ private:
 	struct SInfo
 	{
 		D3DXVECTOR3 posDest;	// 目標位置
+		float fScaleDest;	// 目標スケール
 	};
 
 	void Load(void);
 	void Interact(CObject* pObj);
 	void ApplyEffect(CPlayer *pPlayer);
+	void ManageScale(void);
 
 	CWeapon::TYPE m_type;
 	SInfo m_info;
