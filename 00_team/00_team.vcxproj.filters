@@ -196,6 +196,7 @@
     <ClCompile Include="code\containerManager.cpp">
       <Filter>gimmick</Filter>
     </ClCompile>
+    <ClCompile Include="code\enemyEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -366,5 +367,6 @@
     <ClInclude Include="code\containerManager.h">
       <Filter>gimmick</Filter>
     </ClInclude>
+    <ClInclude Include="code\enemyEvent.h" />
   </ItemGroup>
 </Project>

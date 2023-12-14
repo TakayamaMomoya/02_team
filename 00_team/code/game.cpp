@@ -42,6 +42,7 @@
 #include "ghost.h"
 #include "record.h"
 #include "containerManager.h"
+#include "enemyEvent.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`

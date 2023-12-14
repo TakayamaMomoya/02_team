@@ -16,26 +16,34 @@
 #include "debugproc.h"
 
 //*****************************************************
-// マクロ定義
+// 定数定義
 //*****************************************************
-#define ROLL_SPEED							(0.03f)						//回るスピード
+namespace
+{
+const float SPEED_CHANGE_COL = 0.1f;	// 色を変える速度
+const D3DXCOLOR INTIIAL_COLOR[MAX_LIGHT] =
+{// 初期の色
+	D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f),
+	D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f),
+	D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f)
+};
+}
 
 //====================================================
 //初期化処理
 //====================================================
 HRESULT CLight::Init(void)
 {
-	m_nCurrent = 0;
-
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
 	D3DXVECTOR3 vecDir;
 
+	//ライト１の設定============================================
 	//ライトの種類設定
 	m_aLight[0].Type = D3DLIGHT_DIRECTIONAL;
 
 	//ライトの拡散光の設定
-	m_aLight[0].Diffuse = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+	m_aLight[0].Diffuse = INTIIAL_COLOR[0];
 
 	//ライトの方向設定
 	vecDir = D3DXVECTOR3(-1.4f, 0.24f, -2.21f);
@@ -53,7 +61,7 @@ HRESULT CLight::Init(void)
 	m_aLight[1].Type = D3DLIGHT_DIRECTIONAL;
 
 	//ライトの拡散光の設定
-	m_aLight[1].Diffuse = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+	m_aLight[1].Diffuse = INTIIAL_COLOR[1];
 
 	//ライトの方向設定
 	vecDir = D3DXVECTOR3(1.42f, -0.8f, 0.08f);
@@ -71,7 +79,7 @@ HRESULT CLight::Init(void)
 	m_aLight[2].Type = D3DLIGHT_DIRECTIONAL;
 
 	//ライトの拡散光の設定
-	m_aLight[2].Diffuse = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+	m_aLight[2].Diffuse = INTIIAL_COLOR[2];
 
 	//ライトの方向設定
 	vecDir = D3DXVECTOR3(-0.29f, -0.8f, 0.55f);
@@ -83,6 +91,9 @@ HRESULT CLight::Init(void)
 
 	//ライト有効化
 	pDevice->LightEnable(2, TRUE);
+
+	// 色の初期化
+	ResetColDest();
 
 	return S_OK;
 }
@@ -100,62 +111,40 @@ void CLight::Uninit(void)
 //====================================================
 void CLight::Update(void)
 {
-	CDebugProc *pDebugProc = CDebugProc::GetInstance();
-
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
-	D3DXVECTOR3 vecDir;
 
-	// 入力情報入手
-	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
+	for (int i = 0; i < MAX_LIGHT; i++)
+	{
+		// 色の補正
+		m_aInfo[i].col.r += (m_aInfo[i].colDest.r - m_aInfo[i].col.r) * SPEED_CHANGE_COL;
+		m_aInfo[i].col.g += (m_aInfo[i].colDest.g - m_aInfo[i].col.g) * SPEED_CHANGE_COL;
+		m_aInfo[i].col.b += (m_aInfo[i].colDest.b - m_aInfo[i].col.b) * SPEED_CHANGE_COL;
+		m_aInfo[i].col.a += (m_aInfo[i].colDest.a - m_aInfo[i].col.a) * SPEED_CHANGE_COL;
 
-	//ライト移動================================================
-	//if (pKeyboard->GetPress(DIK_J) == true)
-	//{//左移動
-	//	m_aLight[m_nCurrent].Direction.x -= ROLL_SPEED;
-	//}
-	//if (pKeyboard->GetPress(DIK_L) == true)
-	//{//右移動
-	//	m_aLight[m_nCurrent].Direction.x += ROLL_SPEED;
-	//}
+		// ライトの拡散光の設定
+		m_aLight[i].Diffuse = m_aInfo[i].col;
 
-	//if (pKeyboard->GetPress(DIK_I) == true)
-	//{//奥移動
-	//	m_aLight[m_nCurrent].Direction.z += ROLL_SPEED;
-	//}
-	//if (pKeyboard->GetPress(DIK_K) == true)
-	//{//手前移動
-	//	m_aLight[m_nCurrent].Direction.z -= ROLL_SPEED;
-	//}
+		// ライト設定
+		pDevice->SetLight(i, &m_aLight[i]);
+	}
+}
 
-	//if (pKeyboard->GetPress(DIK_U) == true)
-	//{//上移動
-	//	m_aLight[m_nCurrent].Direction.y += ROLL_SPEED;
-	//}
-	//if (pKeyboard->GetPress(DIK_M) == true)
-	//{//下移動
-	//	m_aLight[m_nCurrent].Direction.y -= ROLL_SPEED;
-	//}
+//====================================================
+// 色の設定
+//====================================================
+void CLight::SetColDest(int nIdx, D3DXCOLOR col)
+{
+	m_aInfo[nIdx].colDest = col;
+}
 
-	////ライト切り替え================================================
-	//if (pKeyboard->GetTrigger(DIK_O) == true)
-	//{//ライト切り替え
-	//	m_nCurrent = (m_nCurrent + 1) % MAX_LIGHT;
-	//}
-
-	//for (int nCntLight = 0;nCntLight < MAX_LIGHT;nCntLight++)
-	//{
-	//	//ベクトル正規化
-	//	D3DXVec3Normalize
-	//	(
-	//		&(D3DXVECTOR3)m_aLight[nCntLight].Direction,
-	//		&(D3DXVECTOR3)m_aLight[nCntLight].Direction
-	//	);
-
-	//	//ライト設定
-	//	pDevice->SetLight(nCntLight, &m_aLight[nCntLight]);
-	//}
-
-	//pDebugProc->Print("選択ライト[%d]\n", m_nCurrent);
-	//pDebugProc->Print("ライトの向き[%f,%f,%f]\n",m_aLight[m_nCurrent].Direction.x, m_aLight[m_nCurrent].Direction.y, m_aLight[m_nCurrent].Direction.z);
+//====================================================
+// 色のリセット
+//====================================================
+void CLight::ResetColDest(void)
+{
+	for (int i = 0; i < MAX_LIGHT; i++)
+	{
+		m_aInfo[i].colDest = INTIIAL_COLOR[i];
+	}
 }
