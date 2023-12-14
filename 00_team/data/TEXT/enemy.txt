@@ -9,6 +9,6 @@
 	TIME_SPAWN = 1.5	# １人のときの敵スポーン頻度
 	TIME_SPAWN = 0.9	# ２人のときの敵スポーン頻度
 	TIME_SPAWN = 0.6	# ３人のときの敵スポーン頻度
-	TIME_SPAWN = 0.4	# ４人のときの敵スポーン頻度
+	TIME_SPAWN = 0.1	# ４人のときの敵スポーン頻度
 
 END_SCRIPT
