@@ -9,6 +9,8 @@
 // インクルード
 //*****************************************************
 #include "enemyEvent.h"
+#include "manager.h"
+#include "light.h"
 
 //*****************************************************
 // 定数定義
@@ -63,7 +65,15 @@ HRESULT CEnemyEvent::Init(void)
 	m_fLife = INITIAL_LIFE;
 
 	// ライトを赤くする
+	CLight *pLight = CManager::GetLight();
 
+	if (pLight != nullptr)
+	{
+		for (int i = 0; i < MAX_LIGHT; i++)
+		{
+			pLight->SetColDest(i, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+	}
 
 	// 敵の出現頻度を変更
 
@@ -77,6 +87,12 @@ HRESULT CEnemyEvent::Init(void)
 void CEnemyEvent::Uninit(void)
 {
 	// ライトの色を戻す
+	CLight *pLight = CManager::GetLight();
+
+	if (pLight != nullptr)
+	{
+		pLight->ResetColDest();
+	}
 
 	// 敵の出現頻度を戻す
 
@@ -89,7 +105,15 @@ void CEnemyEvent::Uninit(void)
 //=====================================================
 void CEnemyEvent::Update(void)
 {
-	// 寿命で消滅
+	// 寿命での消滅
+	float fTick = CManager::GetTick();
+
+	m_fLife -= fTick;
+
+	if (m_fLife <= 0.0f)
+	{
+		Uninit();
+	}
 }
 
 //=====================================================

@@ -22,11 +22,18 @@ public:
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
-	void SetColor(int nIdx, D3DXCOLOR col);
+	void SetColDest(int nIdx, D3DXCOLOR col);
+	void ResetColDest(void);
 
 private:
+	struct SInfo
+	{
+		D3DXCOLOR col;	// åªç›ÇÃêF
+		D3DXCOLOR colDest;	// ñ⁄ïWÇÃêF
+	};
+
 	D3DLIGHT9 m_aLight[MAX_LIGHT];
-	int m_nCurrent;
+	SInfo m_aInfo[MAX_LIGHT];
 };
 
 #endif
