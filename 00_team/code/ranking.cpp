@@ -245,8 +245,8 @@ namespace
 //=====================================================
 CRanking::CRanking()
 {
-	m_infoVisualUi = {};
-	m_infoVisualObj = {};
+	ZeroMemory(&m_infoVisualUi, sizeof(m_infoVisualUi));
+	ZeroMemory(&m_infoVisualObj,sizeof(m_infoVisualObj));
 	m_typeDirection = (DIRECTION_TYPE)0;
 	m_nDirectionCnt = 0;
 }
@@ -562,9 +562,12 @@ void CRanking::UpdateDirection(void)
 
 	for (int nCount = 0; nCount < ACTOR_TYPE_MAX; nCount++)
 	{
-		D3DXVECTOR3 playerMove = m_infoVisualObj.apModelActor[nCount]->GetPosition() + PLAYER_MOVE[m_typeDirection][nCount];
+		if (m_infoVisualObj.apModelActor[nCount] != nullptr)
+		{
+			D3DXVECTOR3 playerMove = m_infoVisualObj.apModelActor[nCount]->GetPosition() + PLAYER_MOVE[m_typeDirection][nCount];
 
-		m_infoVisualObj.apModelActor[nCount]->SetPosition(playerMove);
+			m_infoVisualObj.apModelActor[nCount]->SetPosition(playerMove);
+		}
 	}
 }
 
