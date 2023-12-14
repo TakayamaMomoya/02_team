@@ -58,6 +58,7 @@ public:
 	void SetTitle(D3DXVECTOR3 posV, D3DXVECTOR3 posR);
 	void SetTitleDest(D3DXVECTOR3 posVDest, D3DXVECTOR3 posRDest);
 	void SetSelect(void);
+	void SetRanking(void);
 	void SetLift(void);
 	void SetUpLift(void);
 	void MoveDist(float fFact);

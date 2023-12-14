@@ -54,7 +54,7 @@ namespace
 		D3DXVECTOR3(0.0f, D3DX_PI *  0.25f, 0.0f),
 		D3DXVECTOR3(0.0f, D3DX_PI * -0.10f, 0.0f),
 	};
-	const D3DXVECTOR3 PLAYER_ESC_MOVE = D3DXVECTOR3(0.0f, 0.0f, 8.0f);	// プレイヤーの逃げるときの移動量 
+	const D3DXVECTOR3 PLAYER_ESC_MOVE = D3DXVECTOR3(0.0f, 0.0f, 8.0f);		// プレイヤーの逃げるときの移動量 
 	const D3DXVECTOR3 PLAYER_ESC_ROT = D3DXVECTOR3(0.0f, D3DX_PI, 0.0f);	// プレイヤーの逃げるときの向き
 
 	const char* ENEMY_BODY_PATH[ENEMY::NUM_ENEMY] =
