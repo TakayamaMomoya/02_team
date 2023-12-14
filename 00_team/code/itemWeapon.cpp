@@ -37,7 +37,7 @@ namespace
 
 	const float SPEED_SCALING = 0.1f;	// スケールが大きくなる速度
 	const float INITIAL_DESTSCALE = 1.5f;	// 初期の目標スケール
-	const float INITIAL_HEIGHT_BASE = 70.0f;	// 初期の基準高さ
+	const float INITIAL_HEIGHT_BASE = 150.0f;	// 初期の基準高さ
 	const float RANGE_FLOAT = 50.0f;	// 浮き沈みする範囲
 	const float SPEED_ROTATE = 0.01f;	// 回転速度
 	const float SPEED_MOVE = 0.2f;	// 追従速度
