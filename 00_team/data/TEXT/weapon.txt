@@ -75,7 +75,7 @@ PROBSET
 	PROB = 30 # ショットガンの確率
 	PROB = 5  # レールガンの確率
 	PROB = 10  # ミニガンの確率
-	PROB = 1500 # ランチャーの確率
+	PROB = 15 # ランチャーの確率
 END_PROBSET
 
 END_SCRIPT
