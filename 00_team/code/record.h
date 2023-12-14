@@ -25,7 +25,8 @@ public:
 
 	enum GENRE_TYPE
 	{
-		GENRE_TYPE_DESTROY = 0,
+		GENRE_TYPE_DESTROY = 0,	// ”j‰ó
+		GENRE_TYPE_MADMAN,		// ‹¶l
 		GENRE_TYPE_MAX
 	};
 
@@ -41,13 +42,19 @@ public:
 	void CheckDeathEnemy(CObject* pObj, int nIdx);
 	void CheckDeathEnemyAll(CCollision** ppCollsionMissile, D3DXVECTOR3 posMissile, float fRadiusMissile, int nIdx);
 
+	void AddMedman(int nIdx);
+
 	void AllSort(void);
 
 	static CRecord* GetInstance(void) { return m_pRecord; }
 
 	int GetNumSuvived(void) { return m_nNumSuvived; }
+
 	int GetDestroy(int nIdx) { return m_aInfo[nIdx].nDestroy; }
 	int GetDestroyRank(int nIdx) { return m_aInfo[nIdx].nDestroyRank; }
+
+	int GetMadman(int nIdx) { return m_aInfo[nIdx].nMadman; }
+	int GetMadmanRank(int nIdx) { return m_aInfo[nIdx].nMadmanRank; }
 private:
 
 	void Debug(void);
@@ -57,6 +64,8 @@ private:
 	{
 		int nDestroy;		// “G‚Ì”j‰ó”
 		int nDestroyRank;	// “G‚Ì”j‰ó”‚Ì‡ˆÊ
+		int nMadman;		// –¡•û‚ğ‰£‚Á‚½”
+		int nMadmanRank;	// –¡•û‚ğ‰£‚Á‚½”‚Ì‡ˆÊ
 	};
 
 	static CRecord* m_pRecord;	// ©g‚Ìƒ|ƒCƒ“ƒ^
