@@ -48,8 +48,7 @@ CEnemyManager::CEnemyManager()
 	m_nMaxTimeSpawnThief = 0;
 	m_fTimerThief = 0.0f;
 	m_fTimeSpawnThief = 0.0f;
-	m_fBaseTimeSpawnEnemy = 0.0f;
-	m_fTimePlayer = 0.0f;
+	ZeroMemory(&m_afTime[0], sizeof(float) * NUM_PLAYER);
 
 	m_pHead = nullptr;
 	m_pTail = nullptr;
@@ -148,7 +147,7 @@ void CEnemyManager::Load(void)
 {
 	// 変数宣言
 	char cTemp[256];
-	int nCntAttack = 0;
+	int nCntTime = 0;
 
 	// ファイルから読み込む
 	FILE *pFile = fopen("data\\TEXT\\enemy.txt", "r");
@@ -168,18 +167,13 @@ void CEnemyManager::Load(void)
 				(void)fscanf(pFile, "%d", &m_nMaxTimeSpawnThief);
 			}
 
-			if (strcmp(cTemp, "TIME_PLAYER") == 0)
-			{// プレイヤー一人当たりで減る時間
+			if (strcmp(cTemp, "TIME_SPAWN") == 0)
+			{// 出現時間
 				(void)fscanf(pFile, "%s", &cTemp[0]);
+				
+				(void)fscanf(pFile, "%f", &m_afTime[nCntTime]);
 
-				(void)fscanf(pFile, "%f", &m_fTimePlayer);
-			}
-
-			if (strcmp(cTemp, "TIME_BASE") == 0)
-			{// 基本のスポーン時間
-				(void)fscanf(pFile, "%s", &cTemp[0]);
-
-				(void)fscanf(pFile, "%f", &m_fBaseTimeSpawnEnemy);
+				nCntTime++;
 			}
 
 			if (strcmp(cTemp, "END_SCRIPT") == 0)
@@ -226,13 +220,13 @@ void CEnemyManager::Update(void)
 	}
 
 	// プレイヤー数の取得
-	int nNumPlayer = 1;
+	int nIdx = 1;
 
 	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
 
 	if (pPlayerManager != nullptr)
 	{
-		nNumPlayer = pPlayerManager->GetNumPlayer();
+		nIdx = pPlayerManager->GetNumPlayer() - 1;
 	}
 
 	// 時間の加算
@@ -241,7 +235,7 @@ void CEnemyManager::Update(void)
 	m_fTimerSpawn += fTick;
 
 	// スポーン時間の設定
-	float fTime = m_fBaseTimeSpawnEnemy - (nNumPlayer * m_fTimePlayer);
+	float fTime = m_afTime[nIdx];
 
 	if (m_fTimerSpawn >= fTime)
 	{

@@ -46,8 +46,7 @@ private:
 	float m_fTimeSpawnThief;	// 泥棒敵がスポーンするまでの時間
 	int m_nMinTimeSpawnThief;	// 泥棒敵のスポーンタイマーの最小
 	int m_nMaxTimeSpawnThief;	// 泥棒敵のスポーンタイマーの最大
-	float m_fTimePlayer;	// プレイヤー一人当たりに対して減る出現頻度
-	float m_fBaseTimeSpawnEnemy;	// 敵が出現する基本の頻度
+	float m_afTime[NUM_PLAYER];	// 敵が出現する頻度
 
 	static CEnemyManager *m_pEnemyManager;	// 自身のポインタ
 };
