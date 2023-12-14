@@ -178,6 +178,19 @@ void CRecord::CheckDeathEnemyAll(CCollision** ppCollsionMissile,D3DXVECTOR3 posM
 }
 
 //=====================================================
+// 味方を殴った数の加算処理
+//=====================================================
+void CRecord::AddMedman(int nIdx)
+{
+	// プレイヤー番号が最大数を少ない
+	if (m_nNumSuvived > nIdx)
+	{
+		// 味方を殴った数を加算
+		m_aInfo[nIdx].nMadman++;
+	}
+}
+
+//=====================================================
 // デバッグ表示
 //=====================================================
 void CRecord::AllSort(void)
@@ -223,8 +236,8 @@ void CRecord::Debug(void)
 		return;
 	}
 
-	pDebugProc->Print("\nP1の敵の破壊数[%d]", m_aInfo[0].nDestroy);
-	pDebugProc->Print("\nP2の敵の破壊数[%d]", m_aInfo[1].nDestroy);
+	pDebugProc->Print("\nP1の味方殴った数[%d]", m_aInfo[0].nMadman);
+	pDebugProc->Print("\nP2の味方殴った数[%d]", m_aInfo[1].nMadman);
 }
 
 //=====================================================
