@@ -52,6 +52,7 @@ CEnemyManager::CEnemyManager()
 	m_fDistSpawn = 0.0f;
 	m_fRateProgress = 0.0f;
 	ZeroMemory(&m_afTime[0], sizeof(float) * NUM_PLAYER);
+	m_nMaxEnemy = 0;
 
 	m_pHead = nullptr;
 	m_pTail = nullptr;
@@ -193,6 +194,13 @@ void CEnemyManager::Load(void)
 				(void)fscanf(pFile, "%f", &m_fRateProgress);
 			}
 
+			if (strcmp(cTemp, "MAX_ENEMY") == 0)
+			{// 敵の最大数
+				(void)fscanf(pFile, "%s", &cTemp[0]);
+
+				(void)fscanf(pFile, "%d", &m_nMaxEnemy);
+			}
+
 			if (strcmp(cTemp, "NUM_SPAWN_ANGLE") == 0)
 			{// 出現角度読込
 				int nCntAngle = 0;
@@ -332,7 +340,14 @@ void CEnemyManager::Update(void)
 void CEnemyManager::SpawnNormal(void)
 {
 	if (m_pAngleSpawn == nullptr)
-	{
+	{// 角度のエラー
+		return;
+	}
+
+	int nNumEnemy = CEnemy::GetNumAll();
+
+	if (nNumEnemy >= m_nMaxEnemy)
+	{// 最大数制限
 		return;
 	}
 
@@ -355,6 +370,13 @@ void CEnemyManager::SpawnNormal(void)
 //=====================================================
 void CEnemyManager::SpawnThief(void)
 {
+	int nNumEnemy = CEnemy::GetNumAll();
+
+	if (nNumEnemy >= m_nMaxEnemy)
+	{// 最大数制限
+		return;
+	}
+
 	float fTick = CManager::GetTick();
 	m_fTimerThief += fTick;
 
