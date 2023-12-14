@@ -561,7 +561,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\cî«É`Å[ÉÄêßçÏ\\02_team\\00_team\\data\\TEXTURE\\MATERIAL\\WoodenBox_00.png";
+    "data\\TEXTURE\\MATERIAL\\WoodenBox_00.png";
    }
   }
  }
