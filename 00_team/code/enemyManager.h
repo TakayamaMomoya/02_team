@@ -33,7 +33,7 @@ public:
 	CEnemy *GetTail(void) { return m_pTail; }
 	void SetHead(CEnemy *pEnemy) { m_pHead = pEnemy; }
 	void SetTail(CEnemy *pEnemy) { m_pTail = pEnemy; }
-	void ProgressTimeSpawn(void);
+	void ProgressTimeSpawn(bool bAdd);
 	static CEnemyManager *GetInstance(void) { return m_pEnemyManager; }
 
 private:
@@ -53,6 +53,7 @@ private:
 	float *m_pAngleSpawn;	// スポーン角度のポインタ
 	int m_nNumSpawnAngle;	// スポーン角度の数
 	float m_fRateProgress;	// 進行によって出現頻度を減らす割合
+	int m_nMaxEnemy;	// 最大の敵数
 
 	static CEnemyManager *m_pEnemyManager;	// 自身のポインタ
 };
