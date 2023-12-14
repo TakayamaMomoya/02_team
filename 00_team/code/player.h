@@ -176,6 +176,8 @@ private:
 
 	SInfo m_info;	// 自身の情報
 	SParam m_param;	// パラメーター情報
+
+	bool m_bSound;
 };
 
 #endif

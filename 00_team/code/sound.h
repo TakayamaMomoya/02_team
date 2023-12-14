@@ -59,6 +59,11 @@ public:
 		LABEL_SE_STAMP,					// スタンプ
 		LABEL_SE_GAMEOVER,				// ゲームオーバー
 
+		LABEL_SE_EMOTE_UP,				// エモート十字キー ↑
+		LABEL_SE_EMOTE_DOWN,			// エモート十字キー ↓
+		LABEL_SE_EMOTE_LEFT,			// エモート十字キー ←
+		LABEL_SE_EMOTE_RIGHT,			// エモート十字キー ⇒
+
 		LABEL_MAX
 	} LABEL;
 
@@ -151,8 +156,12 @@ private:
 		{ "data/SOUND/SE/gunshot_sound_05.wav",0 },		// ロケラン取得
 		{ "data/SOUND/SE/weapon_lost.wav",0 },			// 武器失う
 		{ "data/SOUND/SE/stamp.wav",0 },				// スタンプ
-		{ "data/SOUND/SE/fail.wav",0},					// ゲームオーバー
-	
+		{ "data/SOUND/SE/fail.wav",0 },					// ゲームオーバー
+
+		{ "data/SOUND/SE/up.wav",0 },					// エモート十字キー ↑ 
+		{ "data/SOUND/SE/down.wav",0 },					// エモート十字キー ↓ 
+		{ "data/SOUND/SE/left.wav",0 },					// エモート十字キー ← 	
+		{ "data/SOUND/SE/right.wav",0 },				// エモート十字キー ⇒ 
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ
