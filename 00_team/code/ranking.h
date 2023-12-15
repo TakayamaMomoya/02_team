@@ -73,6 +73,7 @@ public:
 
 	void SetRank(void);
 	void ResetRank(void);
+	void SetRankNum(void);
 	void SortRank(void);
 	void SaveRank(void);
 	void LoadRank(void);
@@ -95,6 +96,9 @@ private:
 
 		CObject2D* apFace[NUM_PLAYER];	// 各プレイヤーの顔
 		CNumber* apNumber[NUM_PLAYER];	// 各プレイヤーの戦績
+
+		CObject2D* apFaceRank[RANK::NUM_MAX];	// ランキングの顔
+		CNumber* apNumRank[RANK::NUM_MAX];		// ランキングの数字
 	};
 
 	struct SInfoVisualObj
@@ -112,6 +116,8 @@ private:
 	int m_nGenreCnt;					// 種類カウント
 
 	int m_aRankScore[RANK::NUM_MAX];	// ランキングの値
+	int m_aRankFace[RANK::NUM_MAX];		// 顔の番号
+	int m_aUpdateIdx[NUM_PLAYER];		// 更新したランキングの番号
 };
 
 #endif
