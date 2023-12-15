@@ -96,7 +96,7 @@ namespace
 	const char* GENRE_TEXT_TEX[CRecord::GENRE_TYPE_MAX] =
 	{// テクスチャのパス[種類]
 		"data\\TEXTURE\\UI\\rank_text_destroyer.png",
-		nullptr,
+		"data\\TEXTURE\\UI\\rank_text_madman.png",
 	};
 
 	// 顔表示
