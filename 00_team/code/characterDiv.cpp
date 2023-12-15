@@ -69,7 +69,6 @@ void CCharacterDiv::Load(char* pPathLower, char* pPathUpper)
 
 			m_info.pBody->SetPosition(pos);
 			m_info.pBody->SetRot(rot);
-			m_info.pBody->MultiplyMtx();
 		}
 	}
 }
@@ -80,6 +79,21 @@ void CCharacterDiv::Load(char* pPathLower, char* pPathUpper)
 HRESULT CCharacterDiv::Init(void)
 {
 	return S_OK;
+}
+
+//=====================================================
+// ˆÊ’u‚ÌÝ’è
+//=====================================================
+void CCharacterDiv::SetPosition(D3DXVECTOR3 pos)
+{
+	m_info.pos = pos;
+	
+	if (m_info.pBody != nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+
+		m_info.pBody->SetPosition(pos);
+	}
 }
 
 //=====================================================
