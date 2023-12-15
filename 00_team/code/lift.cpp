@@ -1,6 +1,6 @@
 //*****************************************************
 //
-// 集会所処理[meetingPlace.cpp]
+// リフト処理[lift.cpp]
 // Author:小笠原彪
 //
 //*****************************************************
@@ -114,13 +114,14 @@ void CLift::Update(void)
 		}
 
 		// リフト範囲の設定
-		if (GetPosition().x + 100.0f >= pPlayer->GetPosition().x &&
-			GetPosition().x - 100.0f <= pPlayer->GetPosition().x &&
-			GetPosition().z + 100.0f >= pPlayer->GetPosition().z &&
-			GetPosition().z - 100.0f <= pPlayer->GetPosition().z)
+		if (GetPosition().x + RANGE >= pPlayer->GetPosition().x &&
+			GetPosition().x - RANGE <= pPlayer->GetPosition().x &&
+			GetPosition().z + RANGE >= pPlayer->GetPosition().z &&
+			GetPosition().z - RANGE <= pPlayer->GetPosition().z)
 		{
 			// プレイヤー位置の取得
 			D3DXVECTOR3 playerPos = pPlayer->GetPosition();
+			D3DXVECTOR3 playerRot = pPlayer->GetRot();
 
 			// 移動量の設定
 			D3DXVECTOR3 movePlayer = pPlayer->GetMove();
@@ -129,6 +130,7 @@ void CLift::Update(void)
 
 			// 位置の設定
 			pPlayer->SetPosition(D3DXVECTOR3(playerPos.x, pos.y, playerPos.z));
+			pPlayer->SetRot(D3DXVECTOR3(playerRot.x, playerRot.y, playerRot.z));
 
 			// 参加
 			m_abJoin[nCnt] = true;	

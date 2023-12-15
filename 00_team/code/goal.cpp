@@ -372,6 +372,7 @@ void CGoal::SetResult(void)
 					// À•W‚Ì·•ª‚©‚ç‹——£‚ðŒvŽZ
 					D3DXVECTOR3 pos = GetPosition();
 					D3DXVECTOR3 posPlayer = pPlayer->GetPosition();
+					posPlayer.y = 0.0f;
 					D3DXVECTOR3 vecDiff = posPlayer - pos;
 					float fDiff = D3DXVec3Length(&vecDiff);
 					

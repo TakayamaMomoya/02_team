@@ -100,10 +100,10 @@ HRESULT CUIMagazine::Init(void)
 		// ‰Šú’lÝ’èˆ—iÝ’è‚µ‚Ä‚È‚©‚Á‚½‚ç‚±‚êj
 		m_pUIMagazineFrame->SetSize(50.0f, 100.0f);
 		m_pUIMagazineFrame->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-		m_pUIMagazine->SetSize(50.0f, 100.0f);
 		m_pUIMagazine->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-		m_pNumDig->SetSizeAll(50.0f, 100.0f);
+		m_pUIMagazine->SetSize(50.0f, 100.0f);
 		m_pNumDig->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pNumDig->SetSizeAll(50.0f, 100.0f);
 	}
 
 	return S_OK;
