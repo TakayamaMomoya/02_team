@@ -77,6 +77,7 @@ public:
 	void SetCol(D3DXCOLOR col);
 	D3DXCOLOR GetCol(void) { return m_col; }
 	void SetMtx(D3DXMATRIX mtx) { m_meshCylinder.mtxWorld = mtx; }
+	void SetVtx(void);
 
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ

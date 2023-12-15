@@ -233,6 +233,61 @@ void CMeshCylinder::Update(void)
 }
 
 //=====================================================
+// 更新処理
+//=====================================================
+void CMeshCylinder::SetVtx(void)
+{
+	int nMeshU = m_meshCylinder.nMeshU;
+	int nMeshV = m_meshCylinder.nMeshV;
+	int nTexU = m_meshCylinder.nTexU;
+	int nTexV = m_meshCylinder.nTexV;
+	float fRadius = m_meshCylinder.fRadius;
+	float fHeight = m_meshCylinder.fHeight;
+
+	//頂点情報のポインタ
+	VERTEX_3D *pVtx;
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	for (int nCountV = 0; nCountV < nMeshV + 1; nCountV++)
+	{//頂点座標の設定
+		for (int nCountU = 0; nCountU < nMeshU + 1; nCountU++)
+		{
+			//角度算出
+			float fRot = nCountU * (D3DX_PI / nMeshU) * 2;
+
+			pVtx[nCountV * (nMeshU + 1) + nCountU].pos.x = (float)sin(fRot) * fRadius;
+			pVtx[nCountV * (nMeshU + 1) + nCountU].pos.y = (nMeshV - nCountV) * fHeight;
+			pVtx[nCountV * (nMeshU + 1) + nCountU].pos.z = cosf(fRot) * fRadius;
+
+			//テクスチャ座標
+			pVtx[nCountV * (nMeshU + 1) + nCountU].tex = D3DXVECTOR2
+			(
+				((float)nTexU / nMeshU) * nCountU,
+				((float)nTexV / nMeshV) * nCountV
+			);
+
+			D3DXVECTOR3 VecRot = D3DXVECTOR3
+			(
+				pVtx[nCountV * (nMeshU + 1) + nCountU].pos.x,
+				0.0f,
+				pVtx[nCountV * (nMeshU + 1) + nCountU].pos.z
+			);
+
+			//ベクトル正規化
+			D3DXVec3Normalize(&VecRot, &VecRot);
+
+			//法線ベクトルの設定
+			pVtx[nCountV * (nMeshU + 1) + nCountU].nor = VecRot;
+		}
+	}
+
+	//頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
+}
+
+//=====================================================
 // 色設定
 //=====================================================
 void CMeshCylinder::SetCol(D3DXCOLOR col)
