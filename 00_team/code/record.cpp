@@ -216,6 +216,28 @@ void CRecord::AllSort(void)
 			}
 		}
 	}
+
+	// 味方を殴った数のソート
+	for (int nCutRank = 0; nCutRank < NUM_PLAYER; nCutRank++)
+	{
+		// 置き換え番号
+		for (int nCutScoreRank = 0; nCutScoreRank < NUM_PLAYER; nCutScoreRank++)
+		{
+			// 置き換え番号より数値が低い
+			if (m_aInfo[nCutRank].nMadman < m_aInfo[nCutScoreRank].nMadman)
+			{
+				// 順位を下げる
+				m_aInfo[nCutRank].nMadmanRank++;
+			}
+			// 破壊数が同数 and 置き換え番号の方が大きい場合
+			else if (m_aInfo[nCutRank].nMadman == m_aInfo[nCutScoreRank].nMadman &&
+					 nCutRank > nCutScoreRank)
+			{
+				// 置き換え番号より数値が低い場合順位を下げる
+				m_aInfo[nCutRank].nMadmanRank++;
+			}
+		}
+	}
 }
 
 //=====================================================

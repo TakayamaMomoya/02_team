@@ -49,44 +49,54 @@ namespace
 	const D3DXVECTOR3 GENRE_ICON_POS[CRecord::GENRE_TYPE_MAX] =
 	{// 位置[種類]
 		D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.55f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.55f, 0.0f),
 	};
 	const float GENRE_ICON_SIZE[CRecord::GENRE_TYPE_MAX] =
 	{// 大きさ[種類]
+		250.0f,
 		250.0f,
 	};
 	const float GENRE_ICON_WIDTH[CRecord::GENRE_TYPE_MAX] =
 	{// 横幅[種類]
 		0.5f * GENRE_ICON_SIZE[CRecord::GENRE_TYPE_DESTROY],
+		0.5f * GENRE_ICON_SIZE[CRecord::GENRE_TYPE_DESTROY],
 	};
 	const float GENRE_ICON_HEIGHT[CRecord::GENRE_TYPE_MAX] =
 	{// 縦幅[種類]
 		0.4f * GENRE_ICON_SIZE[CRecord::GENRE_TYPE_DESTROY],
+		0.6f * GENRE_ICON_SIZE[CRecord::GENRE_TYPE_DESTROY],
 	};
 	const char* GENRE_ICON_TEX[CRecord::GENRE_TYPE_MAX] =
 	{// テクスチャのパス[種類]
 		"data\\TEXTURE\\UI\\Icon_destroyer.png",
+		"data\\TEXTURE\\UI\\Icon_madman.png",
 	};
 
 	// 戦績種類文
 	const D3DXVECTOR3 GENRE_TEXT_POS[CRecord::GENRE_TYPE_MAX] =
 	{// 位置[種類]
 		D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.35f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.35f, 0.0f),
 	};
 	const float GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_MAX] =
 	{// 大きさ[種類]
+		175.0f,
 		175.0f,
 	};
 	const float GENRE_TEXT_WIDTH[CRecord::GENRE_TYPE_MAX] =
 	{// 横幅[種類]
 		1.0f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
+		1.0f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
 	};
 	const float GENRE_TEXT_HEIGHT[CRecord::GENRE_TYPE_MAX] =
 	{// 縦幅[種類]
+		0.2f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
 		0.2f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
 	};
 	const char* GENRE_TEXT_TEX[CRecord::GENRE_TYPE_MAX] =
 	{// テクスチャのパス[種類]
 		"data\\TEXTURE\\UI\\rank_text_destroyer.png",
+		nullptr,
 	};
 
 	// 顔表示
@@ -126,18 +136,19 @@ namespace
 	const float FIELD_HEIGHT = 500.0f;		// フィールドの高さ
 	const char* FIELD_FILE_NAME = "data\\TEXTURE\\MATERIAL\\WodenWall_00.jpg";	// フィールドのパス
 
-	// WALL
+	// ウォール
 	const float WALL_WIDTH = 800.0f;		// ウォールの幅
 	const float WALL_HEIGHT = 500.0f;		// ウォールの高さ
 	const char* WALL_FILE_NAME = "data\\TEXTURE\\MATERIAL\\concrete_00.jpg";	// ウォールのパス
 
+	// カメラ
 	const D3DXVECTOR3 CAMERA_POS_V = D3DXVECTOR3(0.0f, 200.0f, -800.0f);
 	const D3DXVECTOR3 CAMERA_POS_R = D3DXVECTOR3(0.0f, 100.0f, 0.0f);
 	const D3DXVECTOR3 CAMERA_MOVE = D3DXVECTOR3(0.0f, 0.0f, 7.0f);
 
-	// プレイヤーの生成処理
+	// 役者
 	const char* PLAYER_BODY_PATH[CRanking::ACTOR_TYPE_MAX] =
-	{// 敵の体のパス[プレイヤー番号]
+	{// 役者の体のパス[役者番号]
 		"data\\MOTION\\motionRanking01.txt",
 		"data\\MOTION\\motionRanking02.txt",
 		"data\\MOTION\\motionRanking03.txt",
@@ -147,7 +158,7 @@ namespace
 		"data\\MOTION\\motionEnemy00.txt",
 	};
 	const D3DXVECTOR3 PLAYER_POS[CRanking::DIRECTION_TYPE_MAX][CRanking::ACTOR_TYPE_MAX] =
-	{// プレイヤーの位置[プレイヤー番号][演出番号]
+	{// 役者の位置[役者番号][演出番号]
 
 		// 行進
 		D3DXVECTOR3(500.0f, 0.0f, 0.0f),
@@ -178,7 +189,7 @@ namespace
 
 	};
 	const D3DXVECTOR3 PLAYER_ROT[CRanking::DIRECTION_TYPE_MAX][CRanking::ACTOR_TYPE_MAX] =
-	{// プレイヤーの向き[プレイヤー番号][演出番号]
+	{// 役者の向き[役者番号][演出番号]
 
 		// 行進
 		D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f),
@@ -209,7 +220,7 @@ namespace
 
 	};
 	const D3DXVECTOR3 PLAYER_MOVE[CRanking::DIRECTION_TYPE_MAX][CRanking::ACTOR_TYPE_MAX] =
-	{// プレイヤーの移動量[プレイヤー番号][演出番号]
+	{// 役者の移動量[役者番号][演出番号]
 
 		// 行進
 		D3DXVECTOR3(-4.0f, 0.0f, 0.0f),
@@ -239,7 +250,8 @@ namespace
 		D3DXVECTOR3(4.0f, 0.0f, 0.0f),
 	};
 
-	const int CHANGE_COUNT = 300;
+	// 演出を変えるまでの時間
+	const int DIRECTION_CHANGE_COUNT = 300;
 }
 
 //=====================================================
@@ -548,7 +560,115 @@ HRESULT CRanking::InitObj(void)
 		}
 	}
 
+	m_typeGenre = CRecord::GENRE_TYPE_MADMAN;
+	SetRecordGenre();
+
 	return S_OK;
+}
+
+//=====================================================
+// 各戦績の設定処理
+//=====================================================
+void CRanking::SetRecordGenre(void)
+{
+	// テクスチャのポインタを取得
+	CTexture* pTexture = CTexture::GetInstance();
+
+	// 戦績のポインタを取得
+	CRecord* pRecord = CRecord::GetInstance();
+
+	// 戦績アイコンの設定処理
+	if (m_infoVisualUi.pGenreIcon != nullptr)
+	{
+		m_infoVisualUi.pGenreIcon->SetPosition(GENRE_ICON_POS[m_typeGenre]);
+		m_infoVisualUi.pGenreIcon->SetSize(GENRE_ICON_WIDTH[m_typeGenre], GENRE_ICON_HEIGHT[m_typeGenre]);
+
+		if (pTexture != nullptr)
+		{
+			int nIdx = pTexture->Regist(GENRE_ICON_TEX[m_typeGenre]);
+			m_infoVisualUi.pGenreIcon->SetIdxTexture(nIdx);
+		}
+
+		m_infoVisualUi.pGenreIcon->SetVtx();
+	}
+
+	// 戦績テキストの設定処理
+	if (m_infoVisualUi.pGenreText != nullptr)
+	{
+		m_infoVisualUi.pGenreText->SetPosition(GENRE_TEXT_POS[m_typeGenre]);
+		m_infoVisualUi.pGenreText->SetSize(GENRE_TEXT_WIDTH[m_typeGenre], GENRE_TEXT_HEIGHT[m_typeGenre]);
+
+		if (pTexture != nullptr)
+		{
+			int nIdx = pTexture->Regist(GENRE_TEXT_TEX[m_typeGenre]);
+			m_infoVisualUi.pGenreText->SetIdxTexture(nIdx);
+		}
+
+		m_infoVisualUi.pGenreText->SetVtx();
+	}
+
+	if (pRecord != nullptr)
+	{
+		int nMaxPlayer = pRecord->GetNumSuvived();
+
+		for (int nCount = 0; nCount < nMaxPlayer; nCount++)
+		{
+			if (pRecord != nullptr)
+			{
+				int nRank = 0;		// 順位
+				int nNumRank = 0;	// 順位での値
+
+				// 種類ごとに戦績の順位を取得
+				switch (m_typeGenre)
+				{
+				case CRecord::GENRE_TYPE_DESTROY:
+
+					nRank = nRank = pRecord->GetDestroyRank(nCount);
+					nNumRank = pRecord->GetDestroy(nCount);
+
+					break;
+				case CRecord::GENRE_TYPE_MADMAN:
+
+					nRank = nRank = pRecord->GetMadmanRank(nCount);
+					nNumRank = pRecord->GetMadman(nCount);
+
+					break;
+				}
+
+				// 顔UIの設定処理
+				if (m_infoVisualUi.apFace[nCount] != nullptr)
+				{
+					// 顔UIを順位の位置に変更
+					m_infoVisualUi.apFace[nCount]->SetPosition(FACE_POS[nRank]);
+					m_infoVisualUi.apFace[nCount]->SetSize(FACE_WIDTH, FACE_HEIGHT);
+
+					if (pTexture != nullptr)
+					{
+						int nIdx = pTexture->Regist(FACE_FILE_NAME[nCount]);
+						m_infoVisualUi.apFace[nCount]->SetIdxTexture(nIdx);
+					}
+
+					m_infoVisualUi.apFace[nCount]->SetVtx();
+				}
+
+				// 数字の設定処理
+				if (m_infoVisualUi.apNumber[nCount] != nullptr)
+				{
+					m_infoVisualUi.apNumber[nCount]->SetPosition(NUMBER_POS[nRank]);
+					m_infoVisualUi.apNumber[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_WIDTH);
+
+					m_infoVisualUi.apNumber[nCount]->SetValue(nNumRank, 4);
+
+					if (pTexture != nullptr)
+					{
+						//int nIdx = pTexture->Regist();
+						//m_infoVisualUi.apNumber[nCount]->SetIdxTexture(nIdx);
+						//m_infoVisualUi.apNumber[nCount]->SetVtx();
+					}
+				}
+			}
+		}
+	}
 }
 
 //=====================================================
@@ -556,7 +676,7 @@ HRESULT CRanking::InitObj(void)
 //=====================================================
 void CRanking::UpdateDirection(void)
 {
-	if (m_nDirectionCnt <= CHANGE_COUNT)
+	if (m_nDirectionCnt <= DIRECTION_CHANGE_COUNT)
 	{
 		m_nDirectionCnt++;
 	}
