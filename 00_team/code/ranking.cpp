@@ -288,8 +288,12 @@ CRanking::CRanking()
 	m_nDirectionCnt = 0;
 	m_nGenreCnt = 0;
 
-	ZeroMemory(&m_aRankScore[0], sizeof(m_aRankScore));
-	ZeroMemory(&m_aRankFace[0], sizeof(m_aRankFace));
+	for (int nCount = 0; nCount < CRecord::GENRE_TYPE_MAX; nCount++)
+	{
+		ZeroMemory(&m_aRankScore[nCount][0], sizeof(m_aRankScore[nCount]));
+		ZeroMemory(&m_aRankFace[nCount][0], sizeof(m_aRankScore[nCount]));
+	}
+
 	ZeroMemory(&m_aUpdateIdx[0], sizeof(m_aUpdateIdx));
 }
 
@@ -598,6 +602,18 @@ HRESULT CRanking::InitObj(void)
 		}
 	}
 
+	// ランキングの数字の生成
+	for (int nCount = 0; nCount < ACTOR_TYPE_MAX; nCount++)
+	{
+		if (m_infoVisualUi.apNumRank[nCount] == nullptr)
+		{
+			m_infoVisualUi.apNumRank[nCount] = CNumber::Create(4, m_aRankScore[m_typeGenre][nCount]);
+		}
+	}
+
+	// ランキング数値の設定処理
+	SetRankNum();
+
 	return S_OK;
 }
 
@@ -811,48 +827,76 @@ void CRanking::SetRank(void)
 	// ソート
 	SortRank();
 
-	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+	for (int nCntGenre = 0; nCntGenre < CRecord::GENRE_TYPE_MAX; nCntGenre++)
 	{
-		if (pRecord != nullptr)
+		for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
 		{
-			int nNewScore = pRecord->GetDestroy(nCount);
+			if (pRecord != nullptr)
+			{
+				int nNewScore = 0;
 
-			if (nNewScore > m_aRankScore[RANK::NUM_MAX - 1])
-			{// 最小値を越したら代入
-				m_aRankScore[RANK::NUM_MAX - 1] = nNewScore;
+				switch (nCntGenre)
+				{
+				case CRecord::GENRE_TYPE_DESTROY:
 
-				// 再ソート
-				SortRank();
+					nNewScore = pRecord->GetDestroy(nCount);
 
-				bNewRank = true;
-			}
-		}
-	}
+					break;
 
-	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
-	{
-		if (pRecord != nullptr &&
-			bNewRank == true)
-		{
-			int nNewScore = pRecord->GetDestroy(nCount);
+				case CRecord::GENRE_TYPE_MADMAN:
 
-			for (int nCnt = 0; nCnt < RANK::NUM_MAX; nCnt++)
-			{// 足した値と合致する記録を探す
-				if (nNewScore == m_aRankScore[nCnt])
-				{// ニューレコード番号を記録
-					m_aUpdateIdx[nCount] = nCnt;
+					nNewScore = pRecord->GetMadman(nCount);
+
+					break;
+				}
+
+				if (nNewScore > m_aRankScore[nCntGenre][RANK::NUM_MAX - 1])
+				{// 最小値を越したら代入
+					m_aRankScore[nCntGenre][RANK::NUM_MAX - 1] = nNewScore;
+
+					// 再ソート
+					SortRank();
+
+					bNewRank = true;
 				}
 			}
 		}
-
-		if (m_infoVisualUi.apNumRank[nCount] == nullptr)
-		{
-			// ランキングの数字の生成
-			m_infoVisualUi.apNumRank[nCount] = CNumber::Create(4, m_aRankScore[nCount]);
-		}
 	}
 
+	for (int nCntGenre = 0; nCntGenre < CRecord::GENRE_TYPE_MAX; nCntGenre++)
+	{
+		for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+		{
+			if (pRecord != nullptr &&
+				bNewRank == true)
+			{
+				int nNewScore = 0;
 
+				switch (nCntGenre)
+				{
+				case CRecord::GENRE_TYPE_DESTROY:
+
+					nNewScore = pRecord->GetDestroy(nCount);
+
+					break;
+
+				case CRecord::GENRE_TYPE_MADMAN:
+
+					nNewScore = pRecord->GetMadman(nCount);
+
+					break;
+				}
+
+				for (int nCnt = 0; nCnt < RANK::NUM_MAX; nCnt++)
+				{// 足した値と合致する記録を探す
+					if (nNewScore == m_aRankScore[nCntGenre][nCnt])
+					{// ニューレコード番号を記録
+						m_aUpdateIdx[nCount] = nCnt;
+					}
+				}
+			}
+		}
+	}
 
 	// ランクの数字を表示
 	SetRankNum();
@@ -864,7 +908,7 @@ void CRanking::SetRank(void)
 }
 
 //=====================================================
-// 設定処理
+// ランキング数値の設定処理
 //=====================================================
 void CRanking::SetRankNum(void)
 {
@@ -874,6 +918,7 @@ void CRanking::SetRankNum(void)
 		if (m_infoVisualUi.apNumRank[nCount] != nullptr)
 		{
 			// 値の設定
+			m_infoVisualUi.apNumRank[nCount]->SetValue(m_aRankScore[m_typeGenre][nCount],4);
 			m_infoVisualUi.apNumRank[nCount]->SetPosition(RANK_NUM_POS[nCount]);
 			m_infoVisualUi.apNumRank[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_HEIGHT);
 
@@ -894,24 +939,27 @@ void CRanking::SetRankNum(void)
 //=====================================================
 void CRanking::SortRank(void)
 {
-	for (int nCntRanking = 0; nCntRanking < RANK::NUM_MAX - 1; nCntRanking++)
-	{//ランキングをソート
-	
-		// 左端の値を最大値とする
-		int nTop = nCntRanking;
+	for (int nCntGenre = 0; nCntGenre < CRecord::GENRE_TYPE_MAX ; nCntGenre++)
+	{
+		for (int nCntRanking = 0; nCntRanking < RANK::NUM_MAX - 1; nCntRanking++)
+		{//ランキングをソート
 
-		for (int nCount2 = nCntRanking + 1; nCount2 < RANK::NUM_MAX; nCount2++)
-		{//左の値と対象の値を比較
-			if (m_aRankScore[nTop] < m_aRankScore[nCount2])
-			{//もし比較した数字が小さかったら
-				nTop = nCount2;
+			// 左端の値を最大値とする
+			int nTop = nCntRanking;
+
+			for (int nCount2 = nCntRanking + 1; nCount2 < RANK::NUM_MAX; nCount2++)
+			{//左の値と対象の値を比較
+				if (m_aRankScore[nCntGenre][nTop] < m_aRankScore[nCntGenre][nCount2])
+				{//もし比較した数字が小さかったら
+					nTop = nCount2;
+				}
 			}
-		}
 
-		//要素の入れ替え
-		int nTemp = m_aRankScore[nCntRanking];
-		m_aRankScore[nCntRanking] = m_aRankScore[nTop];
-		m_aRankScore[nTop] = nTemp;
+			//要素の入れ替え
+			int nTemp = m_aRankScore[nCntGenre][nCntRanking];
+			m_aRankScore[nCntGenre][nCntRanking] = m_aRankScore[nCntGenre][nTop];
+			m_aRankScore[nCntGenre][nTop] = nTemp;
+		}
 	}
 }
 
@@ -938,10 +986,13 @@ void CRanking::SaveRank(void)
 	if (pFile != NULL)
 	{//ファイルが開けた場合
 
-		//バイナリファイルに書き込む
-		fwrite(&m_aRankScore[0], sizeof(int), RANK::NUM_MAX, pFile);
-		fwrite(&m_aRankFace[0], sizeof(int), RANK::NUM_MAX, pFile);
-		
+		for (int nCount = 0; nCount < CRecord::GENRE_TYPE_MAX; nCount++)
+		{
+			//バイナリファイルに書き込む
+			fwrite(&m_aRankScore[nCount][0], sizeof(int), RANK::NUM_MAX, pFile);
+			fwrite(&m_aRankFace[nCount][0], sizeof(int), RANK::NUM_MAX, pFile);
+		}
+
 		//ファイルを閉じる
 		fclose(pFile);
 	}
@@ -966,8 +1017,11 @@ void CRanking::LoadRank(void)
 	{//ファイルが開けた場合
 
 		//バイナリファイルから読み込む
-		fread(&m_aRankScore[0], sizeof(int), RANK::NUM_MAX, pFile);
-		fread(&m_aRankFace[0], sizeof(int), RANK::NUM_MAX, pFile);
+		for (int nCount = 0; nCount < CRecord::GENRE_TYPE_MAX; nCount++)
+		{
+			fread(&m_aRankScore[nCount][0], sizeof(int), RANK::NUM_MAX, pFile);
+			fread(&m_aRankFace[nCount][0], sizeof(int), RANK::NUM_MAX, pFile);
+		}
 
 		//ファイルを閉じる
 		fclose(pFile);
