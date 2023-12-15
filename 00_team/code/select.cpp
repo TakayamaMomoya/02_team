@@ -722,7 +722,7 @@ void CSelect::Lift(void)
 
 			if (pFade != nullptr)
 			{
-				pFade->SetFade(CScene::MODE_GAME);
+				//pFade->SetFade(CScene::MODE_GAME);
 			}
 		}
 	}

@@ -121,9 +121,11 @@ void CLift::Update(void)
 		{
 			// プレイヤー位置の取得
 			D3DXVECTOR3 playerPos = pPlayer->GetPosition();
+			D3DXVECTOR3 playerRot = pPlayer->GetRot();
 
 			// 位置の設定
 			pPlayer->SetPosition(D3DXVECTOR3(playerPos.x, pos.y, playerPos.z));
+			pPlayer->SetRot(D3DXVECTOR3(playerRot.x, playerRot.y, playerRot.z));
 
 			// 参加
 			m_abJoin[nCnt] = true;	
