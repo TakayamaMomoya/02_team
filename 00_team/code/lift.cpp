@@ -123,6 +123,11 @@ void CLift::Update(void)
 			D3DXVECTOR3 playerPos = pPlayer->GetPosition();
 			D3DXVECTOR3 playerRot = pPlayer->GetRot();
 
+			// ˆÚ“®—Ê‚ÌÝ’è
+			D3DXVECTOR3 movePlayer = pPlayer->GetMove();
+			movePlayer.y = 0.0f;
+			pPlayer->SetMove(movePlayer);
+
 			// ˆÊ’u‚ÌÝ’è
 			pPlayer->SetPosition(D3DXVECTOR3(playerPos.x, pos.y, playerPos.z));
 			pPlayer->SetRot(D3DXVECTOR3(playerRot.x, playerRot.y, playerRot.z));
