@@ -114,10 +114,10 @@ void CLift::Update(void)
 		}
 
 		// リフト範囲の設定
-		if (GetPosition().x + 100.0f >= pPlayer->GetPosition().x &&
-			GetPosition().x - 100.0f <= pPlayer->GetPosition().x &&
-			GetPosition().z + 100.0f >= pPlayer->GetPosition().z &&
-			GetPosition().z - 100.0f <= pPlayer->GetPosition().z)
+		if (GetPosition().x + RANGE >= pPlayer->GetPosition().x &&
+			GetPosition().x - RANGE <= pPlayer->GetPosition().x &&
+			GetPosition().z + RANGE >= pPlayer->GetPosition().z &&
+			GetPosition().z - RANGE <= pPlayer->GetPosition().z)
 		{
 			// プレイヤー位置の取得
 			D3DXVECTOR3 playerPos = pPlayer->GetPosition();

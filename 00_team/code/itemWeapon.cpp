@@ -17,6 +17,7 @@
 #include "debugproc.h"
 #include "object3D.h"
 #include "texture.h"
+#include "meshcylinder.h"
 
 //*****************************************************
 // 定数定義
@@ -42,7 +43,8 @@ namespace
 	const float SPEED_ROTATE = 0.01f;	// 回転速度
 	const float SPEED_MOVE = 0.2f;	// 追従速度
 	const float SPEED_FLOAT = 0.03f;	// 浮き沈みする速度
-	const float SIZE_LIGHT = 50.0f;	// 光のサイズ
+	const float SIZE_LIGHT = 40.0f;	// 光のサイズ
+	const float SIZE_RADIUS = 10.0f;	// シリンダーサイズ
 }
 
 //=====================================================
@@ -96,10 +98,22 @@ HRESULT CItemWeapon::Init(void)
 		{
 			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\EFFECT\\effect000.png");
 			m_info.pLight->SetIdxTexture(nIdx);
-
 			m_info.pLight->SetColor(WEPONCOL[m_type]);
 			m_info.pLight->SetSize(SIZE_LIGHT, SIZE_LIGHT);
 			m_info.pLight->EnableAdd(true);
+		}
+	
+	}
+	if (m_info.pCylinder == nullptr)
+	{
+		m_info.pCylinder = CMeshCylinder::Create();
+
+		if (m_info.pCylinder != nullptr)
+		{
+			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\EFFECT\\ring00.png");
+			m_info.pCylinder->SetIdxTexture(nIdx);
+			m_info.pCylinder->SetCol(WEPONCOL[m_type]);
+			m_info.pCylinder->SetRadius(SIZE_RADIUS);
 		}
 	}
 
@@ -137,6 +151,11 @@ void CItemWeapon::Uninit(void)
 		m_info.pLight->Uninit();
 		m_info.pLight = nullptr;
 	}
+	if (m_info.pCylinder != nullptr)
+	{
+		m_info.pCylinder->Uninit();
+		m_info.pCylinder = nullptr;
+	}
 
 	// 継承クラスの終了
 	CGimmick::Uninit();
@@ -163,6 +182,13 @@ void CItemWeapon::Update(void)
 		pos.y = 1.0f;
 
 		m_info.pLight->SetPosition(pos);
+	}
+	if (m_info.pCylinder != nullptr)
+	{
+		D3DXVECTOR3 pos = GetPosition();
+		pos.y = 1.0f;
+
+		m_info.pCylinder->SetPosition(pos);
 	}
 }
 
