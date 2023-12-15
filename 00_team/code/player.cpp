@@ -346,12 +346,26 @@ void CPlayer::Update(void)
 
 		if (m_info.pCollisionSphere != nullptr)
 		{
+			CGame* pGame = CGame::GetInstance();
+			CScene::MODE mode = CManager::GetMode();
 			pos = GetPosition();
 
 			// “G‚Æ‚Ì‰Ÿ‚µo‚µ”»’è
 			m_info.pCollisionSphere->SetPosition(pos);
 
-			m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_PLAYER);
+			if (pGame != nullptr)
+			{
+				CGame::STATE state = pGame->GetState();
+
+				if (state != CGame::STATE_ESCAPE && state != CGame::STATE_RESULT)
+				{// ’Eoó‘Ô
+					m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_PLAYER);
+				}
+			}
+			else if (mode != CScene::MODE_GAME)
+			{
+				m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_PLAYER);
+			}
 			m_info.pCollisionSphere->PushCollision(&pos, CCollision::TAG_ENEMY);
 
 			m_info.pCollisionSphere->SetPositionOld(m_info.pCollisionSphere->GetPosition());
@@ -1552,8 +1566,8 @@ void CPlayer::BoardingRocket(void)
 						D3DXVECTOR3 posRocket = pRocket->GetPosition();
 						D3DXVECTOR3 vecDiff = posRocket - pos;
 
-						pos.x += vecDiff.x * 0.3f;
-						pos.z += vecDiff.z * 0.3f;
+						pos.x += vecDiff.x * 0.2f;
+						pos.z += vecDiff.z * 0.2f;
 
 						D3DXVec3Normalize(&vecDiff, &vecDiff);
 
