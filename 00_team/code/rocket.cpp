@@ -20,6 +20,7 @@
 #include "inputkeyboard.h"
 #include "particle.h"
 #include "enemyManager.h"
+#include "enemyEvent.h"
 
 //*****************************************************
 // 定数定義
@@ -47,6 +48,7 @@ CRocket::CRocket(int nPriority) : CObjectX(nPriority)
 	m_nProgress = 0;
 	m_fTimeRapir = 0.0f;
 	m_state = STATE_NONE;
+	ZeroMemory(&m_infoEvent, sizeof(SInfoEvent));
 	m_pCollisionRocket = nullptr;
 }
 
@@ -227,6 +229,22 @@ void CRocket::ApplyInfo(FILE* pFile, char* pTemp)
 
 		(void)fscanf(pFile, "%f", &m_fDeleteHeight);
 	}
+
+	if (strcmp(pTemp, "DELAY") == 0)
+	{// ディレイの最大値、最小値取得
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_infoEvent.fDelayMin);
+		(void)fscanf(pFile, "%f", &m_infoEvent.fDelayMax);
+	}
+
+	if (strcmp(pTemp, "TIME_EVENT") == 0)
+	{// イベント時間の最大値、最小値取得
+		(void)fscanf(pFile, "%s", pTemp);
+
+		(void)fscanf(pFile, "%f", &m_infoEvent.fTimeMin);
+		(void)fscanf(pFile, "%f", &m_infoEvent.fTimeMax);
+	}
 }
 
 //=====================================================
@@ -325,11 +343,14 @@ void CRocket::AddProgress(int nProgress)
 	if (pEnemyManager != nullptr)
 	{
 		if (nProgress > 0)
-		{
+		{// 進行
 			pEnemyManager->ProgressTimeSpawn(false);
+
+			// イベントの生成
+			CreateEnemyEvent();
 		}
 		else
-		{
+		{// 退行
 			pEnemyManager->ProgressTimeSpawn(true);
 		}
 	}
@@ -355,6 +376,21 @@ void CRocket::AddProgress(int nProgress)
 
 	// ロケットモデルの変化
 	SwapModel(m_nProgress);
+}
+
+//=====================================================
+// 敵イベントの生成
+//=====================================================
+void CRocket::CreateEnemyEvent(void)
+{
+	// 継続時間の設定
+	float fTime = (float)universal::RandRange((int)m_infoEvent.fTimeMin, (int)m_infoEvent.fTimeMax);
+
+	// ディレイの設定
+	float fDelay = (float)universal::RandRange((int)m_infoEvent.fDelayMin, (int)m_infoEvent.fDelayMax);
+
+	// イベントの生成
+	CEnemyEvent::Create(fTime, fDelay);
 }
 
 //=====================================================

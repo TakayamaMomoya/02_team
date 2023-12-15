@@ -21,6 +21,11 @@ namespace
 const float INITIAL_SCALE = 0.5f;	// 初期のタイムスケール
 }
 
+//*****************************************************
+// 静的メンバ変数宣言
+//*****************************************************
+CEnemyEvent *CEnemyEvent::m_pEnemyEvent = nullptr;	// 自身のポインタ
+
 //=====================================================
 // コンストラクタ
 //=====================================================
@@ -44,23 +49,21 @@ CEnemyEvent::~CEnemyEvent()
 //=====================================================
 CEnemyEvent *CEnemyEvent::Create(float fLife, float fDelay)
 {
-	CEnemyEvent *pEnemyEvent = nullptr;
-
-	if (pEnemyEvent == nullptr)
+	if (m_pEnemyEvent == nullptr)
 	{
-		pEnemyEvent = new CEnemyEvent;
+		m_pEnemyEvent = new CEnemyEvent;
 
-		if (pEnemyEvent != nullptr)
+		if (m_pEnemyEvent != nullptr)
 		{
-			pEnemyEvent->m_fLife = fLife;
-			pEnemyEvent->m_fDelay = fDelay;
+			m_pEnemyEvent->m_fLife = fLife;
+			m_pEnemyEvent->m_fDelay = fDelay;
 
 			// 初期化
-			pEnemyEvent->Init();
+			m_pEnemyEvent->Init();
 		}
 	}
 
-	return pEnemyEvent;
+	return m_pEnemyEvent;
 }
 
 //=====================================================
@@ -93,6 +96,8 @@ void CEnemyEvent::Uninit(void)
 	{
 		pEnemyManager->SetTimeScale(1.0f);
 	}
+
+	m_pEnemyEvent = nullptr;
 
 	// 自身の破棄
 	Release();

@@ -390,13 +390,11 @@ void CEnemyManager::SpawnThief(void)
 	{
 		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
 
-		// 出現する座標を設定
-		posCenter.x = (float)universal::RandRange(RAND_SPAWN, -RAND_SPAWN);
-		posCenter.z = (float)universal::RandRange(RAND_SPAWN, -RAND_SPAWN);
+		int nIdxAngle = universal::RandRange(m_nNumSpawnAngle, 0);
 
-		// 位置の正規化
-		D3DXVec3Normalize(&posCenter, &posCenter);
-		posCenter *= m_fDistSpawn;
+		// 出現する座標を設定
+		posCenter.x = sinf(m_pAngleSpawn[nIdxAngle]) * m_fDistSpawn;
+		posCenter.z = cosf(m_pAngleSpawn[nIdxAngle]) * m_fDistSpawn;
 
 		// 敵スポーン
 		CreateEnemy(posCenter, CEnemy::TYPE::TYPE_THIEF);
