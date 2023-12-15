@@ -115,8 +115,8 @@ private:
 	int m_nDirectionCnt;				// 演出カウント
 	int m_nGenreCnt;					// 種類カウント
 
-	int m_aRankScore[RANK::NUM_MAX];	// ランキングの値
-	int m_aRankFace[RANK::NUM_MAX];		// 顔の番号
+	int m_aRankScore[CRecord::GENRE_TYPE_MAX][RANK::NUM_MAX];	// ランキングの値
+	int m_aRankFace[CRecord::GENRE_TYPE_MAX][RANK::NUM_MAX];	// 顔の番号
 	int m_aUpdateIdx[NUM_PLAYER];		// 更新したランキングの番号
 };
 
