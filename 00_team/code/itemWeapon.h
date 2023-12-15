@@ -50,6 +50,7 @@ private:
 	void ApplyEffect(CPlayer *pPlayer);
 	void ManageScale(void);
 	void ManageTransform(void);
+	void EffectScale(void);
 
 	CWeapon::TYPE m_type;
 	SInfo m_info;

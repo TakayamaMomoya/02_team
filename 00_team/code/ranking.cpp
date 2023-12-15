@@ -796,7 +796,6 @@ void CRanking::SetRank(void)
 	//	}
 	//}
 
-
 	// •Û‘¶ˆ—
 #ifndef _DEBUG
 	Save();
