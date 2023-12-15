@@ -178,6 +178,7 @@ private:
 	SParam m_param;	// パラメーター情報
 
 	bool m_bSound;
+	bool m_bGoalJump;
 };
 
 #endif

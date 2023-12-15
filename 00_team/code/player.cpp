@@ -84,6 +84,7 @@ CPlayer::CPlayer(int nPriority)
 	ZeroMemory(&m_info, sizeof(CPlayer::SInfo));
 	ZeroMemory(&m_param, sizeof(CPlayer::SParam));
 	m_bSound = false;
+	m_bGoalJump = false;
 }
 
 //=====================================================
@@ -118,6 +119,8 @@ CPlayer *CPlayer::Create(int nID)
 //=====================================================
 HRESULT CPlayer::Init(void)
 {
+	m_bGoalJump = false;
+	
 	// 継承クラスの初期化
 	CCharacterDiv::Init();
 
@@ -1530,9 +1533,8 @@ void CPlayer::BoardingRocket(void)
 						D3DXVECTOR3 posRocket = pRocket->GetPosition();
 						D3DXVECTOR3 vecDiff = posRocket - pos;
 
-						pos.x += vecDiff.x * 0.08f;
-						pos.z += vecDiff.z * 0.08f;
-						//pos.y = posRocket.y + 400.0f - pos.y;
+						pos.x += vecDiff.x * 0.3f;
+						pos.z += vecDiff.z * 0.3f;
 
 						D3DXVec3Normalize(&vecDiff, &vecDiff);
 
@@ -1553,9 +1555,18 @@ void CPlayer::BoardingRocket(void)
 						D3DXVECTOR3 vecDiffDelete = pos - posRocket;
 						float fLenth = D3DXVec3Length(&vecDiffDelete);
 
-						if (fLenth < 50.0f)
+						if (fLenth < 20.0f)
 						{// ロケットに近い
-							SetPosition({ pos.x, -500.0f, pos.z });		// 埋める
+							SetPosition({ pos.x, -100.0f, pos.z });		// 埋める
+						}
+
+						if(m_bGoalJump == false)
+						{// ジャンプさせる
+							pos.y = posRocket.y + 250.0f - pos.y;
+							SetPosition(pos);
+							D3DXVECTOR3 move = GetMove();
+							SetMove({ move.x, 0.0f, move.z });
+							m_bGoalJump = true;
 						}
 					}
 
