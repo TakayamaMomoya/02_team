@@ -43,8 +43,9 @@ namespace
 	const float SPEED_ROTATE = 0.01f;	// 回転速度
 	const float SPEED_MOVE = 0.2f;	// 追従速度
 	const float SPEED_FLOAT = 0.03f;	// 浮き沈みする速度
-	const float SIZE_LIGHT = 40.0f;	// 光のサイズ
-	const float SIZE_RADIUS = 10.0f;	// シリンダーサイズ
+	const float SIZE_LIGHT = 60.0f;	// 光のサイズ
+	const float SIZE_RADIUS = SIZE_LIGHT - 10.0f;	// シリンダーサイズ(幅)
+	const float SIZE_HEIGHT = 50.0f;	// シリンダーサイズ(高)
 }
 
 //=====================================================
@@ -96,7 +97,7 @@ HRESULT CItemWeapon::Init(void)
 
 		if (m_info.pLight != nullptr)
 		{
-			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\EFFECT\\effect000.png");
+			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\EFFECT\\glow.png");
 			m_info.pLight->SetIdxTexture(nIdx);
 			m_info.pLight->SetColor(WEPONCOL[m_type]);
 			m_info.pLight->SetSize(SIZE_LIGHT, SIZE_LIGHT);
@@ -114,6 +115,8 @@ HRESULT CItemWeapon::Init(void)
 			m_info.pCylinder->SetIdxTexture(nIdx);
 			m_info.pCylinder->SetCol(WEPONCOL[m_type]);
 			m_info.pCylinder->SetRadius(SIZE_RADIUS);
+			m_info.pCylinder->SetHeight(SIZE_HEIGHT);
+			m_info.pCylinder->SetVtx();
 		}
 	}
 
@@ -175,20 +178,24 @@ void CItemWeapon::Update(void)
 	// 回す処理
 	ManageTransform();
 
+	// 位置情報の取得
+	D3DXVECTOR3 pos = GetPosition();
+	pos.y = 1.0f;
+
 	// 光の追従
 	if (m_info.pLight != nullptr)
 	{
-		D3DXVECTOR3 pos = GetPosition();
-		pos.y = 1.0f;
-
 		m_info.pLight->SetPosition(pos);
 	}
+	// シリンダーの追従・回転
 	if (m_info.pCylinder != nullptr)
 	{
-		D3DXVECTOR3 pos = GetPosition();
-		pos.y = 1.0f;
+		D3DXVECTOR3 rot = m_info.pCylinder->GetRot();
+		rot.y += SPEED_ROTATE;
+		universal::LimitRot(rot);
 
 		m_info.pCylinder->SetPosition(pos);
+		m_info.pCylinder->SetRot({ rot.x, rot.y, rot.z });
 	}
 }
 
