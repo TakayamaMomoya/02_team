@@ -233,7 +233,7 @@ void CBlock::Delete(int nIdx)
 	CBlock *pBlockDelete = m_apBlock[nIdx];
 
 	// ”z—ñ‚ð‹l‚ß‚é
-	for (int nCntBlock = nIdx; nCntBlock < NUM_OBJECT - 1; nCntBlock++)
+	/*for (int nCntBlock = nIdx; nCntBlock < NUM_OBJECT - 1; nCntBlock++)
 	{
 		if (m_apBlock[nCntBlock + 1] != nullptr)
 		{
@@ -243,7 +243,7 @@ void CBlock::Delete(int nIdx)
 
 			m_apBlock[nCntBlock + 1] = nullptr;
 		}
-	}
+	}*/
 
 	if (pBlockDelete != nullptr)
 	{// íœˆ—
@@ -252,6 +252,7 @@ void CBlock::Delete(int nIdx)
 		pBlockDelete = nullptr;
 	}
 
+	m_apBlock[nIdx] = nullptr;
 }
 
 //=====================================================
