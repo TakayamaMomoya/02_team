@@ -44,7 +44,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	void SetPosition(D3DXVECTOR3 pos) { m_info.pos = pos; }
+	void SetPosition(D3DXVECTOR3 pos);
 	D3DXVECTOR3 GetPosition(void) { return m_info.pos; }
 	void SetPositionOld(D3DXVECTOR3 pos) { m_info.posOld = pos; }
 	D3DXVECTOR3 GetPositionOld(void) { return m_info.posOld; }

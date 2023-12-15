@@ -151,6 +151,7 @@ void CNumber::SetSizeAll(float width, float height)
 		{
 			m_apObject[nCount]->SetSize(width,height);
 			m_apObject[nCount]->SetPosition(D3DXVECTOR3(GetPosition().x + width * nCount * 2, GetPosition().y, GetPosition().z));
+			m_apObject[nCount]->SetVtx();
 		}
 	}
 }
