@@ -22,13 +22,18 @@ public:
 	CEnemyEvent(int nPriority = 6);	// コンストラクタ
 	~CEnemyEvent();	// デストラクタ
 
-	static CEnemyEvent *Create(void);
+	static CEnemyEvent *Create(float fLife = 10.0f,float fDelay = 10.0f);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void SetScale(float fScale) { m_fScaleTime = fScale; }
 
 private:
+	void StartEvent(void);
+
+	float m_fScaleTime;	// タイムスケール
+	float m_fDelay;	// イベント発生までのディレイ
 	float m_fLife;	// 寿命
 };
 

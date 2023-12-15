@@ -122,6 +122,11 @@ void CLift::Update(void)
 			// プレイヤー位置の取得
 			D3DXVECTOR3 playerPos = pPlayer->GetPosition();
 
+			// 移動量の設定
+			D3DXVECTOR3 movePlayer = pPlayer->GetMove();
+			movePlayer.y = 0.0f;
+			pPlayer->SetMove(movePlayer);
+
 			// 位置の設定
 			pPlayer->SetPosition(D3DXVECTOR3(playerPos.x, pos.y, playerPos.z));
 

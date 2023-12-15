@@ -69,7 +69,7 @@ public:
 	void SetRecordGenre(void);
 
 	void UpdateDirection(void);
-	HRESULT SetDirection(DIRECTION_TYPE type);
+	HRESULT SetDirection(void);
 
 private:
 
@@ -95,6 +95,7 @@ private:
 	CRecord::GENRE_TYPE m_typeGenre;	// 戦績の種類
 	DIRECTION_TYPE m_typeDirection;		// 演出の種類
 	int m_nDirectionCnt;				// 演出カウント
+	int m_nGenreCnt;					// 種類カウント
 };
 
 #endif
