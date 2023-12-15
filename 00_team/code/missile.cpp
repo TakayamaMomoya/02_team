@@ -18,6 +18,7 @@
 #include "animEffect3D.h"
 #include "anim3D.h"
 #include "record.h"
+#include "sound.h"
 
 //*****************************************************
 // 定数定義
@@ -150,6 +151,8 @@ void CMissile::DeleteVisual(void)
 //=====================================================
 void CMissile::Update(void)
 {
+	CSound* pSound = CSound::GetInstance();
+
 	// 変数宣言
 	bool bHit = false;
 
@@ -177,6 +180,11 @@ void CMissile::Update(void)
 		// 敵との当たり判定
 		if (m_info.pCollisionSphere->OnEnter(CCollision::TAG_ENEMY))
 		{// 対象との当たり判定
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_EXPLOSION);
+			}
+
 			bHit = true;
 
 			Death();
@@ -185,6 +193,11 @@ void CMissile::Update(void)
 		{
 			if (m_info.pCollisionSphere->TriggerCube(CCollision::TAG_BLOCK))
 			{// ブロックとの当たり判定
+				if (pSound != nullptr)
+				{
+					pSound->Play(pSound->LABEL_SE_EXPLOSION);
+				}
+
 				bHit = true;
 
 				Death();
@@ -196,6 +209,11 @@ void CMissile::Update(void)
 	{
 		if (m_info.fLife < 0)
 		{// 寿命での削除
+			if (pSound != nullptr)
+			{
+				pSound->Play(pSound->LABEL_SE_EXPLOSION);
+			}
+
 			Death();
 		}
 	}
