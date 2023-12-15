@@ -18,6 +18,7 @@
 // 前方宣言
 //*****************************************************
 class CObject3D;
+class CMeshCylinder;
 
 //*****************************************************
 // クラスの定義
@@ -41,6 +42,7 @@ private:
 		float fScaleDest;	// 目標スケール
 		float fTimer;	// タイマー
 		CObject3D *pLight;	// 光
+		CMeshCylinder* pCylinder;	// 円柱
 	};
 
 	void Load(void);
