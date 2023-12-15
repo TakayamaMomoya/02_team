@@ -28,6 +28,7 @@
 #include "inputkeyboard.h"
 #include "inputjoypad.h"
 #include "inputmouse.h"
+#include "sound.h"
 
 #include "fade.h"
 
@@ -340,6 +341,14 @@ HRESULT CRanking::Init(void)
 
 	// 保存
 	SaveRank();
+
+	// サウンドインスタンスの取得
+	CSound* pSound = CSound::GetInstance();
+
+	if (pSound != nullptr)
+	{
+		pSound->Play(pSound->LABEL_BGM_RANKING);
+	}
 
 	return S_OK;
 }
