@@ -44,8 +44,10 @@ namespace
 	const float SPEED_MOVE = 0.2f;	// 追従速度
 	const float SPEED_FLOAT = 0.03f;	// 浮き沈みする速度
 	const float SIZE_LIGHT = 60.0f;	// 光のサイズ
-	const float SIZE_RADIUS = SIZE_LIGHT - 10.0f;	// シリンダーサイズ(幅)
+	const float SIZE_RADIUS = 60;	// シリンダーサイズ(幅)
 	const float SIZE_HEIGHT = 50.0f;	// シリンダーサイズ(高)
+	const float SPEED_SCALIN = 2.0f;	// スケールが大きくなる速度
+
 }
 
 //=====================================================
@@ -100,7 +102,7 @@ HRESULT CItemWeapon::Init(void)
 			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\EFFECT\\glow.png");
 			m_info.pLight->SetIdxTexture(nIdx);
 			m_info.pLight->SetColor(WEPONCOL[m_type]);
-			m_info.pLight->SetSize(SIZE_LIGHT, SIZE_LIGHT);
+			m_info.pLight->SetSize(0.0f, 0.0f);
 			m_info.pLight->EnableAdd(true);
 		}
 	
@@ -204,11 +206,26 @@ void CItemWeapon::Update(void)
 //=====================================================
 void CItemWeapon::ManageScale(void)
 {
+	// 武器のスケール設定
 	float fScale = GetScale();
 
 	fScale += (m_info.fScaleDest - fScale) * SPEED_SCALING;
 
 	SetScale(fScale);
+
+	// エフェクトのスケール設定
+	if (m_info.pLight != nullptr)
+	{
+		fScale = m_info.pLight->GetWidth();
+		fScale += (SIZE_RADIUS - fScale) * SPEED_SCALING;
+
+		m_info.pLight->SetSize(fScale, fScale);
+	}
+	if (m_info.pCylinder != nullptr)
+	{
+		m_info.pCylinder->SetRadius(fScale);
+		m_info.pCylinder->SetVtx();
+	}
 }
 
 //=====================================================

@@ -256,6 +256,24 @@ namespace
 	const int GENRE_CHANGE_COUNT = 300;		// 種類を変えるまでの時間
 
 	const char* RANKING_BIN_FILE = "data\\BINARY\\ranking";	// ランキングのファイル名
+
+	// ランキングの数字
+	const D3DXVECTOR3 RANK_NUM_POS[RANK::NUM_MAX] =
+	{// 位置[種類]
+		D3DXVECTOR3(SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.5f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.6f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.7f, 0.0f),
+	};
+	const D3DXVECTOR3 RANK_POS_PLUS = D3DXVECTOR3(-50.0f, 0.0f, 0.0f);
+	const float RANK_NUM_SIZE = 50.0f;
+	const float RANK_NUM_WIDTH = 0.5f * RANK_NUM_SIZE;
+	const float RANK_NUM_HEIGHT = 0.4f * RANK_NUM_SIZE;
+	const char* RANK_NUM_TEX[RANK::NUM_MAX] =
+	{// テクスチャのパス[種類]
+		"data\\TEXTURE\\UI\\1st.png",
+		"data\\TEXTURE\\UI\\2nd.png",
+		"data\\TEXTURE\\UI\\3rd.png",
+	};
 }
 
 //=====================================================
@@ -266,8 +284,13 @@ CRanking::CRanking()
 	ZeroMemory(&m_infoVisualUi, sizeof(m_infoVisualUi));
 	ZeroMemory(&m_infoVisualObj,sizeof(m_infoVisualObj)); 
 	m_typeDirection = (DIRECTION_TYPE)0;
+	m_typeGenre = (CRecord::GENRE_TYPE)0;
 	m_nDirectionCnt = 0;
 	m_nGenreCnt = 0;
+
+	ZeroMemory(&m_aRankScore[0], sizeof(m_aRankScore));
+	ZeroMemory(&m_aRankFace[0], sizeof(m_aRankFace));
+	ZeroMemory(&m_aUpdateIdx[0], sizeof(m_aUpdateIdx));
 }
 
 //=====================================================
@@ -303,6 +326,16 @@ HRESULT CRanking::Init(void)
 	{
 		return E_FAIL;
 	}
+
+	// 初期設定
+	ResetRank();
+	SortRank();
+
+	// 取得したスコアでランキング設定
+	SetRank();
+
+	// 保存
+	SaveRank();
 
 	return S_OK;
 }
@@ -726,6 +759,9 @@ void CRanking::UpdateDirection(void)
 
 		// 戦績種類の設定
 		SetRecordGenre();
+
+		// ランクの数字を表示
+		SetRankNum();
 	}
 
 	for (int nCount = 0; nCount < ACTOR_TYPE_MAX; nCount++)
@@ -766,41 +802,91 @@ HRESULT CRanking::SetDirection(void)
 //=====================================================
 void CRanking::SetRank(void)
 {
+	// 変数宣言
+	bool bNewRank = false;
+
 	// 戦績の取得
 	CRecord* pRecord = CRecord::GetInstance();
 
 	// ソート
 	SortRank();
 
-	//for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
-	//{
-	//	if (pRecord != nullptr)
-	//	{
+	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+	{
+		if (pRecord != nullptr)
+		{
+			int nNewScore = pRecord->GetDestroy(nCount);
 
-	//	}
+			if (nNewScore > m_aRankScore[RANK::NUM_MAX - 1])
+			{// 最小値を越したら代入
+				m_aRankScore[RANK::NUM_MAX - 1] = nNewScore;
 
-	//	if (> m_aRankScore[RANK::NUM_MAX - 1])
-	//	{// 最小値を越したら代入
-	//		m_aRankScore[RANK::NUM_MAX - 1] = nScore;
+				// 再ソート
+				SortRank();
 
-	//		// 再ソート
-	//		SortRank();
+				bNewRank = true;
+			}
+		}
+	}
 
-	//		for (int nCnt = 0; nCnt < RANK::NUM_MAX; nCnt++)
-	//		{// 足した値と合致する記録を探す
-	//			if (nScore == m_aRankScore[nCnt])
-	//			{// ニューレコード番号を記録
-	//				m_nRankUpdate = nCnt;
-	//			}
-	//		}
-	//	}
-	//}
+	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+	{
+		if (pRecord != nullptr &&
+			bNewRank == true)
+		{
+			int nNewScore = pRecord->GetDestroy(nCount);
 
+			for (int nCnt = 0; nCnt < RANK::NUM_MAX; nCnt++)
+			{// 足した値と合致する記録を探す
+				if (nNewScore == m_aRankScore[nCnt])
+				{// ニューレコード番号を記録
+					m_aUpdateIdx[nCount] = nCnt;
+				}
+			}
+		}
+
+		if (m_infoVisualUi.apNumRank[nCount] == nullptr)
+		{
+			// ランキングの数字の生成
+			m_infoVisualUi.apNumRank[nCount] = CNumber::Create(4, m_aRankScore[nCount]);
+		}
+	}
+
+
+
+	// ランクの数字を表示
+	SetRankNum();
 
 	// 保存処理
 #ifndef _DEBUG
-	Save();
+	SaveRank();
 #endif
+}
+
+//=====================================================
+// 設定処理
+//=====================================================
+void CRanking::SetRankNum(void)
+{
+	// 数字の設定
+	for (int nCount = 0; nCount < RANK::NUM_MAX; nCount++)
+	{
+		if (m_infoVisualUi.apNumRank[nCount] != nullptr)
+		{
+			// 値の設定
+			m_infoVisualUi.apNumRank[nCount]->SetPosition(RANK_NUM_POS[nCount]);
+			m_infoVisualUi.apNumRank[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_HEIGHT);
+
+			// 順位の生成
+			CObject2D* pObject2D = CObject2D::Create();
+			pObject2D->SetPosition(RANK_NUM_POS[nCount] + RANK_POS_PLUS);
+			pObject2D->SetSize(RANK_NUM_WIDTH, RANK_NUM_HEIGHT);
+
+			int nIdx = CTexture::GetInstance()->Regist(RANK_NUM_TEX[nCount]);
+			pObject2D->SetIdxTexture(nIdx);
+			pObject2D->SetVtx();
+		}
+	}
 }
 
 //=====================================================
@@ -810,7 +896,8 @@ void CRanking::SortRank(void)
 {
 	for (int nCntRanking = 0; nCntRanking < RANK::NUM_MAX - 1; nCntRanking++)
 	{//ランキングをソート
-	 //左端の値を最大値とする
+	
+		// 左端の値を最大値とする
 		int nTop = nCntRanking;
 
 		for (int nCount2 = nCntRanking + 1; nCount2 < RANK::NUM_MAX; nCount2++)
@@ -853,7 +940,8 @@ void CRanking::SaveRank(void)
 
 		//バイナリファイルに書き込む
 		fwrite(&m_aRankScore[0], sizeof(int), RANK::NUM_MAX, pFile);
-
+		fwrite(&m_aRankFace[0], sizeof(int), RANK::NUM_MAX, pFile);
+		
 		//ファイルを閉じる
 		fclose(pFile);
 	}
@@ -879,6 +967,7 @@ void CRanking::LoadRank(void)
 
 		//バイナリファイルから読み込む
 		fread(&m_aRankScore[0], sizeof(int), RANK::NUM_MAX, pFile);
+		fread(&m_aRankFace[0], sizeof(int), RANK::NUM_MAX, pFile);
 
 		//ファイルを閉じる
 		fclose(pFile);
