@@ -95,6 +95,11 @@ HRESULT CLight::Init(void)
 	// F‚Ì‰Šú‰»
 	ResetColDest();
 
+	for (int i = 0; i < MAX_LIGHT; i++)
+	{
+		m_aInfo[i].col = INTIIAL_COLOR[i];
+	}
+
 	return S_OK;
 }
 
