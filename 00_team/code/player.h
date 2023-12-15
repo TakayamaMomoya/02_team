@@ -84,6 +84,7 @@ public:
 	void EnableWeapon(bool bEnable);
 	void SetState(STATE state) { m_info.state = state; }
 	float GetLife(void) { return m_info.fLife; }
+	void SetPosition(D3DXVECTOR3 pos);
 
 private:
 	enum MOTION

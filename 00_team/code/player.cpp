@@ -1369,6 +1369,25 @@ void CPlayer::Draw(void)
 }
 
 //=====================================================
+// ˆÊ’uİ’è
+//=====================================================
+void CPlayer::SetPosition(D3DXVECTOR3 pos)
+{
+	CCharacterDiv::SetPosition(pos);
+
+	if (m_info.pArrow != nullptr)
+	{// –îˆó‚Ì’Ç]
+		D3DXVECTOR3 rot = GetRot();
+		D3DXVECTOR3 posArrow = pos;
+
+		posArrow.y = ARROW_POSY;
+
+		m_info.pArrow->SetPosition(posArrow);
+		m_info.pArrow->SetRot(rot);
+	}
+}
+
+//=====================================================
 // •Šíİ’è
 //=====================================================
 void CPlayer::SetWeapon(CWeapon::TYPE type)
