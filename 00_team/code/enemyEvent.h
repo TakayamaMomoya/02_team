@@ -23,6 +23,7 @@ public:
 	~CEnemyEvent();	// デストラクタ
 
 	static CEnemyEvent *Create(float fLife = 10.0f,float fDelay = 10.0f);
+	static CEnemyEvent *GetInstace(void) { return m_pEnemyEvent; }
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
@@ -35,6 +36,8 @@ private:
 	float m_fScaleTime;	// タイムスケール
 	float m_fDelay;	// イベント発生までのディレイ
 	float m_fLife;	// 寿命
+
+	static CEnemyEvent *m_pEnemyEvent;	// 自身のポインタ
 };
 
 #endif

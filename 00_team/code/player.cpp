@@ -38,16 +38,16 @@ namespace
 {
 const char* BODY_PATH_LOWER[NUM_PLAYER] =
 {// 下半身のパス
-	"data\\MOTION\\motionPotatoman04_lower.txt",
-	"data\\MOTION\\motionPotatoman03_lower.txt",
+	"data\\MOTION\\motionPotatoman01_lower.txt",
+	"data\\MOTION\\motionPotatoman02_lower.txt",
 	"data\\MOTION\\motionPotatoman03_lower.txt",
 	"data\\MOTION\\motionPotatoman04_lower.txt",
 };
 
 const char* BODY_PATH_UPPER[NUM_PLAYER] =
 {// 上半身のパス
-	"data\\MOTION\\motionPotatoman04_upper.txt",
-	"data\\MOTION\\motionPotatoman03_upper.txt",
+	"data\\MOTION\\motionPotatoman01_upper.txt",
+	"data\\MOTION\\motionPotatoman02_upper.txt",
 	"data\\MOTION\\motionPotatoman03_upper.txt",
 	"data\\MOTION\\motionPotatoman04_upper.txt",
 };
@@ -538,6 +538,13 @@ void CPlayer::InputAttack(void)
 
 	if (nMotionUpper != MOTION_PUNCH)
 	{
+		if (pSound != nullptr && m_bSound == false)
+		{
+			pSound->Play(pSound->LABEL_SE_SWING);
+
+			m_bSound = true;
+		}
+
 		if (m_info.pWeapon != nullptr)
 		{// 武器の攻撃
 			bool bEnable = m_info.pWeapon->IsEnable();
@@ -579,13 +586,6 @@ void CPlayer::InputEmote(void)
 
 	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_UP, nID))
 	{// 上ボタンのモーション
-		if (pSound != nullptr && m_bSound == false)
-		{
-			pSound->Play(pSound->LABEL_SE_EMOTE_UP);
-
-			m_bSound = true;
-		}
-
 		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE00);
 		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE00);
 
@@ -832,6 +832,7 @@ void CPlayer::ManageMotion(void)
 	}
 	
 	CInputJoypad* pJoyPad = CInputJoypad::GetInstance();
+	CSound* pSound = CSound::GetInstance();
 
 	if (pJoyPad == nullptr)
 	{
@@ -1019,6 +1020,11 @@ void CPlayer::ManageMotion(void)
 			if (nMotionUpper != MOTION_PUNCH)
 			{
 				SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_PUNCH);
+
+				if (pSound != nullptr)
+				{
+					pSound->Play(pSound->LABEL_SE_SWING);
+				}
 			}
 		}
 		// 所有武器
