@@ -14,6 +14,8 @@
 
 #include "scene.h"
 
+#include "record.h"
+
 //*****************************************************
 // 前方宣言
 //*****************************************************
@@ -64,6 +66,8 @@ public:
 	HRESULT InitUi(void);
 	HRESULT InitObj(void);
 
+	void SetRecordGenre(void);
+
 	void UpdateDirection(void);
 	HRESULT SetDirection(DIRECTION_TYPE type);
 
@@ -86,10 +90,11 @@ private:
 		CMotion* apModelActor[ACTOR_TYPE_MAX];	// プレイヤー
 	};
 
-	SInfoVisualUi m_infoVisualUi;	// UIの見た目関連の情報
-	SInfoVisualObj m_infoVisualObj;	// オブジェクトの見た目関連の処理
-	DIRECTION_TYPE m_typeDirection;	// 演出の種類
-	int m_nDirectionCnt;			// 演出カウント
+	SInfoVisualUi m_infoVisualUi;		// UIの見た目関連の情報
+	SInfoVisualObj m_infoVisualObj;		// オブジェクトの見た目関連の処理
+	CRecord::GENRE_TYPE m_typeGenre;	// 戦績の種類
+	DIRECTION_TYPE m_typeDirection;		// 演出の種類
+	int m_nDirectionCnt;				// 演出カウント
 };
 
 #endif
