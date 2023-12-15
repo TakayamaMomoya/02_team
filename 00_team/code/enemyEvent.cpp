@@ -18,7 +18,7 @@
 //*****************************************************
 namespace
 {
-const float INITIAL_LIFE = 10.0f;	// 初期寿命
+const float INITIAL_SCALE = 0.5f;	// 初期のタイムスケール
 }
 
 //=====================================================
@@ -27,6 +27,8 @@ const float INITIAL_LIFE = 10.0f;	// 初期寿命
 CEnemyEvent::CEnemyEvent(int nPriority) : CObject(nPriority)
 {
 	m_fLife = 0.0f;
+	m_fDelay = 0.0f;
+	m_fScaleTime = 0.0f;
 }
 
 //=====================================================
@@ -40,7 +42,7 @@ CEnemyEvent::~CEnemyEvent()
 //=====================================================
 // 生成処理
 //=====================================================
-CEnemyEvent *CEnemyEvent::Create(void)
+CEnemyEvent *CEnemyEvent::Create(float fLife, float fDelay)
 {
 	CEnemyEvent *pEnemyEvent = nullptr;
 
@@ -50,6 +52,9 @@ CEnemyEvent *CEnemyEvent::Create(void)
 
 		if (pEnemyEvent != nullptr)
 		{
+			pEnemyEvent->m_fLife = fLife;
+			pEnemyEvent->m_fDelay = fDelay;
+
 			// 初期化
 			pEnemyEvent->Init();
 		}
@@ -63,26 +68,7 @@ CEnemyEvent *CEnemyEvent::Create(void)
 //=====================================================
 HRESULT CEnemyEvent::Init(void)
 {
-	m_fLife = INITIAL_LIFE;
-
-	// ライトを赤くする
-	CLight *pLight = CManager::GetLight();
-
-	if (pLight != nullptr)
-	{
-		for (int i = 0; i < MAX_LIGHT; i++)
-		{
-			pLight->SetColDest(i, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
-		}
-	}
-
-	// 敵の出現頻度を変更
-	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
-
-	if (pEnemyManager != nullptr)
-	{
-		pEnemyManager->SetTimeScale(0.5f);
-	}
+	m_fScaleTime = INITIAL_SCALE;
 
 	return S_OK;
 }
@@ -120,11 +106,49 @@ void CEnemyEvent::Update(void)
 	// 寿命での消滅
 	float fTick = CManager::GetTick();
 
-	m_fLife -= fTick;
-
-	if (m_fLife <= 0.0f)
+	if (m_fDelay > 0.0f)
 	{
-		Uninit();
+		// ディレイ
+		m_fDelay -= fTick;
+
+		if (m_fDelay <= 0.0f)
+		{// イベントの開始
+			StartEvent();
+		}
+	}
+	else
+	{// イベントの更新
+		m_fLife -= fTick;
+
+		if (m_fLife <= 0.0f)
+		{
+			Uninit();
+		}
+	}
+}
+
+//=====================================================
+// イベントの開始
+//=====================================================
+void CEnemyEvent::StartEvent(void)
+{
+	// ライトを赤くする
+	CLight *pLight = CManager::GetLight();
+
+	if (pLight != nullptr)
+	{
+		for (int i = 0; i < MAX_LIGHT; i++)
+		{
+			pLight->SetColDest(i, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+	}
+
+	// 敵の出現頻度を変更
+	CEnemyManager *pEnemyManager = CEnemyManager::GetInstance();
+
+	if (pEnemyManager != nullptr)
+	{
+		pEnemyManager->SetTimeScale(m_fScaleTime);
 	}
 }
 
