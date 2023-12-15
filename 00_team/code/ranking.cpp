@@ -250,8 +250,8 @@ namespace
 		D3DXVECTOR3(4.0f, 0.0f, 0.0f),
 	};
 
-	// 演出を変えるまでの時間
-	const int DIRECTION_CHANGE_COUNT = 300;
+	const int DIRECTION_CHANGE_COUNT = 300;	// 演出を変えるまでの時間
+	const int GENRE_CHANGE_COUNT = 300;		// 種類を変えるまでの時間
 }
 
 //=====================================================
@@ -263,6 +263,7 @@ CRanking::CRanking()
 	ZeroMemory(&m_infoVisualObj,sizeof(m_infoVisualObj)); 
 	m_typeDirection = (DIRECTION_TYPE)0;
 	m_nDirectionCnt = 0;
+	m_nGenreCnt = 0;
 }
 
 //=====================================================
@@ -560,9 +561,6 @@ HRESULT CRanking::InitObj(void)
 		}
 	}
 
-	m_typeGenre = CRecord::GENRE_TYPE_MADMAN;
-	SetRecordGenre();
-
 	return S_OK;
 }
 
@@ -623,13 +621,13 @@ void CRanking::SetRecordGenre(void)
 				{
 				case CRecord::GENRE_TYPE_DESTROY:
 
-					nRank = nRank = pRecord->GetDestroyRank(nCount);
+					nRank = pRecord->GetDestroyRank(nCount);
 					nNumRank = pRecord->GetDestroy(nCount);
 
 					break;
 				case CRecord::GENRE_TYPE_MADMAN:
 
-					nRank = nRank = pRecord->GetMadmanRank(nCount);
+					nRank = pRecord->GetMadmanRank(nCount);
 					nNumRank = pRecord->GetMadman(nCount);
 
 					break;
@@ -676,22 +674,54 @@ void CRanking::SetRecordGenre(void)
 //=====================================================
 void CRanking::UpdateDirection(void)
 {
+	// 演出カウントが設定値以下
 	if (m_nDirectionCnt <= DIRECTION_CHANGE_COUNT)
 	{
+		// カウントを加算
 		m_nDirectionCnt++;
 	}
 	else
 	{
+		// カウントの初期化
 		m_nDirectionCnt = 0;
 
+		// 演出番号を増やす
 		m_typeDirection = (DIRECTION_TYPE)(m_typeDirection + 1);
 
+		// 演出が最大数
 		if (m_typeDirection >= DIRECTION_TYPE_MAX)
 		{
+			// 演出を初期化
 			m_typeDirection = (DIRECTION_TYPE)0;
 		}
 
-		SetDirection(m_typeDirection);
+		// 演出を設定
+		SetDirection();
+	}
+
+	// 種類カウントが設定値以下
+	if (m_nGenreCnt <= GENRE_CHANGE_COUNT)
+	{
+		// カウントを増やす
+		m_nGenreCnt++;
+	}
+	else
+	{
+		// カウントを初期化
+		m_nGenreCnt = 0;
+
+		// 戦績種類を増やす
+		m_typeGenre = (CRecord::GENRE_TYPE)(m_typeGenre + 1);
+
+		// 戦績種類が最大値
+		if (m_typeGenre >= CRecord::GENRE_TYPE_MAX)
+		{
+			// 戦績種類を初期化
+			m_typeGenre = (CRecord::GENRE_TYPE)0;
+		}
+
+		// 戦績種類の設定
+		SetRecordGenre();
 	}
 
 	for (int nCount = 0; nCount < ACTOR_TYPE_MAX; nCount++)
@@ -706,13 +736,10 @@ void CRanking::UpdateDirection(void)
 }
 
 //=====================================================
-// 演出の初期化処理
+// 演出の設定処理
 //=====================================================
-HRESULT CRanking::SetDirection(DIRECTION_TYPE type)
+HRESULT CRanking::SetDirection(void)
 {
-	// 演出種類番号を設定
-	m_typeDirection = type;
-
 	for (int nCount = 0; nCount < ACTOR_TYPE_MAX; nCount++)
 	{
 		if (m_infoVisualObj.apModelActor[nCount] != nullptr)
