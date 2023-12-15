@@ -49,11 +49,19 @@ public:
 	float GetRadius(void) { return m_fRadius; }
 
 private:
+	struct SInfoEvent
+	{// イベントの情報
+		float fDelayMax;	// ディレイの最大
+		float fDelayMin;	// ディレイの最小
+		float fTimeMax;	// 継続時間の最大
+		float fTimeMin;	// 継続時間の最小
+	};
+
 	void Load(void);
 	void ApplyInfo(FILE *pFile,char *pTemp);
 	void UpdateEscape(void);
 	void SwapModel(int nProgress);
-	void Debug(void);
+	void CreateEnemyEvent(void);
 
 	float m_fRadius;	// 判定の半径
 	float m_fSpeed;	// 上昇速度
@@ -62,6 +70,7 @@ private:
 	int m_nProgress;	// 進行状況
 	STATE m_state;	// 状態
 	CCollisionSphere *m_pCollisionRocket;	// ゴール判定
+	SInfoEvent m_infoEvent;	// イベントの情報
 	static CRocket *m_pRocket;	// 自身のポインタ
 };
 
