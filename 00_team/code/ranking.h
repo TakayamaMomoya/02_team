@@ -27,6 +27,14 @@ class CObject3D;
 class CMotion;
 
 //*****************************************************
+// 定数定義
+//*****************************************************
+namespace RANK
+{
+	const int NUM_MAX = 3;	// 最大数
+}
+
+//*****************************************************
 // クラスの定義
 //*****************************************************
 class CRanking : public CScene
@@ -63,6 +71,12 @@ public:
 	void Update(void);
 	void Draw(void);
 
+	void SetRank(void);
+	void ResetRank(void);
+	void SortRank(void);
+	void SaveRank(void);
+	void LoadRank(void);
+
 	HRESULT InitUi(void);
 	HRESULT InitObj(void);
 
@@ -96,6 +110,8 @@ private:
 	DIRECTION_TYPE m_typeDirection;		// 演出の種類
 	int m_nDirectionCnt;				// 演出カウント
 	int m_nGenreCnt;					// 種類カウント
+
+	int m_aRankScore[RANK::NUM_MAX];	// ランキングの値
 };
 
 #endif

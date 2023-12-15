@@ -144,7 +144,7 @@ void CEnemyEvent::StartEvent(void)
 	{
 		for (int i = 0; i < MAX_LIGHT; i++)
 		{
-			pLight->SetColDest(i, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+			pLight->SetColDest(i, D3DXCOLOR(1.0f, 0.4f, 0.4f, 1.0f));
 		}
 	}
 

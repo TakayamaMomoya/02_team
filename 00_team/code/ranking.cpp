@@ -12,6 +12,8 @@
 #include "ranking.h"
 #include "main.h"
 
+#include <stdio.h>
+
 #include "manager.h"
 #include "camera.h"
 #include "record.h"
@@ -252,6 +254,8 @@ namespace
 
 	const int DIRECTION_CHANGE_COUNT = 300;	// 演出を変えるまでの時間
 	const int GENRE_CHANGE_COUNT = 300;		// 種類を変えるまでの時間
+
+	const char* RANKING_BIN_FILE = "data\\BINARY\\ranking";	// ランキングのファイル名
 }
 
 //=====================================================
@@ -755,4 +759,132 @@ HRESULT CRanking::SetDirection(void)
 	}
 
 	return S_OK;
+}
+
+//=====================================================
+// 設定処理
+//=====================================================
+void CRanking::SetRank(void)
+{
+	// 戦績の取得
+	CRecord* pRecord = CRecord::GetInstance();
+
+	// ソート
+	SortRank();
+
+	//for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+	//{
+	//	if (pRecord != nullptr)
+	//	{
+
+	//	}
+
+	//	if (> m_aRankScore[RANK::NUM_MAX - 1])
+	//	{// 最小値を越したら代入
+	//		m_aRankScore[RANK::NUM_MAX - 1] = nScore;
+
+	//		// 再ソート
+	//		SortRank();
+
+	//		for (int nCnt = 0; nCnt < RANK::NUM_MAX; nCnt++)
+	//		{// 足した値と合致する記録を探す
+	//			if (nScore == m_aRankScore[nCnt])
+	//			{// ニューレコード番号を記録
+	//				m_nRankUpdate = nCnt;
+	//			}
+	//		}
+	//	}
+	//}
+
+
+	// 保存処理
+#ifndef _DEBUG
+	Save();
+#endif
+}
+
+//=====================================================
+// ランキングソート
+//=====================================================
+void CRanking::SortRank(void)
+{
+	for (int nCntRanking = 0; nCntRanking < RANK::NUM_MAX - 1; nCntRanking++)
+	{//ランキングをソート
+	 //左端の値を最大値とする
+		int nTop = nCntRanking;
+
+		for (int nCount2 = nCntRanking + 1; nCount2 < RANK::NUM_MAX; nCount2++)
+		{//左の値と対象の値を比較
+			if (m_aRankScore[nTop] < m_aRankScore[nCount2])
+			{//もし比較した数字が小さかったら
+				nTop = nCount2;
+			}
+		}
+
+		//要素の入れ替え
+		int nTemp = m_aRankScore[nCntRanking];
+		m_aRankScore[nCntRanking] = m_aRankScore[nTop];
+		m_aRankScore[nTop] = nTemp;
+	}
+}
+
+//=====================================================
+// ランキング情報リセット
+//=====================================================
+void CRanking::ResetRank(void)
+{
+	//外部ファイル読み込み
+	LoadRank();
+}
+
+//=====================================================
+// ランキング情報保存
+//=====================================================
+void CRanking::SaveRank(void)
+{
+	//ポインタ宣言
+	FILE* pFile;
+
+	//ファイルを開く
+	pFile = fopen(RANKING_BIN_FILE, "wb");
+
+	if (pFile != NULL)
+	{//ファイルが開けた場合
+
+		//バイナリファイルに書き込む
+		fwrite(&m_aRankScore[0], sizeof(int), RANK::NUM_MAX, pFile);
+
+		//ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{//ファイルが開けなかった場合
+		assert(("ランキング保存に失敗", false));
+	}
+}
+
+//=====================================================
+//ランキング情報読み込み
+//=====================================================
+void CRanking::LoadRank(void)
+{
+	//ポインタ宣言
+	FILE* pFile;
+
+	//ファイルを開く
+	pFile = fopen(RANKING_BIN_FILE, "rb");
+
+	if (pFile != NULL)
+	{//ファイルが開けた場合
+
+		//バイナリファイルから読み込む
+		fread(&m_aRankScore[0], sizeof(int), RANK::NUM_MAX, pFile);
+
+		//ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{//ファイルが開けなかった場合
+		assert(("ランキング読み込みに失敗", false));
+	}
 }

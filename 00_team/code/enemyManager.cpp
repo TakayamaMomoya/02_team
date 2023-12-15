@@ -280,6 +280,12 @@ void CEnemyManager::Uninit(void)
 {
 	m_pEnemyManager = nullptr;
 
+	if (m_pAngleSpawn != nullptr)
+	{
+		delete[] m_pAngleSpawn;
+		m_pAngleSpawn = nullptr;
+	}
+
 	Release();
 }
 
