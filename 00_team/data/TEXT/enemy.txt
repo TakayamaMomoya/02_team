@@ -17,23 +17,19 @@
 #====================================================================
 # スポーン角度の設定
 #====================================================================
-NUM_SPAWN_ANGLE = 16
+NUM_SPAWN_ANGLE = 12
 
+ANGLE = 345.0
 ANGLE = 0.0
 ANGLE = 15.0
-ANGLE = 30.0
-ANGLE = 45.0
-ANGLE = 60.0
 ANGLE = 75.0
 ANGLE = 90.0
 ANGLE = 105.0
-ANGLE = 120.0
-ANGLE = 135.0
-ANGLE = 150.0
 ANGLE = 165.0
 ANGLE = 180.0
-ANGLE = 210.0
-ANGLE = 220.0
-ANGLE = 230.0
+ANGLE = 195.0
+ANGLE = 255.0
+ANGLE = 270.0
+ANGLE = 285.0
 
 END_SCRIPT
