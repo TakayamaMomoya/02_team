@@ -1,0 +1,134 @@
+#====================================================================
+#
+# ギミック配置情報[gimmick.txt]
+# Author：Momoya Takayama
+#
+#====================================================================
+
+#====================================================================
+# 扉の設定
+#====================================================================
+DOORSET
+	POS = -438.0 0.0 -270.0
+	ROT = 0.0 0.0 0.0
+	ROTDEST = 90.0
+END_DOORSET
+
+DOORSET
+	POS = -354.0 0.0 -270.0
+	ROT = 0.0 180.0 0.0
+	ROTDEST = 90.0
+END_DOORSET
+
+DOORSET
+	POS = -288.0 0.0 -360.0
+	ROT = 0.0 90.0 0.0
+	ROTDEST = 90.0
+END_DOORSET
+
+DOORSET
+	POS = -288.0 0.0 -402.0
+	ROT = 0.0 90.0 0.0
+	ROTDEST = 90.0
+END_DOORSET
+
+
+
+#====================================================================
+# コンテナの設定
+#====================================================================
+CONTAINERSET
+	POS = 430.0 0.0 -50.0
+	ROT = 0.0 0.0 0.0
+END_CONTAINERSET
+
+CONTAINERSET
+	POS = 430.0 0.0 50.0
+	ROT = 0.0 0.0 0.0
+END_CONTAINERSET
+
+CONTAINERSET
+	POS = -430.0 0.0 -50.0
+	ROT = 0.0 0.0 0.0
+END_CONTAINERSET
+
+CONTAINERSET
+	POS = -430.0 0.0 50.0
+	ROT = 0.0 0.0 0.0
+END_CONTAINERSET
+
+
+CONTAINERSET
+	POS = -160.0 0.0 -430.0
+	ROT = 0.0 0.0 0.0
+END_CONTAINERSET
+
+CONTAINERSET
+	POS = -10.0 0.0 -430.0
+	ROT = 0.0 0.0 0.0
+END_CONTAINERSET
+
+CONTAINERSET
+	POS = 140.0 0.0 -430.0
+	ROT = 0.0 0.0 0.0
+END_CONTAINERSET
+
+
+CONTAINERSET
+	POS = -160.0 0.0 470.0
+	ROT = 0.0 0.0 0.0
+END_CONTAINERSET
+
+CONTAINERSET
+	POS = -10.0 0.0 470.0
+	ROT = 0.0 0.0 0.0
+END_CONTAINERSET
+
+CONTAINERSET
+	POS = 140.0 0.0 470.0
+	ROT = 0.0 0.0 0.0
+END_CONTAINERSET
+
+
+CONTAINERSET
+	POS = -410.0 0.0 -450.0
+	ROT = 0.0 0.0 0.0
+END_CONTAINERSET
+
+CONTAINERSET
+	POS = 410.0 0.0 -450.0
+	ROT = 0.0 0.0 0.0
+END_CONTAINERSET
+
+#====================================================================
+# 部品の設置
+#====================================================================
+
+#====================================================================
+# 木箱の設置
+#====================================================================
+BOXSET
+	POS = -410.0 0.0 450.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 1
+END_BOXSET
+
+BOXSET
+	POS = 410.0 0.0 450.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 2
+END_BOXSET
+
+BOXSET
+	POS = -410.0 0.0 -410.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 1
+END_BOXSET
+
+BOXSET
+	POS = 410.0 0.0 -410.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 1
+END_BOXSET
+
+END_SCRIPT

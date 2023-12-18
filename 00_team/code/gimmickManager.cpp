@@ -20,7 +20,7 @@
 //*****************************************************
 namespace
 {
-	const char* MAP_PATH = "data\\MAP\\gimmick.txt";	// 配置情報のパス
+	const char* MAP_PATH = "data\\MAP\\gimmick1.txt";	// 配置情報のパス
 }
 
 //*****************************************************
