@@ -105,7 +105,7 @@ HRESULT CGame::Init(void)
 	CSkybox::Create();
 
 	// ブロックの読み込み
-	CBlock::Load("data\\MAP\\map00.bin");
+	CBlock::Load("data\\MAP\\map01.bin");
 
 	// プレイヤーの生成
 	CPlayerManager *pPlayerManger = CPlayerManager::GetInstance();
