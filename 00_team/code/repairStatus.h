@@ -14,17 +14,12 @@
 #include "object3D.h"
 
 //===============================================
-// 前方宣言
-//===============================================
-class CUI;
-
-//===============================================
 // 修理状況クラス
 //===============================================
-class CRepairStatus : public CObject3D
+class CRepairStatus : public CObject
 {
 public:		// 誰でもアクセス可能 [アクセス指定子]
-	CRepairStatus(int nPriority = 3);						// デフォルトコンストラクタ
+	CRepairStatus(int nPriority = 3);		// デフォルトコンストラクタ
 	~CRepairStatus();						// デストラクタ
 
 	static CRepairStatus* Create(int nPriority = 3);
@@ -34,10 +29,10 @@ public:		// 誰でもアクセス可能 [アクセス指定子]
 	void Update(void);
 	void Draw(void);
 
-	//static CRepairStatus* GetInstance(void) { return m_pRepairStatus; }
-
 private:	// 自分のみアクセス可能 [アクセス指定子]
 	static CRepairStatus* m_pRepairStatus;	// 自身のポインタ
+	CObject3D* m_pStatus;					// ゲージのポインタ
+	CObject3D* m_pFrame;					// 枠のポインタ
 };
 
 #endif
