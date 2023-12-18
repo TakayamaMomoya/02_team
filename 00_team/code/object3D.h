@@ -38,6 +38,7 @@ public:
 	void SetRot(D3DXVECTOR3 rot = { D3DX_PI * 0.5f,0.0f,0.0f }) { m_rot = rot; }
 	void SetIdxTexture(int nIdx) { m_nIdxTexture = nIdx; }
 	int GetIdxTexture(void) { return m_nIdxTexture; }
+	D3DXCOLOR GetColor(void) { return m_col; }
 	void SetColor(D3DXCOLOR col);
 	void SetTex(D3DXVECTOR2 rd, D3DXVECTOR2 lu);
 	void SetVtx(void);
