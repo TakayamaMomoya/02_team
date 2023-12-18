@@ -172,6 +172,7 @@ private:
 	void ManageMotion(void);
 	void ManageAttack(void);
 	void ManageLife(void);
+	void ResizeLife(void);
 	void BlowEnemy(CObject *pObj);
 	void BlowPlayer(CObject *pObj);
 	void DispLife(void);
