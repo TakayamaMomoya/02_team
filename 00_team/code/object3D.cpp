@@ -19,7 +19,7 @@
 //=====================================================
 CObject3D::CObject3D(int nPriority) : CObject(nPriority)
 {
-	m_col = { 0.0f,0.0f,0.0f,0.0f };
+	m_col = { 1.0f,1.0f,1.0f,1.0f };
 	m_pos = { 0.0f,0.0f,0.0f };
 	m_posOld = { 0.0f,0.0f,0.0f };
 	m_rot = { 0.0f,0.0f,0.0f };
