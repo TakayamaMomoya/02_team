@@ -30,6 +30,7 @@
 #include "rocket.h"
 #include "goal.h"
 #include "animEffect3D.h"
+#include "texture.h"
 
 //*****************************************************
 // 定数定義
@@ -66,6 +67,9 @@ const float ARROW_WIDTH = 30.0f;	// 矢印の幅
 const float ARROW_HEIGHT = 50.0f;	// 矢印の高さ
 const float GRAVITY = 1.58f;	// 重力
 const float POW_PUNCH_UP = 15.0f;	// パンチで飛び上がるジャンプ量
+const float SPEED_LIFE_FADE = 0.01f;	// ライフ表示の消える速度
+const float SIZE_LIFE = 50.0f;	// ライフ表示のサイズ
+const D3DXVECTOR3 POS_LIFE = { 50.0f,50.0f,100.0f };	// ライフ表示の位置
 
 const int HAND_PARTS_NUM = 6;				// 手の番号
 const float MOTION_STICK_RUNAWAY = 0.1f;	// スティックの暴走判定
@@ -269,6 +273,9 @@ void CPlayer::Uninit(void)
 		m_info.pClsnAttack = nullptr;
 	}
 
+	// ライフ表示の削除
+	DeleteLife();
+
 	// 継承クラスの終了
 	CCharacterDiv::Uninit();
 }
@@ -421,6 +428,9 @@ void CPlayer::Update(void)
 
 	// 攻撃判定管理
 	ManageAttack();
+
+	// ライフ表示の管理
+	ManageLife();
 
 	// 行動範囲
 	LimidPostion();
@@ -1286,6 +1296,64 @@ void CPlayer::ManageAttack(void)
 }
 
 //=====================================================
+// ライフ表示の管理
+//=====================================================
+void CPlayer::ManageLife(void)
+{
+	if (m_info.pLife == nullptr || m_info.pLifeFrame == nullptr)
+	{
+		return;
+	}
+
+	// 位置の設定
+	D3DXVECTOR3 pos = GetPosition();
+	pos += POS_LIFE;
+
+	m_info.pLife->SetPosition(pos);
+	m_info.pLifeFrame->SetPosition(pos);
+
+	// 色の設定
+	D3DXCOLOR col = m_info.pLife->GetColor();
+
+	col.a -= SPEED_LIFE_FADE;
+
+	m_info.pLife->SetColor(col);
+	m_info.pLifeFrame->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, col.a));
+
+	// サイズ調整
+	ResizeLife();
+
+	if (col.a <= 0.0f)
+	{// 透明になったら削除
+		DeleteLife();
+	}
+}
+
+//=====================================================
+// ライフ表示のサイズ調整
+//=====================================================
+void CPlayer::ResizeLife(void)
+{
+	if (m_info.pLife == nullptr)
+	{
+		return;
+	}
+
+	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
+
+	if (pPlayerManager == nullptr)
+	{
+		return;
+	}
+
+	float fInitialLife = pPlayerManager->GetPlayerParam().fInitialLife;
+
+	float fRate = m_info.fLife / fInitialLife;
+
+	m_info.pLife->SetSize(SIZE_LIFE * fRate, SIZE_LIFE * fRate);
+}
+
+//=====================================================
 // 敵を吹き飛ばす処理
 //=====================================================
 void CPlayer::BlowEnemy(CObject *pObj)
@@ -1370,6 +1438,69 @@ void CPlayer::BlowPlayer(CObject *pObj)
 				pPlayer->SetState(STATE_BLOW);
 			}
 		}
+	}
+}
+
+//=====================================================
+// ライフの表示
+//=====================================================
+void CPlayer::DispLife(void)
+{
+	D3DXVECTOR3 pos = GetPosition();
+	pos += POS_LIFE;
+
+	if (m_info.pLifeFrame == nullptr)
+	{
+		m_info.pLifeFrame = CObject3D::Create(pos);
+
+		if (m_info.pLifeFrame != nullptr)
+		{
+			m_info.pLifeFrame->EnableZtest(true);
+			m_info.pLifeFrame->EnableBillboard(true);
+			m_info.pLifeFrame->SetSize(SIZE_LIFE, SIZE_LIFE);
+			m_info.pLifeFrame->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+			m_info.pLifeFrame->SetPosition(pos);
+
+			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\life000.png");
+			m_info.pLifeFrame->SetIdxTexture(nIdx);
+		}
+	}
+
+	if (m_info.pLife == nullptr)
+	{
+		m_info.pLife = CObject3D::Create(pos);
+
+		if (m_info.pLife != nullptr)
+		{
+			m_info.pLife->EnableZtest(true);
+			m_info.pLife->EnableBillboard(true);
+			m_info.pLife->SetSize(SIZE_LIFE, SIZE_LIFE);
+			m_info.pLife->SetPosition(pos);
+
+			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\life000.png");
+			m_info.pLife->SetIdxTexture(nIdx);
+
+			// 初期サイズ調整
+			ResizeLife();
+		}
+	}
+}
+
+//=====================================================
+// ライフ表示の削除
+//=====================================================
+void CPlayer::DeleteLife(void)
+{
+	if (m_info.pLife != nullptr)
+	{
+		m_info.pLife->Uninit();
+		m_info.pLife = nullptr;
+	}
+
+	if (m_info.pLifeFrame != nullptr)
+	{
+		m_info.pLifeFrame->Uninit();
+		m_info.pLifeFrame = nullptr;
 	}
 }
 
@@ -1492,6 +1623,9 @@ void CPlayer::Hit(float fDamage)
 
 				pJoypad->Vibration(nIdxJoypad,CInputJoypad::PADVIB::PADVIB_USE,1.0f,20);
 			}
+
+			// 残りライフの表示
+			DispLife();
 		}
 	}
 }

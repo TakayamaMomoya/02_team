@@ -22,6 +22,7 @@ class CMotion;
 class CCollisionSphere;
 class CCollisionCube;
 class CArrow;
+class CObject3D;
 
 //*****************************************************
 // クラスの定義
@@ -158,6 +159,8 @@ private:
 		CWeapon* pWeapon;			// 武器
 		CItemRepair* pItemRepair;	// 修理アイテム
 		CArrow *pArrow;	// 矢印のポインタ
+		CObject3D *pLifeFrame;	// ライフ表示のフレーム
+		CObject3D *pLife;	// ライフ表示
 	};
 
 	void Input(void);
@@ -168,8 +171,12 @@ private:
 	void ManageState(void);
 	void ManageMotion(void);
 	void ManageAttack(void);
+	void ManageLife(void);
+	void ResizeLife(void);
 	void BlowEnemy(CObject *pObj);
 	void BlowPlayer(CObject *pObj);
+	void DispLife(void);
+	void DeleteLife(void);
 	void CheckDeathEnemy(CObject* pObj);
 	void LimidPostion();
 	void BoardingRocket(void);

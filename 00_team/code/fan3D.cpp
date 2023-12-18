@@ -104,6 +104,8 @@ HRESULT CFan3D::Init(void)
 	// í∏ì_ê›íË
 	SetVtx();
 
+	EnableLighting(false);
+
 	return S_OK;
 }
 
