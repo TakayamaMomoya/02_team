@@ -89,6 +89,7 @@
     <ClCompile Include="code\ranking.cpp" />
     <ClCompile Include="code\record.cpp" />
     <ClCompile Include="code\renderer.cpp" />
+    <ClCompile Include="code\repairStatus.cpp" />
     <ClCompile Include="code\result.cpp" />
     <ClCompile Include="code\rocket.cpp" />
     <ClCompile Include="code\scene.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="code\ranking.h" />
     <ClInclude Include="code\record.h" />
     <ClInclude Include="code\renderer.h" />
+    <ClInclude Include="code\repairStatus.h" />
     <ClInclude Include="code\result.h" />
     <ClInclude Include="code\rocket.h" />
     <ClInclude Include="code\scene.h" />
