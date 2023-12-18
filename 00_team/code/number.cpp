@@ -171,6 +171,19 @@ void CNumber::SetColor(D3DXCOLOR col)
 }
 
 //=====================================================
+// Fæ“¾ˆ—
+//=====================================================
+D3DXCOLOR CNumber::GetColor(void)
+{
+	if (m_apObject[0] != nullptr)
+	{
+		return m_apObject[0]->GetCol();
+	}
+
+	return D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+//=====================================================
 // ¶¬ˆ—
 //=====================================================
 CNumber *CNumber::Create(int nNumPlace,int nValue)

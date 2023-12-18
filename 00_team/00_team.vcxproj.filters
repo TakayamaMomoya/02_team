@@ -11,9 +11,6 @@
     <Filter Include="scene">
       <UniqueIdentifier>{e92b5137-cc4d-43ce-81df-e80756f78452}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI">
-      <UniqueIdentifier>{78d905fd-ee39-486c-8146-903dd869c54d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="enemy">
       <UniqueIdentifier>{01c3d09f-2183-4573-aa6d-b489588a3608}</UniqueIdentifier>
     </Filter>
@@ -25,6 +22,9 @@
     </Filter>
     <Filter Include="weapon">
       <UniqueIdentifier>{66256463-8e1f-42c8-bd07-9615d0d67a2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{78d905fd-ee39-486c-8146-903dd869c54d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -42,12 +42,12 @@ class CRanking : public CScene
 public:
 	
 	// 演出の種類
-	enum DIRECTION_TYPE
+	enum ACTING_TYPE
 	{
-		DIRECTION_TYPE_MARCH = 0,	// 行進
-		DIRECTION_TYPE_RUN_AWAY,	// 逃げる
-		DIRECTION_TYPE_CHASE,		// 追いかける
-		DIRECTION_TYPE_MAX
+		ACTING_TYPE_MARCH = 0,	// 行進
+		ACTING_TYPE_RUN_AWAY,	// 逃げる
+		ACTING_TYPE_CHASE,		// 追いかける
+		ACTING_TYPE_MAX
 	};
 
 	// 役者の種類
@@ -71,20 +71,22 @@ public:
 	void Update(void);
 	void Draw(void);
 
+	HRESULT InitUi(void);
+	HRESULT InitObj(void);
+
+	void SetUiRecord(void);
+	void SetObjActing(void);
+
+	void UpdateUiRecord(void);
+	void UpdateActing(void);
+	void UpdateNum(void);
+
 	void SetRank(void);
 	void ResetRank(void);
 	void SetRankNum(void);
 	void SortRank(void);
 	void SaveRank(void);
 	void LoadRank(void);
-
-	HRESULT InitUi(void);
-	HRESULT InitObj(void);
-
-	void SetRecordGenre(void);
-
-	void UpdateDirection(void);
-	HRESULT SetDirection(void);
 
 private:
 
@@ -110,14 +112,18 @@ private:
 
 	SInfoVisualUi m_infoVisualUi;		// UIの見た目関連の情報
 	SInfoVisualObj m_infoVisualObj;		// オブジェクトの見た目関連の処理
+
 	CRecord::GENRE_TYPE m_typeGenre;	// 戦績の種類
-	DIRECTION_TYPE m_typeDirection;		// 演出の種類
-	int m_nDirectionCnt;				// 演出カウント
+	ACTING_TYPE m_typeActing;			// 演技の種類
+
+	int m_nActingCnt;					// 演技カウント
 	int m_nGenreCnt;					// 種類カウント
 
 	int m_aRankScore[CRecord::GENRE_TYPE_MAX][RANK::NUM_MAX];	// ランキングの値
 	int m_aRankFace[CRecord::GENRE_TYPE_MAX][RANK::NUM_MAX];	// 顔の番号
-	int m_aUpdateIdx[NUM_PLAYER];		// 更新したランキングの番号
+	int m_aUpdateIdx[CRecord::GENRE_TYPE_MAX][NUM_PLAYER];		// 更新したランキングの番号
+	int m_aUpdateRank[CRecord::GENRE_TYPE_MAX][NUM_PLAYER];		// ランキングの更新の有無
+	bool m_aIsAlphaChange[CRecord::GENRE_TYPE_MAX][NUM_PLAYER];	// α値の変化
 };
 
 #endif

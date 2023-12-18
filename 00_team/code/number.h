@@ -42,6 +42,7 @@ public:
 	float GetWidth(void) { return 0.0f; }	// サイズ取得
 	float GetHeight(void) { return 0.0f; }	// サイズ取得
 	void SetColor(D3DXCOLOR col);
+	D3DXCOLOR GetColor(void);
 
 private:
 	CUI *m_apObject[MAX_PLACE];	// ２Ⅾオブジェクトのポインタ

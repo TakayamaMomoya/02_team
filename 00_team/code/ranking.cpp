@@ -160,8 +160,8 @@ namespace
 		"data\\MOTION\\motionEnemy00.txt",
 		"data\\MOTION\\motionEnemy00.txt",
 	};
-	const D3DXVECTOR3 PLAYER_POS[CRanking::DIRECTION_TYPE_MAX][CRanking::ACTOR_TYPE_MAX] =
-	{// 役者の位置[役者番号][演出番号]
+	const D3DXVECTOR3 PLAYER_POS[CRanking::ACTING_TYPE_MAX][CRanking::ACTOR_TYPE_MAX] =
+	{// 役者の位置[役者番号][演技番号]
 
 		// 行進
 		D3DXVECTOR3(500.0f, 0.0f, 0.0f),
@@ -191,8 +191,8 @@ namespace
 		D3DXVECTOR3(-500.0f, 0.0f,  0.0f),
 
 	};
-	const D3DXVECTOR3 PLAYER_ROT[CRanking::DIRECTION_TYPE_MAX][CRanking::ACTOR_TYPE_MAX] =
-	{// 役者の向き[役者番号][演出番号]
+	const D3DXVECTOR3 PLAYER_ROT[CRanking::ACTING_TYPE_MAX][CRanking::ACTOR_TYPE_MAX] =
+	{// 役者の向き[役者番号][演技番号]
 
 		// 行進
 		D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f),
@@ -222,8 +222,8 @@ namespace
 		D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f),
 
 	};
-	const D3DXVECTOR3 PLAYER_MOVE[CRanking::DIRECTION_TYPE_MAX][CRanking::ACTOR_TYPE_MAX] =
-	{// 役者の移動量[役者番号][演出番号]
+	const D3DXVECTOR3 PLAYER_MOVE[CRanking::ACTING_TYPE_MAX][CRanking::ACTOR_TYPE_MAX] =
+	{// 役者の移動量[役者番号][演技番号]
 
 		// 行進
 		D3DXVECTOR3(-4.0f, 0.0f, 0.0f),
@@ -253,7 +253,7 @@ namespace
 		D3DXVECTOR3(4.0f, 0.0f, 0.0f),
 	};
 
-	const int DIRECTION_CHANGE_COUNT = 300;	// 演出を変えるまでの時間
+	const int Acting_CHANGE_COUNT = 300;	// 演技を変えるまでの時間
 	const int GENRE_CHANGE_COUNT = 300;		// 種類を変えるまでの時間
 
 	const char* RANKING_BIN_FILE = "data\\BINARY\\ranking";	// ランキングのファイル名
@@ -275,6 +275,10 @@ namespace
 		"data\\TEXTURE\\UI\\2nd.png",
 		"data\\TEXTURE\\UI\\3rd.png",
 	};
+
+	const float ALPHA_UPPER = 1.0f;			// α値の上限量
+	const float ALPHA_LOWER = 0.25f;		// α値の下限量
+	const float ALPHA_CHANGE = 0.1f;		// α値の変化量
 }
 
 //=====================================================
@@ -284,18 +288,19 @@ CRanking::CRanking()
 {
 	ZeroMemory(&m_infoVisualUi, sizeof(m_infoVisualUi));
 	ZeroMemory(&m_infoVisualObj,sizeof(m_infoVisualObj)); 
-	m_typeDirection = (DIRECTION_TYPE)0;
+	m_typeActing = (ACTING_TYPE)0;
 	m_typeGenre = (CRecord::GENRE_TYPE)0;
-	m_nDirectionCnt = 0;
+	m_nActingCnt = 0;
 	m_nGenreCnt = 0;
 
 	for (int nCount = 0; nCount < CRecord::GENRE_TYPE_MAX; nCount++)
 	{
 		ZeroMemory(&m_aRankScore[nCount][0], sizeof(m_aRankScore[nCount]));
 		ZeroMemory(&m_aRankFace[nCount][0], sizeof(m_aRankScore[nCount]));
+		ZeroMemory(&m_aUpdateIdx[nCount][0], sizeof(m_aUpdateIdx[nCount]));
+		ZeroMemory(&m_aUpdateRank[nCount][0], sizeof(m_aUpdateRank[nCount]));
+		ZeroMemory(&m_aIsAlphaChange[nCount][0], sizeof(m_aIsAlphaChange[nCount]));
 	}
-
-	ZeroMemory(&m_aUpdateIdx[0], sizeof(m_aUpdateIdx));
 }
 
 //=====================================================
@@ -384,8 +389,14 @@ void CRanking::Update(void)
 	// シーンの更新
 	CScene::Update();
 
-	// 演出の更新
-	UpdateDirection();
+	// 戦績UIの更新
+	UpdateUiRecord();
+
+	// 演技の更新
+	UpdateActing();
+
+	// 数値の更新処理
+	UpdateNum();
 
 	// 画面遷移==========================================
 	if (pKeyboard->GetTrigger(DIK_RETURN) ||
@@ -443,19 +454,6 @@ HRESULT CRanking::InitUi(void)
 	// 種類アイコンの生成
 	m_infoVisualUi.pGenreIcon = CObject2D::Create(7);
 
-	if (m_infoVisualUi.pGenreIcon != nullptr)
-	{
-		m_infoVisualUi.pGenreIcon->SetPosition(GENRE_ICON_POS[CRecord::GENRE_TYPE_DESTROY]);
-		m_infoVisualUi.pGenreIcon->SetSize(GENRE_ICON_WIDTH[CRecord::GENRE_TYPE_DESTROY], GENRE_ICON_HEIGHT[CRecord::GENRE_TYPE_DESTROY]);
-
-		if (pTexture != nullptr)
-		{
-			int nIdx = pTexture->Regist(GENRE_ICON_TEX[CRecord::GENRE_TYPE_DESTROY]);
-			m_infoVisualUi.pGenreIcon->SetIdxTexture(nIdx);
-		}
-
-		m_infoVisualUi.pGenreIcon->SetVtx();
-	}
 	if (m_infoVisualUi.pGenreIcon == nullptr)
 	{
 		return E_FAIL;
@@ -464,19 +462,6 @@ HRESULT CRanking::InitUi(void)
 	// 種類のテキストの生成
 	m_infoVisualUi.pGenreText = CObject2D::Create(7);
 
-	if (m_infoVisualUi.pGenreText != nullptr)
-	{
-		m_infoVisualUi.pGenreText->SetPosition(GENRE_TEXT_POS[CRecord::GENRE_TYPE_DESTROY]);
-		m_infoVisualUi.pGenreText->SetSize(GENRE_TEXT_WIDTH[CRecord::GENRE_TYPE_DESTROY], GENRE_TEXT_HEIGHT[CRecord::GENRE_TYPE_DESTROY]);
-
-		if (pTexture != nullptr)
-		{
-			int nIdx = pTexture->Regist(GENRE_TEXT_TEX[CRecord::GENRE_TYPE_DESTROY]);
-			m_infoVisualUi.pGenreText->SetIdxTexture(nIdx);
-		}
-
-		m_infoVisualUi.pGenreText->SetVtx();
-	}
 	if (m_infoVisualUi.pGenreText == nullptr)
 	{
 		return E_FAIL;
@@ -491,24 +476,6 @@ HRESULT CRanking::InitUi(void)
 			// プレイヤー顔の生成
 			m_infoVisualUi.apFace[nCount] = CObject2D::Create(7);
 
-			if (m_infoVisualUi.apFace[nCount] != nullptr)
-			{
-				if (pRecord != nullptr)
-				{
-					int nRankNum = pRecord->GetDestroyRank(nCount);
-
-					m_infoVisualUi.apFace[nCount]->SetPosition(FACE_POS[nRankNum]);
-					m_infoVisualUi.apFace[nCount]->SetSize(FACE_WIDTH, FACE_HEIGHT);
-				}
-
-				if (pTexture != nullptr)
-				{
-					int nIdx = pTexture->Regist(FACE_FILE_NAME[nCount]);
-					m_infoVisualUi.apFace[nCount]->SetIdxTexture(nIdx);
-				}
-
-				m_infoVisualUi.apFace[nCount]->SetVtx();
-			}
 			if (m_infoVisualUi.apFace[nCount] == nullptr)
 			{
 				return E_FAIL;
@@ -517,31 +484,15 @@ HRESULT CRanking::InitUi(void)
 			// 数字の生成
 			m_infoVisualUi.apNumber[nCount] = CNumber::Create(4, 0);
 
-			if (m_infoVisualUi.apNumber[nCount] != nullptr)
-			{
-				if (pRecord != nullptr)
-				{
-					int nRankNum = pRecord->GetDestroyRank(nCount);
-
-					m_infoVisualUi.apNumber[nCount]->SetPosition(NUMBER_POS[nRankNum]);
-					m_infoVisualUi.apNumber[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_WIDTH);
-				}
-
-				m_infoVisualUi.apNumber[nCount]->SetValue(pRecord->GetDestroy(nCount), 4);
-
-				if (pTexture != nullptr)
-				{
-					//int nIdx = pTexture->Regist();
-					//m_infoVisualUi.apNumber[nCount]->SetIdxTexture(nIdx);
-					//m_infoVisualUi.apNumber[nCount]->SetVtx();
-				}
-			}
 			if (m_infoVisualUi.apNumber[nCount] == nullptr)
 			{
 				return E_FAIL;
 			}
 		}
 	}
+
+	// 戦績種類の設定処理
+	SetUiRecord();
 
 	return S_OK;
 }
@@ -601,8 +552,8 @@ HRESULT CRanking::InitObj(void)
 
 		if (m_infoVisualObj.apModelActor[nCount] != nullptr)
 		{
-			m_infoVisualObj.apModelActor[nCount]->SetPosition(PLAYER_POS[m_typeDirection][nCount]);
-			m_infoVisualObj.apModelActor[nCount]->SetRot(PLAYER_ROT[m_typeDirection][nCount]);
+			m_infoVisualObj.apModelActor[nCount]->SetPosition(PLAYER_POS[m_typeActing][nCount]);
+			m_infoVisualObj.apModelActor[nCount]->SetRot(PLAYER_ROT[m_typeActing][nCount]);
 			m_infoVisualObj.apModelActor[nCount]->SetMotion(1);
 		}
 		else if (m_infoVisualObj.apModelActor[nCount] == nullptr)
@@ -612,11 +563,13 @@ HRESULT CRanking::InitObj(void)
 	}
 
 	// ランキングの数字の生成
-	for (int nCount = 0; nCount < ACTOR_TYPE_MAX; nCount++)
+	for (int nCount = 0; nCount < RANK::NUM_MAX; nCount++)
 	{
+		m_infoVisualUi.apNumRank[nCount] = CNumber::Create(4, m_aRankScore[m_typeGenre][nCount]);
+
 		if (m_infoVisualUi.apNumRank[nCount] == nullptr)
 		{
-			m_infoVisualUi.apNumRank[nCount] = CNumber::Create(4, m_aRankScore[m_typeGenre][nCount]);
+			return E_FAIL;
 		}
 	}
 
@@ -627,9 +580,9 @@ HRESULT CRanking::InitObj(void)
 }
 
 //=====================================================
-// 各戦績の設定処理
+// 戦績の設定処理
 //=====================================================
-void CRanking::SetRecordGenre(void)
+void CRanking::SetUiRecord(void)
 {
 	// テクスチャのポインタを取得
 	CTexture* pTexture = CTexture::GetInstance();
@@ -716,6 +669,7 @@ void CRanking::SetRecordGenre(void)
 				{
 					m_infoVisualUi.apNumber[nCount]->SetPosition(NUMBER_POS[nRank]);
 					m_infoVisualUi.apNumber[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_WIDTH);
+					m_infoVisualUi.apNumber[nCount]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
 					m_infoVisualUi.apNumber[nCount]->SetValue(nNumRank, 4);
 
@@ -732,35 +686,26 @@ void CRanking::SetRecordGenre(void)
 }
 
 //=====================================================
-// 演出の更新
+// 演技の設定処理
 //=====================================================
-void CRanking::UpdateDirection(void)
+void CRanking::SetObjActing(void)
 {
-	// 演出カウントが設定値以下
-	if (m_nDirectionCnt <= DIRECTION_CHANGE_COUNT)
+	for (int nCount = 0; nCount < ACTOR_TYPE_MAX; nCount++)
 	{
-		// カウントを加算
-		m_nDirectionCnt++;
-	}
-	else
-	{
-		// カウントの初期化
-		m_nDirectionCnt = 0;
-
-		// 演出番号を増やす
-		m_typeDirection = (DIRECTION_TYPE)(m_typeDirection + 1);
-
-		// 演出が最大数
-		if (m_typeDirection >= DIRECTION_TYPE_MAX)
+		if (m_infoVisualObj.apModelActor[nCount] != nullptr)
 		{
-			// 演出を初期化
-			m_typeDirection = (DIRECTION_TYPE)0;
+			m_infoVisualObj.apModelActor[nCount]->SetPosition(PLAYER_POS[m_typeActing][nCount]);
+			m_infoVisualObj.apModelActor[nCount]->SetRot(PLAYER_ROT[m_typeActing][nCount]);
+			m_infoVisualObj.apModelActor[nCount]->SetMotion(1);
 		}
-
-		// 演出を設定
-		SetDirection();
 	}
+}
 
+//=====================================================
+// 戦績UIの更新
+//=====================================================
+void CRanking::UpdateUiRecord(void)
+{
 	// 種類カウントが設定値以下
 	if (m_nGenreCnt <= GENRE_CHANGE_COUNT)
 	{
@@ -783,17 +728,49 @@ void CRanking::UpdateDirection(void)
 		}
 
 		// 戦績種類の設定
-		SetRecordGenre();
+		SetUiRecord();
 
 		// ランクの数字を表示
 		SetRankNum();
 	}
+}
 
+//=====================================================
+// 演技の更新
+//=====================================================
+void CRanking::UpdateActing(void)
+{
+	// 演技カウントが設定値以下
+	if (m_nActingCnt <= Acting_CHANGE_COUNT)
+	{
+		// カウントを加算
+		m_nActingCnt++;
+	}
+	else
+	{
+		// カウントの初期化
+		m_nActingCnt = 0;
+
+		// 演技番号を増やす
+		m_typeActing = (ACTING_TYPE)(m_typeActing + 1);
+
+		// 演技が最大数
+		if (m_typeActing >= ACTING_TYPE_MAX)
+		{
+			// 演技を初期化
+			m_typeActing = (ACTING_TYPE)0;
+		}
+
+		// 演技を設定
+		SetObjActing();
+	}
+
+	// 演技の更新
 	for (int nCount = 0; nCount < ACTOR_TYPE_MAX; nCount++)
 	{
 		if (m_infoVisualObj.apModelActor[nCount] != nullptr)
 		{
-			D3DXVECTOR3 playerMove = m_infoVisualObj.apModelActor[nCount]->GetPosition() + PLAYER_MOVE[m_typeDirection][nCount];
+			D3DXVECTOR3 playerMove = m_infoVisualObj.apModelActor[nCount]->GetPosition() + PLAYER_MOVE[m_typeActing][nCount];
 
 			m_infoVisualObj.apModelActor[nCount]->SetPosition(playerMove);
 		}
@@ -801,25 +778,45 @@ void CRanking::UpdateDirection(void)
 }
 
 //=====================================================
-// 演出の設定処理
+// 数値の更新
 //=====================================================
-HRESULT CRanking::SetDirection(void)
+void CRanking::UpdateNum(void)
 {
-	for (int nCount = 0; nCount < ACTOR_TYPE_MAX; nCount++)
+	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
 	{
-		if (m_infoVisualObj.apModelActor[nCount] != nullptr)
+		if (m_aUpdateRank[m_typeGenre][nCount])
 		{
-			m_infoVisualObj.apModelActor[nCount]->SetPosition(PLAYER_POS[m_typeDirection][nCount]);
-			m_infoVisualObj.apModelActor[nCount]->SetRot(PLAYER_ROT[m_typeDirection][nCount]);
-			m_infoVisualObj.apModelActor[nCount]->SetMotion(1);
-		}
-		else if (m_infoVisualObj.apModelActor[nCount] == nullptr)
-		{
-			return E_FAIL;
+			if (m_infoVisualUi.apNumber[nCount] != nullptr &&
+				m_infoVisualUi.apNumRank[m_aUpdateIdx[m_typeGenre][nCount]])
+			{
+				// 色の情報取得
+				D3DXCOLOR col = m_infoVisualUi.apNumber[nCount]->GetColor();
+
+				// α値の増減処理
+				if (m_aIsAlphaChange[m_typeGenre][nCount] == false)
+				{
+					col.a -= ALPHA_CHANGE;
+				}
+				else if (m_aIsAlphaChange[m_typeGenre][nCount] == true)
+				{
+					col.a += ALPHA_CHANGE;
+				}
+
+				// α値の増減方向切り替え処理
+				if (col.a <= ALPHA_LOWER)
+				{
+					m_aIsAlphaChange[m_typeGenre][nCount] = true;
+				}
+				else if (col.a >= ALPHA_UPPER)
+				{
+					m_aIsAlphaChange[m_typeGenre][nCount] = false;
+				}
+
+				m_infoVisualUi.apNumber[nCount]->SetColor(col);
+				m_infoVisualUi.apNumRank[m_aUpdateIdx[m_typeGenre][nCount]]->SetColor(col);
+			}
 		}
 	}
-
-	return S_OK;
 }
 
 //=====================================================
@@ -829,6 +826,7 @@ void CRanking::SetRank(void)
 {
 	// 変数宣言
 	bool bNewRank = false;
+	int aNewScore[CRecord::GENRE_TYPE_MAX][NUM_PLAYER] = {};
 
 	// 戦績の取得
 	CRecord* pRecord = CRecord::GetInstance();
@@ -842,31 +840,19 @@ void CRanking::SetRank(void)
 		{
 			if (pRecord != nullptr)
 			{
-				int nNewScore = 0;
-
 				switch (nCntGenre)
 				{
 				case CRecord::GENRE_TYPE_DESTROY:
 
-					nNewScore = pRecord->GetDestroy(nCount);
+					aNewScore[nCntGenre][nCount] = pRecord->GetDestroy(nCount);
 
 					break;
 
 				case CRecord::GENRE_TYPE_MADMAN:
 
-					nNewScore = pRecord->GetMadman(nCount);
+					aNewScore[nCntGenre][nCount] = pRecord->GetMadman(nCount);
 
 					break;
-				}
-
-				if (nNewScore > m_aRankScore[nCntGenre][RANK::NUM_MAX - 1])
-				{// 最小値を越したら代入
-					m_aRankScore[nCntGenre][RANK::NUM_MAX - 1] = nNewScore;
-
-					// 再ソート
-					SortRank();
-
-					bNewRank = true;
 				}
 			}
 		}
@@ -876,31 +862,30 @@ void CRanking::SetRank(void)
 	{
 		for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
 		{
-			if (pRecord != nullptr &&
-				bNewRank == true)
+			if (aNewScore[nCntGenre][nCount] > m_aRankScore[nCntGenre][RANK::NUM_MAX - 1])
+			{// 最小値を越したら代入
+				m_aRankScore[nCntGenre][RANK::NUM_MAX - 1] = aNewScore[nCntGenre][nCount];
+
+				// 再ソート
+				SortRank();
+
+				bNewRank = true;
+			}
+		}
+	}
+
+	for (int nCntGenre = 0; nCntGenre < CRecord::GENRE_TYPE_MAX; nCntGenre++)
+	{
+		for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
+		{
+			if (bNewRank == true)
 			{
-				int nNewScore = 0;
-
-				switch (nCntGenre)
-				{
-				case CRecord::GENRE_TYPE_DESTROY:
-
-					nNewScore = pRecord->GetDestroy(nCount);
-
-					break;
-
-				case CRecord::GENRE_TYPE_MADMAN:
-
-					nNewScore = pRecord->GetMadman(nCount);
-
-					break;
-				}
-
 				for (int nCnt = 0; nCnt < RANK::NUM_MAX; nCnt++)
 				{// 足した値と合致する記録を探す
-					if (nNewScore == m_aRankScore[nCntGenre][nCnt])
+					if (aNewScore[nCntGenre][nCount] == m_aRankScore[nCntGenre][nCnt])
 					{// ニューレコード番号を記録
-						m_aUpdateIdx[nCount] = nCnt;
+						m_aUpdateIdx[nCntGenre][nCount] = nCnt;
+						m_aUpdateRank[nCntGenre][nCount] = true;
 					}
 				}
 			}
@@ -917,6 +902,15 @@ void CRanking::SetRank(void)
 }
 
 //=====================================================
+// ランキング情報リセット
+//=====================================================
+void CRanking::ResetRank(void)
+{
+	//外部ファイル読み込み
+	LoadRank();
+}
+
+//=====================================================
 // ランキング数値の設定処理
 //=====================================================
 void CRanking::SetRankNum(void)
@@ -930,6 +924,7 @@ void CRanking::SetRankNum(void)
 			m_infoVisualUi.apNumRank[nCount]->SetValue(m_aRankScore[m_typeGenre][nCount],4);
 			m_infoVisualUi.apNumRank[nCount]->SetPosition(RANK_NUM_POS[nCount]);
 			m_infoVisualUi.apNumRank[nCount]->SetSizeAll(NUMBER_WIDTH, NUMBER_HEIGHT);
+			m_infoVisualUi.apNumRank[nCount]->SetColor(D3DXCOLOR(1.0f,1.0f,1.0f,1.0f));
 
 			// 順位の生成
 			CObject2D* pObject2D = CObject2D::Create();
@@ -970,15 +965,6 @@ void CRanking::SortRank(void)
 			m_aRankScore[nCntGenre][nTop] = nTemp;
 		}
 	}
-}
-
-//=====================================================
-// ランキング情報リセット
-//=====================================================
-void CRanking::ResetRank(void)
-{
-	//外部ファイル読み込み
-	LoadRank();
 }
 
 //=====================================================
