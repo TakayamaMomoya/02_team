@@ -24,6 +24,7 @@
 #include "texture.h"
 #include "game.h"
 #include "gimmickManager.h"
+#include "block.h"
 
 //===============================================
 // 定数定義
@@ -42,10 +43,10 @@ namespace
 	// プレイヤーの位置
 	const D3DXVECTOR3 PLAYER_POS[NUM_PLAYER] =
 	{
-		D3DXVECTOR3(145.0f, 0.0f, 65.0f),
-		D3DXVECTOR3(205.0f, 0.0f, 65.0f),
-		D3DXVECTOR3(260.0f, 0.0f, 65.0f),
-		D3DXVECTOR3(90.0f, 0.0f, 65.0f)
+		D3DXVECTOR3(-35.0f, 0.0f, -215.0f),
+		D3DXVECTOR3(35.0f, 0.0f, -215.0f),
+		D3DXVECTOR3(90.0f, 0.0f, -215.0f),
+		D3DXVECTOR3(-160.0f, 0.0f, -215.0f)
 	};
 
 	// プレイヤーの向き
@@ -63,11 +64,11 @@ namespace
 	// 敵の位置
 	const D3DXVECTOR3 ENEMY_POS[NUM_ENEMY] =
 	{
-		D3DXVECTOR3(30.0f, 0.0f, 90.0f),
-		D3DXVECTOR3(100.0f, 0.0f, 120.0f),
-		D3DXVECTOR3(170.0f, 0.0f, 150.0f),
-		D3DXVECTOR3(240.0f, 0.0f, 120.0f),
-		D3DXVECTOR3(310.0f, 0.0f, 90.0f)
+		D3DXVECTOR3(-140.0f, 0.0f, -160.0f),
+		D3DXVECTOR3(-70.0f, 0.0f, -130.0f),
+		D3DXVECTOR3(0.0f, 0.0f, -100.0f),
+		D3DXVECTOR3(70.0f, 0.0f, -130.0f),
+		D3DXVECTOR3(140.0f, 0.0f, -160.0f)
 	};
 
 	// 敵の向き
@@ -81,10 +82,10 @@ namespace
 	};
 
 	// 視点カメラの位置
-	const D3DXVECTOR3 CAMERA_POSV = D3DXVECTOR3(170.0f, 110.0f, -90.0f);
+	const D3DXVECTOR3 CAMERA_POSV = D3DXVECTOR3(0.0f, 110.0f, -340.0f);
 
 	// 注視点カメラの位置
-	const D3DXVECTOR3 CAMERA_POSR = D3DXVECTOR3(170.0f, -50.0f, 300.0f);
+	const D3DXVECTOR3 CAMERA_POSR = D3DXVECTOR3(0.0f, -50.0f, 50.0f);
 
 	// ゲームオーバーのテクスチャのパス
 	const char* LOGO_PATH = "data\\TEXTURE\\UI\\gameover.png";
@@ -366,12 +367,27 @@ void CGameover::Update(void)
 	// インスタンスを取得
 	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
 	CCamera* pCamera = CManager::GetCamera();
-
+	
 	// カメラをロケット付近へ移動
 	if (pCamera != nullptr)
 	{
 		// カメラの設定
 		pCamera->UpdateGameover(CAMERA_POSV, CAMERA_POSR);
+	}
+
+	int nNumBlock = CBlock::GetNumAll();
+
+	if (nNumBlock > 0)
+	{
+		CBlock** pBlock = CBlock::GetBlock();
+
+		for (int nCntBlock = 0; nCntBlock < NUM_OBJECT; nCntBlock++)
+		{
+			if (pBlock[nCntBlock] != nullptr)
+			{
+				pBlock[nCntBlock]->Hit(100);
+			}
+		}
 	}
 
 	bool bFinish = m_apModelPlayer[0]->IsFinish();		// 死亡モーションが終了したか
