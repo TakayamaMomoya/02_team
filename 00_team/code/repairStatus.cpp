@@ -17,25 +17,17 @@
 //===============================================
 namespace
 {
-	// 視点カメラの位置
-	const D3DXVECTOR3 OBJ_POS = D3DXVECTOR3(170.0f, 110.0f, -90.0f);
-
-	// 注視点カメラの位置
-	const D3DXVECTOR3 CAMERA_POSR = D3DXVECTOR3(170.0f, -50.0f, 300.0f);
-
 	// 修理状況のテクスチャのパス
 	const char* TEX_PATH = "data\\TEXTURE\\UI\\repair_status.png";
 
-	// 修理状況の横幅
-	const float LOGO_WIDTH = 480.0f;
+	// 修理状況のフレームテクスチャのパス
+	const char* FRAME_PATH = "data\\TEXTURE\\UI\\repair_status_frame.png";
 
-	// 修理状況の縦幅
-	const float LOGO_HEIGHT = 270.0f;
+	// 高さの位置
+	const float POS_Y = 300.0f;
 
-	// 修理状況の位置
-	const D3DXVECTOR3 LOGO_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f - 100.0f, 0.0f);
-
-	const float INCREASED_VALUE = 30.0f;
+	// 修理したときの変動量
+	const float INCREASED_VALUE = 25.0f;
 }
 
 //===============================================
@@ -49,7 +41,7 @@ CRepairStatus* CRepairStatus::m_pRepairStatus = nullptr;	// 自身のポインタ
 CRepairStatus::CRepairStatus(int nPriority) : CObject3D(nPriority)
 {
 	// 値のクリア
-	//ZeroMemory(&m_apModelPlayer[0], sizeof(m_apModelPlayer));
+	ZeroMemory(&m_pFrame, sizeof(m_pFrame));
 }
 
 //===============================================
@@ -68,7 +60,7 @@ CRepairStatus *CRepairStatus::Create(int nPriority)
 	if (m_pRepairStatus == nullptr)
 	{
 		// 修理状況の生成
-		m_pRepairStatus = new CRepairStatus(7);
+		m_pRepairStatus = new CRepairStatus();
 
 		if (m_pRepairStatus != nullptr)
 		{
@@ -98,13 +90,27 @@ HRESULT CRepairStatus::Init()
 		{
 			D3DXVECTOR3 posRocket = pRocket->GetPosition();
 
+			// 初期情報の設定
 			CObject3D::Init();
 			m_pRepairStatus->SetSize(0.0f, 50.0f);
-			m_pRepairStatus->SetPosition({ posRocket.x - INCREASED_VALUE * 3, 200.0f, posRocket.z - 50.0f });
+			m_pRepairStatus->SetPosition({ posRocket.x - INCREASED_VALUE * 3, POS_Y, posRocket.z - 50.0f });
 			int nIdx = CTexture::GetInstance()->Regist(TEX_PATH);
 			m_pRepairStatus->SetIdxTexture(nIdx);
+			m_pRepairStatus->SetColor({0.0f, 1.0f, 0.0f, 1.0f});
 			m_pRepairStatus->EnableBillboard(true);
 			m_pRepairStatus->SetVtx();
+
+			if (m_pFrame == nullptr)
+			{// 枠の情報設定
+				m_pFrame = CObject3D::Create({ posRocket.x, 250.0f, posRocket.z - 50.0f });
+				m_pFrame->SetSize(3 * INCREASED_VALUE + INCREASED_VALUE * 0.1f, 20.0f + INCREASED_VALUE * 0.1f);
+				m_pFrame->SetPosition({ posRocket.x, POS_Y, posRocket.z - 50.0f });
+				int nIdx = CTexture::GetInstance()->Regist(FRAME_PATH);
+				m_pFrame->SetIdxTexture(nIdx);
+				m_pFrame->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+				m_pFrame->EnableBillboard(true);
+				m_pFrame->SetVtx();
+			}
 		}
 	}
 
@@ -116,10 +122,8 @@ HRESULT CRepairStatus::Init()
 //===============================================
 void CRepairStatus::Uninit(void)
 {
-	if (m_pRepairStatus != nullptr)
-	{
-		m_pRepairStatus = nullptr;
-	}
+	m_pRepairStatus = nullptr;
+	m_pFrame = nullptr;
 
 	CObject3D::Uninit();
 }
@@ -133,12 +137,12 @@ void CRepairStatus::Update(void)
 	CRocket* pRocket = pRocket->GetInstance();
 
 	if (pRocket != nullptr)
-	{
+	{// 修理状況によってゲージの状態を変える
 		int nProgress = pRocket->GetProgress();
 		D3DXVECTOR3 posRocket = pRocket->GetPosition();
 
-		m_pRepairStatus->SetSize(nProgress * INCREASED_VALUE, 30.0f);
-		m_pRepairStatus->SetPosition({ posRocket.x - INCREASED_VALUE * 3 + nProgress * INCREASED_VALUE, 200.0f, posRocket.z - 50.0f});
+		m_pRepairStatus->SetSize(nProgress * INCREASED_VALUE, 20.0f);
+		m_pRepairStatus->SetPosition({ posRocket.x - INCREASED_VALUE * 3 + nProgress * INCREASED_VALUE, POS_Y, posRocket.z - 50.0f});
 	}
 
 	CObject3D::Update();

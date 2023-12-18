@@ -38,6 +38,7 @@ public:		// 誰でもアクセス可能 [アクセス指定子]
 
 private:	// 自分のみアクセス可能 [アクセス指定子]
 	static CRepairStatus* m_pRepairStatus;	// 自身のポインタ
+	CObject3D* m_pFrame;					// 枠のポインタ
 };
 
 #endif
