@@ -41,6 +41,7 @@ public:
 	void SetSizeAll(float width,float height);
 	float GetWidth(void) { return 0.0f; }	// サイズ取得
 	float GetHeight(void) { return 0.0f; }	// サイズ取得
+	void SetTex(const char* pFileName);
 	void SetColor(D3DXCOLOR col);
 	D3DXCOLOR GetColor(void);
 

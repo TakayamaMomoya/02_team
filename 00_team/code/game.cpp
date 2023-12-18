@@ -142,8 +142,21 @@ HRESULT CGame::Init(void)
 		pSound->Play(pSound->LABEL_BGM_GAME);
 	}
 
+	CRecord* pRecord = CRecord::GetInstance();
+
 	// 戦績の生成
-	CRecord* pRecord = CRecord::Create();
+	if (pRecord == nullptr)
+	{
+		pRecord = CRecord::Create();
+	}
+	else if (pRecord != nullptr)
+	{
+		// 戦績の終了処理（リトライの記録維持防止）
+		pRecord->Uninit();
+
+		// 戦績の生成処理
+		pRecord = CRecord::Create();
+	}
 
 	if (pRecord == nullptr)
 	{

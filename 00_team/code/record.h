@@ -25,8 +25,9 @@ public:
 
 	enum GENRE_TYPE
 	{
-		GENRE_TYPE_DESTROY = 0,	// 破壊
-		GENRE_TYPE_MADMAN,		// 狂人
+		GENRE_TYPE_DESTROY = 0,	// 破壊（敵を倒した数）
+		GENRE_TYPE_MADMAN,		// 狂人（味方を殴った数）
+		GENRE_TYPE_ENGINEER,	// 技術者（クリア時間）
 		GENRE_TYPE_MAX
 	};
 
@@ -37,6 +38,8 @@ public:
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
+
+	void ReSetData(void);
 
 	void AddDestroy(int nIdx);
 	void CheckDeathEnemy(CObject* pObj, int nIdx);
@@ -55,6 +58,9 @@ public:
 
 	int GetMadman(int nIdx) { return m_aInfo[nIdx].nMadman; }
 	int GetMadmanRank(int nIdx) { return m_aInfo[nIdx].nMadmanRank; }
+
+	float GetEngineer(void) { return m_fGameTime; }
+
 private:
 
 	void Debug(void);
@@ -71,6 +77,7 @@ private:
 	static CRecord* m_pRecord;	// 自身のポインタ
 	SInfo m_aInfo[NUM_PLAYER];	// 戦績情報
 	int m_nNumSuvived;			// 生存者数
+	float m_fGameTime;			// ゲームのプレイ時間
 };
 
 #endif

@@ -53,9 +53,11 @@ namespace
 	{// 位置[種類]
 		D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.55f, 0.0f),
 		D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.55f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.55f, 0.0f),
 	};
 	const float GENRE_ICON_SIZE[CRecord::GENRE_TYPE_MAX] =
 	{// 大きさ[種類]
+		250.0f,
 		250.0f,
 		250.0f,
 	};
@@ -63,16 +65,19 @@ namespace
 	{// 横幅[種類]
 		0.5f * GENRE_ICON_SIZE[CRecord::GENRE_TYPE_DESTROY],
 		0.5f * GENRE_ICON_SIZE[CRecord::GENRE_TYPE_DESTROY],
+		0.5f * GENRE_ICON_SIZE[CRecord::GENRE_TYPE_DESTROY],
 	};
 	const float GENRE_ICON_HEIGHT[CRecord::GENRE_TYPE_MAX] =
 	{// 縦幅[種類]
 		0.4f * GENRE_ICON_SIZE[CRecord::GENRE_TYPE_DESTROY],
 		0.6f * GENRE_ICON_SIZE[CRecord::GENRE_TYPE_DESTROY],
+		0.5f * GENRE_ICON_SIZE[CRecord::GENRE_TYPE_DESTROY],
 	};
 	const char* GENRE_ICON_TEX[CRecord::GENRE_TYPE_MAX] =
 	{// テクスチャのパス[種類]
 		"data\\TEXTURE\\UI\\Icon_destroyer.png",
 		"data\\TEXTURE\\UI\\Icon_madman.png",
+		"data\\TEXTURE\\UI\\Icon_engineer.png",
 	};
 
 	// 戦績種類文
@@ -80,9 +85,11 @@ namespace
 	{// 位置[種類]
 		D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.35f, 0.0f),
 		D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.35f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.35f, SCREEN_HEIGHT * 0.35f, 0.0f),
 	};
 	const float GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_MAX] =
 	{// 大きさ[種類]
+		175.0f,
 		175.0f,
 		175.0f,
 	};
@@ -90,15 +97,18 @@ namespace
 	{// 横幅[種類]
 		1.0f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
 		1.0f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
+		1.0f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
 	};
 	const float GENRE_TEXT_HEIGHT[CRecord::GENRE_TYPE_MAX] =
 	{// 縦幅[種類]
+		0.2f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
 		0.2f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
 		0.2f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
 	};
 	const char* GENRE_TEXT_TEX[CRecord::GENRE_TYPE_MAX] =
 	{// テクスチャのパス[種類]
 		"data\\TEXTURE\\UI\\rank_text_destroyer.png",
+		"data\\TEXTURE\\UI\\rank_text_madman.png",
 		"data\\TEXTURE\\UI\\rank_text_madman.png",
 	};
 
@@ -673,11 +683,9 @@ void CRanking::SetUiRecord(void)
 
 					m_infoVisualUi.apNumber[nCount]->SetValue(nNumRank, 4);
 
-					if (pTexture != nullptr)
+					if (nRank == 0)
 					{
-						//int nIdx = pTexture->Regist();
-						//m_infoVisualUi.apNumber[nCount]->SetIdxTexture(nIdx);
-						//m_infoVisualUi.apNumber[nCount]->SetVtx();
+						m_infoVisualUi.apNumber[nCount]->SetTex("data\\TEXTURE\\UI\\number002.png");
 					}
 				}
 			}
