@@ -43,6 +43,7 @@
 #include "record.h"
 #include "containerManager.h"
 #include "enemyEvent.h"
+#include "repairStatus.h"
 
 //*****************************************************
 // マクロ定義
@@ -123,6 +124,9 @@ HRESULT CGame::Init(void)
 
 	// ロケットの生成
 	CRocket::Create();
+
+	// 修理状況の生成
+	CRepairStatus::Create();
 
 	// ギミックマネージャーの生成
 	CGimmickManager::Create();

@@ -30,6 +30,7 @@
 #include "rocket.h"
 #include "goal.h"
 #include "animEffect3D.h"
+#include "texture.h"
 
 //*****************************************************
 // 定数定義
@@ -66,7 +67,7 @@ const float ARROW_WIDTH = 30.0f;	// 矢印の幅
 const float ARROW_HEIGHT = 50.0f;	// 矢印の高さ
 const float GRAVITY = 1.58f;	// 重力
 const float POW_PUNCH_UP = 15.0f;	// パンチで飛び上がるジャンプ量
-const float SPEED_LIFE_FADE = 0.05f;	// ライフ表示の消える速度
+const float SPEED_LIFE_FADE = 0.01f;	// ライフ表示の消える速度
 const float SIZE_LIFE = 50.0f;	// ライフ表示のサイズ
 const D3DXVECTOR3 POS_LIFE = { 50.0f,50.0f,100.0f };	// ライフ表示の位置
 
@@ -1304,23 +1305,52 @@ void CPlayer::ManageLife(void)
 		return;
 	}
 
+	// 位置の設定
 	D3DXVECTOR3 pos = GetPosition();
 	pos += POS_LIFE;
 
 	m_info.pLife->SetPosition(pos);
 	m_info.pLifeFrame->SetPosition(pos);
 
+	// 色の設定
 	D3DXCOLOR col = m_info.pLife->GetColor();
 
 	col.a -= SPEED_LIFE_FADE;
 
 	m_info.pLife->SetColor(col);
-	m_info.pLifeFrame->SetColor(col);
+	m_info.pLifeFrame->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, col.a));
+
+	// サイズ調整
+	ResizeLife();
 
 	if (col.a <= 0.0f)
 	{// 透明になったら削除
 		DeleteLife();
 	}
+}
+
+//=====================================================
+// ライフ表示のサイズ調整
+//=====================================================
+void CPlayer::ResizeLife(void)
+{
+	if (m_info.pLife == nullptr)
+	{
+		return;
+	}
+
+	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
+
+	if (pPlayerManager == nullptr)
+	{
+		return;
+	}
+
+	float fInitialLife = pPlayerManager->GetPlayerParam().fInitialLife;
+
+	float fRate = m_info.fLife / fInitialLife;
+
+	m_info.pLife->SetSize(SIZE_LIFE * fRate, SIZE_LIFE * fRate);
 }
 
 //=====================================================
@@ -1419,27 +1449,39 @@ void CPlayer::DispLife(void)
 	D3DXVECTOR3 pos = GetPosition();
 	pos += POS_LIFE;
 
-	if (m_info.pLife == nullptr)
-	{
-		m_info.pLife = CObject3D::Create(pos);
-
-		if (m_info.pLife != nullptr)
-		{
-			m_info.pLife->EnableBillboard(true);
-			m_info.pLife->SetSize(SIZE_LIFE, SIZE_LIFE);
-			SetPosition(pos);
-		}
-	}
-
 	if (m_info.pLifeFrame == nullptr)
 	{
 		m_info.pLifeFrame = CObject3D::Create(pos);
 
 		if (m_info.pLifeFrame != nullptr)
 		{
+			m_info.pLifeFrame->EnableZtest(true);
 			m_info.pLifeFrame->EnableBillboard(true);
+			m_info.pLifeFrame->SetSize(SIZE_LIFE, SIZE_LIFE);
+			m_info.pLifeFrame->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+			m_info.pLifeFrame->SetPosition(pos);
+
+			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\life000.png");
+			m_info.pLifeFrame->SetIdxTexture(nIdx);
+		}
+	}
+
+	if (m_info.pLife == nullptr)
+	{
+		m_info.pLife = CObject3D::Create(pos);
+
+		if (m_info.pLife != nullptr)
+		{
+			m_info.pLife->EnableZtest(true);
+			m_info.pLife->EnableBillboard(true);
 			m_info.pLife->SetSize(SIZE_LIFE, SIZE_LIFE);
-			SetPosition(pos);
+			m_info.pLife->SetPosition(pos);
+
+			int nIdx = CTexture::GetInstance()->Regist("data\\TEXTURE\\UI\\life000.png");
+			m_info.pLife->SetIdxTexture(nIdx);
+
+			// 初期サイズ調整
+			ResizeLife();
 		}
 	}
 }
