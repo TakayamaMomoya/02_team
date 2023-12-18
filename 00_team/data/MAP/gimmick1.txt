@@ -8,27 +8,75 @@
 #====================================================================
 # 扉の設定
 #====================================================================
-DOORSET
+DOORSET	#左下
 	POS = -438.0 0.0 -270.0
 	ROT = 0.0 0.0 0.0
-	ROTDEST = 90.0
+	ROTDEST = -90.0
 END_DOORSET
 
 DOORSET
 	POS = -354.0 0.0 -270.0
 	ROT = 0.0 180.0 0.0
-	ROTDEST = 90.0
+	ROTDEST = -90.0
 END_DOORSET
 
 DOORSET
 	POS = -288.0 0.0 -360.0
 	ROT = 0.0 90.0 0.0
+	ROTDEST = 0.0
+END_DOORSET
+
+DOORSET
+	POS = -288.0 0.0 -444.0
+	ROT = 0.0 -90.0 0.0
+	ROTDEST = 0.0
+END_DOORSET
+
+DOORSET	#右下
+	POS = 276.0 0.0 -348.0
+	ROT = 0.0 90.0 0.0
+	ROTDEST = 180.0
+END_DOORSET
+
+DOORSET
+	POS = 276.0 0.0 -426.0
+	ROT = 0.0 -90.0 0.0
+	ROTDEST = 180.0
+END_DOORSET
+
+DOORSET
+	POS = 348.0 0.0 -258.0
+	ROT = 0.0 0.0 0.0
+	ROTDEST = -90.0
+END_DOORSET
+
+DOORSET
+	POS = 426.0 0.0 -258.0
+	ROT = 0.0 180.0 0.0
+	ROTDEST = -90.0
+END_DOORSET
+
+DOORSET	#右上
+	POS = 366.0 0.0 276.0
+	ROT = 0.0 0.0 0.0
 	ROTDEST = 90.0
 END_DOORSET
 
 DOORSET
-	POS = -288.0 0.0 -402.0
-	ROT = 0.0 90.0 0.0
+	POS = 444.0 0.0 276.0
+	ROT = 0.0 180.0 0.0
+	ROTDEST = 90.0
+END_DOORSET
+
+DOORSET	#左上
+	POS = -420.0 0.0 294.0
+	ROT = 0.0 0.0 0.0
+	ROTDEST = 90.0
+END_DOORSET
+
+DOORSET
+	POS = -342.0 0.0 294.0
+	ROT = 0.0 180.0 0.0
 	ROTDEST = 90.0
 END_DOORSET
 
