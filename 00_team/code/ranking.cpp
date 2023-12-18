@@ -882,7 +882,8 @@ void CRanking::SetRank(void)
 			{
 				for (int nCnt = 0; nCnt < RANK::NUM_MAX; nCnt++)
 				{// ‘«‚µ‚½’l‚Æ‡’v‚·‚é‹L˜^‚ð’T‚·
-					if (aNewScore[nCntGenre][nCount] == m_aRankScore[nCntGenre][nCnt])
+					if (aNewScore[nCntGenre][nCount] == m_aRankScore[nCntGenre][nCnt] &&
+						m_aRankScore[nCntGenre][nCnt] != 0)
 					{// ƒjƒ…[ƒŒƒR[ƒh”Ô†‚ð‹L˜^
 						m_aUpdateIdx[nCntGenre][nCount] = nCnt;
 						m_aUpdateRank[nCntGenre][nCount] = true;
