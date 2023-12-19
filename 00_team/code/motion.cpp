@@ -283,6 +283,23 @@ void CMotion::InitPose(int nMotion)
 		for (int nCntPart = 0; nCntPart < m_nNumParts; nCntPart++)
 		{
 			m_aKeyOld[nCntPart] = m_aMotionInfo[nMotion].aKeyInfo[i].aKey[nCntPart];
+
+			D3DXVECTOR3 rot =
+			{
+				m_aMotionInfo[nMotion].aKeyInfo[i].aKey[nCntPart].fRotX,
+				m_aMotionInfo[nMotion].aKeyInfo[i].aKey[nCntPart].fRotY,
+				m_aMotionInfo[nMotion].aKeyInfo[i].aKey[nCntPart].fRotZ
+			};
+
+			D3DXVECTOR3 pos =
+			{
+				m_aMotionInfo[nMotion].aKeyInfo[i].aKey[nCntPart].fPosX,
+				m_aMotionInfo[nMotion].aKeyInfo[i].aKey[nCntPart].fPosY,
+				m_aMotionInfo[nMotion].aKeyInfo[i].aKey[nCntPart].fPosZ
+			};
+
+			m_apParts[nCntPart]->pParts->SetRot(rot);
+			//m_apParts[nCntPart]->pParts->SetPosition(pos);
 		}
 	}
 }
@@ -405,11 +422,6 @@ void CMotion::MultiplyMtx(void)
 //=====================================================
 void CMotion::Draw(void)
 {
-	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetInstance()->GetDevice();
-
-	pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);
-
 	// マトリックスをかけ合わせる処理
 	MultiplyMtx();
 }
