@@ -9,7 +9,7 @@
 # 扉の設定
 #====================================================================
 DOORSET	#左下
-	POS = -438.0 0.0 -270.0
+	POS = -440.0 0.0 -270.0
 	ROT = 0.0 0.0 0.0
 	ROTDEST = -90.0
 END_DOORSET
@@ -149,6 +149,7 @@ END_CONTAINERSET
 #====================================================================
 # 木箱の設置
 #====================================================================
+// 修理品
 BOXSET
 	POS = -410.0 0.0 450.0
 	ROT = 0.0 0.0 0.0
@@ -171,6 +172,73 @@ BOXSET
 	POS = 410.0 0.0 -410.0
 	ROT = 0.0 0.0 0.0
 	TYPE = 1
+END_BOXSET
+
+// 壊すだけ
+BOXSET	# 左下
+	POS = -250.0 0.0 -305.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 2
+END_BOXSET
+
+BOXSET
+	POS = -200.0 0.0 -305.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 2
+END_BOXSET
+
+BOXSET
+	POS = -150.0 0.0 -305.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 2
+END_BOXSET
+
+BOXSET	# 右下
+	POS = 240.0 0.0 -305.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 2
+END_BOXSET
+
+BOXSET
+	POS = 190.0 0.0 -305.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 2
+END_BOXSET
+
+BOXSET
+	POS = 140.0 0.0 -305.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 2
+END_BOXSET
+
+BOXSET	# 左上
+	POS = -220.0 0.0 305.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 2
+END_BOXSET
+
+BOXSET
+	POS = -160.0 0.0 305.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 2
+END_BOXSET
+
+BOXSET	# 右上
+	POS = 260.0 0.0 305.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 2
+END_BOXSET
+
+BOXSET
+	POS = 200.0 0.0 305.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 2
+END_BOXSET
+
+BOXSET
+	POS = 140.0 0.0 305.0
+	ROT = 0.0 0.0 0.0
+	TYPE = 2
 END_BOXSET
 
 END_SCRIPT
