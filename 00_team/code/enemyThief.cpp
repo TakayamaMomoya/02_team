@@ -67,6 +67,9 @@ HRESULT CEnemyThief::Init(void)
 	// 継承クラスの初期化
 	CEnemy::Init();
 
+	// 体力を個別設定
+	SetLife(50.0f);
+
 	// 歩きモーションに設定
 	CMotion *pBody = GetBody();
 
