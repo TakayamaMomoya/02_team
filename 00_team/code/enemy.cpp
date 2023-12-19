@@ -430,8 +430,14 @@ bool CEnemy::IsInArea(void)
 //=====================================================
 void CEnemy::ChaseTarget(void)
 {
-	// ÉQÅ[ÉÄèÛë‘Ç…ÇÊÇ¡Çƒí«ê’Ç≥ÇπÇ»Ç¢
+	// èÛë‘Ç…ÇÊÇ¡Çƒí«ê’Ç≥ÇπÇ»Ç¢
 	CGame *pGame = CGame::GetInstance();
+	CEnemy::STATE state = GetState();
+
+	if (state == CEnemy::STATE::STATE_DEATH)
+	{
+		return;
+	}
 
 	if (pGame != nullptr)
 	{
@@ -548,7 +554,7 @@ void CEnemy::Hit(float fDamage)
 //=====================================================
 void CEnemy::Death(void)
 {
-
+	m_state = STATE_DEATH;
 }
 
 //=====================================================
