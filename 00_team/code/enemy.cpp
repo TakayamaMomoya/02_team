@@ -68,6 +68,8 @@ CEnemy::CEnemy()
 	m_pCollisionCube = nullptr;
 	m_pShadow = nullptr;
 	m_state = STATE_NORMAL;
+	m_moveState = MOVESTATE_NONE;
+	m_posDest = { 0.0f,0.0f,0.0f };
 
 	// 値のクリア
 	m_pPrev = nullptr;
@@ -225,6 +227,7 @@ HRESULT CEnemy::Init(void)
 
 	// 通常状態にする
 	m_state = STATE_NORMAL;
+	m_moveState = MOVESTATE_INTRUSION;
 
 	SetPositionOld(GetPosition());
 
@@ -260,8 +263,14 @@ void CEnemy::Update(void)
 	// 継承クラスの更新
 	CCharacter::Update();
 
+	// 目標の追跡
+	ChaseTarget();
+
 	// 状態管理
 	ManageState();
+
+	// 移動状態の管理
+	ManageMoveState();
 
 	// 当たり判定の管理
 	ManageCollision();
@@ -370,6 +379,52 @@ void CEnemy::ManageState(void)
 }
 
 //=====================================================
+// 移動状態管理
+//=====================================================
+void CEnemy::ManageMoveState(void)
+{
+	switch (m_moveState)
+	{
+	case MOVESTATE_INTRUSION:
+		// 侵入しようとしている状態
+		if (IsInArea())
+		{// エリア内に入ったら、追跡へ移行
+			TransferChase();
+		}
+
+		break;
+	case MOVESTATE_CHASE:
+		// 対象を追跡している状態
+		
+
+		break;
+	}
+}
+
+//=====================================================
+// 追跡に移行する
+//=====================================================
+void CEnemy::TransferChase(void)
+{
+	m_moveState = MOVESTATE_CHASE;
+}
+
+//=====================================================
+// エリアに入った判定
+//=====================================================
+bool CEnemy::IsInArea(void)
+{
+	D3DXVECTOR3 pos = GetPosition();
+
+	if (pos.x <= 460 && pos.x >= -460 && pos.z <= 460 && pos.z >= -460)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+//=====================================================
 // 目標の追跡
 //=====================================================
 void CEnemy::ChaseTarget(void)
@@ -387,40 +442,9 @@ void CEnemy::ChaseTarget(void)
 		}
 	}
 
-	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
-
-	if (pPlayerManager == nullptr)
-	{
-		return;
-	}
-
-	D3DXVECTOR3 posTarget = { 0.0f,0.0f,0.0f };
-
-	// 最遠距離の宣言
-	float fLengthMax = FLT_MAX;
-
-	for (int i = 0;i < NUM_PLAYER;i++)
-	{// 最も近いプレイヤーを参照
-		CPlayer *pPlayer = pPlayerManager->GetPlayer(i);
-
-		if (pPlayer != nullptr)
-		{
-			D3DXVECTOR3 pos = GetPosition();
-			D3DXVECTOR3 posPlayer = pPlayer->GetPosition();
-
-			// 距離の比較
-			bool bNear = universal::DistCmp(pos, posPlayer, fLengthMax, &fLengthMax);
-
-			if (bNear)
-			{
-				posTarget = posPlayer;
-			}
-		}
-	}
-
 	// 移動量の設定
 	D3DXVECTOR3 pos = GetPosition();
-	D3DXVECTOR3 vecDiff = posTarget - pos;
+	D3DXVECTOR3 vecDiff = m_posDest - pos;
 	D3DXVECTOR3 move = GetMove();
 
 	D3DXVec3Normalize(&vecDiff, &vecDiff);

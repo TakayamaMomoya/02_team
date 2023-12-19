@@ -21,6 +21,7 @@
 #include "debrisSpawner.h"
 #include "block.h"
 #include "motion.h"
+#include "playerManager.h"
 
 //=====================================================
 // コンストラクタ
@@ -103,9 +104,52 @@ void CEnemyNormal::Update(void)
 	}
 	else
 	{
-		// 目標追跡
-		ChaseTarget();
+
 	}
+}
+
+//=====================================================
+// 目標の追跡
+//=====================================================
+void CEnemyNormal::ChaseTarget(void)
+{
+	CPlayerManager *pPlayerManager = CPlayerManager::GetInstance();
+
+	if (pPlayerManager == nullptr)
+	{
+		return;
+	}
+
+	MOVESTATE moveState = GetMoveState();
+
+	if (moveState == MOVESTATE_CHASE)
+	{
+		D3DXVECTOR3 posTarget = { 0.0f,0.0f,0.0f };
+
+		// 最遠距離の宣言
+		float fLengthMax = FLT_MAX;
+
+		for (int i = 0; i < NUM_PLAYER; i++)
+		{// 最も近いプレイヤーを参照
+			CPlayer *pPlayer = pPlayerManager->GetPlayer(i);
+
+			if (pPlayer != nullptr)
+			{
+				D3DXVECTOR3 pos = GetPosition();
+				D3DXVECTOR3 posPlayer = pPlayer->GetPosition();
+
+				// 距離の比較
+				bool bNear = universal::DistCmp(pos, posPlayer, fLengthMax, &fLengthMax);
+
+				if (bNear)
+				{
+					SetPosDest(posPlayer);
+				}
+			}
+		}
+	}
+
+	CEnemy::ChaseTarget();
 }
 
 //=====================================================
