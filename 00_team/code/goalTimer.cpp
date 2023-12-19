@@ -16,6 +16,7 @@
 #include "goal.h"
 #include "UI.h"
 #include "texture.h"
+#include "sound.h"
 
 //*****************************************************
 // ’è”’è‹`
@@ -47,6 +48,7 @@ CGoalTimer::CGoalTimer()
 	m_pObjDecimal = nullptr;
 	m_pPoint = nullptr;
 	m_bStop = false;
+	m_bSound = false;
 	m_fSecond = 0;
 }
 
@@ -146,6 +148,14 @@ void CGoalTimer::Update(void)
 
 	// •b”‚ðŒ¸‚ç‚·
 	float fTick = CManager::GetTick();
+
+	CSound* pSound = CSound::GetInstance();
+
+	if (pSound != nullptr && m_bSound == false)
+	{
+		pSound->Play(pSound->LABEL_SE_COUNT_DOWN);
+		m_bSound = true;
+	}
 	
 	m_fSecond -= fTick;
 

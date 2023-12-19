@@ -128,7 +128,7 @@ HRESULT CBlock::Init(void)
 	// タイプの設定
 	SetType(TYPE_BLOCK);
 
-	m_fLife = 900.0f;
+	m_fLife = 300.0f;
 
 	// 影の有効化
 	EnableShadow(true);
