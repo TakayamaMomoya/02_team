@@ -12,6 +12,7 @@
 #include "manager.h"
 #include "light.h"
 #include "enemyManager.h"
+#include "sound.h"
 
 //*****************************************************
 // 定数定義
@@ -146,6 +147,13 @@ void CEnemyEvent::StartEvent(void)
 		{
 			pLight->SetColDest(i, D3DXCOLOR(1.0f, 0.6f, 0.6f, 1.0f));
 		}
+	}
+
+	CSound* pSound = CSound::GetInstance();
+
+	if (pSound != nullptr)
+	{
+		pSound->Play(pSound->LABEL_SE_SIREN);
 	}
 
 	// 敵の出現頻度を変更
