@@ -33,6 +33,7 @@ namespace
 {
 	const float INITIAL_LIFE = 10.0f;	// 初期体力
 	const float INITIAL_SPEED = 1.0f;	// 初期速度
+	const float LINE_CHASE = 470;	// 追跡状態に移行するエリア
 	const int DAMAGE_FRAME = 10;	// ダメージ状態のフレーム数
 	const int TIME_DEATH = 60;	// 死亡までの時間
 }
@@ -416,7 +417,7 @@ bool CEnemy::IsInArea(void)
 {
 	D3DXVECTOR3 pos = GetPosition();
 
-	if (pos.x <= 460 && pos.x >= -460 && pos.z <= 460 && pos.z >= -460)
+	if (pos.x <= LINE_CHASE && pos.x >= -LINE_CHASE && pos.z <= LINE_CHASE && pos.z >= -LINE_CHASE)
 	{
 		return true;
 	}
