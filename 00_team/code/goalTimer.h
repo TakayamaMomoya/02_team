@@ -48,6 +48,7 @@ private:
 	float m_fSecond;	// 現在の時間(秒)
 	static CGoalTimer *m_pGoalTimer;	// 自身のポインタ
 	bool m_bStop;	// 止めるかどうか
+	bool m_bSound;
 };
 
 #endif

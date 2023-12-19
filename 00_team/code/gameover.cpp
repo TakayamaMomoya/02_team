@@ -46,7 +46,7 @@ namespace
 		D3DXVECTOR3(-35.0f, 0.0f, -215.0f),
 		D3DXVECTOR3(35.0f, 0.0f, -215.0f),
 		D3DXVECTOR3(90.0f, 0.0f, -215.0f),
-		D3DXVECTOR3(-160.0f, 0.0f, -215.0f)
+		D3DXVECTOR3(-90.0f, 0.0f, -215.0f)
 	};
 
 	// ÉvÉåÉCÉÑÅ[ÇÃå¸Ç´
