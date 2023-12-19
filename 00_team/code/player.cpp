@@ -1552,6 +1552,18 @@ void CPlayer::SetWeapon(CWeapon::TYPE type)
 //=====================================================
 void CPlayer::Hit(float fDamage)
 {
+	CGame *pGame = CGame::GetInstance();
+
+	if (pGame != nullptr)
+	{
+		CGame::STATE state = pGame->GetState();
+
+		if (state != CGame::STATE::STATE_NORMAL)
+		{
+			return;
+		}
+	}
+
 	CPlayerManager* pPlayerManager = CPlayerManager::GetInstance();
 
 	if (m_info.state == STATE_NORMAL)
