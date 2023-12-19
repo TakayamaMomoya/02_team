@@ -84,6 +84,21 @@ HRESULT CEnemyThief::Init(void)
 	// 移動速度の設定
 	SetMoveSpeed(MOVE_SPEED);
 
+	// カメライベントの設定
+	CGame *pGame = CGame::GetInstance();
+
+	if (pGame != nullptr)
+	{
+		D3DXVECTOR3 posOwn = GetPosition();
+		D3DXVECTOR3 posV = posOwn;
+		posV.x += 100.0f;
+		posV.y += 150.0f;
+		posV.z -= 150.0f;
+		posOwn.y += 60.0f;
+
+		pGame->SetEventCamera(TIME_CAMERAEVENT, posOwn, posV);
+	}
+
 	return S_OK;
 }
 
@@ -193,7 +208,7 @@ void CEnemyThief::SwitchUpdate(void)
 }
 
 //=====================================================
-// ロケットを追う処理
+// 目標を追跡する処理
 //=====================================================
 void CEnemyThief::ChaseTarget(void)
 {
