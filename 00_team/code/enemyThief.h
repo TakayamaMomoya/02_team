@@ -49,7 +49,7 @@ private:
 		MOTION_MAX
 	};
 	void SwitchUpdate(void);
-	void ChaseRocket(void);
+	void ChaseTarget(void);
 	void CollisionRocket(void);
 	void Escape(void);
 	void Death(void);

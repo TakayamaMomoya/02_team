@@ -176,9 +176,6 @@ void CEnemyThief::SwitchUpdate(void)
 	switch (m_state)
 	{
 	case CEnemyThief::STATE_CHASE:	// ロケットの追跡
-		// ロケットを追う
-		ChaseRocket();
-
 		// ロケットとの当たり判定
 		CollisionRocket();
 
@@ -195,7 +192,7 @@ void CEnemyThief::SwitchUpdate(void)
 //=====================================================
 // ロケットを追う処理
 //=====================================================
-void CEnemyThief::ChaseRocket(void)
+void CEnemyThief::ChaseTarget(void)
 {
 	// ゲーム状態によって追跡させない
 	CGame *pGame = CGame::GetInstance();
@@ -204,7 +201,7 @@ void CEnemyThief::ChaseRocket(void)
 	{
 		CGame::STATE state = pGame->GetState();
 
-		if (state != CGame::STATE::STATE_NORMAL)
+		if (state != CGame::STATE::STATE_NORMAL || m_state != STATE_CHASE)
 		{
 			return;
 		}
