@@ -59,7 +59,7 @@ namespace
 
 	const D3DXVECTOR3 SPOWN_POS({ LEAF_POS.x, -80.0f, LEAF_POS.z });	//プレイヤー出現の高さ(旅出すためマイナス値)
 
-	const float ADULTWALL_POS_Z(-470.0f);
+	const float NOTSEEWALL_POS_Z(-470.0f);	
 
 	const D3DXVECTOR3 CONTAINER_POS({ -150.0, 0.0, -100.0f });	// コンテナの位置
 	const D3DXVECTOR3 CONTAINER_SPACE({ 400.0, 0.0, -70.0f });	// コンテナ間の広さ
@@ -83,7 +83,7 @@ CSelect::CSelect()
 	m_pLift = nullptr;
 	m_pSlash = nullptr;
 	m_bLiftCamera = false;
-	m_bOk = false;
+	m_bLiftUp = false;
 	m_bSound = false;
 	m_selectState = SELECT_STATE::STATE_BEFORE;
 }
@@ -103,12 +103,14 @@ HRESULT CSelect::Init(void)
 {
 	// カメラ情報の取得
 	CCamera* pCamera = CManager::GetCamera();
+
 	if (pCamera != nullptr)
 	{
 		pCamera->SetSelect();
 	}
 
-	MenuInit();
+	// 初期化
+	JoinUiInit();
 	StartInit();
 	ContainerInit();
 
@@ -117,12 +119,6 @@ HRESULT CSelect::Init(void)
 
 	// プレイヤーマネージャーの生成
 	CPlayerManager::Create();
-
-#ifdef _DEBUG
-	// エディットの生成
-	//CEdit::Create();
-
-#endif // DEBUG
 
 	// ブロックの読み込み
 	CBlock::Load("data\\MAP\\select_map00.bin");
@@ -144,6 +140,7 @@ HRESULT CSelect::Init(void)
 		pObjectX->BindModel(CModel::Load("data\\MODEL\\select\\potato_bed.x"));
 	}
 
+	// ポテトの葉の初期化
 	PotatoLeafInit();
 
 	// 参加人数の表示
@@ -158,6 +155,7 @@ HRESULT CSelect::Init(void)
 		}
 	}
 
+	// スラッシュの表示
 	m_pSlash = CBillboard::Create({ m_apNumber[0]->GetPosition().x + 15.0f, m_apNumber[0]->GetPosition().y, m_apNumber[0]->GetPosition().z }, 10.0f, 20.0f);
 	if (m_pSlash != nullptr)
 	{
@@ -191,7 +189,7 @@ HRESULT CSelect::Init(void)
 //=====================================================
 // メニューの初期化処理
 //=====================================================
-void CSelect::MenuInit(void)
+void CSelect::JoinUiInit(void)
 {
 	char* apPath[NUM_PLAYER] =
 	{
@@ -265,6 +263,7 @@ void CSelect::PotatoLeafInit(void)
 
 		if (m_apPlayerData[nCnt].pLeaf != nullptr)
 		{
+			// オブジェクトモデルの設定
 			int nIdx = CModel::Load("data\\MODEL\\select\\potatoLeaf.x");
 			m_apPlayerData[nCnt].pLeaf->BindModel(nIdx);
 		}
@@ -347,7 +346,7 @@ void CSelect::Update(void)
 					{// リフトが上がる処理
 						m_pSlash->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 						m_selectState = STATE_GO;
-						m_bOk = true;
+						m_bLiftUp = true;
 					}
 				}
 
@@ -356,7 +355,7 @@ void CSelect::Update(void)
 				{// フェード
 					m_pSlash->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 					m_selectState = STATE_GO;
-					m_bOk = true;
+					m_bLiftUp = true;
 				}
 
 				bGameStart = true;
@@ -613,7 +612,7 @@ void CSelect::EntryInput(int nPlayer)
 }
 
 //=====================================================
-// 透明な壁
+// 行動制限
 //=====================================================
 void CSelect::MoveLimit(int nPlayer)
 {
@@ -630,9 +629,9 @@ void CSelect::MoveLimit(int nPlayer)
 	// 大人の壁判定
 	if (m_selectState == STATE_BEFORE)
 	{
-		if (pos.z < ADULTWALL_POS_Z)
+		if (pos.z < NOTSEEWALL_POS_Z)
 		{
-			pos.z = ADULTWALL_POS_Z;
+			pos.z = NOTSEEWALL_POS_Z;
 		}
 	}
 	else
@@ -677,7 +676,7 @@ void CSelect::PlayerShowUp(int nPlayer)
 //=====================================================
 void CSelect::Lift(void)
 {
-	if (m_bOk == true)
+	if (m_bLiftUp == true)
 	{
 		CCamera* pCamera = CManager::GetCamera();
 
@@ -733,22 +732,19 @@ void CSelect::Lift(void)
 //=====================================================
 void CSelect::LiftInNumberUi(int nPlayer)
 {
-	//for (int nCnt = 0; nCnt < 2; nCnt++)
+	if (m_apNumber[0] != nullptr)
 	{
-		if (m_apNumber[0] != nullptr)
-		{
-			m_apNumber[0]->SetValue(CLift::GetInPlayer(), 1);
-		}
+		m_apNumber[0]->SetValue(CLift::GetInPlayer(), 1);
+	}
 
-		if (m_apNumber[1] != nullptr)
-		{
-			m_apNumber[1]->SetValue(nPlayer, 1);
-		}
+	if (m_apNumber[1] != nullptr)
+	{
+		m_apNumber[1]->SetValue(nPlayer, 1);
 	}
 }
 
 //=====================================================
-// オブジェクトえお消す処理
+// オブジェクトを消す処理
 //=====================================================
 void CSelect::ObjDelete(int nPlayer)
 {
