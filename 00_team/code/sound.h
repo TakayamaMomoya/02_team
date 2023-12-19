@@ -66,6 +66,7 @@ public:
 
 		LABEL_SE_EXPLOSION,				// 爆発
 		LABEL_BGM_RANKING,				// ランキング
+		LABEL_SE_SIREN,					// サイレン
 
 		LABEL_MAX
 	} LABEL;
@@ -168,6 +169,7 @@ private:
 
 		{ "data/SOUND/SE/explosion.wav",0 },			// 爆発
 		{ "data/SOUND/BGM/ranking.wav",0 },				// ランキング
+		{ "data/SOUND/SE/siren.wav",0 },				// サイレン
 	};
 
 	static CSound *m_pSound;	// 自身のポインタ

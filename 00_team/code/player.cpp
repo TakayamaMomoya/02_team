@@ -565,13 +565,6 @@ void CPlayer::InputAttack(void)
 
 	if (nMotionUpper != MOTION_PUNCH)
 	{
-		if (pSound != nullptr && m_bSound == false)
-		{
-			pSound->Play(pSound->LABEL_SE_SWING);
-
-			m_bSound = true;
-		}
-
 		if (m_info.pWeapon != nullptr)
 		{// •Ší‚ÌUŒ‚
 			bool bEnable = m_info.pWeapon->IsEnable();

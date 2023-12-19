@@ -10,6 +10,9 @@
 //*****************************************************
 #include "record.h"
 #include "debugproc.h"
+#include "manager.h"
+#include "scene.h"
+#include "game.h"
 
 #include "playerManager.h"
 #include "enemyManager.h"
@@ -27,6 +30,7 @@ CRecord::CRecord()
 {
 	ZeroMemory(&m_aInfo[0], sizeof(m_aInfo));
 	m_nNumSuvived = 0;
+	m_fGameTime = 0.0f;
 }
 
 //=====================================================
@@ -79,6 +83,16 @@ void CRecord::Uninit(void)
 //=====================================================
 void CRecord::Update(void)
 {
+	if (CManager::GetMode() == CScene::MODE_GAME)
+	{
+		if (CGame::GetState() == CGame::STATE_NORMAL &&
+			CGame::GetInstance()->GetStop() == false)
+		{
+			// プレイ時間を加算
+			m_fGameTime += CManager::GetTick();
+		}
+	}
+
 	// デバック処理
 	Debug();
 }
@@ -258,8 +272,8 @@ void CRecord::Debug(void)
 		return;
 	}
 
-	pDebugProc->Print("\nP1の味方殴った数[%d]", m_aInfo[0].nMadman);
-	pDebugProc->Print("\nP2の味方殴った数[%d]", m_aInfo[1].nMadman);
+	pDebugProc->Print("\n敵倒したP1[%d]", m_aInfo[0].nDestroy);
+	pDebugProc->Print("\n時間[%f]", m_fGameTime);
 }
 
 //=====================================================

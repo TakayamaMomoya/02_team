@@ -26,6 +26,9 @@
     <Filter Include="UI">
       <UniqueIdentifier>{78d905fd-ee39-486c-8146-903dd869c54d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ranking">
+      <UniqueIdentifier>{d0ae6ffb-1eac-4b42-acc4-f5ed53a146c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\animation2D.cpp" />
@@ -198,6 +201,12 @@
     </ClCompile>
     <ClCompile Include="code\enemyEvent.cpp" />
     <ClCompile Include="code\repairStatus.cpp" />
+    <ClCompile Include="code\rank.cpp">
+      <Filter>ranking</Filter>
+    </ClCompile>
+    <ClCompile Include="code\rank_acting.cpp">
+      <Filter>ranking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\animation2D.h" />
@@ -370,5 +379,11 @@
     </ClInclude>
     <ClInclude Include="code\enemyEvent.h" />
     <ClInclude Include="code\repairStatus.h" />
+    <ClInclude Include="code\rank.h">
+      <Filter>ranking</Filter>
+    </ClInclude>
+    <ClInclude Include="code\rank_acting.h">
+      <Filter>ranking</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

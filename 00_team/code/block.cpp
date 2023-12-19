@@ -23,7 +23,7 @@
 namespace
 {
 	const float SPEED_MOVE(1.0f);	// 移動速度
-	const char* MAP_FILE = "data\\MAP\\map00.bin";	// マップのファイルパス
+	const char* MAP_FILE = "data\\MAP\\map01.bin";	// マップのファイルパス
 }
 
 //*****************************************************

@@ -11,6 +11,7 @@
 #include "repairStatus.h"
 #include "rocket.h"
 #include "texture.h"
+#include "game.h"
 
 //===============================================
 // 定数定義
@@ -38,10 +39,11 @@ CRepairStatus* CRepairStatus::m_pRepairStatus = nullptr;	// 自身のポインタ
 //===============================================
 // コンストラクタ
 //===============================================
-CRepairStatus::CRepairStatus(int nPriority) : CObject3D(nPriority)
+CRepairStatus::CRepairStatus(int nPriority) : CObject(nPriority)
 {
 	// 値のクリア
-	ZeroMemory(&m_pFrame, sizeof(m_pFrame));
+	m_pStatus = nullptr;
+	m_pFrame = nullptr;
 }
 
 //===============================================
@@ -81,6 +83,9 @@ CRepairStatus *CRepairStatus::Create(int nPriority)
 //===============================================
 HRESULT CRepairStatus::Init()
 {
+	m_pStatus = nullptr;
+	m_pFrame = nullptr;
+
 	// インスタンスを取得
 	CRocket* pRocket = pRocket->GetInstance();
 
@@ -90,26 +95,36 @@ HRESULT CRepairStatus::Init()
 		{
 			D3DXVECTOR3 posRocket = pRocket->GetPosition();
 
-			// 初期情報の設定
-			CObject3D::Init();
-			m_pRepairStatus->SetSize(0.0f, 50.0f);
-			m_pRepairStatus->SetPosition({ posRocket.x - INCREASED_VALUE * 3, POS_Y, posRocket.z - 50.0f });
-			int nIdx = CTexture::GetInstance()->Regist(TEX_PATH);
-			m_pRepairStatus->SetIdxTexture(nIdx);
-			m_pRepairStatus->SetColor({0.0f, 1.0f, 0.0f, 1.0f});
-			m_pRepairStatus->EnableBillboard(true);
-			m_pRepairStatus->SetVtx();
+			if (m_pStatus == nullptr)
+			{// ゲージの生成
+				m_pStatus = CObject3D::Create({ posRocket.x - INCREASED_VALUE * 3, POS_Y, posRocket.z - 50.0f });
+
+				if (m_pStatus != nullptr)
+				{// 初期情報の設定
+					m_pStatus->SetSize(0.0f, 50.0f);
+					m_pStatus->SetPosition({ posRocket.x - INCREASED_VALUE * 3, POS_Y, posRocket.z - 50.0f });
+					int nIdx = CTexture::GetInstance()->Regist(TEX_PATH);
+					m_pStatus->SetIdxTexture(nIdx);
+					m_pStatus->SetColor({ 0.0f, 1.0f, 0.0f, 1.0f });
+					m_pStatus->EnableBillboard(true);
+					m_pStatus->SetVtx();
+				}
+			}
 
 			if (m_pFrame == nullptr)
-			{// 枠の情報設定
+			{// 枠の生成
 				m_pFrame = CObject3D::Create({ posRocket.x, 250.0f, posRocket.z - 50.0f });
-				m_pFrame->SetSize(3 * INCREASED_VALUE + INCREASED_VALUE * 0.1f, 20.0f + INCREASED_VALUE * 0.1f);
-				m_pFrame->SetPosition({ posRocket.x, POS_Y, posRocket.z - 50.0f });
-				int nIdx = CTexture::GetInstance()->Regist(FRAME_PATH);
-				m_pFrame->SetIdxTexture(nIdx);
-				m_pFrame->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-				m_pFrame->EnableBillboard(true);
-				m_pFrame->SetVtx();
+				
+				if (m_pFrame != nullptr)
+				{// 枠の情報設定
+					m_pFrame->SetSize(3 * INCREASED_VALUE + INCREASED_VALUE * 0.1f, 20.0f + INCREASED_VALUE * 0.1f);
+					m_pFrame->SetPosition({ posRocket.x, POS_Y, posRocket.z - 50.0f });
+					int nIdx = CTexture::GetInstance()->Regist(FRAME_PATH);
+					m_pFrame->SetIdxTexture(nIdx);
+					m_pFrame->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+					m_pFrame->EnableBillboard(true);
+					m_pFrame->SetVtx();
+				}
 			}
 		}
 	}
@@ -122,10 +137,19 @@ HRESULT CRepairStatus::Init()
 //===============================================
 void CRepairStatus::Uninit(void)
 {
-	m_pRepairStatus = nullptr;
-	m_pFrame = nullptr;
+	if (m_pStatus != nullptr)
+	{
+		m_pStatus->Uninit();
+		m_pStatus = nullptr;
+	}
 
-	CObject3D::Uninit();
+	if (m_pFrame != nullptr)
+	{
+		m_pFrame->Uninit();
+		m_pFrame = nullptr;
+	}
+
+	m_pRepairStatus = nullptr;
 }
 
 //===============================================
@@ -135,17 +159,29 @@ void CRepairStatus::Update(void)
 {
 	// インスタンスを取得
 	CRocket* pRocket = pRocket->GetInstance();
+	CGame* pGame = pGame->GetInstance();
 
 	if (pRocket != nullptr)
 	{// 修理状況によってゲージの状態を変える
 		int nProgress = pRocket->GetProgress();
 		D3DXVECTOR3 posRocket = pRocket->GetPosition();
 
-		m_pRepairStatus->SetSize(nProgress * INCREASED_VALUE, 20.0f);
-		m_pRepairStatus->SetPosition({ posRocket.x - INCREASED_VALUE * 3 + nProgress * INCREASED_VALUE, POS_Y, posRocket.z - 50.0f});
+		if (m_pStatus != nullptr)
+		{
+			m_pStatus->SetSize(nProgress * INCREASED_VALUE, 20.0f);
+			m_pStatus->SetPosition({ posRocket.x - INCREASED_VALUE * 3 + nProgress * INCREASED_VALUE, POS_Y, posRocket.z - 50.0f });
+		}
 	}
 
-	CObject3D::Update();
+	if (pGame != nullptr)
+	{
+		CGame::STATE state = pGame->GetState();
+
+		if (state == CGame::STATE_ESCAPE)
+		{// リザルトで非表示にする
+			Uninit();
+		}
+	}
 }
 
 //===============================================
@@ -153,5 +189,5 @@ void CRepairStatus::Update(void)
 //===============================================
 void CRepairStatus::Draw(void)
 {
-	CObject3D::Draw();
+	
 }

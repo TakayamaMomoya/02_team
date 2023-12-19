@@ -157,6 +157,30 @@ void CNumber::SetSizeAll(float width, float height)
 }
 
 //=====================================================
+// テクスチャ設定処理
+//=====================================================
+void CNumber::SetTex(const char* pFileName)
+{
+	for (int nCnt = 0; nCnt < m_nNumPlace; nCnt++)
+	{// テクスチャ番号取得
+
+		if (m_apObject[nCnt] != nullptr)
+		{
+			CTexture* pTexture = CTexture::GetInstance();
+
+			if (pTexture != nullptr)
+			{
+				m_nIdxTexture = pTexture->Regist(pFileName);
+
+				m_apObject[nCnt]->SetIdxTexture(m_nIdxTexture);
+				m_apObject[nCnt]->SetVtx();
+			}
+		}
+	}
+
+
+}
+//=====================================================
 // 色設定処理
 //=====================================================
 void CNumber::SetColor(D3DXCOLOR col)
