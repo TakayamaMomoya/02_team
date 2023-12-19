@@ -30,22 +30,30 @@ class CBlock;
 class CEnemy : public CCharacter
 {
 public:
-	typedef enum
+	enum TYPE
 	{// 敵の種類
 		TYPE_NONE = 0,	// 何でもない
 		TYPE_NORMAL,	// 通常敵
 		TYPE_THIEF,		// 泥棒敵
 		TYPE_MAX
-	}TYPE;
+	};
 
-	typedef enum
+	enum STATE
 	{// 状態
 		STATE_NONE = 0,	// 何でもない状態
 		STATE_NORMAL,	// 通常状態
 		STATE_DAMAGE,	// ダメージ状態
 		STATE_DEATH,	// 死亡状態
 		STATE_MAX
-	}STATE;
+	};
+
+	enum MOVESTATE
+	{// 移動状態
+		MOVESTATE_NONE = 0,	// 何でもない状態
+		MOVESTATE_INTRUSION,	// 侵入しようとしてる状態
+		MOVESTATE_CHASE,	// 追跡状態
+		MOVESTATE_MAX
+	};
 
 	CEnemy();	// コンストラクタ
 	~CEnemy();	// デストラクタ
@@ -69,17 +77,22 @@ public:
 	void DeleteCollision(void);
 	float GetSpeed(void) { return m_fMoveSpeed; }
 	void SetMoveSpeed(float fSpeed) { m_fMoveSpeed = fSpeed; }
+	MOVESTATE GetMoveState(void) { return m_moveState; }
+	void SetPosDest(D3DXVECTOR3 pos) { m_posDest = pos; }
 
 protected:
 	CArrow *GetShadow(void) { return m_pShadow; }
 	void ManageScore(void);
 	CBlock *GetTouchBlock(void) { return m_pBlock; }
-	void ChaseTarget(void);
+	virtual void ChaseTarget(void);
 	virtual void Death(void);
+	virtual void TransferChase(void);
 
 private:
 	void ManageState(void);
+	void ManageMoveState(void);
 	void ManageCollision(void);
+	bool IsInArea(void);
 
 	static int m_nNumAll;	// 総数
 	float m_fLife;	// 体力
@@ -90,6 +103,8 @@ private:
 	CArrow *m_pShadow;	// 影のポインタ
 	CBlock *m_pBlock;	// ブロックのポインタ
 	STATE m_state;	// 状態
+	MOVESTATE m_moveState;	// 移動状態
+	D3DXVECTOR3 m_posDest;	// 目標位置
 
 	CEnemy *m_pPrev;	// 前のアドレス
 	CEnemy *m_pNext;	// 次のアドレス

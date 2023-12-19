@@ -26,6 +26,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void ChaseTarget(void);
 
 private:
 	enum MOTION
