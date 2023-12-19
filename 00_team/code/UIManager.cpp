@@ -204,7 +204,7 @@ namespace
 
 	// 色変更情報
 	const int COL_CHANGE_COUNT = 180;							// 色を変えるまでのカウント
-	const float COL_CHANGE_MAX_SUB = 0.25f;						// 色の最大減算量
+	const float COL_CHANGE_MAX_SUB = 0.45f;						// 色の最大減算量
 	const float COL_CHANGE_SUB = 0.05f * COL_CHANGE_MAX_SUB;	// 色の減算量割合
 }
 
