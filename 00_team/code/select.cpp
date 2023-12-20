@@ -633,6 +633,39 @@ void CSelect::MoveLimit(int nPlayer)
 		{
 			pos.z = NOTSEEWALL_POS_Z;
 		}
+
+		if (pos.z > -24.0f)
+		{
+			if (pos.x <= -65.0f || pos.x >= 125.0f)
+			{
+				pos.z = -24.0f;
+			}
+			else
+			{// リフトに乗っている
+				if (pos.x < -59.0f)
+				{
+					pos.x = -59.0f;
+				}
+				else if (pos.x > 119.0f)
+				{
+					pos.x = 119.0f;
+				}
+			}
+		}
+
+		if (pos.z > 185.0f)
+		{// リフト奥
+			pos.z = 185.0f;
+		}
+
+		if (pos.x < -215.0f)
+		{// 画面左
+			pos.x = -215.0f;
+		}
+		else if (pos.x > 329.0f)
+		{// 画面右
+			pos.x = 329.0f;
+		}
 	}
 	else
 	{
