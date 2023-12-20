@@ -19,6 +19,7 @@
 #include "anim3D.h"
 #include "record.h"
 #include "sound.h"
+#include "weaponManager.h"
 
 //*****************************************************
 // 定数定義
@@ -66,6 +67,8 @@ CMissile::~CMissile()
 //=====================================================
 HRESULT CMissile::Init(void)
 {
+	CWeaponManager* pWeaponManager = CWeaponManager::GetInstance();
+
 	// 見た目の生成
 	CreateVisual();
 
@@ -73,6 +76,12 @@ HRESULT CMissile::Init(void)
 	m_info.fSpeed = INITIAL_SPEED;
 	m_info.fRadiusExplosion = INITIAL_RADIUS_FUZE;
 	m_info.fDamage = INITIAL_DAMAGE;
+
+	if (pWeaponManager != nullptr)
+	{// 外部ファイルの情報を読み込み
+		m_info.fLife = pWeaponManager->GetBaseInfo(CWeapon::TYPE_LAUNCHER).fLifeBullet;
+		m_info.fDamage = pWeaponManager->GetBaseInfo(CWeapon::TYPE_LAUNCHER).fDamage;
+	}
 
 	if (m_info.pCollisionSphere != nullptr)
 	{
