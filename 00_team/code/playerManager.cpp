@@ -71,7 +71,7 @@ void CPlayerManager::CreatePlayer(void)
 			{
 				pPlayer->SetIDJoypad(m_anIDJoypad[i]);
 
-				pPlayer->SetPosition(D3DXVECTOR3(50.0f * m_nNumPlayer, 0.0f, 0.0f));
+				pPlayer->SetPosition(D3DXVECTOR3(-75.0f + 50.0f * m_nNumPlayer, 0.0f, -100.0f));
 
 				m_apPlayer[m_nNumPlayer] = pPlayer;
 
