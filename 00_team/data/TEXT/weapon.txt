@@ -39,8 +39,8 @@ END_SHOTGUNSET
 
 RAILGUNSET
 	BULLET = 3	# 弾数
-	DAMAGE = 20.0	# 威力
-	RAPID = 26		# 発射頻度(左のフレーム数ごとに発射できる)
+	DAMAGE = 100.0	# 威力
+	RAPID = 40		# 発射頻度(左のフレーム数ごとに発射できる)
 	BULLET_LIFE = 1.0	# 弾の寿命（秒数）
 	WIDTH = 220.0	# 判定の幅
 	LENGTH = 1000.0	# 判定の長さ
@@ -53,17 +53,17 @@ MINIGUNSET
 	DAMAGE = 3.3	# 威力
 	RAPID = 3		# 発射頻度(左のフレーム数ごとに発射できる)
 	BULLET_LIFE = 10.0	# 弾の寿命（秒数）
-	VIB_POWER = 0.4		# コントローラーの振動の強さ（0.0～1.0）
+	VIB_POWER = 0.8		# コントローラーの振動の強さ（0.0～1.0）
 	VIB_TIME = 2		# コントローラーの振動時間
 END_MINIGUNSET
 
 LAUNCHERSET
-	BULLET = 4	# 弾数
-	DAMAGE = 10.0	# 威力
+	BULLET = 6	# 弾数
+	DAMAGE = 50.0	# 威力
 	RAPID = 60		# 発射頻度(左のフレーム数ごとに発射できる)
 	BULLET_LIFE = 1.0	# 弾の寿命（秒数）
-	VIB_POWER = 0.8		# コントローラーの振動の強さ（0.0～1.0）
-	VIB_TIME = 10		# コントローラーの振動時間
+	VIB_POWER = 1.0		# コントローラーの振動の強さ（0.0～1.0）
+	VIB_TIME = 15		# コントローラーの振動時間
 END_LAUNCHERSET
 
 #====================================================================

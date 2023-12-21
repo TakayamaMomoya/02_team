@@ -382,6 +382,8 @@ void CEnemyManager::SpawnNormal(void)
 //=====================================================
 void CEnemyManager::SpawnThief(void)
 {
+	CRocket* pRocket = CRocket::GetInstance();
+	int nProgress = 0;
 	int nNumEnemy = CEnemy::GetNumAll();
 
 	if (nNumEnemy >= m_nMaxEnemy)
@@ -389,10 +391,15 @@ void CEnemyManager::SpawnThief(void)
 		return;
 	}
 
+	if (pRocket != nullptr)
+	{// ƒƒPƒbƒg‚ÌC—ó‹µ‚ðŽæ“¾
+		nProgress = pRocket->GetProgress();
+	}
+
 	float fTick = CManager::GetTick();
 	m_fTimerThief += fTick;
 
-	if (m_fTimerThief > m_fTimeSpawnThief)
+	if (m_fTimerThief > m_fTimeSpawnThief && nProgress < 3)
 	{
 		D3DXVECTOR3 posCenter = { 0.0f,0.0f,0.0f };
 

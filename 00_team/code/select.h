@@ -84,11 +84,11 @@ private:
 		float fReSpawnTimer;
 	};
 
-	void MenuInit(void);	// メニューの初期設定
+	void JoinUiInit(void);	// メニューの初期設定
 	void ObjDelete(int nPlayer);	// 削除
 	void MenuColorChange(int nPlayer);	// メニュー色の変更
 	void StartInit(void);	// スタートの初期設定
-	void PotatoLeafInit(void);
+	void PotatoLeafInit(void);	// ポテトの葉の初期設定
 	void ContainerInit(void);	// コンテナの初期設定
 	void ReSetContainer(void);	// コンテナの再設置
 	void EntryInput(int nPlayer);	// 参加の入力
@@ -97,20 +97,20 @@ private:
 
 	void Lift(void);	// リフトの設定
 
-	void LiftInNumberUi(int nPlayer);
+	void LiftInNumberUi(int nPlayer);	// リフトに入った人数表示
 
-	SJoinUi_info m_aJoinUiData[NUM_PLAYER];	// それぞれの選択メニュー
+	SJoinUi_info m_aJoinUiData[NUM_PLAYER];	// 参加UI
 	CObject2D* m_pStartUI;	// Start文字
 	PlayerInfo m_apPlayerData[NUM_PLAYER];	// プレイヤー情報
 	CContainerInfo m_aContainerData[NUM_PLAYER];	// コンテナ
 	CLift* m_pLift;	// リフト
 	CNumber3D* m_apNumber[2];	// 何人リフトに乗ってるかのテクスチャ
-	CBillboard* m_pSlash;
+	CBillboard* m_pSlash;	// スラッシュ
 	SELECT_STATE m_selectState;	// 人数選択の状態
 	bool m_abEntry[NUM_PLAYER];	// 参加したかどうか
-	bool m_bLiftCamera;
-	bool m_bOk;
-	bool m_bSound;
+	bool m_bLiftCamera;	// リフトカメラの切り替え
+	bool m_bLiftUp;	// リフトが上昇するかどうか
+	bool m_bSound;	// サウンドを再生するかどうか
 };
 
 #endif
