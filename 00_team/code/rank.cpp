@@ -240,14 +240,31 @@ void CRank::Set(void)
 
 	for (int nCount = 0; nCount < NUM_PLAYER; nCount++)
 	{
-		if (aNewScore[nCount] > m_aRankScore[RANK::NUM_MAX - 1])
-		{// 最小値を越したら代入
-			m_aRankScore[RANK::NUM_MAX - 1] = aNewScore[nCount];
+		if (m_typeGenre == CRecord::GENRE_TYPE_ENGINEER)
+		{
+			if (aNewScore[nCount] < m_aRankScore[RANK::NUM_MAX - 1])
+			{// 最小値を越したら代入
+				m_aRankScore[RANK::NUM_MAX - 1] = aNewScore[nCount];
 
-			// 再ソート
-			Sort();
+				// 再ソート
+				Sort();
 
-			bNewRank = true;
+				bNewRank = true;
+
+				break;
+			}
+		}
+		else
+		{
+			if (aNewScore[nCount] > m_aRankScore[RANK::NUM_MAX - 1])
+			{// 最小値を越したら代入
+				m_aRankScore[RANK::NUM_MAX - 1] = aNewScore[nCount];
+
+				// 再ソート
+				Sort();
+
+				bNewRank = true;
+			}
 		}
 	}
 
@@ -280,33 +297,6 @@ void CRank::Reset(void)
 {
 	//外部ファイル読み込み
 	Load();
-
-	//switch (m_typeGenre)
-	//{
-	//case CRecord::GENRE_TYPE_DESTROY:
-
-	//	m_aRankScore[0] = 50;
-	//	m_aRankScore[1] = 80;
-	//	m_aRankScore[2] = 100;
-
-	//	break;
-
-	//case CRecord::GENRE_TYPE_MADMAN:
-
-	//	m_aRankScore[0] = 10;
-	//	m_aRankScore[1] = 20;
-	//	m_aRankScore[2] = 30;
-
-	//	break;
-	//case CRecord::GENRE_TYPE_ENGINEER:
-
-	//	m_aRankScore[0] = 240;
-	//	m_aRankScore[1] = 180;
-	//	m_aRankScore[2] = 120;
-
-	//	break;
-	//}
-
 }
 
 //=====================================================
@@ -349,6 +339,8 @@ void CRank::Sort(void)
 //=====================================================
 void CRank::Save(void)
 {
+#ifndef _DEBUG
+
 	//ポインタ宣言
 	FILE* pFile;
 
@@ -369,6 +361,7 @@ void CRank::Save(void)
 	{//ファイルが開けなかった場合
 		assert(("ランキング保存に失敗", false));
 	}
+#endif
 }
 
 //=====================================================
