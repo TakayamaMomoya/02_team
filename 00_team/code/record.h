@@ -60,6 +60,7 @@ public:
 	int GetMadmanRank(int nIdx) { return m_aInfo[nIdx].nMadmanRank; }
 
 	float GetEngineer(void) { return m_fGameTime; }
+	int GetEngineerRank(void) { return m_nTimeRank; }
 
 private:
 
@@ -78,6 +79,7 @@ private:
 	SInfo m_aInfo[NUM_PLAYER];	// 戦績情報
 	int m_nNumSuvived;			// 生存者数
 	float m_fGameTime;			// ゲームのプレイ時間
+	int m_nTimeRank;	// タイムの順位
 };
 
 #endif

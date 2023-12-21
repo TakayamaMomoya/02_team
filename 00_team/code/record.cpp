@@ -31,6 +31,7 @@ CRecord::CRecord()
 	ZeroMemory(&m_aInfo[0], sizeof(m_aInfo));
 	m_nNumSuvived = 0;
 	m_fGameTime = 0.0f;
+	m_nTimeRank = 0.0f;
 }
 
 //=====================================================

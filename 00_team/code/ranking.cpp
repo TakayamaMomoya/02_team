@@ -95,15 +95,15 @@ namespace
 	};
 	const float GENRE_TEXT_WIDTH[CRecord::GENRE_TYPE_MAX] =
 	{// 横幅[種類]
-		1.0f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
-		1.0f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
-		1.0f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
+		0.8f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
+		0.8f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
+		0.8f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
 	};
 	const float GENRE_TEXT_HEIGHT[CRecord::GENRE_TYPE_MAX] =
 	{// 縦幅[種類]
-		0.2f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
-		0.2f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
-		0.2f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
+		0.3f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
+		0.3f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
+		0.3f * GENRE_TEXT_SIZE[CRecord::GENRE_TYPE_DESTROY],
 	};
 	const char* GENRE_TEXT_TEX[CRecord::GENRE_TYPE_MAX] =
 	{// テクスチャのパス[種類]
@@ -476,6 +476,12 @@ void CRanking::SetUiRecord(void)
 
 					nRank = pRecord->GetMadmanRank(nCount);
 					nNumRank = pRecord->GetMadman(nCount);
+
+					break;
+				case CRecord::GENRE_TYPE_ENGINEER:
+
+					nRank = pRecord->GetEngineerRank();
+					nNumRank = pRecord->GetEngineer();
 
 					break;
 				}

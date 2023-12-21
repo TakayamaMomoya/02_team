@@ -196,6 +196,7 @@ void CRank::ReSetUi(void)
 		}
 	}
 }
+
 //=====================================================
 // 設定処理
 //=====================================================
@@ -226,6 +227,11 @@ void CRank::Set(void)
 			case CRecord::GENRE_TYPE_MADMAN:
 
 				aNewScore[nCount] = pRecord->GetMadman(nCount);
+
+				break;
+			case CRecord::GENRE_TYPE_ENGINEER:
+
+				aNewScore[nCount] = pRecord->GetEngineer();
 
 				break;
 			}
@@ -274,6 +280,33 @@ void CRank::Reset(void)
 {
 	//外部ファイル読み込み
 	Load();
+
+	//switch (m_typeGenre)
+	//{
+	//case CRecord::GENRE_TYPE_DESTROY:
+
+	//	m_aRankScore[0] = 50;
+	//	m_aRankScore[1] = 80;
+	//	m_aRankScore[2] = 100;
+
+	//	break;
+
+	//case CRecord::GENRE_TYPE_MADMAN:
+
+	//	m_aRankScore[0] = 10;
+	//	m_aRankScore[1] = 20;
+	//	m_aRankScore[2] = 30;
+
+	//	break;
+	//case CRecord::GENRE_TYPE_ENGINEER:
+
+	//	m_aRankScore[0] = 240;
+	//	m_aRankScore[1] = 180;
+	//	m_aRankScore[2] = 120;
+
+	//	break;
+	//}
+
 }
 
 //=====================================================
@@ -283,15 +316,24 @@ void CRank::Sort(void)
 {
 	for (int nCntRanking = 0; nCntRanking < RANK::NUM_MAX - 1; nCntRanking++)
 	{//ランキングをソート
-
 		// 左端の値を最大値とする
 		int nTop = nCntRanking;
 
 		for (int nCount2 = nCntRanking + 1; nCount2 < RANK::NUM_MAX; nCount2++)
 		{//左の値と対象の値を比較
-			if (m_aRankScore[nTop] < m_aRankScore[nCount2])
-			{//もし比較した数字が小さかったら
-				nTop = nCount2;
+			if (m_typeGenre == CRecord::GENRE_TYPE_ENGINEER)
+			{
+				if (m_aRankScore[nTop] > m_aRankScore[nCount2])
+				{//もし比較した数字が小さかったら
+					nTop = nCount2;
+				}
+			}
+			else
+			{
+				if (m_aRankScore[nTop] < m_aRankScore[nCount2])
+				{//もし比較した数字が小さかったら
+					nTop = nCount2;
+				}
 			}
 		}
 
