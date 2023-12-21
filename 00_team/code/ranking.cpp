@@ -109,7 +109,7 @@ namespace
 	{// テクスチャのパス[種類]
 		"data\\TEXTURE\\UI\\rank_text_destroyer.png",
 		"data\\TEXTURE\\UI\\rank_text_madman.png",
-		"data\\TEXTURE\\UI\\rank_text_madman.png",
+		"data\\TEXTURE\\UI\\rank_text_speedy.png",
 	};
 
 	// 顔表示
@@ -410,6 +410,7 @@ HRESULT CRanking::InitRank(void)
 	
 	return S_OK;
 }
+
 //=====================================================
 // 戦績の設定処理
 //=====================================================

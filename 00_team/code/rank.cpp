@@ -263,7 +263,7 @@ void CRank::Set(void)
 
 	// •Û‘¶ˆ—
 #ifndef _DEBUG
-	SaveRank();
+	Save();
 #endif
 }
 
