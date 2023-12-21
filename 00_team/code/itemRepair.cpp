@@ -263,6 +263,16 @@ void CItemRepair::Update(void)
 		m_pGuide->SetPosition(pos);
 	}
 
+	if (m_pGauge != nullptr)
+	{// ゲージの追従
+		D3DXVECTOR3 pos = GetPosition();
+
+		pos.y += 150.0f;
+		pos.x += 50.0f;
+
+		m_pGauge->SetPosition(pos);
+	}
+
 	// ロケットとの当たり判定
 	CollisionRocket();
 }
@@ -272,8 +282,6 @@ void CItemRepair::Update(void)
 //=====================================================
 void CItemRepair::FollowPlayerHand(void)
 {
-	
-
 	if (m_pPlayer == nullptr)
 	{
 		return;
@@ -416,12 +424,16 @@ void CItemRepair::CollisionRocket(void)
 						pos.x += 50.0f;
 
 						m_pGauge = CFan3D::Create();
-						m_pGauge->SetPosition(pos);
-						m_pGauge->SetRadius(30.0f);
-						m_pGauge->EnableBillboard(true);
-						m_pGauge->EnableZtest(true);
 
-						m_pGauge->SetVtx();
+						if (m_pGauge != nullptr)
+						{
+							m_pGauge->SetPosition(pos);
+							m_pGauge->SetRadius(30.0f);
+							m_pGauge->EnableBillboard(true);
+							m_pGauge->EnableZtest(true);
+
+							m_pGauge->SetVtx();
+						}
 					}
 
 					if (m_pGauge != nullptr)
@@ -480,6 +492,12 @@ void CItemRepair::CollisionRocket(void)
 			{// インタラクト表示削除
 				m_pInteract->Uninit();
 				m_pInteract = nullptr;
+			}
+
+			if (m_pGauge != nullptr)
+			{// ゲージの破棄
+				m_pGauge->Uninit();
+				m_pGauge = nullptr;
 			}
 		}
 	}
