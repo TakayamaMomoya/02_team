@@ -521,7 +521,7 @@ void CRanking::SetUiRecord(void)
 
 					m_infoVisualUi.apNumber[nCount]->SetValue(nNumRank, 4);
 
-					if (nRank == 0 && nNumRank != 0)
+					if (nRank == 0 && nNumRank > 0)
 					{
 						m_infoVisualUi.apNumber[nCount]->SetTex("data\\TEXTURE\\UI\\number002.png");
 					}
