@@ -606,6 +606,13 @@ void CPlayer::InputEmote(void)
 
 	if (pJoyPad->GetTrigger(CInputJoypad::PADBUTTONS_UP, nID))
 	{// 上ボタンのモーション
+		if (pSound != nullptr && m_bSound == false)
+		{
+			pSound->Play(pSound->LABEL_SE_EMOTE_UP);
+
+			m_bSound = true;
+		}
+
 		SetMotion(CCharacterDiv::PARTS_LOWER, MOTION_EMOTE00);
 		SetMotion(CCharacterDiv::PARTS_UPPER, MOTION_EMOTE00);
 
