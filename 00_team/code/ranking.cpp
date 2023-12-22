@@ -499,6 +499,16 @@ void CRanking::SetUiRecord(void)
 						m_infoVisualUi.apFace[nCount]->SetIdxTexture(nIdx);
 					}
 
+					// ƒNƒŠƒAŽžŠÔ‚Ì‚Æ‚«‚Ì‚ÝŠç‚ð”ñ•\Ž¦‚É‚·‚é
+					if (m_typeGenre != CRecord::GENRE_TYPE_ENGINEER || nCount == 0)
+					{
+						m_infoVisualUi.apFace[nCount]->SetCol({ 1.0f, 1.0f, 1.0f, 1.0f });
+					}
+					else
+					{
+						m_infoVisualUi.apFace[nCount]->SetCol({ 1.0f, 1.0f, 1.0f, 0.0f });
+					}
+
 					m_infoVisualUi.apFace[nCount]->SetVtx();
 				}
 
@@ -511,9 +521,13 @@ void CRanking::SetUiRecord(void)
 
 					m_infoVisualUi.apNumber[nCount]->SetValue(nNumRank, 4);
 
-					if (nRank == 0)
+					if (nRank == 0 && nNumRank != 0)
 					{
 						m_infoVisualUi.apNumber[nCount]->SetTex("data\\TEXTURE\\UI\\number002.png");
+					}
+					else
+					{
+						m_infoVisualUi.apNumber[nCount]->SetTex("data\\TEXTURE\\UI\\number001.png");
 					}
 				}
 			}
