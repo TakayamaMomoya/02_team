@@ -345,7 +345,10 @@ void CTitle::Update(void)
 		{
 			if (pKeyboard->GetTrigger(DIK_RETURN) ||
 				pMouse->GetTrigger(CInputMouse::BUTTON_LMB) ||
-				pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0))
+				pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0) ||
+				pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 1) ||
+				pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 2) ||
+				pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 3))
 			{// フェード開始
 
 				// サウンドインスタンスの取得
