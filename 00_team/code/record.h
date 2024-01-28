@@ -61,6 +61,7 @@ public:
 
 	float GetEngineer(void) { return m_fGameTime; }
 	int GetEngineerRank(void) { return m_nTimeRank; }
+	void SetEngineer(float fTime) { m_fGameTime = fTime; }
 
 private:
 
